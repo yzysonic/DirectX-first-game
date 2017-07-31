@@ -6,13 +6,15 @@
 //=============================================================================
 #include "main.h"
 #include "graphics.h"
+#include "input.h"
+#include "sound.h"
 
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define WINDOW_CLASS_NAME		_T("MainClass")			// ウインドウのクラス名
-#define WINDOW_TITLE			_T("DirectX 初ゲーム")	// ウインドウのキャプション名
+#define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
+#define WINDOW_TITLE		_T("DirectX 初ゲーム")	// ウインドウのキャプション名
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -40,10 +42,8 @@ int			g_nCountFPS;		// FPSカウンタ
 //=============================================================================
 // メイン関数
 //=============================================================================
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);	// 無くても良いけど、警告が出る（未使用宣言）
-	UNREFERENCED_PARAMETER(lpCmdLine);		// 無くても良いけど、警告が出る（未使用宣言）
 
 	// 時間計測用
 	DWORD dwExecLastTime = timeGetTime();
@@ -57,7 +57,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	hr = InitSystem();
 
 	if (FAILED(hr))
-		return (-1);
+		return FALSE;
 
 	// メッセージループ
 	MSG msg;
@@ -65,14 +65,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	{
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
+			// PostQuitMessage()が呼ばれたらループ終了
 			if (msg.message == WM_QUIT)
 			{
-				// PostQuitMessage()が呼ばれたらループ終了
 				break;
 			}
+			// メッセージの翻訳とディスパッチ
 			else
 			{
-				// メッセージの翻訳とディスパッチ
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
@@ -146,12 +146,12 @@ HRESULT InitWindows()
 	// ウィンドウクラスを登録する
 	WNDCLASSEX	wcex = {};
 
-	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style = CS_CLASSDC;
-	wcex.lpfnWndProc = WindowProc;
-	wcex.hInstance = g_hInstance;
-	wcex.lpszClassName = WINDOW_CLASS_NAME;
-	//wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.cbSize			= sizeof(WNDCLASSEX);
+	wcex.style			= CS_CLASSDC;
+	wcex.lpfnWndProc	= WindowProc;
+	wcex.hInstance		= g_hInstance;
+	wcex.lpszClassName	= WINDOW_CLASS_NAME;
+	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	//wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
 	RegisterClassEx(&wcex);
@@ -228,5 +228,5 @@ void UninitSystem()
 //=============================================================================
 void UpdateFrame()
 {
-	DrawFrame();
+
 }

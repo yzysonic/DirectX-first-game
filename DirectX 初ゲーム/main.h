@@ -7,18 +7,14 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-#define _CRT_SECURE_NO_WARNINGS			// scanf ‚Ìwarning–h~
 #define DIRECTINPUT_VERSION 0x0800		// Œx‘Îˆ
 
-//#define _BULLET_V2
 
-#include "windows.h"
-#include <stdio.h>
+#include <windows.h>
 #include <tchar.h>
-#include "dinput.h"
-#include "mmsystem.h"
+//#include <stdio.h>
+//#include "mmsystem.h"
 
-#pragma comment (lib, "dinput8.lib")
 #pragma comment (lib, "winmm.lib")
 
 #define SCREEN_WIDTH	(1280)				// ƒEƒCƒ“ƒhƒE‚Ì•

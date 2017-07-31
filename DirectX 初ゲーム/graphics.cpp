@@ -6,6 +6,10 @@
 //=============================================================================
 #include "graphics.h"
 
+#pragma comment (lib, "d3d9.lib")
+#pragma comment (lib, "d3dx9.lib")
+#pragma comment (lib, "dxguid.lib")
+
 #define SafeRelease(ptr){ if(ptr != NULL) {ptr->Release(); ptr = NULL; }}
 
 //*****************************************************************************
@@ -108,6 +112,8 @@ HRESULT InitGraphics(HWND hWnd, int screenWidth, int screenHeight, bool bWindowM
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャＶ値の繰り返し設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大時の補間設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小時の補間設定
+
+	return S_OK;
 }
 
 //=============================================================================

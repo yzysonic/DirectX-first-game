@@ -7,11 +7,8 @@
 #ifndef _GRAPHICS_H_
 #define _GRAPHICS_H_
 
-#include "d3dx9.h"
+#include <d3dx9.h>
 
-#pragma comment (lib, "d3d9.lib")
-#pragma comment (lib, "d3dx9.lib")
-#pragma comment (lib, "dxguid.lib")
 
 #define	NUM_VERTEX	(4)		// ’¸“_”
 #define	NUM_POLYGON	(2)		// ƒ|ƒŠƒSƒ“”
