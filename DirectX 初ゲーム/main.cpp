@@ -94,6 +94,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 		{
 			dwExecLastTime = dwCurrentTime; // 処理した時刻を保存
 
+			UpdateInput();	// 入力更新
 			UpdateFrame();	// 更新処理
 			DrawFrame();	// 描画処理
 
@@ -211,6 +212,14 @@ HRESULT InitSystem()
 	if (SUCCEEDED(hr))
 		hr = InitGraphics(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT, true);
 
+	// インプットの初期化
+	if (SUCCEEDED(hr))
+		hr = InitInput(g_hInstance, g_hWnd);
+
+	// サウンドの初期化
+	if (SUCCEEDED(hr))
+		hr = InitSound(g_hWnd);
+
 	return hr;
 }
 
@@ -219,6 +228,8 @@ HRESULT InitSystem()
 //=============================================================================
 void UninitSystem()
 {
+	UninitSound();
+	UninitInput();
 	UninitGraphics();
 	UninitWindows();
 }
