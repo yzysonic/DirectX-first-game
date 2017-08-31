@@ -156,14 +156,17 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Object.h" />
@@ -173,12 +176,14 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="RendererType.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="test.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
