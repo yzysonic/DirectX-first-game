@@ -1,4 +1,6 @@
-#include"SceneGame.h"
+#include "SceneGame.h"
+#include "test.h"
+#include "Time.h"
 
 typedef struct _SceneGame
 {
@@ -20,6 +22,16 @@ void initSceneGame(void)
 
 void updateSceneGame(void)
 {
+	static float timer = 0;
+
+	timer += GetDeltaTime();
+
+	if (timer > 0.5)
+	{
+		Object *obj = newObject(ObjType_Test);
+		timer = 0;
+	}
+		
 }
 
 void uninitSceneGame(void)

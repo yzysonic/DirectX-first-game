@@ -3,6 +3,7 @@
 #include "Direct3D.h"
 #include "Input.h"
 #include "Time.h"
+#include "Random.h"
 #include "Texture.h"
 #include "GameManager.h"
 #include "ObjectManager.h"
@@ -16,6 +17,7 @@ MSG g_Msg;
 void InitGame(void)
 {
 	InitTime();
+	InitRandom();
 	InitTexture();
 	InitObjectManager();
 	InitGameManager();

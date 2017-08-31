@@ -12,6 +12,7 @@ typedef enum
 	ObjType_Normal,
 	ObjType_Player,
 	ObjType_Enemy,
+	ObjType_Test,
 	ObjTypeMax
 }ObjectType;
 
@@ -82,7 +83,7 @@ typedef struct _ObjectTypeFunc
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-Object* newObject(ObjectType type);
+Object* newObject(ObjectType type = ObjType_Normal);
 void deleteObject(Object* thiz);
 void Object_SetActive(Object* thiz, bool value);
 

@@ -28,6 +28,7 @@
 #define New(obj)			(obj*)malloc(sizeof(obj))
 #define SafeDelete(obj)		if(obj != NULL) free(obj)
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
+#define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
 //// ƒƒ‚ƒŠƒŠ[ƒN©“®ŒŸo
 #ifdef _DEBUG

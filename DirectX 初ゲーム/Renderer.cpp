@@ -31,8 +31,6 @@ void DrawFrame()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(device->BeginScene()))
 	{
-		// 頂点フォーマットの設定
-		device->SetFVF(FVF_VERTEX_2D);
 
 		for (int i = 0; i < LAYER_MAX; i++)
 		{
@@ -45,7 +43,10 @@ void DrawFrame()
 
 				// 頂点座標の更新
 				Polygon_UpdateVertex(poly);
+
+				// 頂点フォーマットの設定
 				device->SetFVF(FVF_VERTEX_2D);
+
 				// テクスチャの設定
 				device->SetTexture(0, poly->pTexture->pDXTex);
 

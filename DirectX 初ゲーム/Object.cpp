@@ -17,7 +17,7 @@ Transform* newTransform(Object* object)
 {
 	Transform *transform = New(Transform);
 
-	transform->object	= object;
+	transform->object		= object;
 	transform->position		= Vector3(0, 0, 0);
 	transform->rotation		= Vector3(0, 0, 0);
 	transform->scale		= Vector3(0, 0, 0);
@@ -49,18 +49,18 @@ Object* newObject(ObjectType type)
 
 		if (thiz->init)
 			thiz->init(thiz);
-
 	}
-
-
 
 	return thiz;
 }
 
 void deleteObject(Object* thiz)
 {
+	if (thiz->uninit)
+		thiz->uninit(thiz);
+
 	Object_SetActive(thiz, false);
-	free(thiz->transform);
+	SafeDelete(thiz->transform);
 	SafeDelete(thiz->rigidbody);
 	SafeDelete(thiz->collider);
 	deletePolygon(thiz->polygon);

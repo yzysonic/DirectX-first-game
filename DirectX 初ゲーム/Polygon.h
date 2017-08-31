@@ -41,7 +41,7 @@ typedef struct _RectPolygon
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName = TEX_NONE);
+RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE);
 void deletePolygon(RectPolygon* thiz);
 void Polygon_UpdateVertex(RectPolygon *thiz);
 

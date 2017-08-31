@@ -21,7 +21,7 @@ void deletePlayer(Player * thiz)
 void initPlayer(Object *thiz)
 {
 	thiz->polygon = newPolygon(thiz, LAYER_PLAYER, TEX_PLAYER);
-	thiz->transform->position = Vector3(600, 600, 0.5f);
+	thiz->transform->position = Vector3(600, 600, 0.0f);
 	
 }
 
