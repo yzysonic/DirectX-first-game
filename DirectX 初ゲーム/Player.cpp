@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Polygon.h"
 #include "Input.h"
-#include "Direct3D.h"
 #include "Time.h"
 
 Player* newPlayer(void)
@@ -20,7 +19,7 @@ void deletePlayer(Player * thiz)
 
 void initPlayer(Object *thiz)
 {
-	thiz->polygon = newPolygon(thiz, LAYER_PLAYER, TEX_PLAYER);
+	thiz->polygon = newPolygon(thiz, LAYER_PLAYER, TEX_PLAYER, REND_TEX_POLY);
 	thiz->transform->position = Vector3(600, 600, 0.5f);
 	
 }
