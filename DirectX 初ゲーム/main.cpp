@@ -5,16 +5,12 @@
 //
 //=============================================================================
 #include "main.h"
-#include "graphics.h"
-#include "input.h"
-#include "sound.h"
+#include "Direct3D.h"
+#include "Input.h"
+#include "Sound.h"
+#include "Game.h"
 
 
-//*****************************************************************************
-// マクロ定義
-//*****************************************************************************
-#define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
-#define WINDOW_TITLE		_T("DirectX 初ゲーム")	// ウインドウのキャプション名
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -24,7 +20,6 @@ HRESULT InitWindows();
 void UninitWindows();
 HRESULT InitSystem();
 void UninitSystem();
-void UpdateFrame();
 
 
 //*****************************************************************************
@@ -33,80 +28,26 @@ void UpdateFrame();
 HINSTANCE g_hInstance = NULL;
 HWND g_hWnd = NULL;
 
-#ifdef _DEBUG
-LPD3DXFONT	g_pD3DXFont = NULL;	// フォントへのポインタ
-int			g_nCountFPS;		// FPSカウンタ
-#endif
-
 
 //=============================================================================
 // メイン関数
 //=============================================================================
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 
-	// 時間計測用
-	DWORD dwExecLastTime = timeGetTime();
-	DWORD dwFPSLastTime = timeGetTime();
-	DWORD dwCurrentTime = 0;
-	DWORD dwFrameCount = 0;
-	timeBeginPeriod(1); // 分解能を設定
+	// 初期化
+	if (FAILED(InitSystem()))
+		return 1;
+	InitGame();
 
-	//システム初期化
-	HRESULT hr;
-	hr = InitSystem();
+	// ゲームループ
+	RunGame();
 
-	if (FAILED(hr))
-		return FALSE;
-
-	// メッセージループ
-	MSG msg;
-	while(true)
-	{
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			// PostQuitMessage()が呼ばれたらループ終了
-			if (msg.message == WM_QUIT)
-			{
-				break;
-			}
-			// メッセージの翻訳とディスパッチ
-			else
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-		}
-
-
-		dwCurrentTime = timeGetTime();
-
-		if ((dwCurrentTime - dwFPSLastTime) >= 500) // 0.5秒ごとに実行
-		{
-#ifdef _DEBUG
-			g_nCountFPS = (dwFrameCount * 1000) / (dwCurrentTime - dwFPSLastTime); // FPSを計測
-#endif
-			dwFPSLastTime = dwCurrentTime;	//　FPS計測時刻を保存
-			dwFrameCount = 0;				// カウントをクリア
-		}
-
-		if ((dwCurrentTime - dwExecLastTime) >= (1000/60)) // 1/60秒ごとに実行
-		{
-			dwExecLastTime = dwCurrentTime; // 処理した時刻を保存
-
-			UpdateInput();	// 入力更新
-			UpdateFrame();	// 更新処理
-			DrawFrame();	// 描画処理
-
-			dwFrameCount++; //処理回数のカウントを加算
-		}
-
-	}
-	
-	// システム終了
+	// 終了
+	UninitGame();
 	UninitSystem();
 
-	return (int)msg.wParam;
+	return 0;
 }
 
 
@@ -125,7 +66,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case VK_ESCAPE:					// [ESC]キーが押された
-			DestroyWindow(hWnd);		// ウィンドウを破棄するよう指示する
+			//DestroyWindow(hWnd);		// ウィンドウを破棄するよう指示する
+			StopGame();
 			break;
 		}
 		break;
@@ -190,7 +132,7 @@ HRESULT InitWindows()
 void UninitWindows()
 {
 	// ウィンドウのデストロイド
-	DestroyWindow(g_hWnd);
+	//DestroyWindow(g_hWnd);
 	g_hWnd = NULL;
 
 	// ウィンドウクラスの登録を解除
@@ -203,6 +145,11 @@ void UninitWindows()
 //=============================================================================
 HRESULT InitSystem()
 {
+
+#ifdef _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // メモリリーク自動検出
+#endif
+
 	HRESULT hr;
 
 	// ウィンドウズの初期化
@@ -210,7 +157,7 @@ HRESULT InitSystem()
 	
 	// グラフィックスの初期化
 	if (SUCCEEDED(hr))
-		hr = InitGraphics(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT, true);
+		hr = InitDirect3D(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT, true);
 
 	// インプットの初期化
 	if (SUCCEEDED(hr))
@@ -230,14 +177,11 @@ void UninitSystem()
 {
 	UninitSound();
 	UninitInput();
-	UninitGraphics();
+	UninitDirect3D();
 	UninitWindows();
 }
 
-//=============================================================================
-// 更新処理処理
-//=============================================================================
-void UpdateFrame()
+HWND GetHWnd()
 {
-
+	return g_hWnd;
 }

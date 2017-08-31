@@ -4,24 +4,24 @@
 // 作者：GP11A143 38 楊子毅
 //
 //=============================================================================
-#include "graphics.h"
+#include "Direct3D.h"
+#include "main.h"
 
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "dxguid.lib")
 
-#define SafeRelease(ptr){ if(ptr != NULL) {ptr->Release(); ptr = NULL; }}
-
 //*****************************************************************************
 // グローバル変数:
 //*****************************************************************************
-LPDIRECT3D9				g_pD3D = NULL;				// Direct3Dオブジェクト
-LPDIRECT3DDEVICE9		g_pD3DDevice = NULL;		// Deviceオブジェクト(描画に必要)
+LPDIRECT3D9			g_pD3D = NULL;				// Direct3Dオブジェクト
+LPDIRECT3DDEVICE9	g_pD3DDevice = NULL;		// Deviceオブジェクト(描画に必要)
+LPD3DXFONT			g_pD3DXFont = NULL;			// フォント
 
 //=============================================================================
 // グラフィックの初期化処理
 //=============================================================================
-HRESULT InitGraphics(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode)
+HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode)
 {
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE d3ddm;
@@ -113,35 +113,28 @@ HRESULT InitGraphics(HWND hWnd, int screenWidth, int screenHeight, bool bWindowM
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大時の補間設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小時の補間設定
 
+	D3DXCreateFont(g_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &g_pD3DXFont);
+
 	return S_OK;
 }
 
 //=============================================================================
 // グラフィックの終了処理
 //=============================================================================
-void UninitGraphics()
+void UninitDirect3D()
 {
 	SafeRelease(g_pD3DDevice);
 	SafeRelease(g_pD3D);
 }
 
-//=============================================================================
-// 描画処理
-//=============================================================================
-void DrawFrame()
+
+LPDIRECT3DDEVICE9 GetDevice()
 {
-	// バックバッファ＆Ｚバッファのクリア
-	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(200, 200, 200, 0), 1.0f, 0);
+	return g_pD3DDevice;
+}
 
-	// Direct3Dによる描画の開始
-	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
-	{
-
-
-		// Direct3Dによる描画の終了
-		g_pD3DDevice->EndScene();
-	}
-
-	// バックバッファとフロントバッファの入れ替え
-	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
+LPD3DXFONT GetFont()
+{
+	return g_pD3DXFont;
 }
