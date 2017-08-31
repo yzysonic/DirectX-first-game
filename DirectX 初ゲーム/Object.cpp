@@ -31,7 +31,7 @@ Object* newObject(ObjectType type)
 {
 	Object *thiz = ObjectManager_GetObj();
 
-	if (thiz)
+	if (thiz != NULL)
 	{
 		thiz->transform		= newTransform(thiz);
 		thiz->polygon		= NULL;
@@ -46,10 +46,13 @@ Object* newObject(ObjectType type)
 		thiz->uninit		= ObjectManager_GetTypeFunc(type)->uninit;
 
 		Object_SetActive(thiz, true);
+
+		if (thiz->init)
+			thiz->init(thiz);
+
 	}
 
-	if(thiz->init)
-		thiz->init(thiz);
+
 
 	return thiz;
 }
