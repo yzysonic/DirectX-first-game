@@ -26,9 +26,9 @@ void updateSceneGame(void)
 
 	timer += GetDeltaTime();
 
-	if (timer > 0.5)
+	if (timer > 0.7f)
 	{
-		Object *obj = newObject(ObjType_Test);
+		newObject(ObjType_Test);
 		timer = 0;
 	}
 		

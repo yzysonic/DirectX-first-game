@@ -1,5 +1,6 @@
 #include "test.h"
 
+Timer *timer = newTimer(1);
 
 void initTest(Object * thiz)
 {
@@ -9,13 +10,14 @@ void initTest(Object * thiz)
 
 void updateTest(Object * thiz)
 {
-	static float timer = 0;
-	timer += GetDeltaTime();
-	if (timer > 2)
+	static Vector3 speed;
+	if (Timer_TimeUp(timer))
 	{
 		//deleteObject(thiz);
-		timer = 0;
+		speed = Vector3(Randomf(-100, 100), Randomf(-100, 100), 0.0f);
+		Timer_Reset(timer);
 	}
+	thiz->transform->position += speed*GetDeltaTime();
 }
 
 void uninitTest(Object * thiz)

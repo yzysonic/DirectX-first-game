@@ -9,7 +9,7 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
 
 	polygon->object		= object;
 	polygon->pTexture	= GetTexture(texName);
-	if(polygon->pTexture)
+	if(polygon->pTexture->pDXTex)
 		polygon->size	= polygon->pTexture->size;
 	else
 		polygon->size	= Vector2(100.f, 100.f);

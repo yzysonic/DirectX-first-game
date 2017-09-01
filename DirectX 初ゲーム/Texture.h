@@ -5,7 +5,7 @@
 
 typedef enum
 {
-	TEX_NONE = -1,
+	TEX_NONE,
 	TEX_PLAYER,
 	TEX_MAX
 }TextureName;

@@ -8,8 +8,8 @@ void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide = Vector2(1
 
 void InitTexture()
 {
+	LoadTexture(TEX_NONE, "");
 	LoadTexture(TEX_PLAYER, "player.png");
-
 }
 
 void UninitTexture()
@@ -20,10 +20,7 @@ void UninitTexture()
 
 Texture * GetTexture(TextureName texName)
 {
-	if (texName != TEX_NONE)
-		return &g_textureList[texName];
-	else
-		return NULL;
+	return &g_textureList[texName];
 }
 
 
