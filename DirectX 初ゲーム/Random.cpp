@@ -1,5 +1,10 @@
 #include "Random.h"
 
+inline int round(float x)
+{
+	return (int)(x + 0.5f);
+}
+
 void InitRandom(void)
 {
 	srand((unsigned)time(NULL));
@@ -11,15 +16,14 @@ int Random(int min, int max)
 	if (range <= 0)
 		return min;
 	else
-		return (int)(min + ( rand() / (float)RAND_MAX * (range+1.0f) ));
+		return round(min + ( rand() * (float)range / RAND_MAX));
 }
 
 float Randomf(float min, float max)
 {
 	float range = max - min;
-	if (range <= 0.0001f)
+	if (range < 1.0e-35f)
 		return min;
 	else
-		return (min + (rand() / (float)RAND_MAX * (range + 1.0f)));
-
+		return (min + (rand() * range / RAND_MAX));
 }
