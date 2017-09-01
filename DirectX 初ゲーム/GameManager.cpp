@@ -1,17 +1,15 @@
-#include"GameManager.h"
-#include"main.h"
-#include"SceneGame.h"
+#include "GameManager.h"
+#include "main.h"
+#include "SceneGame.h"
+#include "SceneTest.h"
 
 Scene* g_CurrentScene;
 
+void LoadScene(SceneName scene);
+
 void InitGameManager(void)
 {
-	g_CurrentScene = GetSceneGame();
-	g_CurrentScene->init = &initSceneGame;
-	g_CurrentScene->update = &updateSceneGame;
-	g_CurrentScene->uninit = &uninitSceneGame;
-
-	g_CurrentScene->init();
+	LoadScene(SCENE_TEST);
 }
 
 void UpdateGameManager(void)
@@ -26,8 +24,14 @@ void UninitGameManager(void)
 
 void SetScene(SceneName scene)
 {
-	g_CurrentScene->uninit();
+	if (g_CurrentScene->uninit != NULL)
+		g_CurrentScene->uninit();
 
+	LoadScene(scene);
+}
+
+void LoadScene(SceneName scene)
+{
 	switch (scene)
 	{
 	case SCENE_TITLE:
@@ -35,11 +39,22 @@ void SetScene(SceneName scene)
 		break;
 	case SCENE_GAME:
 		g_CurrentScene = GetSceneGame();
+		g_CurrentScene->init = &initSceneGame;
+		g_CurrentScene->update = &updateSceneGame;
+		g_CurrentScene->uninit = &uninitSceneGame;
 		break;
 	case SCENE_RESULT:
 
 		break;
+	case SCENE_TEST:
+		g_CurrentScene = GetSceneTest();
+		g_CurrentScene->init = &initSceneTest;
+		g_CurrentScene->update = &updateSceneTest;
+		g_CurrentScene->uninit = &uninitSceneTest;
+		break;
 	}
 
-	g_CurrentScene->init();
+	if (g_CurrentScene->init != NULL)
+		g_CurrentScene->init();
+
 }

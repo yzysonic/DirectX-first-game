@@ -4,7 +4,8 @@ typedef enum
 {
 	SCENE_TITLE,
 	SCENE_GAME,
-	SCENE_RESULT
+	SCENE_RESULT,
+	SCENE_TEST
 }SceneName;
 
 typedef struct _Scene

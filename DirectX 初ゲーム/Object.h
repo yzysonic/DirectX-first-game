@@ -6,10 +6,10 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type);
-#define NewObj(type)			{type* ptr; SetNewObj(ptr, type)}
-#define DeleteObj(ptr)			deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;
-#define SetThis(type)			type* thisTest = (type*)thiz;
+#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type, ptr);
+#define NewObj(type)		{type* ptr; SetNewObj(ptr, type)}
+#define DeleteObj(ptr)			if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;}
+#define SetThis(type)			type* thisTest = (type*)(thiz->owner);
 
 
 typedef enum
@@ -61,6 +61,7 @@ typedef struct _BoxCollider
 
 typedef struct _Object
 {
+	void *owner;
 	Transform *transform;
 	RectPolygon *polygon;
 	Rigidbody *rigidbody;
@@ -88,7 +89,7 @@ typedef struct _ObjectTypeFunc
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-Object* newObject(ObjectType type = ObjType_Normal);
+Object* newObject(ObjectType type = ObjType_Normal, void *owner = NULL);
 void deleteObject(Object* thiz);
 void Object_SetActive(Object* thiz, bool value);
 

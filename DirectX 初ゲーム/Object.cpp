@@ -27,12 +27,13 @@ Transform* newTransform(Object* object)
 
 
 
-Object* newObject(ObjectType type)
+Object* newObject(ObjectType type, void *owner)
 {
 	Object *thiz = ObjectManager_GetObj();
 
 	if (thiz != NULL)
 	{
+		thiz->owner = owner;
 		thiz->transform		= newTransform(thiz);
 		thiz->polygon		= NULL;
 		thiz->rigidbody		= NULL;
@@ -64,6 +65,8 @@ void deleteObject(Object* thiz)
 	SafeDelete(thiz->rigidbody);
 	SafeDelete(thiz->collider);
 	deletePolygon(thiz->polygon);
+
+	thiz->owner = NULL;
 
 	ObjectManager_ReleaseObj(thiz);
 }

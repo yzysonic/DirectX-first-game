@@ -160,6 +160,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="SceneTest.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="Texture.h" />
