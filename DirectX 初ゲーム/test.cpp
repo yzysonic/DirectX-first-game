@@ -6,8 +6,8 @@ void initTest(Object * thiz)
 	thiz->polygon = newPolygon(thiz);
 	Polygon_SetColor(thiz->polygon, ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 200));
 
-	float size = Randomf(10, 50);
-	thiz->polygon->size = Vector2(size, size);
+	float scale = Randomf(0.3f, 0.5f);
+	thiz->transform->scale = Vector3(scale, scale, 0);
 	thiz->transform->position = Vector3(Randomf(0, 1280), Randomf(0, 720), 0.0f);
 
 	thisTest->timer = newTimer(Randomf(0.2f, 0.7f));

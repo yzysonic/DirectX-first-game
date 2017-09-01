@@ -36,6 +36,8 @@ typedef struct _RectPolygon
 	int pattern;							// 表示するパターン
 	Layer layer;							// 描画のレイヤー
 	int poolIndex;							// 識別番号
+	float radius;							// 頂点計算用半径
+	float baseAngle;						// 頂点計算用角度
 }RectPolygon;
 
 //*****************************************************************************

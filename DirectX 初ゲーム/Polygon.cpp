@@ -14,6 +14,9 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
 	else
 		polygon->size	= Vector2(100.f, 100.f);
 
+	polygon->radius = D3DXVec2Length(&(polygon->size/2));
+	polygon->baseAngle = atan2f(polygon->size.y, polygon->size.x);
+
 	Polygon_UpdateVertex(polygon);
 
 	// rhw‚Ìİ’è
@@ -49,11 +52,25 @@ void deletePolygon(RectPolygon * thiz)
 void Polygon_UpdateVertex(RectPolygon *thiz)
 {
 	Vector3 pos = thiz->object->transform->position;
+	Vector3 rot = thiz->object->transform->rotation;
+	Vector3 radius = thiz->radius * thiz->object->transform->scale;
 
-	thiz->vertex[0].vtx = pos + Vector3(-thiz->size.x / 2, -thiz->size.y / 2, 0.0f);
-	thiz->vertex[1].vtx = pos + Vector3(+thiz->size.x / 2, -thiz->size.y / 2, 0.0f);
-	thiz->vertex[2].vtx = pos + Vector3(-thiz->size.x / 2, +thiz->size.y / 2, 0.0f);
-	thiz->vertex[3].vtx = pos + Vector3(+thiz->size.x / 2, +thiz->size.y / 2, 0.0f);
+	thiz->vertex[0].vtx.x = pos.x - cosf(thiz->baseAngle + rot.z) * radius.x;
+	thiz->vertex[0].vtx.y = pos.y - sinf(thiz->baseAngle + rot.z) * radius.y;
+	thiz->vertex[0].vtx.z = 0.0f;
+
+	thiz->vertex[1].vtx.x = pos.x + cosf(thiz->baseAngle - rot.z) * radius.x;
+	thiz->vertex[1].vtx.y = pos.y - sinf(thiz->baseAngle - rot.z) * radius.y;
+	thiz->vertex[1].vtx.z = 0.0f;
+
+	thiz->vertex[2].vtx.x = pos.x - cosf(thiz->baseAngle - rot.z) * radius.x;
+	thiz->vertex[2].vtx.y = pos.y + sinf(thiz->baseAngle - rot.z) * radius.y;
+	thiz->vertex[2].vtx.z = 0.0f;
+
+	thiz->vertex[3].vtx.x = pos.x + cosf(thiz->baseAngle + rot.z) * radius.x;
+	thiz->vertex[3].vtx.y = pos.y + sinf(thiz->baseAngle + rot.z) * radius.y;
+	thiz->vertex[3].vtx.z = 0.0f;
+
 
 }
 
