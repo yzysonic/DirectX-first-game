@@ -4,19 +4,6 @@
 #include "Direct3D.h"
 #include "Time.h"
 
-Player* newPlayer(void)
-{
-	Player* thiz = New(Player);
-	thiz->base = newObject(ObjType_Player);
-	return thiz;
-}
-
-void deletePlayer(Player * thiz)
-{
-	deleteObject(thiz->base);
-	SafeDelete(thiz);
-	thiz = NULL;
-}
 
 void initPlayer(Object *thiz)
 {
@@ -45,7 +32,7 @@ void updatePlayer(Object *thiz)
 		thiz->transform->position.x -= 5.0f;
 	}
 
-	thiz->transform->position.x += 100*GetDeltaTime();
+	//thiz->transform->position.x += 100*GetDeltaTime();
 	if (thiz->transform->position.x > SCREEN_WIDTH)
 		thiz->transform->position.x = 0;
 

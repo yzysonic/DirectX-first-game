@@ -6,6 +6,11 @@
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
+#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type);
+#define NewObj(type)			{type* ptr; SetNewObj(ptr, type)}
+#define DeleteObj(ptr)			deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;
+#define SetThis(type)			type* thisTest = (type*)thiz;
+
 
 typedef enum
 {

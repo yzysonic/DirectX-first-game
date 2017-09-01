@@ -8,3 +8,4 @@
 void DrawFrame();
 RectPolygon* Renderer_GetPolygon(Layer layer);
 void Renderer_ReleasePolygon(RectPolygon* thiz);
+char *GetDebugText();

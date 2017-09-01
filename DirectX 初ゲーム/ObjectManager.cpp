@@ -79,7 +79,9 @@ Object* ObjectManager_GetObj()
 
 void ObjectManager_ReleaseObj(Object * thiz)
 {
-	g_ObjectPool[thiz->poolIndex] = g_ObjectPool[g_ObjectPoolNextObj - 1];
+	int index = thiz->poolIndex;
+	g_ObjectPool[index] = g_ObjectPool[g_ObjectPoolNextObj - 1];
+	g_ObjectPool[index].poolIndex = index;
 	g_ObjectPoolNextObj--;
 }
 

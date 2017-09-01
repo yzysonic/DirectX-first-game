@@ -33,7 +33,7 @@ void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide)
 
 	//テクスチャ読込
 	D3DXCreateTextureFromFile(GetDevice(), fileDir, &texture.pDXTex);
-	if (texture.pDXTex == NULL)
+	if (texture.pDXTex == NULL && texName != TEX_NONE)
 	{
 		TCHAR s[128];
 		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), fileName);

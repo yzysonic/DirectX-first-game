@@ -11,7 +11,7 @@ int Random(int min, int max)
 	if (range <= 0)
 		return min;
 	else
-		return (int)(min + ( rand() / RAND_MAX * (range+1.0f) ));
+		return (int)(min + ( rand() / (float)RAND_MAX * (range+1.0f) ));
 }
 
 float Randomf(float min, float max)

@@ -56,3 +56,9 @@ void Polygon_UpdateVertex(RectPolygon *thiz)
 	thiz->vertex[3].vtx = pos + Vector3(+thiz->size.x / 2, +thiz->size.y / 2, 0.0f);
 
 }
+
+void Polygon_SetColor(RectPolygon * thiz, D3DCOLOR color)
+{
+	for (int i = 0; i < RECT_NUM_VERTEX; i++)
+		thiz->vertex[i].diffuse = color;
+}

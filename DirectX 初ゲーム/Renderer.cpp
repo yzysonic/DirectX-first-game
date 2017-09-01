@@ -4,6 +4,7 @@
 #include "Time.h"
 
 const int g_PoolSize = ObjectMax / LAYER_MAX;
+char g_DebugText[256];
 
 typedef struct _PolygonPool
 {
@@ -14,7 +15,7 @@ typedef struct _PolygonPool
 
 PolygonPool	g_PolygonPool[LAYER_MAX];
 
-
+void DrawDebug();
 
 //=============================================================================
 // 描画処理
@@ -55,6 +56,9 @@ void DrawFrame()
 			}
 		}
 
+		// デバッグ
+		DrawDebug();
+
 		// Direct3Dによる描画の終了
 		device->EndScene();
 	}
@@ -82,4 +86,15 @@ void Renderer_ReleasePolygon(RectPolygon * thiz)
 {
 	PolygonPool* pool = &g_PolygonPool[thiz->layer];
 	pool->polygon[thiz->poolIndex] = pool->polygon[pool->activeTop--];
+}
+
+char * GetDebugText()
+{
+	return g_DebugText;
+}
+
+void DrawDebug()
+{
+	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
+	GetFont()->DrawText(NULL, g_DebugText, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 }
