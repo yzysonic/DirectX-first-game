@@ -8,7 +8,10 @@ void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide = Vector2(1
 
 void InitTexture()
 {
-	LoadTexture(TEX_NONE, "");
+	g_textureList[TEX_NONE].pDXTex = NULL;
+	g_textureList[TEX_NONE].divide = Vector2(1, 1);
+	g_textureList[TEX_NONE].size = Vector2(100, 100);
+
 	LoadTexture(TEX_PLAYER, "player.png");
 }
 
@@ -31,22 +34,37 @@ void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide)
 	char fileDir[256];
 	strcat(strcpy(fileDir, TEX_DIR), fileName);
 
-	//テクスチャ読込
-	D3DXCreateTextureFromFile(GetDevice(), fileDir, &texture.pDXTex);
-	if (texture.pDXTex == NULL && texName != TEX_NONE)
+	//テクスチャ詳細情報取得
+	D3DXIMAGE_INFO info;
+	if (D3DXGetImageInfoFromFile(fileDir, &info) == D3D_OK)
+	{
+		//テクスチャ読込
+		D3DXCreateTextureFromFileEx(
+			GetDevice(),
+			fileDir,
+			info.Width, info.Height,
+			1, 0,
+			D3DFMT_A8R8G8B8,
+			D3DPOOL_MANAGED,
+			D3DX_FILTER_NONE,
+			D3DX_FILTER_NONE,
+			0xFF000000,
+			NULL, NULL,
+			&texture.pDXTex);
+	}
+	else
 	{
 		TCHAR s[128];
 		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), fileName);
 		MessageBox(GetHWnd(), s, _T("エラー"), MB_OK | MB_ICONWARNING);
 		return;
+
 	}
 
-	texture.divide = divide;
-
-	//テクスチャ詳細情報取得
-	D3DXIMAGE_INFO info;
-	D3DXGetImageInfoFromFile(fileDir, &info);
 	texture.size.x = info.Width / divide.x;
 	texture.size.y = info.Height / divide.y;
+	texture.divide = divide;
+
+	
 }
 
