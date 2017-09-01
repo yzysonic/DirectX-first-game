@@ -20,7 +20,7 @@ Transform* newTransform(Object* object)
 	transform->object		= object;
 	transform->position		= Vector3(0, 0, 0);
 	transform->rotation		= Vector3(0, 0, 0);
-	transform->scale		= Vector3(0, 0, 0);
+	transform->scale		= Vector3(1, 1, 1);
 
 	return transform;
 }
