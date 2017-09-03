@@ -20,7 +20,7 @@ void updatePlayer(Object *thiz)
 	if (GetKeyboardPress(DIK_LSHIFT))
 		boost = 2.0f;
 
-	if (GetKeyboardPress(DIK_LALT))
+	if (GetKeyboardPress(DIK_LCONTROL))
 	{
 		if (GetKeyboardPress(DIK_DOWN))
 		{
