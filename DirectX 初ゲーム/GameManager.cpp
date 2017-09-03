@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "main.h"
+#include "Random.h"
 #include "Renderer.h"
 #include "SceneGame.h"
 #include "SceneTest.h"
@@ -55,7 +56,8 @@ void LoadScene(SceneName scene)
 		break;
 	}
 
-	InitRenderer();
+	InitRandom();
+	Renderer_SetCamera(NULL);
 
 	if (g_CurrentScene->init != NULL)
 		g_CurrentScene->init();

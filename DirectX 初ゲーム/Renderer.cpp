@@ -11,10 +11,9 @@
 //=============================================================================
 // 構造体宣言
 //=============================================================================
-const int g_PoolSize = ObjectMax / LAYER_MAX;
 typedef struct _PolygonPool
 {
-	RectPolygon polygon[g_PoolSize];
+	RectPolygon *polygon = NULL;
 	int activeTop = -1;
 }PolygonPool;
 
@@ -25,6 +24,7 @@ extern LPDIRECT3DDEVICE9 g_pD3DDevice;
 PolygonPool	g_PolygonPool[LAYER_MAX];
 Transform g_FixedCamera;
 Transform *g_Camera;
+int g_PoolSize[LAYER_MAX];
 char g_DebugText[10][256] = {};
 
 //=============================================================================
@@ -57,7 +57,38 @@ void InitRenderer(void)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
 
+	// 初期カメラ
 	g_Camera = &g_FixedCamera;
+
+	// ポリゴンが使うメモリの確保
+	if (g_PolygonPool[0].polygon != NULL)
+		return;
+
+	g_PoolSize[LAYER_BG_00]		= POOL_SIZE_BG_00;
+	g_PoolSize[LAYER_BG_01]		= POOL_SIZE_BG_01;
+	g_PoolSize[LAYER_BG_02]		= POOL_SIZE_BG_02;
+	g_PoolSize[LAYER_DEFAULT]	= POOL_SIZE_DEFAULT;
+	g_PoolSize[LAYER_PLAYER]	= POOL_SIZE_PLAYER;
+	g_PoolSize[LAYER_UI_00]		= POOL_SIZE_UI_00;
+	g_PoolSize[LAYER_UI_01]		= POOL_SIZE_UI_01;
+	g_PoolSize[LAYER_UI_02]		= POOL_SIZE_UI_02;
+
+	for (int i = 0; i < LAYER_MAX; i++)
+	{
+		g_PolygonPool[i].polygon = (RectPolygon*)malloc(sizeof(RectPolygon)*g_PoolSize[i]);
+	}
+
+}
+
+//=============================================================================
+// 終了処理
+//=============================================================================
+void UninitRenderer(void)
+{
+	for (int i = 0; i < LAYER_MAX; i++)
+	{
+		SafeDelete(g_PolygonPool[i].polygon);
+	}
 }
 
 //=============================================================================
@@ -127,7 +158,7 @@ RectPolygon * Renderer_GetPolygon(Layer layer)
 {
 	PolygonPool* pool = &g_PolygonPool[layer];
 
-	if (pool->activeTop < g_PoolSize - 1)
+	if (pool->activeTop < g_PoolSize[layer] - 1)
 	{
 		RectPolygon* thiz = &pool->polygon[++pool->activeTop];
 		thiz->layer = layer;
@@ -152,7 +183,10 @@ void Renderer_ReleasePolygon(RectPolygon * thiz)
 //=============================================================================
 void Renderer_SetCamera(Transform * camera)
 {
-	g_Camera = camera;
+	if (camera != NULL)
+		g_Camera = camera;
+	else
+		g_Camera = &g_FixedCamera;
 }
 
 //=============================================================================
