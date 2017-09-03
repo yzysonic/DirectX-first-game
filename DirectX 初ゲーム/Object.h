@@ -72,12 +72,13 @@ typedef struct _Object
 	ObjectType type;
 	int updateIndex;
 	int poolIndex;
-	char name[128] = "Object";
+	char name[128];
 	bool isActive;
 
 	void(*init)(Object*);
 	void(*update)(Object*);
 	void(*uninit)(Object*);
+	void(*onCollision)(Object*, Object*);
 }Object;
 
 typedef struct _ObjectTypeFunc
@@ -85,6 +86,7 @@ typedef struct _ObjectTypeFunc
 	void(*init)(Object*);
 	void(*update)(Object*);
 	void(*uninit)(Object*);
+	void(*onCollision)(Object*, Object*);
 }ObjectTypeFunc;
 
 

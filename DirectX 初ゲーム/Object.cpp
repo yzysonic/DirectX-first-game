@@ -51,6 +51,8 @@ Object* newObject(ObjectType type, void *owner)
 		thiz->update		= ObjectManager_GetTypeFunc(type)->update;
 		thiz->uninit		= ObjectManager_GetTypeFunc(type)->uninit;
 
+		strcpy(thiz->name, "Object");
+
 		Object_SetActive(thiz, true);
 
 		((ObjOwner*)owner)->base = thiz;
