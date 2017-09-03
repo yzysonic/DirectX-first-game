@@ -1,7 +1,6 @@
 #include "Polygon.h"
 #include "Object.h"
 #include "Renderer.h"
-#include "Camera.h"
 
 
 RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
