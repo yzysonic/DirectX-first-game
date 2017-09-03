@@ -13,6 +13,7 @@
 HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode);
 void UninitDirect3D();
 LPDIRECT3DDEVICE9 GetDevice();
+bool ResetDevice(bool windowMode);
 LPD3DXFONT GetFont();
 
 

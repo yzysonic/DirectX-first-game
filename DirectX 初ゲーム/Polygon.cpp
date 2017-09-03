@@ -1,6 +1,7 @@
 #include "Polygon.h"
 #include "Object.h"
 #include "Renderer.h"
+#include "Camera.h"
 
 
 RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
@@ -16,8 +17,7 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
 
 	polygon->radius = D3DXVec2Length(&(polygon->size/2));
 	polygon->baseAngle = atan2f(polygon->size.y, polygon->size.x);
-
-	Polygon_UpdateVertex(polygon);
+	polygon->color = ColorRGBA(255, 255, 255, 255);
 
 	// rhwの設定
 	polygon->vertex[0].rhw =
@@ -29,7 +29,7 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
 	polygon->vertex[0].diffuse =
 	polygon->vertex[1].diffuse =
 	polygon->vertex[2].diffuse =
-	polygon->vertex[3].diffuse = D3DCOLOR_RGBA(255, 255, 255, 255);
+	polygon->vertex[3].diffuse = polygon->color;
 
 	// テクスチャ座標の設定
 	polygon->vertex[0].uv = Vector2(0.0f, 0.0f);
@@ -44,38 +44,30 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
 
 void deletePolygon(RectPolygon * thiz)
 {
+	if (thiz == NULL) return;
+
 	thiz->object = NULL;
 	thiz->pTexture = NULL;
 	Renderer_ReleasePolygon(thiz);
 }
 
-void Polygon_UpdateVertex(RectPolygon *thiz)
-{
-	Vector3 pos = thiz->object->transform->position;
-	Vector3 rot = thiz->object->transform->rotation;
-	Vector3 radius = thiz->radius * thiz->object->transform->scale;
-
-	thiz->vertex[0].vtx.x = pos.x - cosf(thiz->baseAngle + rot.z) * radius.x;
-	thiz->vertex[0].vtx.y = pos.y - sinf(thiz->baseAngle + rot.z) * radius.y;
-	thiz->vertex[0].vtx.z = 0.0f;
-
-	thiz->vertex[1].vtx.x = pos.x + cosf(thiz->baseAngle - rot.z) * radius.x;
-	thiz->vertex[1].vtx.y = pos.y - sinf(thiz->baseAngle - rot.z) * radius.y;
-	thiz->vertex[1].vtx.z = 0.0f;
-
-	thiz->vertex[2].vtx.x = pos.x - cosf(thiz->baseAngle - rot.z) * radius.x;
-	thiz->vertex[2].vtx.y = pos.y + sinf(thiz->baseAngle - rot.z) * radius.y;
-	thiz->vertex[2].vtx.z = 0.0f;
-
-	thiz->vertex[3].vtx.x = pos.x + cosf(thiz->baseAngle + rot.z) * radius.x;
-	thiz->vertex[3].vtx.y = pos.y + sinf(thiz->baseAngle + rot.z) * radius.y;
-	thiz->vertex[3].vtx.z = 0.0f;
-
-
-}
 
 void Polygon_SetColor(RectPolygon * thiz, D3DCOLOR color)
 {
 	for (int i = 0; i < RECT_NUM_VERTEX; i++)
 		thiz->vertex[i].diffuse = color;
+	thiz->color = color;
+}
+
+void Polygon_SetOpacity(RectPolygon * thiz, float opacity)
+{
+	thiz->color &= 0x00ffffff;
+	thiz->color += (BYTE)(opacity * 0xff) << 24;
+
+	Polygon_SetColor(thiz, thiz->color);
+}
+
+float Polygon_GetOpacity(RectPolygon * thiz)
+{
+	return (float)(thiz->color >> 24)/0xff;
 }

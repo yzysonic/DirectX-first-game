@@ -43,6 +43,7 @@ typedef D3DXVECTOR3 Vector3;
 typedef D3DCOLOR	Color;
 
 HWND GetHWnd();
-
+bool GetWindowMode(void);
+void SetWindowMode(bool windowMode);
 
 #endif

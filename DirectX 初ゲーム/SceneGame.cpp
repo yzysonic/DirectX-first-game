@@ -1,11 +1,12 @@
 #include "SceneGame.h"
-#include "test.h"
 #include "Core.h"
+#include "Camera.h"
 
 
 typedef struct _SceneGame
 {
 	Scene base;
+	Camera* camera = NULL;
 	Player* player = NULL;
 }SceneGame;
 
@@ -18,7 +19,8 @@ Scene * GetSceneGame(void)
 
 void initSceneGame(void)
 {
-	SetNewObj(g_SceneGame.player, Player);
+	g_SceneGame.camera = NewObj(Camera);
+	g_SceneGame.player = NewObj(Player);
 }
 
 void updateSceneGame(void)
@@ -28,5 +30,6 @@ void updateSceneGame(void)
 
 void uninitSceneGame(void)
 {
+	DeleteObj(g_SceneGame.camera);
 	DeleteObj(g_SceneGame.player);
 }

@@ -47,7 +47,7 @@ void UninitGame(void)
 
 void StopGame(void)
 {
-	g_bRunGame = false;
+	DestroyWindow(GetHWnd());	// ウィンドウを破棄するよう指示する
 }
 
 void CheckWinMesg()

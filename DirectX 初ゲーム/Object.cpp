@@ -7,6 +7,11 @@
 //*****************************************************************************
 
 
+typedef struct _ObjOwner
+{
+	Object *base;
+}ObjOwner;
+
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -47,6 +52,8 @@ Object* newObject(ObjectType type, void *owner)
 		thiz->uninit		= ObjectManager_GetTypeFunc(type)->uninit;
 
 		Object_SetActive(thiz, true);
+
+		((ObjOwner*)owner)->base = thiz;
 
 		if (thiz->init)
 			thiz->init(thiz);

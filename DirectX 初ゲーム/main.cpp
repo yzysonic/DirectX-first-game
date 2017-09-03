@@ -25,8 +25,9 @@ void UninitSystem();
 //*****************************************************************************
 // グローバル変数:
 //*****************************************************************************
-HINSTANCE g_hInstance = NULL;
-HWND g_hWnd = NULL;
+HINSTANCE	g_hInstance = NULL;
+HWND		g_hWnd = NULL;
+bool		g_bWindowMode = true;
 
 
 //=============================================================================
@@ -58,6 +59,9 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	switch (message)
 	{
+	case WM_CLOSE:
+		StopGame();
+		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -65,12 +69,13 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case VK_ESCAPE:					// [ESC]キーが押された
-			//DestroyWindow(hWnd);		// ウィンドウを破棄するよう指示する
+		case VK_ESCAPE:		// [ESC]キーが押された
 			StopGame();
 			break;
+		case VK_F9:			// [F9]キーが押された
+			SetWindowMode(!g_bWindowMode);
+			break;
 		}
-		break;
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -105,9 +110,9 @@ HRESULT InitWindows()
 		0,							//拡張スタイル（任意）
 		WINDOW_CLASS_NAME,			//クラス名
 		WINDOW_TITLE,				//ウィンドウ名（タイトル）
-		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU,			//スタイル
-		(GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2,		//横方向の位置
-		(GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2,	//縦方向の位置
+		(g_bWindowMode ? (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU) : WS_POPUP),		//スタイル
+		(g_bWindowMode ? ((GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2) : 0),		//横方向の位置
+		(g_bWindowMode ? ((GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2) : 0),	//縦方向の位置
 		SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,		//幅
 		SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	//高さ
 		NULL,						//親ウィンドウ
@@ -157,7 +162,7 @@ HRESULT InitSystem()
 	
 	// グラフィックスの初期化
 	if (SUCCEEDED(hr))
-		hr = InitDirect3D(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT, true);
+		hr = InitDirect3D(g_hWnd, SCREEN_WIDTH, SCREEN_HEIGHT, g_bWindowMode);
 
 	// インプットの初期化
 	if (SUCCEEDED(hr))
@@ -181,7 +186,38 @@ void UninitSystem()
 	UninitWindows();
 }
 
+
 HWND GetHWnd()
 {
 	return g_hWnd;
+}
+
+bool GetWindowMode(void)
+{
+	return g_bWindowMode;
+}
+
+void SetWindowMode(bool windowMode)
+{
+	if (!ResetDevice(windowMode))
+		return;
+
+	if (windowMode)
+	{
+		SetWindowLong(g_hWnd, GWL_STYLE, WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU);
+		SetWindowPos(g_hWnd, NULL, 
+			(GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2,
+			(GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2,
+			0, 0,
+			SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+	}
+	else
+	{
+		SetWindowLong(g_hWnd, GWL_STYLE, WS_POPUP | WS_EX_TOPMOST);
+	}
+
+
+	ShowWindow(g_hWnd, SW_SHOW);
+
+	g_bWindowMode = windowMode;
 }

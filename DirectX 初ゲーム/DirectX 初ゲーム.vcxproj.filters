@@ -72,6 +72,12 @@
     <ClCompile Include="SceneTest.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Lerp.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -136,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="SceneTest.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Lerp.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

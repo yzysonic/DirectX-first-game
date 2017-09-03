@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "main.h"
+#include "Renderer.h"
 #include "SceneGame.h"
 #include "SceneTest.h"
 
@@ -53,6 +54,8 @@ void LoadScene(SceneName scene)
 		g_CurrentScene->uninit = &uninitSceneTest;
 		break;
 	}
+
+	InitRenderer();
 
 	if (g_CurrentScene->init != NULL)
 		g_CurrentScene->init();

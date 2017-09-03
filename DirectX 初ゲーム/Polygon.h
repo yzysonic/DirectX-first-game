@@ -38,6 +38,7 @@ typedef struct _RectPolygon
 	int poolIndex;							// 識別番号
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
+	Color color;							// 色（読込専用）
 }RectPolygon;
 
 //*****************************************************************************
@@ -45,7 +46,8 @@ typedef struct _RectPolygon
 //*****************************************************************************
 RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE);
 void deletePolygon(RectPolygon* thiz);
-void Polygon_UpdateVertex(RectPolygon *thiz);
 void Polygon_SetColor(RectPolygon *thiz, D3DCOLOR color);
+void Polygon_SetOpacity(RectPolygon *thiz, float opacity);
+float Polygon_GetOpacity(RectPolygon *thiz);
 
 #endif

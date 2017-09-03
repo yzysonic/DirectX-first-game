@@ -6,15 +6,17 @@
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
-#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type, ptr);
-#define NewObj(type)		{type* ptr; SetNewObj(ptr, type)}
-#define DeleteObj(ptr)			if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;}
-#define SetThis(type)			type* thisTest = (type*)(thiz->owner);
+//#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type, ptr);
+//#define NewObj(type)		{type* ptr; SetNewObj(ptr, type)}
+#define NewObj(type)	(type*)(newObject(ObjType_##type, New(type))->owner);
+#define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;}
+#define SetThis(type)	type* this##type = (type*)(thiz->owner);
 
 
 typedef enum
 {
 	ObjType_Normal,
+	ObjType_Camera,
 	ObjType_Player,
 	ObjType_Enemy,
 	ObjType_Test,

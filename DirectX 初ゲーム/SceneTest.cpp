@@ -2,12 +2,14 @@
 #include "test.h"
 #include "Time.h"
 #include "Renderer.h"
+#include "Camera.h"
 
-#define testMax 4000
+#define testMax 7000
 
 typedef struct _SceneTest
 {
 	Scene base;
+	Camera* camera = NULL;
 	Player* player = NULL;
 	Test* testList[testMax];
 	int testCount;
@@ -22,8 +24,13 @@ Scene * GetSceneTest(void)
 
 void initSceneTest(void)
 {
-	SetNewObj(g_SceneTest.player, Player);
+	g_SceneTest.camera = NewObj(Camera);
+	g_SceneTest.player = NewObj(Player);
+
+	g_SceneTest.camera->target = g_SceneTest.player->base->transform;
 	g_SceneTest.testCount = 0;
+
+	Renderer_SetCamera(g_SceneTest.camera->base->transform);
 }
 
 void updateSceneTest(void)
@@ -38,8 +45,7 @@ void updateSceneTest(void)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			Test *test;
-			SetNewObj(test, Test);
+			Test *test = NewObj(Test);
 			g_SceneTest.testList[i++] = test;
 			if (i >= testMax)
 				break;
@@ -69,13 +75,22 @@ void updateSceneTest(void)
 		}
 	}
 
-	sprintf(GetDebugText(), "ObjectCount: %d", i);
+	int line = 0;
+	sprintf(GetDebugText(line++), "ObjectCount: %d", i);
+	sprintf(GetDebugText(line++), "PlayerX: %5.1f", g_SceneTest.player->base->transform->position.x);
+	sprintf(GetDebugText(line++), "PlayerY: %5.1f", g_SceneTest.player->base->transform->position.y);
+	sprintf(GetDebugText(line++), "PlayerZ: %5.1f", g_SceneTest.player->base->transform->position.z);
+	sprintf(GetDebugText(line++), "CameraX: %5.1f", g_SceneTest.camera->base->transform->position.x);
+	sprintf(GetDebugText(line++), "CameraY: %5.1f", g_SceneTest.camera->base->transform->position.y);
+	sprintf(GetDebugText(line++), "CameraZ: %5.1f", g_SceneTest.camera->base->transform->position.z);
 
 }
 
 void uninitSceneTest(void)
 {
+	DeleteObj(g_SceneTest.camera);
 	DeleteObj(g_SceneTest.player);
+
 	int &i = g_SceneTest.testCount;
 	while (i > 0)
 	{

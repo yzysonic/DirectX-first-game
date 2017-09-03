@@ -1,36 +1,78 @@
 #include "Renderer.h"
 #include "Direct3D.h"
-#include "SceneGame.h"
 #include "Time.h"
 
-const int g_PoolSize = ObjectMax / LAYER_MAX;
-char g_DebugText[256];
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define zmax 100.0f
+#define zmin 0.1f
 
+//=============================================================================
+// 構造体宣言
+//=============================================================================
+const int g_PoolSize = ObjectMax / LAYER_MAX;
 typedef struct _PolygonPool
 {
 	RectPolygon polygon[g_PoolSize];
 	int activeTop = -1;
 }PolygonPool;
 
-
+//=============================================================================
+// グローバル変数
+//=============================================================================
+extern LPDIRECT3DDEVICE9 g_pD3DDevice;
 PolygonPool	g_PolygonPool[LAYER_MAX];
+Transform g_FixedCamera;
+Transform *g_Camera;
+char g_DebugText[10][256] = {};
 
+//=============================================================================
+// プロトタイプ宣言
+//=============================================================================
+void TransformVertex(RectPolygon *thiz);
 void DrawDebug();
+
+
+//=============================================================================
+// 初期化
+//=============================================================================
+void InitRenderer(void)
+{
+	// レンダリングステートパラメータの設定
+	g_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングを行わない
+	g_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
+	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
+	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
+
+	// サンプラーステートパラメータの設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャＵ値の繰り返し設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャＶ値の繰り返し設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);		// テクスチャ拡大時の補間設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);		// テクスチャ縮小時の補間設定
+
+	// テクスチャステージ加算合成処理
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
+
+	g_Camera = &g_FixedCamera;
+}
 
 //=============================================================================
 // 描画処理
 //=============================================================================
 void DrawFrame()
 {
-	LPDIRECT3DDEVICE9	device = GetDevice();
 	PolygonPool*		pool;
 	RectPolygon*		poly;
 
 	// バックバッファ＆Ｚバッファのクリア
-	device->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(200, 200, 200, 255), 1.0f, 0);
+	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(200, 200, 200, 255), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
-	if (SUCCEEDED(device->BeginScene()))
+	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
 
 		for (int i = 0; i < LAYER_MAX; i++)
@@ -43,16 +85,16 @@ void DrawFrame()
 				poly = &pool->polygon[j];
 
 				// 頂点座標の更新
-				Polygon_UpdateVertex(poly);
+				TransformVertex(poly);
 
 				// 頂点フォーマットの設定
-				device->SetFVF(FVF_VERTEX_2D);
+				g_pD3DDevice->SetFVF(FVF_VERTEX_2D);
 
 				// テクスチャの設定
-				device->SetTexture(0, poly->pTexture->pDXTex);
+				g_pD3DDevice->SetTexture(0, poly->pTexture->pDXTex);
 
 				// ポリゴンの描画
-				device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, RECT_NUM_POLYGON, poly->vertex, sizeof(Vertex2D));
+				g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, RECT_NUM_POLYGON, poly->vertex, sizeof(Vertex2D));
 			}
 		}
 
@@ -60,13 +102,27 @@ void DrawFrame()
 		DrawDebug();
 
 		// Direct3Dによる描画の終了
-		device->EndScene();
+		g_pD3DDevice->EndScene();
 	}
 
 	// バックバッファとフロントバッファの入れ替え
-	device->Present(NULL, NULL, NULL, NULL);
+	static HRESULT hr;
+	hr = g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
+
+	// デバイスロストの検知
+	if (hr == D3DERR_DEVICELOST) {
+
+		// 復帰可能の場合
+		if (g_pD3DDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) {
+
+			ResetDevice(GetWindowMode());
+		}
+	}
 }
 
+//=============================================================================
+// ポリゴン資源の取得
+//=============================================================================
 RectPolygon * Renderer_GetPolygon(Layer layer)
 {
 	PolygonPool* pool = &g_PolygonPool[layer];
@@ -82,19 +138,96 @@ RectPolygon * Renderer_GetPolygon(Layer layer)
 		return NULL;
 }
 
+//=============================================================================
+// ポリゴン資源の釈放
+//=============================================================================
 void Renderer_ReleasePolygon(RectPolygon * thiz)
 {
 	PolygonPool* pool = &g_PolygonPool[thiz->layer];
 	pool->polygon[thiz->poolIndex] = pool->polygon[pool->activeTop--];
 }
 
-char * GetDebugText()
+//=============================================================================
+// カメラ設置
+//=============================================================================
+void Renderer_SetCamera(Transform * camera)
 {
-	return g_DebugText;
+	g_Camera = camera;
 }
 
+//=============================================================================
+// 頂点の座標変換
+//=============================================================================
+void TransformVertex(RectPolygon *thiz)
+{
+	// ワールド変換
+	Vector3 pos = thiz->object->transform->position;
+	Vector3 rot = thiz->object->transform->rotation;
+	Vector3 radius = thiz->radius * thiz->object->transform->scale;
+
+	thiz->vertex[0].vtx.x = pos.x - cosf(thiz->baseAngle + rot.z) * radius.x;
+	thiz->vertex[0].vtx.y = pos.y - sinf(thiz->baseAngle + rot.z) * radius.y;
+	thiz->vertex[0].vtx.z = pos.z;
+
+	thiz->vertex[1].vtx.x = pos.x + cosf(thiz->baseAngle - rot.z) * radius.x;
+	thiz->vertex[1].vtx.y = pos.y - sinf(thiz->baseAngle - rot.z) * radius.y;
+	thiz->vertex[1].vtx.z = pos.z;
+
+	thiz->vertex[2].vtx.x = pos.x - cosf(thiz->baseAngle - rot.z) * radius.x;
+	thiz->vertex[2].vtx.y = pos.y + sinf(thiz->baseAngle - rot.z) * radius.y;
+	thiz->vertex[2].vtx.z = pos.z;
+
+	thiz->vertex[3].vtx.x = pos.x + cosf(thiz->baseAngle + rot.z) * radius.x;
+	thiz->vertex[3].vtx.y = pos.y + sinf(thiz->baseAngle + rot.z) * radius.y;
+	thiz->vertex[3].vtx.z = pos.z;
+
+	// カメラ変換
+	thiz->vertex[0].vtx -= g_Camera->position;
+	thiz->vertex[1].vtx -= g_Camera->position;
+	thiz->vertex[2].vtx -= g_Camera->position;
+	thiz->vertex[3].vtx -= g_Camera->position;
+
+	// 投影変換
+	thiz->vertex[0].vtx.x /= thiz->vertex[0].vtx.z;
+	thiz->vertex[0].vtx.y /= thiz->vertex[0].vtx.z;
+	thiz->vertex[0].vtx.z = (thiz->vertex[0].vtx.z - zmin) / (zmax - zmin);
+
+	thiz->vertex[1].vtx.x /= thiz->vertex[1].vtx.z;
+	thiz->vertex[1].vtx.y /= thiz->vertex[1].vtx.z;
+	thiz->vertex[1].vtx.z = (thiz->vertex[1].vtx.z - zmin) / (zmax - zmin);
+
+	thiz->vertex[2].vtx.x /= thiz->vertex[2].vtx.z;
+	thiz->vertex[2].vtx.y /= thiz->vertex[2].vtx.z;
+	thiz->vertex[2].vtx.z = (thiz->vertex[2].vtx.z - zmin) / (zmax - zmin);
+
+	thiz->vertex[3].vtx.x /= thiz->vertex[3].vtx.z;
+	thiz->vertex[3].vtx.y /= thiz->vertex[3].vtx.z;
+	thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
+
+	// スクリーン変換
+	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
+	thiz->vertex[1].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
+	thiz->vertex[2].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
+	thiz->vertex[3].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
+}
+
+//=============================================================================
+// デバッグ文字列の取得
+//=============================================================================
+char *GetDebugText(int line)
+{
+	return g_DebugText[line];
+}
+
+//=============================================================================
+// デバッグ文字の描画
+//=============================================================================
 void DrawDebug()
 {
-	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
-	GetFont()->DrawText(NULL, g_DebugText, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	RECT rect;
+	for (int i = 0; i < 10; i++)
+	{
+		rect = { 0,i*20,SCREEN_WIDTH,SCREEN_HEIGHT };
+		GetFont()->DrawText(NULL, g_DebugText[i], -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	}
 }

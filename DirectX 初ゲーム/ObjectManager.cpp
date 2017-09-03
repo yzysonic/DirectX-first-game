@@ -1,5 +1,6 @@
 #include "ObjectManager.h"
 #include "main.h"
+#include "Camera.h"
 #include "Player.h"
 #include "test.h"
 
@@ -32,13 +33,17 @@ void InitObjectManager(void)
 	g_ObjectTypeFuncList[ObjType_Normal].update = &EmptyFunc;
 	g_ObjectTypeFuncList[ObjType_Normal].uninit = &EmptyFunc;
 
+	g_ObjectTypeFuncList[ObjType_Camera].init	= &initCamera;
+	g_ObjectTypeFuncList[ObjType_Camera].update = &updateCamera;
+	g_ObjectTypeFuncList[ObjType_Camera].uninit = &uninitCamera;
+
 	g_ObjectTypeFuncList[ObjType_Player].init	= &initPlayer;
 	g_ObjectTypeFuncList[ObjType_Player].update = &updatePlayer;
 	g_ObjectTypeFuncList[ObjType_Player].uninit = &uninitPlayer;
 
-	g_ObjectTypeFuncList[ObjType_Test].init	= &initTest;
-	g_ObjectTypeFuncList[ObjType_Test].update = &updateTest;
-	g_ObjectTypeFuncList[ObjType_Test].uninit = &uninitTest;
+	g_ObjectTypeFuncList[ObjType_Test].init		= &initTest;
+	g_ObjectTypeFuncList[ObjType_Test].update	= &updateTest;
+	g_ObjectTypeFuncList[ObjType_Test].uninit	= &uninitTest;
 
 }
 
