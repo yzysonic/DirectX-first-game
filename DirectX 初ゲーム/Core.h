@@ -8,3 +8,4 @@
 #include "Lerp.h"
 #include "Object.h"
 #include "Polygon.h"
+#include "Collider.h"

@@ -13,7 +13,8 @@ int g_ObjectPoolNextObj;
 int g_ObjectUpdateListTop;
 ObjectTypeFunc g_ObjectTypeFuncList[ObjTypeMax];
 
-void EmptyFunc(Object *obj) {}
+void EmptyFunc(Object *) {}
+void EmptyFunc2(Object*, Object*) {};
 
 //public
 
@@ -29,9 +30,13 @@ void InitObjectManager(void)
 		g_ObjectPool[i].poolIndex = i;
 	}
 
-	g_ObjectTypeFuncList[ObjType_Normal].init	= &EmptyFunc;
-	g_ObjectTypeFuncList[ObjType_Normal].update = &EmptyFunc;
-	g_ObjectTypeFuncList[ObjType_Normal].uninit = &EmptyFunc;
+	for (int i = 0; i < ObjTypeMax; i++)
+	{
+		g_ObjectTypeFuncList[i].init = &EmptyFunc;
+		g_ObjectTypeFuncList[i].update = &EmptyFunc;
+		g_ObjectTypeFuncList[i].uninit = &EmptyFunc;
+		g_ObjectTypeFuncList[i].onCollision = &EmptyFunc2;
+	}
 
 	g_ObjectTypeFuncList[ObjType_Camera].init	= &initCamera;
 	g_ObjectTypeFuncList[ObjType_Camera].update = &updateCamera;
@@ -40,6 +45,7 @@ void InitObjectManager(void)
 	g_ObjectTypeFuncList[ObjType_Player].init	= &initPlayer;
 	g_ObjectTypeFuncList[ObjType_Player].update = &updatePlayer;
 	g_ObjectTypeFuncList[ObjType_Player].uninit = &uninitPlayer;
+	g_ObjectTypeFuncList[ObjType_Player].onCollision = &onCollisionPlayer;
 
 	g_ObjectTypeFuncList[ObjType_Test].init		= &initTest;
 	g_ObjectTypeFuncList[ObjType_Test].update	= &updateTest;

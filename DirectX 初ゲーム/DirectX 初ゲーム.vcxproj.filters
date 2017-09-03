@@ -19,6 +19,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{effbbba1-fd5e-4c1c-b0a3-ebf572acb3c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Physics">
+      <UniqueIdentifier>{18ba455b-7671-49d5-b817-eda05d1fd10a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -77,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="Lerp.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Core\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="Lerp.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Core\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

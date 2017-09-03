@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Object.h"
+#include"Core.h"
 
 typedef struct _Player
 {
@@ -10,3 +10,4 @@ typedef struct _Player
 void initPlayer(Object *thiz);
 void updatePlayer(Object *thiz);
 void uninitPlayer(Object *thiz);
+void onCollisionPlayer(Object *thiz, Object *other);

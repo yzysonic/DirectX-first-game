@@ -18,12 +18,12 @@
 
 #define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
 #define WINDOW_TITLE		_T("DirectX 初ゲーム")	// ウインドウのキャプション名
-#define SCREEN_WIDTH		(1280)					// ウインドウの幅
-#define SCREEN_HEIGHT		(720)					// ウインドウの高さ
+#define SCREEN_WIDTH		(1600)					// ウインドウの幅
+#define SCREEN_HEIGHT		(900)					// ウインドウの高さ
 #define SCREEN_CENTER_X		(SCREEN_WIDTH / 2)		// ウインドウの中心Ｘ座標
 #define SCREEN_CENTER_Y		(SCREEN_HEIGHT / 2)		// ウインドウの中心Ｙ座標
 #define MAX_FPS				(61)					// 最大FPS
-#define ObjectMax			(100000)				// 最大オブジェクト数
+#define ObjectMax			(30000)					// 最大オブジェクト数
 
 #define New(obj)			(obj*)malloc(sizeof(obj))
 #define SafeDelete(obj)		if(obj != NULL) free(obj)

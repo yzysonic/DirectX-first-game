@@ -1,13 +1,11 @@
 #include "Player.h"
-#include "Polygon.h"
-#include "Input.h"
-#include "Direct3D.h"
-#include "Time.h"
+#include "test.h"
 
 
 void initPlayer(Object *thiz)
 {
 	thiz->polygon = newPolygon(thiz, LAYER_PLAYER, TEX_PLAYER);
+	thiz->collider = newCollider(thiz);
 	thiz->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	
 }
@@ -56,4 +54,13 @@ void updatePlayer(Object *thiz)
 
 void uninitPlayer(Object *thiz)
 {
+
+}
+
+void onCollisionPlayer(Object * thiz, Object * other)
+{
+	if (other->type == ObjType_Test)
+	{
+		Polygon_SetColor(other->polygon, ColorRGBA(255, 255, 255, 255));
+	}
 }

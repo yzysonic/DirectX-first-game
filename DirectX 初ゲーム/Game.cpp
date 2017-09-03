@@ -6,7 +6,7 @@
 #include "Texture.h"
 #include "ObjectManager.h"
 #include "Renderer.h"
-//#include "Physics.h"
+#include "Physics.h"
 #include "GameManager.h"
 
 // プロトタイプ宣言
@@ -35,7 +35,7 @@ void RunGame(void)
 		CheckWinMesg();
 		UpdateInput();
 		UpdateGameManager();
-		//UpdatePhysics();
+		UpdatePhysics();
 		UpdateObjectManager();
 		DrawFrame();
 		FramerateControl();

@@ -6,8 +6,6 @@
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
-//#define SetNewObj(ptr, type)	ptr = New(type); ptr->base = newObject(ObjType_##type, ptr);
-//#define NewObj(type)		{type* ptr; SetNewObj(ptr, type)}
 #define NewObj(type)	(type*)(newObject(ObjType_##type, New(type))->owner);
 #define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;}
 #define SetThis(type)	type* this##type = (type*)(thiz->owner);
@@ -29,6 +27,7 @@ typedef enum
 //*****************************************************************************
 typedef struct _Object Object;
 typedef struct _RectPolygon RectPolygon;
+typedef struct _Collider Collider;
 
 typedef struct _Transform
 {
@@ -38,7 +37,6 @@ typedef struct _Transform
 	Vector3 scale;
 }Transform;
 
-
 typedef struct _Rigidbody
 {
 	Object *object;
@@ -47,19 +45,6 @@ typedef struct _Rigidbody
 	Vector3 velocity;
 	bool useGravity;
 }Rigidbody;
-
-typedef struct _Collider
-{
-	Object *object;
-	bool isTrigger;
-}Collider;
-
-typedef struct _BoxCollider
-{
-	Collider *base;
-	Vector3 cneter;
-	Vector3 size;
-}BoxCollider;
 
 typedef struct _Object
 {
@@ -83,10 +68,10 @@ typedef struct _Object
 
 typedef struct _ObjectTypeFunc
 {
-	void(*init)(Object*);
-	void(*update)(Object*);
-	void(*uninit)(Object*);
-	void(*onCollision)(Object*, Object*);
+	void(*init)(Object* thiz);
+	void(*update)(Object* thiz);
+	void(*uninit)(Object* thiz);
+	void(*onCollision)(Object* thiz, Object* other);
 }ObjectTypeFunc;
 
 

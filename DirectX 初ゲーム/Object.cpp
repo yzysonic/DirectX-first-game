@@ -1,6 +1,7 @@
-#include"Object.h"
-#include"ObjectManager.h"
-#include"Polygon.h"
+#include "Object.h"
+#include "ObjectManager.h"
+#include "Polygon.h"
+#include "Collider.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -50,6 +51,7 @@ Object* newObject(ObjectType type, void *owner)
 		thiz->init			= ObjectManager_GetTypeFunc(type)->init;
 		thiz->update		= ObjectManager_GetTypeFunc(type)->update;
 		thiz->uninit		= ObjectManager_GetTypeFunc(type)->uninit;
+		thiz->onCollision	= ObjectManager_GetTypeFunc(type)->onCollision;
 
 		strcpy(thiz->name, "Object");
 
@@ -72,7 +74,7 @@ void deleteObject(Object* thiz)
 	Object_SetActive(thiz, false);
 	SafeDelete(thiz->transform);
 	SafeDelete(thiz->rigidbody);
-	SafeDelete(thiz->collider);
+	deleteCollider(thiz->collider);
 	deletePolygon(thiz->polygon);
 
 	thiz->owner = NULL;
