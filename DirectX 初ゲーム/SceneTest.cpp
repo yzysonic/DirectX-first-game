@@ -1,10 +1,11 @@
 #include "SceneTest.h"
-#include "test.h"
 #include "Time.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "test.h"
+#include "Player.h"
 
-#define testMax 7000
+#define testMax 2000
 
 typedef struct _SceneTest
 {
@@ -44,6 +45,7 @@ void updateSceneTest(void)
 	static float timer = 0;
 	static int &i = g_SceneTest.testCount;
 	static bool bReset = false;
+	static bool bProject = true;
 
 	timer += GetDeltaTime();
 
@@ -56,12 +58,19 @@ void updateSceneTest(void)
 			if (i >= testMax)
 				break;
 		}
-		timer = 0;
 	}
+
+	Renderer_SetFov(Lerpf(Renderer_GetFov(), (float)bProject, GetDeltaTime()*5));
+
 
 	if (GetKeyboardPress(DIK_RETURN))
 	{
 		bReset = true;
+	}
+
+	if (GetKeyboardTrigger(DIK_TAB))
+	{
+		bProject = !bProject;
 	}
 
 	if (bReset)

@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Direct3D.h"
 #include "Time.h"
+#include "Lerp.h"
 
 //=============================================================================
 // マクロ定義
@@ -26,6 +27,7 @@ Transform g_FixedCamera;
 Transform *g_Camera;
 int g_PoolSize[LAYER_MAX];
 char g_DebugText[10][256] = {};
+float g_fov;
 
 //=============================================================================
 // プロトタイプ宣言
@@ -59,6 +61,7 @@ void InitRenderer(void)
 
 	// 初期カメラ
 	g_Camera = &g_FixedCamera;
+	g_fov = 1.0f;
 
 	// ポリゴンが使うメモリの確保
 	if (g_PolygonPool[0].polygon != NULL)
@@ -222,20 +225,21 @@ void TransformVertex(RectPolygon *thiz)
 	thiz->vertex[3].vtx -= g_Camera->position;
 
 	// 投影変換
-	thiz->vertex[0].vtx.x /= thiz->vertex[0].vtx.z;
-	thiz->vertex[0].vtx.y /= thiz->vertex[0].vtx.z;
+	float fov = Lerpf(thiz->vertex[0].vtx.z, 1.0f, g_fov);
+	thiz->vertex[0].vtx.x /= thiz->vertex[0].vtx.z / fov;
+	thiz->vertex[0].vtx.y /= thiz->vertex[0].vtx.z / fov;
 	thiz->vertex[0].vtx.z = (thiz->vertex[0].vtx.z - zmin) / (zmax - zmin);
 
-	thiz->vertex[1].vtx.x /= thiz->vertex[1].vtx.z;
-	thiz->vertex[1].vtx.y /= thiz->vertex[1].vtx.z;
+	thiz->vertex[1].vtx.x /= thiz->vertex[1].vtx.z / fov;
+	thiz->vertex[1].vtx.y /= thiz->vertex[1].vtx.z / fov;
 	thiz->vertex[1].vtx.z = (thiz->vertex[1].vtx.z - zmin) / (zmax - zmin);
 
-	thiz->vertex[2].vtx.x /= thiz->vertex[2].vtx.z;
-	thiz->vertex[2].vtx.y /= thiz->vertex[2].vtx.z;
+	thiz->vertex[2].vtx.x /= thiz->vertex[2].vtx.z / fov;
+	thiz->vertex[2].vtx.y /= thiz->vertex[2].vtx.z / fov;
 	thiz->vertex[2].vtx.z = (thiz->vertex[2].vtx.z - zmin) / (zmax - zmin);
 
-	thiz->vertex[3].vtx.x /= thiz->vertex[3].vtx.z;
-	thiz->vertex[3].vtx.y /= thiz->vertex[3].vtx.z;
+	thiz->vertex[3].vtx.x /= thiz->vertex[3].vtx.z / fov;
+	thiz->vertex[3].vtx.y /= thiz->vertex[3].vtx.z / fov;
 	thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
 
 	// スクリーン変換
@@ -251,6 +255,16 @@ void TransformVertex(RectPolygon *thiz)
 char *GetDebugText(int line)
 {
 	return g_DebugText[line];
+}
+
+float Renderer_GetFov()
+{
+	return g_fov;
+}
+
+void Renderer_SetFov(float value)
+{
+	g_fov = value;
 }
 
 //=============================================================================
