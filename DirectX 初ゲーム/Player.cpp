@@ -19,6 +19,8 @@ void initPlayer(Object *thiz)
 	//	thisPlayer->bulletWk[i] = NewObj(Bullet);
 	//	thisPlayer->bulletWk[i]->base->
 	//}
+
+	SetVolume(SE_BULLET, -500);
 }
 
 void updatePlayer(Object *thiz)
@@ -76,13 +78,14 @@ void updatePlayer(Object *thiz)
 
 	if (GetKeyboardPress(DIK_SPACE))
 	{
-		if(thisPlayer->timer >= 0.1f)
+		if(thisPlayer->timer >= 0.13f)
 		{
 			Bullet* bullet = NewObj(Bullet);
 			bullet->base->rigidbody->position = thiz->transform->position;
 			bullet->base->rigidbody->velocity = 1000.0f*thisPlayer->dir + thisPlayer->speed * boost * controlVector;
 			bullet->base->rigidbody->rotation = thisPlayer->base->transform->rotation;
 			thisPlayer->timer = 0;
+			PlaySE(SE_BULLET);
 		}
 		thisPlayer->timer += GetDeltaTime();
 	}

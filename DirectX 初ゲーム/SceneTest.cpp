@@ -41,6 +41,8 @@ void initSceneTest(void)
 	}
 
 	Renderer_SetFov(ProjectMode);
+	SetVolume(BGM_GAME, -1000);
+	PlayBGM(BGM_GAME);
 }
 
 void updateSceneTest(void)
@@ -116,4 +118,6 @@ void uninitSceneTest(void)
 		i--;
 		DeleteObj(g_SceneTest.testList[i]);
 	}
+
+	StopSound(BGM_GAME);
 }

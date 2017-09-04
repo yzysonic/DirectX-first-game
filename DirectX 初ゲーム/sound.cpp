@@ -7,12 +7,16 @@
 
 // サウンドファイルのパス（sound.hの通しナンバーと順番を合わせること）
 const TCHAR* c_soundFilename[] = {
-	_T("data/BGM/sample000.wav"),
-	_T("data/SE/bomb000.wav")
+	_T(SOUND_DIR"BGM/bubble_bubble.wav"),
+	_T(SOUND_DIR"BGM/Ganache_2.wav"),
+	_T(SOUND_DIR"BGM/スモークランド.wav"),
+	_T(SOUND_DIR"BGM/Like_A_Star.wav"),
+	_T(SOUND_DIR"SE/bullet.wav")
 };
 
 // グローバル変数
-IDirectSound8 *g_pDirectSound = NULL;	// サウンドインターフェース
+IDirectSound8 *g_pDirectSound = NULL;			// サウンドインターフェース
+LPDIRECTSOUNDBUFFER8 g_pSoundBuffer[SOUND_MAX];	// サウンドバッファ
 
 // サウンドの初期化
 // hWnd:ウィンドウハンドル
@@ -25,6 +29,10 @@ HRESULT InitSound( HWND hWnd )
 	// 協調レベル設定 
 	if (FAILED(g_pDirectSound->SetCooperativeLevel(hWnd, DSSCL_PRIORITY)))
 		return E_FAIL;
+
+	// サウンドのロード
+	for (int i = 0; i < SOUND_MAX; i++)
+		g_pSoundBuffer[i] = LoadSound(i);
 
 	return S_OK;
 }
@@ -118,7 +126,7 @@ LPDIRECTSOUNDBUFFER8 LoadSound( int no )
 	// 6.曲を読み込む「セカンダリバッファ」を用意
 	ZeroMemory(&buff, sizeof(DSBUFFERDESC));		// まず初期化
 	buff.dwSize = sizeof(DSBUFFERDESC);			// そこから各種設定
-	buff.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_LOCDEFER;
+	buff.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_LOCDEFER | DSBCAPS_CTRLVOLUME;
 	buff.dwBufferBytes = size;
 	buff.lpwfxFormat = &pcm;
 
@@ -157,8 +165,9 @@ void PlaySound(  LPDIRECTSOUNDBUFFER8 pBuffer, int flag/*=0*/ )
 }
 
 // 音を止める
-void StopSound( LPDIRECTSOUNDBUFFER8 pBuffer )
+void StopSound(SoundName sound )
 {
+	LPDIRECTSOUNDBUFFER8 pBuffer = g_pSoundBuffer[sound];
 	DWORD status;
 
 	pBuffer->GetStatus(&status);
@@ -180,5 +189,21 @@ bool IsPlaying( LPDIRECTSOUNDBUFFER8 pBuffer )
 		return true;
 	}
 	return false;
+}
+
+void PlayBGM(SoundName sound)
+{
+	PlaySound(g_pSoundBuffer[sound], E_DS8_FLAG_LOOP);
+}
+
+void PlaySE(SoundName sound)
+{
+	g_pSoundBuffer[sound]->SetCurrentPosition(0);
+	PlaySound(g_pSoundBuffer[sound], E_DS8_FLAG_NONE);
+}
+
+void SetVolume(SoundName sound, LONG volume)
+{
+	g_pSoundBuffer[sound]->SetVolume(volume);
 }
 

@@ -6,13 +6,18 @@
 #include <tchar.h>
 #include <mmsystem.h>
 
+#define SOUND_DIR "Data/Sound/"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-enum
+enum SoundName
 {	// サウンド通しナンバー(sound.cppの順番と合わせる事)
-	BGM_00,
-	SE_00,
+	BGM_TITLE,
+	BGM_GAME,
+	BGM_GAMEOVER,
+	BGM_CLEAR,
+	SE_BULLET,
 	SOUND_MAX
 };
 
@@ -31,5 +36,9 @@ void					UninitSound();			// 後片付け
 LPDIRECTSOUNDBUFFER8	LoadSound( int no );	// サウンドのロード
 void					PlaySound( LPDIRECTSOUNDBUFFER8 pBuffer, int flag = 0 );	// 音ごとに再生
 bool					IsPlaying( LPDIRECTSOUNDBUFFER8 pBuffer );					// 再生中かどうか
+void					PlayBGM(SoundName sound);
+void					PlaySE(SoundName sound);
+void					SetVolume(SoundName sound, LONG volume);
+void					StopSound(SoundName sound);
 
 #endif
