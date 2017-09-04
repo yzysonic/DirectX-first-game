@@ -3,12 +3,12 @@
 
 #define TEX_DIR "Data/Texture/"
 
-typedef enum
+enum TextureName
 {
 	TEX_NONE,
 	TEX_PLAYER,
 	TEX_MAX
-}TextureName;
+};
 
 typedef struct _Texture
 {

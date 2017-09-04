@@ -45,7 +45,7 @@ void updateSceneTest(void)
 	static float timer = 0;
 	static int &i = g_SceneTest.testCount;
 	static bool bReset = false;
-	static bool bProject = true;
+	static bool bProject = false;
 
 	timer += GetDeltaTime();
 

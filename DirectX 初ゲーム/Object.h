@@ -11,7 +11,7 @@
 #define SetThis(type)	type* this##type = (type*)(thiz->owner);
 
 
-typedef enum
+enum ObjectType
 {
 	ObjType_Normal,
 	ObjType_Camera,
@@ -19,7 +19,7 @@ typedef enum
 	ObjType_Enemy,
 	ObjType_Test,
 	ObjTypeMax
-}ObjectType;
+};
 
 
 //*****************************************************************************

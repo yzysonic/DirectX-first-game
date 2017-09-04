@@ -1,12 +1,12 @@
 #pragma once
 
-typedef enum
+enum SceneName
 {
 	SCENE_TITLE,
 	SCENE_GAME,
 	SCENE_RESULT,
 	SCENE_TEST
-}SceneName;
+};
 
 typedef struct _Scene
 {

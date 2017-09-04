@@ -69,7 +69,7 @@ void FramerateControl()
 	g_FrameCount++;
 	elapsed = timeGetTime() - g_pFPSTimer->startTime;
 	//if (elapsed >= g_pFPSTimer->interval)
-	if (g_FrameCount >= 30)
+	if (g_FrameCount == 30)
 	{
 		//g_fps = g_FrameCount / (g_pFPSTimer->interval / 1000.0f);
 		g_fps = (int)(g_FrameCount / Timer_ElapsedTime(g_pFPSTimer));
@@ -84,12 +84,12 @@ void FramerateControl()
 	if (sleep > 0)
 	{
 		Sleep(sleep);
-		_elapsed = elapsed;
-		elapsed = (timeGetTime() - g_pFrameTimer->startTime);
-		g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
+		//_elapsed = elapsed;
+		//elapsed = (timeGetTime() - g_pFrameTimer->startTime);
+		//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
 	}
-	else
-		g_FrameError = 0;
+	//else
+	//	g_FrameError = 0;
 	
 	//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
 	g_DeltaTime = elapsed / 1000.0f;
