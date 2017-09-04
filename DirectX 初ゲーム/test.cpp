@@ -7,11 +7,11 @@ void initTest(Object * thiz)
 
 	float scale = 0.4f;
 	thiz->transform->scale = Vector3(scale, scale, 0);
-	thiz->transform->position = Vector3(Randomf(-2000, 2000), Randomf(-1000, 1000), -10);
+	thiz->transform->position = Vector3(Randomf(-2000, 2000), Randomf(-1000, 1000), 0);
 
 	thisTest->timer = newTimer(Randomf(0.2f, 0.7f));
 	thisTest->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f)*2;
-	thisTest->targetZ = Randomf(0, 3);
+	thisTest->targetZ = Randomf(1, 5);
 	thisTest->targetC = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 250);
 	Polygon_SetColor(thiz->polygon, thisTest->targetC);
 }

@@ -6,7 +6,7 @@ void initCamera(Object * thiz)
 {
 	SetThis(Camera);
 	thisCamera->target = NULL;
-	thiz->transform->position.z = 5.0f;
+	thiz->transform->position.z = -5.0f;
 }
 
 void updateCamera(Object * thiz)

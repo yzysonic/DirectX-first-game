@@ -85,7 +85,7 @@ void FramerateControl()
 	{
 		Sleep(sleep);
 		//_elapsed = elapsed;
-		//elapsed = (timeGetTime() - g_pFrameTimer->startTime);
+		elapsed = (timeGetTime() - g_pFrameTimer->startTime);
 		//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
 	}
 	//else
