@@ -30,6 +30,8 @@
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
+#define PI D3DX_PI
+
 // ƒƒ‚ƒŠƒŠ[ƒN©“®ŒŸo
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC

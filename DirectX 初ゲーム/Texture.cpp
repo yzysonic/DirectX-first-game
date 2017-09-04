@@ -13,6 +13,7 @@ void InitTexture()
 	g_textureList[TEX_NONE].size = Vector2(100, 100);
 
 	LoadTexture(TEX_PLAYER, "player.png");
+	LoadTexture(TEX_BULLET, "bullet.png");
 }
 
 void UninitTexture()

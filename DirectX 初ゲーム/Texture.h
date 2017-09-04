@@ -7,6 +7,7 @@ enum TextureName
 {
 	TEX_NONE,
 	TEX_PLAYER,
+	TEX_BULLET,
 	TEX_MAX
 };
 

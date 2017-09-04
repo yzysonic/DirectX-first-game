@@ -5,6 +5,8 @@
 typedef struct _Player
 {
 	Object *base;
+	Vector3 dir;
+	float speed;
 }Player;
 
 void initPlayer(Object *thiz);
