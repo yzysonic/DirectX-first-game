@@ -87,6 +87,9 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Core\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Core\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

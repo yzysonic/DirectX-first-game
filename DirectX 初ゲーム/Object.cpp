@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 #include "Polygon.h"
 #include "Collider.h"
+#include "Rigidbody.h"
 
 //*****************************************************************************
 // É}ÉNÉçíËã`

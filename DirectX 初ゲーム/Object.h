@@ -28,6 +28,7 @@ enum ObjectType
 typedef struct _Object Object;
 typedef struct _RectPolygon RectPolygon;
 typedef struct _Collider Collider;
+typedef struct _Rigidbody Rigidbody;
 
 typedef struct _Transform
 {
@@ -36,15 +37,6 @@ typedef struct _Transform
 	Vector3 rotation;
 	Vector3 scale;
 }Transform;
-
-typedef struct _Rigidbody
-{
-	Object *object;
-	Vector3 position;
-	Vector3 rotation;
-	Vector3 velocity;
-	bool useGravity;
-}Rigidbody;
 
 typedef struct _Object
 {

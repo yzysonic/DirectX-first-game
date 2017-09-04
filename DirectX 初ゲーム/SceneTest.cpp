@@ -6,6 +6,7 @@
 #include "Player.h"
 
 #define testMax 2000
+#define ProjectMode 0
 
 typedef struct _SceneTest
 {
@@ -39,7 +40,7 @@ void initSceneTest(void)
 		g_SceneTest.testList[g_SceneTest.testCount++] = test;
 	}
 
-	Renderer_SetFov(0);
+	Renderer_SetFov(ProjectMode);
 }
 
 void updateSceneTest(void)
@@ -47,7 +48,8 @@ void updateSceneTest(void)
 	static float timer = 0;
 	static int &i = g_SceneTest.testCount;
 	static bool bReset = false;
-	static bool bProject = (bool)Renderer_GetFov();
+	static float fov = Renderer_GetFov();
+	static int project = ProjectMode;
 
 	timer += GetDeltaTime();
 
@@ -61,7 +63,7 @@ void updateSceneTest(void)
 				break;
 		}
 	}
-	Renderer_SetFov(Lerpf(Renderer_GetFov(), (float)bProject, GetDeltaTime()*5));
+	Renderer_SetFov(Lerpf(Renderer_GetFov(), (float)project, GetDeltaTime()*5));
 
 	if (GetKeyboardPress(DIK_RETURN))
 	{
@@ -70,7 +72,7 @@ void updateSceneTest(void)
 
 	if (GetKeyboardTrigger(DIK_TAB))
 	{
-		bProject = !bProject;
+		project = !project;
 	}
 
 	if (bReset)
@@ -92,14 +94,14 @@ void updateSceneTest(void)
 
 	int line = 0;
 	sprintf(GetDebugText(line++), "ObjectCount: %d", i);
+	sprintf(GetDebugText(line++), "DeltaTime: %3.0fms", GetDeltaTime()*1000);
+	sprintf(GetDebugText(line++), "fov: %2.1f", Renderer_GetFov());
 	sprintf(GetDebugText(line++), "PlayerX: %5.1f", g_SceneTest.player->base->transform->position.x);
 	sprintf(GetDebugText(line++), "PlayerY: %5.1f", g_SceneTest.player->base->transform->position.y);
 	sprintf(GetDebugText(line++), "PlayerZ: %5.1f", g_SceneTest.player->base->transform->position.z);
 	sprintf(GetDebugText(line++), "CameraX: %5.1f", g_SceneTest.camera->base->transform->position.x);
 	sprintf(GetDebugText(line++), "CameraY: %5.1f", g_SceneTest.camera->base->transform->position.y);
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", g_SceneTest.camera->base->transform->position.z);
-	sprintf(GetDebugText(line++), "fov: %2.1f", Renderer_GetFov());
-	sprintf(GetDebugText(line++), "DeltaTime: %3.0fms", GetDeltaTime()*1000);
 
 }
 
