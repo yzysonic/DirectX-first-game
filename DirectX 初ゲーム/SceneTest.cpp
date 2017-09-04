@@ -45,7 +45,7 @@ void updateSceneTest(void)
 	static float timer = 0;
 	static int &i = g_SceneTest.testCount;
 	static bool bReset = false;
-	static bool bProject = false;
+	static bool bProject = true;
 
 	timer += GetDeltaTime();
 
@@ -59,9 +59,17 @@ void updateSceneTest(void)
 				break;
 		}
 	}
-
 	Renderer_SetFov(Lerpf(Renderer_GetFov(), (float)bProject, GetDeltaTime()*5));
-
+	if (bProject)
+	{
+		if (Renderer_GetFov() > 0.95f)
+			Renderer_SetFov(1.0f);
+	}
+	else
+	{
+		if (Renderer_GetFov() < 0.05f)
+			Renderer_SetFov(0.0f);
+	}
 
 	if (GetKeyboardPress(DIK_RETURN))
 	{
@@ -98,6 +106,7 @@ void updateSceneTest(void)
 	sprintf(GetDebugText(line++), "CameraX: %5.1f", g_SceneTest.camera->base->transform->position.x);
 	sprintf(GetDebugText(line++), "CameraY: %5.1f", g_SceneTest.camera->base->transform->position.y);
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", g_SceneTest.camera->base->transform->position.z);
+	sprintf(GetDebugText(line++), "fov: %2.1f", Renderer_GetFov());
 
 }
 

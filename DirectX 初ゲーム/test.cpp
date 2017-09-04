@@ -12,7 +12,7 @@ void initTest(Object * thiz)
 	thisTest->timer = newTimer(Randomf(0.2f, 0.7f));
 	thisTest->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f)*2;
 	thisTest->targetZ = Randomf(0, 3);
-	thisTest->targetC = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0);
+	thisTest->targetC = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 250);
 	Polygon_SetColor(thiz->polygon, thisTest->targetC);
 }
 
@@ -26,7 +26,7 @@ void updateTest(Object * thiz)
 	}
 	thiz->transform->position += thisTest->speed*GetDeltaTime();
 	thiz->transform->position.z = Lerpf(thiz->transform->position.z, thisTest->targetZ, 3 * GetDeltaTime());
-	Polygon_SetOpacity(thiz->polygon, (1-(thisTest->targetZ - thiz->transform->position.z)/(10+ thisTest->targetZ)));
+	//Polygon_SetOpacity(thiz->polygon, (1-(thisTest->targetZ - thiz->transform->position.z)/(10+ thisTest->targetZ)));
 }
 
 void uninitTest(Object * thiz)

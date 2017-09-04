@@ -61,7 +61,7 @@ void InitRenderer(void)
 
 	// 初期カメラ
 	g_Camera = &g_FixedCamera;
-	g_fov = 0.0f;
+	g_fov = 1.0f;
 
 	// ポリゴンが使うメモリの確保
 	if (g_PolygonPool[0].polygon != NULL)
