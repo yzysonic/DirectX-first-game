@@ -22,8 +22,8 @@ void InitGame(void)
 {
 	InitTime();
 	InitTexture();
-	InitObjectManager();
 	InitRenderer();
+	InitObjectManager();
 	InitGameManager();
 }
 
@@ -35,8 +35,8 @@ void RunGame(void)
 		CheckWinMesg();
 		UpdateInput();
 		UpdateGameManager();
-		UpdatePhysics();
 		UpdateObjectManager();
+		UpdatePhysics();
 		DrawFrame();
 		FramerateControl();
 	}
@@ -46,8 +46,8 @@ void RunGame(void)
 void UninitGame(void)
 {
 	UninitGameManager();
-	UninitRenderer();
 	UninitObjectManager();
+	UninitRenderer();
 	UninitTexture();
 	UninitTime();
 }

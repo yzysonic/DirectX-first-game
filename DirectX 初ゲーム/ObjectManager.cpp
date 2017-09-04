@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Bullet.h"
 #include "test.h"
 
 //*****************************************************************************
@@ -47,6 +48,10 @@ void InitObjectManager(void)
 	g_ObjectTypeFuncList[ObjType_Player].uninit = &uninitPlayer;
 	g_ObjectTypeFuncList[ObjType_Player].onCollision = &onCollisionPlayer;
 
+	g_ObjectTypeFuncList[ObjType_Bullet].init	= &initBullet;
+	g_ObjectTypeFuncList[ObjType_Bullet].update = &updateBullet;
+	g_ObjectTypeFuncList[ObjType_Bullet].uninit = &uninitBullet;
+
 	g_ObjectTypeFuncList[ObjType_Test].init		= &initTest;
 	g_ObjectTypeFuncList[ObjType_Test].update	= &updateTest;
 	g_ObjectTypeFuncList[ObjType_Test].uninit	= &uninitTest;
@@ -82,7 +87,9 @@ Object* ObjectManager_GetObj()
 
 	if (g_ObjectPoolNextObj < ObjectMax)
 	{
-		thiz = &g_ObjectPool[g_ObjectPoolNextObj++];
+		thiz = &g_ObjectPool[g_ObjectPoolNextObj];
+		thiz->poolIndex = g_ObjectPoolNextObj;
+		g_ObjectPoolNextObj++;
 	}
 
 	return thiz;
@@ -91,8 +98,29 @@ Object* ObjectManager_GetObj()
 void ObjectManager_ReleaseObj(Object * thiz)
 {
 	int index = thiz->poolIndex;
-	g_ObjectPool[index] = g_ObjectPool[g_ObjectPoolNextObj - 1];
-	g_ObjectPool[index].poolIndex = index;
+	Object *obj = &g_ObjectPool[index];
+
+	if (obj->poolIndex < g_ObjectPoolNextObj - 1)
+	{
+		// 最後尾のオブジェクトをindexのところに移動
+		*obj = g_ObjectPool[g_ObjectPoolNextObj - 1];
+		obj->poolIndex = index;
+
+		// アドレスが変わったため参照を更新する
+		g_ObjectUpdateList[obj->updateIndex] = obj;
+		((ObjOwner*)obj->owner)->base = obj;
+		obj->transform->object = obj;
+		if(obj->polygon)
+			obj->polygon->object = obj;
+		if(obj->collider)
+			obj->collider->object = obj;
+		if(obj->rigidbody)
+			obj->rigidbody->object = obj;
+	}
+
+	// メモリをクリア
+	g_ObjectPool[g_ObjectPoolNextObj - 1] = {};
+
 	g_ObjectPoolNextObj--;
 }
 
@@ -119,8 +147,12 @@ void ObjectManager_UpdateList_Remove(Object* thiz)
 {
 	int &top = g_ObjectUpdateListTop;
 
-	g_ObjectUpdateList[thiz->updateIndex] = g_ObjectUpdateList[top];
-	g_ObjectUpdateList[thiz->updateIndex]->updateIndex = thiz->updateIndex;
+	if (thiz->updateIndex < top)
+	{
+		g_ObjectUpdateList[thiz->updateIndex] = g_ObjectUpdateList[top];
+		g_ObjectUpdateList[thiz->updateIndex]->updateIndex = thiz->updateIndex;
+	}
+	g_ObjectUpdateList[top] = NULL;
 	thiz->updateIndex = -1;
 	top--;
 

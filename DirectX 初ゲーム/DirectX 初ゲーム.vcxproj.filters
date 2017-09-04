@@ -90,6 +90,9 @@
     <ClCompile Include="Rigidbody.cpp">
       <Filter>Core\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Rigidbody.h">
       <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Script</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

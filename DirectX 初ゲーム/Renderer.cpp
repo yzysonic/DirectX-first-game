@@ -75,10 +75,12 @@ void InitRenderer(void)
 	g_PoolSize[LAYER_UI_00]		= POOL_SIZE_UI_00;
 	g_PoolSize[LAYER_UI_01]		= POOL_SIZE_UI_01;
 	g_PoolSize[LAYER_UI_02]		= POOL_SIZE_UI_02;
+	g_PoolSize[LAYER_TOP]		= POOL_SIZE_TOP;
 
 	for (int i = 0; i < LAYER_MAX; i++)
 	{
 		g_PolygonPool[i].polygon = (RectPolygon*)malloc(sizeof(RectPolygon)*g_PoolSize[i]);
+		ZeroMemory(g_PolygonPool[i].polygon, sizeof(RectPolygon)*g_PoolSize[i]);
 	}
 
 }
@@ -177,8 +179,24 @@ RectPolygon * Renderer_GetPolygon(Layer layer)
 //=============================================================================
 void Renderer_ReleasePolygon(RectPolygon * thiz)
 {
+	int index = thiz->poolIndex;
 	PolygonPool* pool = &g_PolygonPool[thiz->layer];
-	pool->polygon[thiz->poolIndex] = pool->polygon[pool->activeTop--];
+	RectPolygon* polygon = &pool->polygon[index];
+
+	if (polygon->poolIndex < pool->activeTop)
+	{
+		// 最後尾のポリゴンをpoolIndexのところへ移動する
+		*polygon = pool->polygon[pool->activeTop];
+		polygon->poolIndex = index;
+
+		// アドレスが変わったため参照を更新する
+		polygon->object->polygon = polygon;
+	}
+
+	// メモリをクリア
+	pool->polygon[pool->activeTop] = {};
+
+	pool->activeTop--;
 }
 
 //=============================================================================

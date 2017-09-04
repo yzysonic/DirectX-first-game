@@ -23,12 +23,19 @@ void Physics_AddCollider(Collider * thiz)
 	if ((g_ColliderListTop + 1) < ObjectMax)
 	{
 		g_ColliderList[++g_ColliderListTop] = thiz;
+		thiz->listIndex = g_ColliderListTop;
 	}
 }
 
 void Physics_RemoveCollider(Collider * thiz)
 {
-	g_ColliderList[thiz->listIndex] = g_ColliderList[g_ColliderListTop--];
+	if (thiz->listIndex < g_ColliderListTop)
+	{
+		g_ColliderList[thiz->listIndex] = g_ColliderList[g_ColliderListTop];
+		g_ColliderList[thiz->listIndex]->listIndex = thiz->listIndex;
+	}
+	g_ColliderList[g_ColliderListTop] = NULL;
+	g_ColliderListTop--;
 	thiz->listIndex = -1;
 }
 
@@ -37,12 +44,19 @@ void Physics_AddRigidbody(Rigidbody * thiz)
 	if ((g_RigidbodyListTop + 1) < ObjectMax)
 	{
 		g_RigidbodyList[++g_RigidbodyListTop] = thiz;
+		thiz->listIndex = g_RigidbodyListTop;
 	}
 }
 
 void Physics_RemoveRigidbody(Rigidbody * thiz)
 {
-	g_RigidbodyList[thiz->listIndex] = g_RigidbodyList[g_RigidbodyListTop--];
+	if (thiz->listIndex < g_RigidbodyListTop)
+	{
+		g_RigidbodyList[thiz->listIndex] = g_RigidbodyList[g_RigidbodyListTop];
+		g_RigidbodyList[thiz->listIndex]->listIndex = thiz->listIndex;
+	}
+	g_RigidbodyList[g_RigidbodyListTop] = NULL;
+	g_RigidbodyListTop--;
 	thiz->listIndex = -1;
 }
 
@@ -90,6 +104,8 @@ void UpdateDynamics()
 			rb->velocity.z += 0.5f*(a.z + rb->useGravity*g_Gravaty.z)*dt;	
 		}
 
+		rb->object->transform->position = rb->position;
+		rb->object->transform->rotation = rb->rotation;
 
 	}
 

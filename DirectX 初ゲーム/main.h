@@ -26,7 +26,7 @@
 #define ObjectMax			(30000)					// 最大オブジェクト数
 
 #define New(obj)			(obj*)malloc(sizeof(obj))
-#define SafeDelete(obj)		if(obj != NULL) free(obj)
+#define SafeDelete(ptr)		if(ptr != NULL) {free(ptr); ptr = NULL; }
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 

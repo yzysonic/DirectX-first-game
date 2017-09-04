@@ -34,7 +34,7 @@ void initSceneTest(void)
 
 	Renderer_SetCamera(g_SceneTest.camera->base->transform);
 
-	for (int j = 0; j < 100; j++)
+	for (int j = 0; j < 1000; j++)
 	{
 		Test *test = NewObj(Test);
 		g_SceneTest.testList[g_SceneTest.testCount++] = test;

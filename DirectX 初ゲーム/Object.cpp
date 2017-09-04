@@ -9,11 +9,6 @@
 //*****************************************************************************
 
 
-typedef struct _ObjOwner
-{
-	Object *base;
-}ObjOwner;
-
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -74,7 +69,7 @@ void deleteObject(Object* thiz)
 
 	Object_SetActive(thiz, false);
 	SafeDelete(thiz->transform);
-	SafeDelete(thiz->rigidbody);
+	deleteRigidbody(thiz->rigidbody);
 	deleteCollider(thiz->collider);
 	deletePolygon(thiz->polygon);
 

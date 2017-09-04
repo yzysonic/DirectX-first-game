@@ -7,7 +7,7 @@
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
 #define NewObj(type)	(type*)(newObject(ObjType_##type, New(type))->owner);
-#define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr); ptr = NULL;}
+#define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr)}
 #define SetThis(type)	type* this##type = (type*)(thiz->owner);
 
 
@@ -16,6 +16,7 @@ enum ObjectType
 	ObjType_Normal,
 	ObjType_Camera,
 	ObjType_Player,
+	ObjType_Bullet,
 	ObjType_Enemy,
 	ObjType_Test,
 	ObjTypeMax
@@ -65,6 +66,12 @@ typedef struct _ObjectTypeFunc
 	void(*uninit)(Object* thiz);
 	void(*onCollision)(Object* thiz, Object* other);
 }ObjectTypeFunc;
+
+typedef struct _ObjOwner
+{
+	Object *base;
+}ObjOwner;
+
 
 
 //*****************************************************************************
