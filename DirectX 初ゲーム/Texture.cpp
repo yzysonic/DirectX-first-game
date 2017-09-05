@@ -12,9 +12,10 @@ void InitTexture()
 	g_textureList[TEX_NONE].divide = Vector2(1, 1);
 	g_textureList[TEX_NONE].size = Vector2(100, 100);
 
+	LoadTexture(TEX_VIGNETTING,		"vignetting.png");
 	LoadTexture(TEX_TITLE_LOGO,		"title_logo.png");
-	LoadTexture(TEX_TITLE_PRESSKEY, "title_presskey.png");
-	LoadTexture(TEX_TITLE_INFO,		"title_info.png");
+	LoadTexture(TEX_TITLE_PRESSKEY, "title_presskey_v3.png");
+	LoadTexture(TEX_TITLE_INFO,		"title_copyright.png");
 	LoadTexture(TEX_PLAYER,			"player.png");
 	LoadTexture(TEX_BULLET,			"bullet.png");
 }
