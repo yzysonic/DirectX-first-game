@@ -106,7 +106,7 @@ void DrawFrame()
 	RectPolygon*		poly;
 
 	// バックバッファ＆Ｚバッファのクリア
-	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(200, 200, 200, 255), 1.0f, 0);
+	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(220, 220, 220, 255), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
@@ -262,10 +262,10 @@ void TransformVertex(RectPolygon *thiz)
 	thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
 
 	// スクリーン変換
-	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
-	thiz->vertex[1].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
-	thiz->vertex[2].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
-	thiz->vertex[3].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
+	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
+	thiz->vertex[1].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
+	thiz->vertex[2].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
+	thiz->vertex[3].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
 }
 
 //=============================================================================

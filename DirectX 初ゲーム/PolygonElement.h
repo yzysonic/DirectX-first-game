@@ -7,6 +7,8 @@ typedef struct _PolygonElement
 	float timer;
 	float timerInterval;
 	Vector3 speed;
+	Vector3 prePos;
+	Color nextColor;
 	void(*update)(_PolygonElement*);
 }PolygonElement;
 
