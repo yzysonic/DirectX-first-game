@@ -119,5 +119,8 @@ void uninitSceneTest(void)
 		DeleteObj(g_SceneTest.testList[i]);
 	}
 
+	for (int i = 0; i < 10; i++)
+		strcpy(GetDebugText(i), "");
+
 	StopSound(BGM_GAME);
 }

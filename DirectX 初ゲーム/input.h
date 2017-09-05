@@ -53,6 +53,7 @@ bool GetKeyboardPress(int nKey);
 bool GetKeyboardTrigger(int nKey);
 bool GetKeyboardRepeat(int nKey);
 bool GetKeyboardRelease(int nKey);
+bool GetKeyboardAnyKeyTrigger();
 
 //---------------------------- mouse
 BOOL IsMouseLeftPressed(void);      // ¶ƒNƒŠƒbƒN‚µ‚½ó‘Ô

@@ -108,7 +108,8 @@ void ObjectManager_ReleaseObj(Object * thiz)
 
 		// アドレスが変わったため参照を更新する
 		g_ObjectUpdateList[obj->updateIndex] = obj;
-		((ObjOwner*)obj->owner)->base = obj;
+		if(obj->owner != NULL)
+			((ObjOwner*)obj->owner)->base = obj;
 		obj->transform->object = obj;
 		if(obj->polygon)
 			obj->polygon->object = obj;

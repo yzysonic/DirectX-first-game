@@ -193,6 +193,7 @@ bool IsPlaying( LPDIRECTSOUNDBUFFER8 pBuffer )
 
 void PlayBGM(SoundName sound)
 {
+	g_pSoundBuffer[sound]->SetCurrentPosition(0);
 	PlaySound(g_pSoundBuffer[sound], E_DS8_FLAG_LOOP);
 }
 

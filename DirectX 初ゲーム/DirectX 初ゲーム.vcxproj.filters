@@ -93,6 +93,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTitle.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

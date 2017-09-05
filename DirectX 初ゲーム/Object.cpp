@@ -53,7 +53,8 @@ Object* newObject(ObjectType type, void *owner)
 
 		Object_SetActive(thiz, true);
 
-		((ObjOwner*)owner)->base = thiz;
+		if(owner != NULL)
+			((ObjOwner*)owner)->base = thiz;
 
 		if (thiz->init)
 			thiz->init(thiz);

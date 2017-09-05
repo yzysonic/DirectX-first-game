@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Random.h"
 #include "Renderer.h"
+#include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneTest.h"
 
@@ -11,11 +12,17 @@ void LoadScene(SceneName scene);
 
 void InitGameManager(void)
 {
-	LoadScene(SCENE_TEST);
+	LoadScene(SCENE_TITLE);
 }
 
 void UpdateGameManager(void)
 {
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_1))
+		SetScene(SCENE_TITLE);
+	if (GetKeyboardTrigger(DIK_2))
+		SetScene(SCENE_TEST);
+#endif
 	g_CurrentScene->update();
 }
 
@@ -37,23 +44,30 @@ void LoadScene(SceneName scene)
 	switch (scene)
 	{
 	case SCENE_TITLE:
-
+		g_CurrentScene = GetSceneTitle();
+		g_CurrentScene->init = &initSceneTitle;
+		g_CurrentScene->update = &updateSceneTitle;
+		g_CurrentScene->uninit = &uninitSceneTitle;
 		break;
+
 	case SCENE_GAME:
 		g_CurrentScene = GetSceneGame();
 		g_CurrentScene->init = &initSceneGame;
 		g_CurrentScene->update = &updateSceneGame;
 		g_CurrentScene->uninit = &uninitSceneGame;
 		break;
-	case SCENE_RESULT:
+
+	case SCENE_CLEAR:
 
 		break;
+
 	case SCENE_TEST:
 		g_CurrentScene = GetSceneTest();
 		g_CurrentScene->init = &initSceneTest;
 		g_CurrentScene->update = &updateSceneTest;
 		g_CurrentScene->uninit = &uninitSceneTest;
 		break;
+
 	}
 
 	InitRandom();

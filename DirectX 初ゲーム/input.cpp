@@ -253,6 +253,14 @@ bool GetKeyboardRelease(int key)
 	return (g_keyStateRelease[key] & 0x80) ? true : false;
 }
 
+bool GetKeyboardAnyKeyTrigger()
+{
+	for (int i = 0; i < NUM_KEY_MAX; i++)
+		if (GetKeyboardTrigger(i)) return true;
+	
+	return false;
+}
+
 
 //=============================================================================
 // ƒ}ƒEƒXŠÖŒW‚Ìˆ—

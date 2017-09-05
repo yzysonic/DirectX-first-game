@@ -60,8 +60,9 @@ void InitRenderer(void)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
 
 	// 初期カメラ
+	g_FixedCamera.position = Vector3(0.0f, 0.0f, -1.0f);
 	g_Camera = &g_FixedCamera;
-	g_fov = 1.0f;
+	g_fov = 0.0f;
 
 	// ポリゴンが使うメモリの確保
 	if (g_PolygonPool[0].polygon != NULL)
