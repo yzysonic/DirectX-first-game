@@ -177,6 +177,11 @@ void StopSound(SoundName sound )
 	}
 }
 
+void GetSoundCurrentPos(SoundName sound, LPDWORD playCursor)
+{
+	g_pSoundBuffer[sound]->GetCurrentPosition(playCursor, NULL);
+}
+
 // 再生中かどうか調べる
 // pBuffer:音を鳴らしたいサウンドデータのセカンダリバッファ
 bool IsPlaying( LPDIRECTSOUNDBUFFER8 pBuffer )

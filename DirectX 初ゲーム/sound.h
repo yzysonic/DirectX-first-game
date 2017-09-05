@@ -40,5 +40,6 @@ void					PlayBGM(SoundName sound);
 void					PlaySE(SoundName sound);
 void					SetVolume(SoundName sound, LONG volume);
 void					StopSound(SoundName sound);
+void					GetSoundCurrentPos(SoundName sound, LPDWORD playCursor);
 
 #endif
