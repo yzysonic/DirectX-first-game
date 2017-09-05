@@ -8,7 +8,6 @@ void InitObjectManager(void);
 void UpdateObjectManager(void);
 void UninitObjectManager(void);
 
-ObjectTypeFunc* ObjectManager_GetTypeFunc(ObjectType type);
 Object* ObjectManager_GetObj();
 void ObjectManager_ReleaseObj(Object* thiz);
 bool ObjectManager_UpdateList_Add(Object* thiz);

@@ -262,10 +262,10 @@ void TransformVertex(RectPolygon *thiz)
 	thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
 
 	// ƒXƒNƒŠ[ƒ“•ÏŠ·
-	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
-	thiz->vertex[1].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
-	thiz->vertex[2].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
-	thiz->vertex[3].vtx += Vector3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f);
+	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
+	thiz->vertex[1].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
+	thiz->vertex[2].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
+	thiz->vertex[3].vtx += Vector3(SCREEN_CENTER_X+0.5f, SCREEN_CENTER_Y+0.5f, 0.0f);
 }
 
 //=============================================================================

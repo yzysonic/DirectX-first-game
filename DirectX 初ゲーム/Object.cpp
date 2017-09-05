@@ -44,10 +44,10 @@ Object* newObject(ObjectType type, void *owner)
 		thiz->isActive		= false;
 		thiz->updateIndex	= -1;
 
-		thiz->init			= ObjectManager_GetTypeFunc(type)->init;
-		thiz->update		= ObjectManager_GetTypeFunc(type)->update;
-		thiz->uninit		= ObjectManager_GetTypeFunc(type)->uninit;
-		thiz->onCollision	= ObjectManager_GetTypeFunc(type)->onCollision;
+		thiz->init			= GetObjectTypeFunc(type)->init;
+		thiz->update		= GetObjectTypeFunc(type)->update;
+		thiz->uninit		= GetObjectTypeFunc(type)->uninit;
+		thiz->onCollision	= GetObjectTypeFunc(type)->onCollision;
 
 		strcpy(thiz->name, "Object");
 
@@ -65,6 +65,9 @@ Object* newObject(ObjectType type, void *owner)
 
 void deleteObject(Object* thiz)
 {
+	if (thiz == NULL)
+		return;
+
 	if (thiz->uninit)
 		thiz->uninit(thiz);
 

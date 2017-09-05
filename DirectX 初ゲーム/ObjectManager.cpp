@@ -1,9 +1,8 @@
 #include "ObjectManager.h"
 #include "main.h"
-#include "Camera.h"
-#include "Player.h"
-#include "Bullet.h"
-#include "test.h"
+#include "Polygon.h"
+#include "Collider.h"
+#include "Rigidbody.h"
 
 //*****************************************************************************
 // ÉOÉçÅ[ÉoÉãïœêî:
@@ -12,10 +11,6 @@ Object g_ObjectPool[ObjectMax];
 Object *g_ObjectUpdateList[ObjectMax];
 int g_ObjectPoolNextObj;
 int g_ObjectUpdateListTop;
-ObjectTypeFunc g_ObjectTypeFuncList[ObjTypeMax];
-
-void EmptyFunc(Object *) {}
-void EmptyFunc2(Object*, Object*) {};
 
 //public
 
@@ -31,30 +26,7 @@ void InitObjectManager(void)
 		g_ObjectPool[i].poolIndex = i;
 	}
 
-	for (int i = 0; i < ObjTypeMax; i++)
-	{
-		g_ObjectTypeFuncList[i].init = &EmptyFunc;
-		g_ObjectTypeFuncList[i].update = &EmptyFunc;
-		g_ObjectTypeFuncList[i].uninit = &EmptyFunc;
-		g_ObjectTypeFuncList[i].onCollision = &EmptyFunc2;
-	}
-
-	g_ObjectTypeFuncList[ObjType_Camera].init	= &initCamera;
-	g_ObjectTypeFuncList[ObjType_Camera].update = &updateCamera;
-	g_ObjectTypeFuncList[ObjType_Camera].uninit = &uninitCamera;
-
-	g_ObjectTypeFuncList[ObjType_Player].init	= &initPlayer;
-	g_ObjectTypeFuncList[ObjType_Player].update = &updatePlayer;
-	g_ObjectTypeFuncList[ObjType_Player].uninit = &uninitPlayer;
-	g_ObjectTypeFuncList[ObjType_Player].onCollision = &onCollisionPlayer;
-
-	g_ObjectTypeFuncList[ObjType_Bullet].init	= &initBullet;
-	g_ObjectTypeFuncList[ObjType_Bullet].update = &updateBullet;
-	g_ObjectTypeFuncList[ObjType_Bullet].uninit = &uninitBullet;
-
-	g_ObjectTypeFuncList[ObjType_Test].init		= &initTest;
-	g_ObjectTypeFuncList[ObjType_Test].update	= &updateTest;
-	g_ObjectTypeFuncList[ObjType_Test].uninit	= &uninitTest;
+	InitObjectType();
 
 }
 
@@ -76,10 +48,6 @@ void UninitObjectManager(void)
 	}
 }
 
-ObjectTypeFunc * ObjectManager_GetTypeFunc(ObjectType type)
-{
-	return &g_ObjectTypeFuncList[type];
-}
 
 Object* ObjectManager_GetObj()
 {

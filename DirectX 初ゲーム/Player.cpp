@@ -100,7 +100,7 @@ void uninitPlayer(Object *thiz)
 
 void onCollisionPlayer(Object * thiz, Object * other)
 {
-	if (other->type == ObjType_Test)
+	if (other->type == Obj_Test)
 	{
 		Polygon_SetColor(other->polygon, ColorRGBA(255, 255, 255, 255));
 	}

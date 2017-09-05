@@ -96,6 +96,12 @@
     <ClCompile Include="SceneTitle.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="PolygonElement.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectType.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -181,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="SceneTitle.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonElement.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>Core\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

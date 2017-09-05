@@ -92,7 +92,7 @@ void FramerateControl()
 	//	g_FrameError = 0;
 	
 	//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
-	g_DeltaTime = elapsed / 1000.0f;
+	g_DeltaTime = min(elapsed / 1000.0f, (1.0f / MAX_FPS)*3);
 
 	Timer_Reset(g_pFrameTimer);
 

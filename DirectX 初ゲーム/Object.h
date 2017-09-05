@@ -1,26 +1,15 @@
 #ifndef _GAME_OBJECT_H_
 #define _GAME_OBJECT_H_
 
-#include"main.h"
+#include "main.h"
+#include "ObjectType.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define NewObj(type)	(type*)(newObject(ObjType_##type, New(type))->owner);
+#define NewObj(type)	(type*)(newObject(Obj_##type, New(type))->owner);
 #define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr)}
 #define SetThis(type)	type* this##type = (type*)(thiz->owner);
-
-
-enum ObjectType
-{
-	ObjType_Normal,
-	ObjType_Camera,
-	ObjType_Player,
-	ObjType_Bullet,
-	ObjType_Enemy,
-	ObjType_Test,
-	ObjTypeMax
-};
 
 
 //*****************************************************************************
@@ -59,13 +48,6 @@ typedef struct _Object
 	void(*onCollision)(Object*, Object*);
 }Object;
 
-typedef struct _ObjectTypeFunc
-{
-	void(*init)(Object* thiz);
-	void(*update)(Object* thiz);
-	void(*uninit)(Object* thiz);
-	void(*onCollision)(Object* thiz, Object* other);
-}ObjectTypeFunc;
 
 typedef struct _ObjOwner
 {
@@ -73,11 +55,10 @@ typedef struct _ObjOwner
 }ObjOwner;
 
 
-
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-Object* newObject(ObjectType type = ObjType_Normal, void *owner = NULL);
+Object* newObject(ObjectType type = Obj_Normal, void *owner = NULL);
 void deleteObject(Object* thiz);
 void Object_SetActive(Object* thiz, bool value);
 
