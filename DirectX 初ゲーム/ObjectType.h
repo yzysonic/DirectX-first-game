@@ -4,7 +4,7 @@ typedef struct _Object Object;
 
 enum ObjectType
 {
-	Obj_Normal,
+	Obj_Object,
 	Obj_PolygonElement,
 	Obj_Camera,
 	Obj_Player,

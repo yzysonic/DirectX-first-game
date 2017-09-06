@@ -46,6 +46,7 @@ typedef struct _RectPolygon
 //*****************************************************************************
 RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE);
 void deletePolygon(RectPolygon* thiz);
+void Polygon_SetSize(RectPolygon* thiz, float x, float y);
 void Polygon_SetColor(RectPolygon *thiz, D3DCOLOR color);
 void Polygon_SetOpacity(RectPolygon *thiz, float opacity);
 float Polygon_GetOpacity(RectPolygon *thiz);

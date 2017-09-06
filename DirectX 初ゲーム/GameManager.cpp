@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Random.h"
 #include "Renderer.h"
+#include "FadeScreen.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneTest.h"
@@ -12,6 +13,7 @@ void LoadScene(SceneName scene);
 
 void InitGameManager(void)
 {
+	InitFadeScreen();
 	LoadScene(SCENE_TITLE);
 }
 
@@ -29,6 +31,7 @@ void UpdateGameManager(void)
 void UninitGameManager(void)
 {
 	g_CurrentScene->uninit();
+	UninitFadeScreen();
 }
 
 void SetScene(SceneName scene)

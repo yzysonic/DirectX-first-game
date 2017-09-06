@@ -11,3 +11,4 @@
 #include "Polygon.h"
 #include "Collider.h"
 #include "Rigidbody.h"
+#include "FadeScreen.h"

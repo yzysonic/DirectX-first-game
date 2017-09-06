@@ -3,8 +3,11 @@
 #include "GameManager.h"
 #include "PolygonElement.h"
 
+// マクロ定義
 #define TitlePolyMax (300)
+#define TitleBGMBPS (130)
 
+// アニメーション状態の列挙
 enum animeState
 {
 	Hit,
@@ -13,6 +16,7 @@ enum animeState
 	Wait
 };
 
+// 構造体宣言
 typedef struct _SceneTitle
 {
 	Scene base;
@@ -22,6 +26,7 @@ typedef struct _SceneTitle
 	Object *info;
 	PolygonElement* polyList[TitlePolyMax];
 	int polyCount;
+	float timer;
 	float polyTimer;
 	float logoTimer;
 	float keyTimer;
@@ -34,53 +39,64 @@ typedef struct _SceneTitle
 }SceneTitle;
 
 
+// 内部用関数のプロトタイプ宣言
 void update_title_state0(void);
 void update_title_state1(void);
 void update_title_state2(void);
+void update_title_state3(void);
 void update_title_poly(void);
 void update_title_logo(void);
 void update_title_presskey(void);
 
+// グローバル変数宣言
 SceneTitle g_SceneTitle;
-SceneTitle* thiz;
+SceneTitle* thiz = &g_SceneTitle;
 
 
+/// public関数
 
+// シーンインスタンスの取得
 Scene * GetSceneTitle(void)
 {
 	return (Scene*)&g_SceneTitle;
 }
 
+// 初期化
 void initSceneTitle(void)
 {
-	thiz = &g_SceneTitle;
-
 	thiz->polyCount = 0;
-	thiz->beat = newTimer(60 / 65.0f);
+	thiz->beat = newTimer();
 	thiz->beatCount = 0;
 	thiz->update = &update_title_state0;
 
-	thiz->vignetting = newObject();
-	thiz->vignetting->polygon = newPolygon(thiz->vignetting, LAYER_TOP, TEX_VIGNETTING);
+	thiz->vignetting = newObject(Obj_Object, &thiz->vignetting);
+	thiz->vignetting->polygon = newPolygon(thiz->vignetting, LAYER_UI_02, TEX_VIGNETTING);
 
-	SetVolume(BGM_TITLE, -1000);
-	PlayBGM(BGM_TITLE);
+	thiz->timer = 0;
+
+	// フェイトイン（黒=>白）
+	FadeScreen(FADE_IN_BK, 0, 1.5f);
 }
 
+// グローバル更新処理
 void updateSceneTitle(void)
 {
-	if (Timer_ElapsedTime(thiz->beat) >= (60/65.0f)*(thiz->beatCount + 1))
+	if (Timer_ElapsedTime(thiz->beat) >= (60.0f/TitleBGMBPS)*(thiz->beatCount + 1))
 	{
-		//if(thiz->beatCount % 2)
-		//	thiz->logoState = Hit;
-		thiz->keyState = Hit;
-		if((thiz->beatCount % 4 ) == 0)
+		while(Timer_ElapsedTime(thiz->beat) >= (60.0f / TitleBGMBPS)*(thiz->beatCount + 1))
+			thiz->beatCount++;
+
+		if((thiz->beatCount % 2) == 0)
+			thiz->logoState = Hit;
+		if ((thiz->beatCount % 2) == 0)
+			thiz->keyState = Hit;
+		if((thiz->beatCount % 8 ) == 0)
 			thiz->polyState = Hit;
-		thiz->beatCount++;
 	}
 	g_SceneTitle.update();
 }
 
+// 終了処理
 void uninitSceneTitle(void)
 {
 	deleteObject(thiz->logo);
@@ -88,14 +104,41 @@ void uninitSceneTitle(void)
 	deleteObject(thiz->info);
 	deleteObject(thiz->vignetting);
 
-	for(int i=0;i<TitlePolyMax;i++)
+	SafeDelete(thiz->beat);
+
+	for(int i=0;i<thiz->polyCount;i++)
 		DeleteObj(g_SceneTitle.polyList[i]);;
 
 	StopSound(BGM_TITLE);
 }
 
+
+/// private関数
+
+//----------------------
+//各状態の更新処理
+//----------------------
+
+// フェイト処理完了待ち
 void update_title_state0(void)
 {
+	// 処理完了
+	if (FadeFinished())
+	{
+		// BGM再生
+		SetVolume(BGM_TITLE, -1800);
+		PlayBGM(BGM_TITLE);
+		Timer_Reset(thiz->beat);
+
+		// 状態遷移
+		thiz->update = &update_title_state1;
+	}
+}
+
+// 背景ポリゴンの生成
+void update_title_state1(void)
+{
+	// アニメーションスキップ
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{
 		for (int i = 0; thiz->polyCount<TitlePolyMax; i++)
@@ -105,7 +148,9 @@ void update_title_state0(void)
 		}
 
 	}
-	if (thiz->polyCount < TitlePolyMax)
+
+	// 生成アニメーション処理
+	else if (thiz->polyCount < TitlePolyMax)
 	{
 		for (int i = 0; i < 3; i++)
 		{
@@ -115,21 +160,27 @@ void update_title_state0(void)
 				break;
 		}
 	}
+
+	// 処理完了
 	else 
 	{
-		thiz->logo = newObject(Obj_Normal);
+		// ロゴ表示
+		thiz->logo = newObject(Obj_Object, &thiz->logo);
 		thiz->logo->polygon = newPolygon(thiz->logo, LAYER_UI_00, TEX_TITLE_LOGO);
 		thiz->logo->transform->position = Vector3(0, 200 - SCREEN_CENTER_Y, 0);
 		thiz->logoTimer = 0;
 		Polygon_SetOpacity(thiz->logo->polygon, 0);
 
-		thiz->update = &update_title_state1;
+		// 状態遷移
+		thiz->update = &update_title_state2;
 	}
 }
 
-void update_title_state1(void)
+// ロゴアニメーション
+void update_title_state2(void)
 {
-	float interval = 0.3f;
+	// アニメーション処理
+	const float interval = 0.3f;
 	if (thiz->logoTimer <= interval)
 	{
 		float progress = thiz->logoTimer / interval;
@@ -138,45 +189,63 @@ void update_title_state1(void)
 		Polygon_SetOpacity(thiz->logo->polygon, progress);
 		thiz->logoTimer += GetDeltaTime();
 	}
+
+	// 処理完了
 	else
 	{
 		thiz->logo->transform->scale = Vector3(1.0f, 1.0f, 1.0f);
 
-		thiz->presskey = newObject(Obj_Normal);
+		// PRESS KEY 表示
+		thiz->presskey = newObject(Obj_Object, &thiz->presskey);
 		thiz->presskey->polygon = newPolygon(thiz->presskey, LAYER_UI_00, TEX_TITLE_PRESSKEY);
 		thiz->presskey->transform->position = Vector3(0, 550 - SCREEN_CENTER_Y, 0);
 
-		thiz->info = newObject(Obj_Normal);
+		// 作者情報表示
+		thiz->info = newObject(Obj_Object, &thiz->info);
 		thiz->info->polygon = newPolygon(thiz->info, LAYER_UI_00, TEX_TITLE_INFO);
 		thiz->info->transform->position.x = SCREEN_CENTER_X - thiz->info->polygon->pTexture->size.x / 2 - 30;
 		thiz->info->transform->position.y = SCREEN_CENTER_Y - thiz->info->polygon->pTexture->size.y - 10;
 		thiz->info->transform->position.z = 0;
 
-		thiz->logoState = Phase2;
-		thiz->update = &update_title_state2;
+		thiz->logoState = Wait;
+		thiz->keyState = Wait;
+		thiz->polyState = Wait;
+
+		// 状態遷移
+		thiz->update = &update_title_state3;
 	}
 
 }
 
-void update_title_state2(void)
+// 入力待ち
+void update_title_state3(void)
 {
 
-	if (GetKeyboardAnyKeyTrigger())
+	// メニュー表示
+	if (GetKeyboardTrigger(DIK_RETURN))
 	{
 		SetScene(SCENE_TEST);
 		return;
 	}
+
+	// 各アニメーション処理
 	update_title_poly();
 	update_title_logo();
 	update_title_presskey();
 }
 
+
+//----------------------
+//各ループアニメーション処理
+//----------------------
+
+// 背景ポリゴン
 void update_title_poly(void)
 {
 	switch (thiz->polyState)
 	{
 	case Hit:
-		for (int i = 0; i < TitlePolyMax; i++)
+		for (int i = 0; i < thiz->polyCount; i++)
 		{
 			thiz->polyList[i]->prePos = thiz->polyList[i]->base->transform->position;
 			thiz->polyList[i]->nextColor = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 200);
@@ -186,11 +255,11 @@ void update_title_poly(void)
 		break;
 	case Phase1:
 	{
-		float interval = 0.7f;
+		float interval = 2.0f;
 		if (thiz->polyTimer <= interval)
 		{
 			float progress = thiz->polyTimer / interval;
-			for (int i = 0; i < TitlePolyMax; i++)
+			for (int i = 0; i < thiz->polyCount; i++)
 			{
 				//Vector3 dir;
 				//D3DXVec3Normalize(&dir, &thiz->polyList[i]->prePos);
@@ -211,7 +280,7 @@ void update_title_poly(void)
 	}
 	case Phase2:
 
-		for (int i = 0; i < TitlePolyMax; i++)
+		for (int i = 0; i < thiz->polyCount; i++)
 		{
 			//thiz->polyList[i]->base->transform->position = LerpV3(thiz->polyList[i]->base->transform->position, thiz->polyList[i]->prePos, GetDeltaTime()*10.0f);
 
@@ -224,6 +293,7 @@ void update_title_poly(void)
 
 }
 
+// ロゴ
 void update_title_logo(void)
 {
 	switch (thiz->logoState)
@@ -255,6 +325,7 @@ void update_title_logo(void)
 
 }
 
+// PRESS KEY
 void update_title_presskey(void)
 {
 	switch (thiz->keyState)

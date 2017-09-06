@@ -68,8 +68,7 @@ void deleteObject(Object* thiz)
 	if (thiz == NULL)
 		return;
 
-	if (thiz->uninit)
-		thiz->uninit(thiz);
+	thiz->uninit(thiz);
 
 	Object_SetActive(thiz, false);
 	SafeDelete(thiz->transform);

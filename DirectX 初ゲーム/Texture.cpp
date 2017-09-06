@@ -14,7 +14,7 @@ void InitTexture()
 
 	LoadTexture(TEX_VIGNETTING,		"vignetting.png");
 	LoadTexture(TEX_TITLE_LOGO,		"title_logo.png");
-	LoadTexture(TEX_TITLE_PRESSKEY, "title_presskey_v3.png");
+	LoadTexture(TEX_TITLE_PRESSKEY, "title_press_enter.png");
 	LoadTexture(TEX_TITLE_INFO,		"title_copyright.png");
 	LoadTexture(TEX_PLAYER,			"player.png");
 	LoadTexture(TEX_BULLET,			"bullet.png");

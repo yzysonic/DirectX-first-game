@@ -58,7 +58,7 @@ typedef struct _ObjOwner
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-Object* newObject(ObjectType type = Obj_Normal, void *owner = NULL);
+Object* newObject(ObjectType type = Obj_Object, void *owner = NULL);
 void deleteObject(Object* thiz);
 void Object_SetActive(Object* thiz, bool value);
 

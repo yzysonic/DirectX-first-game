@@ -100,7 +100,7 @@ HRESULT InitWindows()
 	wcex.hInstance		= g_hInstance;
 	wcex.lpszClassName	= WINDOW_CLASS_NAME;
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	//wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.hbrBackground	= (HBRUSH)(COLOR_BACKGROUND + 1);
 
 	RegisterClassEx(&wcex);
 

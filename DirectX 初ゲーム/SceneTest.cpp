@@ -41,7 +41,7 @@ void initSceneTest(void)
 	}
 
 	Renderer_SetFov(ProjectMode);
-	SetVolume(BGM_GAME, -1000);
+	SetVolume(BGM_GAME, -1800);
 	PlayBGM(BGM_GAME);
 }
 

@@ -50,6 +50,13 @@ void deletePolygon(RectPolygon * thiz)
 	Renderer_ReleasePolygon(thiz);
 }
 
+void Polygon_SetSize(RectPolygon * thiz, float x, float y)
+{
+	thiz->size = Vector2(x, y);
+	thiz->radius = D3DXVec2Length(&(thiz->size / 2));
+	thiz->baseAngle = atan2f(thiz->size.y, thiz->size.x);
+}
+
 
 void Polygon_SetColor(RectPolygon * thiz, D3DCOLOR color)
 {
