@@ -96,10 +96,7 @@ void FadeScreen(FadeType type, Color color, float interval)
 		break;
 	}
 
-	if (interval >= 0)
-		fadeTime = interval;
-	else
-		fadeTime = DEFAULT_FADE_TIME;
+	fadeTime = interval;
 
 	if (fadeTime > 0)
 		state = Run;

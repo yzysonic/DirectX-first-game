@@ -3,6 +3,7 @@
 #include "main.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Renderer.h"
 #include "Time.h"
 #include "Random.h"
 #include "Lerp.h"

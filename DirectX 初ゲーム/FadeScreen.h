@@ -16,5 +16,5 @@ enum FadeType
 
 void InitFadeScreen(void);
 void UninitFadeScreen(void);
-void FadeScreen(FadeType type, Color color = 0, float interval = -1);
+void FadeScreen(FadeType type, Color color = 0, float interval = DEFAULT_FADE_TIME);
 bool FadeFinished(void);

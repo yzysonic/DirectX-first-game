@@ -20,10 +20,12 @@ void uninitCamera(Object * thiz)
 	SetThis(Camera);
 }
 
-void newCamera(Transform * target, Vector3 pos)
+Camera* newCamera(Transform * target, Vector3 pos)
 {
 	Camera *thiz = NewSubObj(Camera);
 
 	thiz->target = target;
 	thiz->base->transform->position = pos;
+
+	return thiz;
 }

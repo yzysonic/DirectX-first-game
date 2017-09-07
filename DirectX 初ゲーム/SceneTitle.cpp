@@ -184,7 +184,6 @@ void syncAnimation(void)
 // フェイト処理完了待ち
 void update_title_fadeWait(void)
 {
-	// 処理完了
 	if (FadeFinished())
 	{
 		switch (thiz->com)
