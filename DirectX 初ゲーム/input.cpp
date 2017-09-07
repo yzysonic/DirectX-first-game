@@ -5,6 +5,7 @@
 //
 //=============================================================================
 #include "input.h"
+#include "main.h"
 
 #pragma comment (lib, "dinput8.lib")
 
@@ -54,6 +55,7 @@ static LPDIRECTINPUTDEVICE8 pMouse = NULL; // mouse
 
 static DIMOUSESTATE2   mouseState;		// マウスのダイレクトな状態
 static DIMOUSESTATE2   mouseTrigger;	// 押された瞬間だけON
+static D3DXVECTOR3     mousePos;		// マウスの座標
 
 //--------------------------------- game pad
 
@@ -347,6 +349,18 @@ HRESULT UpdateMouse()
 		// アクセス権を得てみる
 		result = pMouse->Acquire();
 	}
+
+	// マウス座標の計算
+	RECT rect;
+	POINT p;
+	GetCursorPos(&p);
+	GetWindowRect(GetHWnd(), &rect);
+
+	mousePos.x = (float)p.x - rect.left - SCREEN_CENTER_X;
+	mousePos.y = (float)p.y - rect.top - SCREEN_CENTER_Y;
+	mousePos.z = 0.0f;
+
+
 	return result;
 	
 }
@@ -377,17 +391,29 @@ BOOL IsMouseCenterTriggered(void)
 	return (BOOL)(mouseTrigger.rgbButtons[2] & 0x80);
 }
 //------------------
-long GetMouseX(void)
+long GetMouseMoveX(void)
 {
 	return mouseState.lX;
 }
-long GetMouseY(void)
+long GetMouseMoveY(void)
 {
 	return mouseState.lY;
 }
-long GetMouseZ(void)
+long GetMouseMoveZ(void)
 {
 	return mouseState.lZ;
+}
+D3DXVECTOR3 GetMousePos(void)
+{
+	return mousePos;
+}
+int GetMouseX(void)
+{
+	return 0;
+}
+int GetMouseY(void)
+{
+	return 0;
 }
 //================================================= game pad
 //---------------------------------------- コールバック関数

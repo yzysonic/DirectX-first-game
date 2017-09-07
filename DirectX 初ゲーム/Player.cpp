@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "test.h"
+
 
 void initPlayer(Object *thiz)
 {
@@ -14,49 +14,68 @@ void initPlayer(Object *thiz)
 	thizz->dir = Vector3(0, -1, 0);
 	thizz->timer = 0;
 
-	//for (int i = 0; i < BULLET_MAX; i++)
-	//{
-	//	thizz->bulletWk[i] = NewObj(Bullet);
-	//	thizz->bulletWk[i]->base->
-	//}
-
-	SetVolume(SE_BULLET, -500);
 }
 
 void updatePlayer(Object *thiz)
 {
 	SetThis(Player);
+
+
+	// ˆÚ“®“ü—Í
+	D3DXVECTOR3 controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	if (GetKeyboardPress(DIK_W))
+	{
+		controlVector += D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+	}
+	if (GetKeyboardPress(DIK_S))
+	{
+		controlVector += D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	}
+	if (GetKeyboardPress(DIK_A))
+	{
+		controlVector += D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+	}
+	if (GetKeyboardPress(DIK_D))
+	{
+		controlVector += D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+	}
+
+	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
+	{
+		D3DXVec3Normalize(&controlVector, &controlVector);
+		thizz->dir = controlVector;
+		thiz->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
+	}
+
+	// ‰Á‘¬“ü—Í
 	float boost = 1.0f;
-	
 	if (GetKeyboardPress(DIK_LSHIFT))
 		boost = 2.0f;
 
-	D3DXVECTOR3 controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	// ˆÚ“®ˆ—
+	thiz->transform->position += thizz->speed * boost * controlVector * GetDeltaTime();
 
-	if (GetKeyboardPress(DIK_LCONTROL))
+
+	// ƒ}ƒEƒXÆ€‚ÌŒvŽZ
+
+	//if(GetMousePos().x > 0)
+	//	thiz->transform->rotation.z = acosf(D3DXVec3Dot(&Vector3(0,-1,0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
+	//else
+	//	thiz->transform->rotation.z = PI+acosf(-D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
+
+	D3DXVec3Normalize(&thizz->dir, &GetMousePos());
+	thiz->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
+
+	// ’e”­ŽË
+	controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	if (GetKeyboardPress(DIK_UP))
 	{
-		if (GetKeyboardPress(DIK_DOWN))
-		{
-			thiz->transform->position.z -= 2.f*boost*GetDeltaTime();
-		}
-		else if (GetKeyboardPress(DIK_UP))
-		{
-			thiz->transform->position.z += 2.f*boost*GetDeltaTime();
-		}
+		controlVector += D3DXVECTOR3(0.0f, -1.0f, 0.0f);
 	}
-	else
+	if (GetKeyboardPress(DIK_DOWN))
 	{
-		if (GetKeyboardPress(DIK_UP))
-		{
-			controlVector += D3DXVECTOR3(0.0f, -1.0f, 0.0f);
-		}
-		if (GetKeyboardPress(DIK_DOWN))
-		{
-			controlVector += D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		}
+		controlVector += D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	}
-
-
 	if (GetKeyboardPress(DIK_LEFT))
 	{
 		controlVector += D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
@@ -66,26 +85,27 @@ void updatePlayer(Object *thiz)
 		controlVector += D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 	}
 
-	float length = powf(controlVector.x, 2.0f) + powf(controlVector.y, 2.0f);
-	if (length != 0.0f)
+	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
-		controlVector /= sqrtf(powf(controlVector.x, 2.0f) + powf(controlVector.y, 2.0f));
+		D3DXVec3Normalize(&controlVector, &controlVector);
 		thizz->dir = controlVector;
 		thiz->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
 	}
 
-	thiz->transform->position += thizz->speed * boost * controlVector * GetDeltaTime();
-
-	if (GetKeyboardPress(DIK_SPACE))
+	// ’e”­ŽË
+	if (
+		GetKeyboardPress(DIK_UP)		|| 
+		GetKeyboardPress(DIK_DOWN)		|| 
+		GetKeyboardPress(DIK_LEFT)		|| 
+		GetKeyboardPress(DIK_RIGHT)		|| 
+		GetKeyboardPress(DIK_RSHIFT)	|| 
+		IsMouseLeftPressed()
+		)
 	{
 		if(thizz->timer >= 0.13f)
 		{
-			Bullet* bullet = NewSubObj(Bullet);
-			bullet->base->rigidbody->position = thiz->transform->position;
-			bullet->base->rigidbody->velocity = 1000.0f*thizz->dir + thizz->speed * boost * controlVector;
-			bullet->base->rigidbody->rotation = thizz->base->transform->rotation;
+			newBullet(thiz->transform, 2000.0f*thizz->dir + thizz->speed * boost * controlVector);
 			thizz->timer = 0;
-			PlaySE(SE_BULLET);
 		}
 		thizz->timer += GetDeltaTime();
 	}

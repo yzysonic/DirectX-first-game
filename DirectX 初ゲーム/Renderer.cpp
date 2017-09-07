@@ -27,7 +27,7 @@ Color g_BackColor;
 Transform g_FixedCamera;
 Transform *g_Camera;
 int g_PoolSize[LAYER_MAX];
-char g_DebugText[10][256] = {};
+char g_DebugText[20][256] = {};
 float g_fov;
 
 //=============================================================================
@@ -308,7 +308,7 @@ void Renderer_SetFov(float value)
 void DrawDebug()
 {
 	RECT rect;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		rect = { 0,i*20,SCREEN_WIDTH,SCREEN_HEIGHT };
 		GetFont()->DrawText(NULL, g_DebugText[i], -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
