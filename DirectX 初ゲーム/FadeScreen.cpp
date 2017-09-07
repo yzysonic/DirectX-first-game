@@ -28,6 +28,8 @@ void InitFadeScreen()
 	Polygon_SetSize(fadeLayer->polygon, SCREEN_WIDTH, SCREEN_HEIGHT);
 	Polygon_SetOpacity(fadeLayer->polygon, 0.0f);
 
+	state = Stop;
+
 	Object_SetActive(fadeLayer, false);
 }
 

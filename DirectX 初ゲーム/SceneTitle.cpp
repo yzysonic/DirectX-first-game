@@ -20,7 +20,8 @@ enum AnimeState
 
 enum Command
 {
-	COM_NONE,
+	COM_WAIT,
+	COM_OP,
 	COM_START,
 	COM_EXIT
 };
@@ -97,7 +98,7 @@ void initSceneTitle(void)
 	thiz->beat = newTimer();
 	thiz->beatCount = 0;
 	thiz->timer = 0;
-	thiz->com = COM_NONE;
+	thiz->com = COM_WAIT;
 
 	thiz->vignetting = newObject(Obj_Object, &thiz->vignetting);
 	thiz->vignetting->polygon = newPolygon(thiz->vignetting, LAYER_UI_02, TEX_VIGNETTING);
@@ -115,8 +116,8 @@ void initSceneTitle(void)
 	Renderer_SetCamera(NULL);
 	Renderer_SetFov(0.0f);
 
-	// フェイトイン（黒=>白）
-	FadeScreen(FADE_IN_BK, 0, 0.7f);
+	// フェイトアウト
+	FadeScreen(FADE_OUT_BK, 0, 0);
 
 	// 初期状態
 	thiz->update = &update_title_state0;
@@ -187,7 +188,17 @@ void update_title_state0(void)
 	{
 		switch (thiz->com)
 		{
-		case COM_NONE:
+		case COM_WAIT:
+			if (thiz->timer > 1.0f)
+			{
+				thiz->com = COM_OP;
+				// フェイトイン
+				FadeScreen(FADE_IN_BK, 0, 0.7f);
+			}
+			thiz->timer += GetDeltaTime();
+			break;
+
+		case COM_OP:
 			// BGM再生
 			SetVolume(BGM_TITLE, -1800);
 			PlayBGM(BGM_TITLE);
