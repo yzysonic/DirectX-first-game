@@ -26,8 +26,8 @@ Scene * GetSceneTest(void)
 
 void initSceneTest(void)
 {
-	g_SceneTest.camera = NewObj(Camera);
-	g_SceneTest.player = NewObj(Player);
+	g_SceneTest.camera = NewSubObj(Camera);
+	g_SceneTest.player = NewSubObj(Player);
 
 	g_SceneTest.camera->target = g_SceneTest.player->base->transform;
 	g_SceneTest.testCount = 0;
@@ -36,7 +36,7 @@ void initSceneTest(void)
 
 	for (int j = 0; j < 1000; j++)
 	{
-		Test *test = NewObj(Test);
+		Test *test = NewSubObj(Test);
 		g_SceneTest.testList[g_SceneTest.testCount++] = test;
 	}
 
@@ -59,7 +59,7 @@ void updateSceneTest(void)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			Test *test = NewObj(Test);
+			Test *test = NewSubObj(Test);
 			g_SceneTest.testList[i++] = test;
 			if (i >= testMax)
 				break;
@@ -84,7 +84,7 @@ void updateSceneTest(void)
 			if (i > 0)
 			{
 				i--;
-				DeleteObj(g_SceneTest.testList[i]);
+				DeleteSubObj(g_SceneTest.testList[i]);
 			}
 			else
 			{
@@ -109,14 +109,14 @@ void updateSceneTest(void)
 
 void uninitSceneTest(void)
 {
-	DeleteObj(g_SceneTest.camera);
-	DeleteObj(g_SceneTest.player);
+	DeleteSubObj(g_SceneTest.camera);
+	DeleteSubObj(g_SceneTest.player);
 
 	int &i = g_SceneTest.testCount;
 	while (i > 0)
 	{
 		i--;
-		DeleteObj(g_SceneTest.testList[i]);
+		DeleteSubObj(g_SceneTest.testList[i]);
 	}
 
 	for (int i = 0; i < 10; i++)

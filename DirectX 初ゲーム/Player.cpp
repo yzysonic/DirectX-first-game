@@ -80,7 +80,7 @@ void updatePlayer(Object *thiz)
 	{
 		if(thisPlayer->timer >= 0.13f)
 		{
-			Bullet* bullet = NewObj(Bullet);
+			Bullet* bullet = NewSubObj(Bullet);
 			bullet->base->rigidbody->position = thiz->transform->position;
 			bullet->base->rigidbody->velocity = 1000.0f*thisPlayer->dir + thisPlayer->speed * boost * controlVector;
 			bullet->base->rigidbody->rotation = thisPlayer->base->transform->rotation;

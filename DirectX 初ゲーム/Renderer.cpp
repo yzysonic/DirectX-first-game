@@ -23,6 +23,7 @@ typedef struct _PolygonPool
 //=============================================================================
 extern LPDIRECT3DDEVICE9 g_pD3DDevice;
 PolygonPool	g_PolygonPool[LAYER_MAX];
+Color g_BackColor;
 Transform g_FixedCamera;
 Transform *g_Camera;
 int g_PoolSize[LAYER_MAX];
@@ -51,13 +52,16 @@ void InitRenderer(void)
 	// サンプラーステートパラメータの設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャＵ値の繰り返し設定
 	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャＶ値の繰り返し設定
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);		// テクスチャ拡大時の補間設定
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);		// テクスチャ縮小時の補間設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);		// テクスチャ拡大時の補間設定
+	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);		// テクスチャ縮小時の補間設定
 
 	// テクスチャステージ加算合成処理
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
+
+	//	初期バックカラー
+	g_BackColor = D3DCOLOR_RGBA(255, 255, 255, 255);
 
 	// 初期カメラ
 	g_FixedCamera.position = Vector3(0.0f, 0.0f, -1.0f);
@@ -106,7 +110,7 @@ void DrawFrame()
 	RectPolygon*		poly;
 
 	// バックバッファ＆Ｚバッファのクリア
-	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(220, 220, 220, 255), 1.0f, 0);
+	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), g_BackColor, 1.0f, 0);
 
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
@@ -151,7 +155,6 @@ void DrawFrame()
 
 		// 復帰可能の場合
 		if (g_pD3DDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) {
-
 			ResetDevice(GetWindowMode());
 		}
 	}
@@ -198,6 +201,14 @@ void Renderer_ReleasePolygon(RectPolygon * thiz)
 	pool->polygon[pool->activeTop] = {};
 
 	pool->activeTop--;
+}
+
+//=============================================================================
+// バックカラー設定
+//=============================================================================
+void Renderer_SetBackColor(Color value)
+{
+	g_BackColor = value;
 }
 
 //=============================================================================

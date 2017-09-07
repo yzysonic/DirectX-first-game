@@ -1,6 +1,6 @@
 #include "FadeScreen.h"
 
-enum animeState
+enum AnimeState
 {
 	Set,
 	Run,
@@ -16,7 +16,7 @@ float timer;
 float targetOpacity;
 float oldOpacity;
 Color fadeColor;
-animeState state;
+AnimeState state;
 
 
 void InitFadeScreen()
@@ -41,7 +41,7 @@ void UpdateFadeScreen(Object* thiz)
 		state = Stop;
 		break;
 	case Run:
-		if (timer < fadeTime+0.1f)
+		if (timer < fadeTime + 0.1f)
 		{
 			float t = Polygon_GetOpacity(fadeLayer->polygon);
 			Polygon_SetOpacity(fadeLayer->polygon, Lerpf(oldOpacity, targetOpacity, timer / fadeTime));
@@ -99,7 +99,7 @@ void FadeScreen(FadeType type, Color color, float interval)
 	else
 		fadeTime = DEFAULT_FADE_TIME;
 
-	if (interval > 0)
+	if (fadeTime > 0)
 		state = Run;
 	else
 		state = Set;

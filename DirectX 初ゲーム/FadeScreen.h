@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.h"
 
-#define DEFAULT_FADE_TIME (1.0f)
+#define DEFAULT_FADE_TIME (0.3f)
 
 enum FadeType
 {

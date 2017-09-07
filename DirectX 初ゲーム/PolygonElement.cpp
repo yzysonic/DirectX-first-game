@@ -11,11 +11,11 @@ void initPolygonElement(Object * thiz)
 
 	thiz->transform->position.x = Randomf(-SCREEN_CENTER_X - 100, SCREEN_CENTER_X + 100);
 	thiz->transform->position.y = Randomf(-SCREEN_CENTER_Y - 100, SCREEN_CENTER_Y + 100);
-	thiz->transform->position.z = Randomf(1, 5);
+	thiz->transform->position.z = Randomf(0.01f, 5);
 
 	thisPolygonElement->timer = 0;
-	thisPolygonElement->timerInterval = Randomf(0.2f, 0.7f);
-	thisPolygonElement->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f) * 2;
+	thisPolygonElement->timerInterval = Randomf(0.3f, 1.0f);
+	thisPolygonElement->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
 
 	Polygon_SetColor(thiz->polygon, ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
 
@@ -52,7 +52,7 @@ void update_polyele_state1(PolygonElement* thiz)
 {
 	if (thiz->timer >= thiz->timerInterval)
 	{
-		thiz->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f) * 2;
+		thiz->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
 		thiz->timerInterval = Randomf(0.2f, 0.7f);
 		thiz->timer = 0;
 	}

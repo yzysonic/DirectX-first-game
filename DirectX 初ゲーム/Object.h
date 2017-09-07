@@ -7,9 +7,10 @@
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
 //*****************************************************************************
-#define NewObj(type)	(type*)(newObject(Obj_##type, New(type))->owner);
-#define DeleteObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr)}
-#define SetThis(type)	type* this##type = (type*)(thiz->owner);
+#define NewSubObj(type)		(type*)(newObject(Obj_##type, New(type))->owner);
+#define DeleteSubObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr)}
+#define DeleteObj(ptr)		if(ptr != NULL) {deleteObject(ptr); ptr = NULL;}
+#define SetThis(type)		type* this##type = (type*)(thiz->owner);
 
 
 //*****************************************************************************

@@ -20,6 +20,7 @@ void UninitRenderer(void);
 void DrawFrame(void);
 RectPolygon* Renderer_GetPolygon(Layer layer);
 void Renderer_ReleasePolygon(RectPolygon* thiz);
+void Renderer_SetBackColor(Color value);
 void Renderer_SetCamera(Transform *camera);
 char *GetDebugText(int line);
 float Renderer_GetFov();

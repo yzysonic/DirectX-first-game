@@ -19,13 +19,14 @@ void InitGameManager(void)
 
 void UpdateGameManager(void)
 {
+	g_CurrentScene->update();
+
 #ifdef _DEBUG
 	if (GetKeyboardTrigger(DIK_1))
 		SetScene(SCENE_TITLE);
 	if (GetKeyboardTrigger(DIK_2))
 		SetScene(SCENE_TEST);
 #endif
-	g_CurrentScene->update();
 }
 
 void UninitGameManager(void)
@@ -74,7 +75,6 @@ void LoadScene(SceneName scene)
 	}
 
 	InitRandom();
-	Renderer_SetCamera(NULL);
 
 	if (g_CurrentScene->init != NULL)
 		g_CurrentScene->init();

@@ -16,6 +16,9 @@ void InitTexture()
 	LoadTexture(TEX_TITLE_LOGO,		"title_logo.png");
 	LoadTexture(TEX_TITLE_PRESSKEY, "title_press_enter.png");
 	LoadTexture(TEX_TITLE_INFO,		"title_copyright.png");
+	LoadTexture(TEX_TITLE_CURSOR,	"title_cursor_v2.png");
+	LoadTexture(TEX_TITLE_START,	"title_start.png");
+	LoadTexture(TEX_TITLE_EXIT,		"title_exit.png");
 	LoadTexture(TEX_PLAYER,			"player.png");
 	LoadTexture(TEX_BULLET,			"bullet.png");
 }

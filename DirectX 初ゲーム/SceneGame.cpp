@@ -19,8 +19,8 @@ Scene * GetSceneGame(void)
 
 void initSceneGame(void)
 {
-	g_SceneGame.camera = NewObj(Camera);
-	g_SceneGame.player = NewObj(Player);
+	g_SceneGame.camera = NewSubObj(Camera);
+	g_SceneGame.player = NewSubObj(Player);
 }
 
 void updateSceneGame(void)
@@ -30,6 +30,6 @@ void updateSceneGame(void)
 
 void uninitSceneGame(void)
 {
-	DeleteObj(g_SceneGame.camera);
-	DeleteObj(g_SceneGame.player);
+	DeleteSubObj(g_SceneGame.camera);
+	DeleteSubObj(g_SceneGame.player);
 }

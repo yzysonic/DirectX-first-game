@@ -17,7 +17,7 @@ void updateBullet(Object * thiz)
 	thisBullet->timer += GetDeltaTime();
 
 	if (thisBullet->timer > 0.7f)
-		DeleteObj(thisBullet);
+		DeleteSubObj(thisBullet);
 }
 
 void uninitBullet(Object * thiz)
