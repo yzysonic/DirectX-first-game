@@ -248,29 +248,34 @@ void TransformVertex(RectPolygon *thiz)
 	thiz->vertex[3].vtx.y = pos.y + sinf(thiz->baseAngle + rot.z) * radius.y;
 	thiz->vertex[3].vtx.z = pos.z;
 
-	// カメラ変換
-	thiz->vertex[0].vtx -= g_Camera->position;
-	thiz->vertex[1].vtx -= g_Camera->position;
-	thiz->vertex[2].vtx -= g_Camera->position;
-	thiz->vertex[3].vtx -= g_Camera->position;
+	if (thiz->rendType == REND_DEFAULT)
+	{
 
-	// 投影変換
-	float fov = Lerpf(thiz->vertex[0].vtx.z, 1.0f, g_fov);
-	thiz->vertex[0].vtx.x /= thiz->vertex[0].vtx.z / fov;
-	thiz->vertex[0].vtx.y /= thiz->vertex[0].vtx.z / fov;
-	thiz->vertex[0].vtx.z = (thiz->vertex[0].vtx.z - zmin) / (zmax - zmin);
+		// カメラ変換
+		thiz->vertex[0].vtx -= g_Camera->position;
+		thiz->vertex[1].vtx -= g_Camera->position;
+		thiz->vertex[2].vtx -= g_Camera->position;
+		thiz->vertex[3].vtx -= g_Camera->position;
 
-	thiz->vertex[1].vtx.x /= thiz->vertex[1].vtx.z / fov;
-	thiz->vertex[1].vtx.y /= thiz->vertex[1].vtx.z / fov;
-	thiz->vertex[1].vtx.z = (thiz->vertex[1].vtx.z - zmin) / (zmax - zmin);
+		// 投影変換
+		float fov = Lerpf(thiz->vertex[0].vtx.z, 1.0f, g_fov);
+		thiz->vertex[0].vtx.x /= thiz->vertex[0].vtx.z / fov;
+		thiz->vertex[0].vtx.y /= thiz->vertex[0].vtx.z / fov;
+		thiz->vertex[0].vtx.z = (thiz->vertex[0].vtx.z - zmin) / (zmax - zmin);
 
-	thiz->vertex[2].vtx.x /= thiz->vertex[2].vtx.z / fov;
-	thiz->vertex[2].vtx.y /= thiz->vertex[2].vtx.z / fov;
-	thiz->vertex[2].vtx.z = (thiz->vertex[2].vtx.z - zmin) / (zmax - zmin);
+		thiz->vertex[1].vtx.x /= thiz->vertex[1].vtx.z / fov;
+		thiz->vertex[1].vtx.y /= thiz->vertex[1].vtx.z / fov;
+		thiz->vertex[1].vtx.z = (thiz->vertex[1].vtx.z - zmin) / (zmax - zmin);
 
-	thiz->vertex[3].vtx.x /= thiz->vertex[3].vtx.z / fov;
-	thiz->vertex[3].vtx.y /= thiz->vertex[3].vtx.z / fov;
-	thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
+		thiz->vertex[2].vtx.x /= thiz->vertex[2].vtx.z / fov;
+		thiz->vertex[2].vtx.y /= thiz->vertex[2].vtx.z / fov;
+		thiz->vertex[2].vtx.z = (thiz->vertex[2].vtx.z - zmin) / (zmax - zmin);
+
+		thiz->vertex[3].vtx.x /= thiz->vertex[3].vtx.z / fov;
+		thiz->vertex[3].vtx.y /= thiz->vertex[3].vtx.z / fov;
+		thiz->vertex[3].vtx.z = (thiz->vertex[3].vtx.z - zmin) / (zmax - zmin);
+
+	}
 
 	// スクリーン変換
 	thiz->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);

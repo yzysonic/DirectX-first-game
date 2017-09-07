@@ -20,6 +20,7 @@ SceneGame *thiz = &g_SceneGame;
 
 // プロトタイプ宣言
 void update_game_fadeWait(void);
+void update_game_main(void);
 
 
 
@@ -43,12 +44,14 @@ void initSceneGame(void)
 	Renderer_SetCamera(thiz->camera->base->transform);
 
 	FadeScreen(FADE_IN_WH, 0, 1);
+
+	thiz->update = &update_game_fadeWait;
 }
 
 // グローバル更新処理
 void updateSceneGame(void)
 {
-	
+	thiz->update();
 }
 
 // 終了処理
@@ -66,6 +69,12 @@ void update_game_fadeWait(void)
 {
 	if (FadeFinished())
 	{
-
+		Object_SetActive(thiz->player->base, true);
+		Object_SetActive(thiz->camera->base, true);
+		thiz->update = &update_game_main;
 	}
+}
+
+void update_game_main(void)
+{
 }

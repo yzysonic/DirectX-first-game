@@ -3,11 +3,12 @@
 #include "Renderer.h"
 
 
-RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName)
+RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType)
 {
 	RectPolygon *polygon = Renderer_GetPolygon(layer);
 
 	polygon->object		= object;
+	polygon->rendType	= rendType;
 	polygon->pTexture	= GetTexture(texName);
 	if(polygon->pTexture->pDXTex)
 		polygon->size	= polygon->pTexture->size;

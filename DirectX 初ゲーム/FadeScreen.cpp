@@ -22,7 +22,7 @@ AnimeState state;
 void InitFadeScreen()
 {
 	fadeLayer = newObject();
-	fadeLayer->polygon = newPolygon(fadeLayer, LAYER_TOP);
+	fadeLayer->polygon = newPolygon(fadeLayer, LAYER_TOP, TEX_NONE, REND_UI);
 	fadeLayer->update = &UpdateFadeScreen;
 
 	Polygon_SetSize(fadeLayer->polygon, SCREEN_WIDTH, SCREEN_HEIGHT);

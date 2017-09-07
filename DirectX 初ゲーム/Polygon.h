@@ -1,9 +1,10 @@
 #ifndef _POLYGON_H_
 #define _POLYGON_H_
 
-#include"main.h"
-#include"Texture.h"
-#include"Layer.h"
+#include "main.h"
+#include "Texture.h"
+#include "Layer.h"
+#include "RendererType.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -29,7 +30,8 @@ typedef struct _VERTEX_2D
 
 typedef struct _RectPolygon
 {
-	Object *object;
+	Object *object;							// 所有するオブジェクトへの参照
+	RendererType rendType;					// 描画方法指定
 	Vertex2D vertex[RECT_NUM_VERTEX];		// 頂点情報格納ワーク
 	Texture *pTexture;						// テクスチャーへのポインタ
 	Vector2 size;							// 表示するサイズ
@@ -44,7 +46,7 @@ typedef struct _RectPolygon
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE);
+RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = REND_DEFAULT);
 void deletePolygon(RectPolygon* thiz);
 void Polygon_SetSize(RectPolygon* thiz, float x, float y);
 void Polygon_SetColor(RectPolygon *thiz, D3DCOLOR color);

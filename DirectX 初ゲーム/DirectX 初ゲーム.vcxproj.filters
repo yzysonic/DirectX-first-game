@@ -152,9 +152,6 @@
     <ClInclude Include="Player.h">
       <Filter>Script</Filter>
     </ClInclude>
-    <ClInclude Include="RendererType.h">
-      <Filter>Core\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="test.h">
       <Filter>Script</Filter>
     </ClInclude>
@@ -199,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="FadeScreen.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererType.h">
+      <Filter>Core\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
