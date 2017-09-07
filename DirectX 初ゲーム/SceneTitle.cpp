@@ -20,10 +20,10 @@ enum AnimeState
 
 enum Command
 {
+	COM_START,
+	COM_EXIT,
 	COM_WAIT,
 	COM_OP,
-	COM_START,
-	COM_EXIT
 };
 
 // 構造体宣言
@@ -67,16 +67,17 @@ typedef struct _SceneTitle
 
 // 内部用関数のプロトタイプ宣言
 void syncAnimation(void);
-void update_title_state0(void);
-void update_title_state1(void);
-void update_title_state2(void);
-void update_title_state3(void);
-void update_title_state4(void);
-void update_title_state5(void);
-void update_title_state6(void);
-void update_title_poly(void);
-void update_title_logo(void);
-void update_title_presskey(void);
+void update_title_waitFade(void);
+void update_title_createPoly(void);
+void update_title_showLogo(void);
+void update_title_pressWait(void);
+void update_title_showMenu_A(void);
+void update_title_showMenu_B(void);
+void update_title_menu(void);
+
+void update_title_anime_poly(void);
+void update_title_anime_logo(void);
+void update_title_anime_presskey(void);
 
 // グローバル変数宣言
 SceneTitle g_SceneTitle;
@@ -120,15 +121,15 @@ void initSceneTitle(void)
 	FadeScreen(FADE_OUT_BK, 0, 0);
 
 	// 初期状態
-	thiz->update = &update_title_state0;
+	thiz->update = &update_title_waitFade;
 }
 
 // グローバル更新処理
 void updateSceneTitle(void)
 {
 	// 各アニメーション処理
-	update_title_poly();
-	update_title_logo();
+	update_title_anime_poly();
+	update_title_anime_logo();
 
 	// ローカル更新処理
 	g_SceneTitle.update();
@@ -181,7 +182,7 @@ void syncAnimation(void)
 //----------------------
 
 // フェイト処理完了待ち
-void update_title_state0(void)
+void update_title_waitFade(void)
 {
 	// 処理完了
 	if (FadeFinished())
@@ -205,7 +206,7 @@ void update_title_state0(void)
 			Timer_Reset(thiz->beat);
 
 			// 状態遷移
-			thiz->update = &update_title_state1;
+			thiz->update = &update_title_createPoly;
 			break;
 		
 		case COM_START:
@@ -222,7 +223,7 @@ void update_title_state0(void)
 }
 
 // 背景ポリゴンの生成
-void update_title_state1(void)
+void update_title_createPoly(void)
 {
 	// アニメーションスキップ
 	if (GetKeyboardTrigger(DIK_RETURN))
@@ -258,12 +259,12 @@ void update_title_state1(void)
 		Polygon_SetOpacity(thiz->logo->polygon, 0);
 
 		// 状態遷移
-		thiz->update = &update_title_state2;
+		thiz->update = &update_title_showLogo;
 	}
 }
 
 // ロゴアニメーション
-void update_title_state2(void)
+void update_title_showLogo(void)
 {
 	// アニメーション処理
 	const float interval = 0.3f;
@@ -297,13 +298,13 @@ void update_title_state2(void)
 		thiz->polyState = Wait;
 
 		// 状態遷移
-		thiz->update = &update_title_state3;
+		thiz->update = &update_title_pressWait;
 	}
 
 }
 
 // 入力待ち
-void update_title_state3(void)
+void update_title_pressWait(void)
 {
 	syncAnimation();
 
@@ -313,14 +314,14 @@ void update_title_state3(void)
 		thiz->timer = 0;
 
 		// 状態遷移
-		thiz->update = &update_title_state4;
+		thiz->update = &update_title_showMenu_A;
 	}
 
-	update_title_presskey();
+	update_title_anime_presskey();
 }
 
 // メニューアニメーションA
-void update_title_state4(void)
+void update_title_showMenu_A(void)
 {
 	syncAnimation();
 	Renderer_SetFov(Lerpf(Renderer_GetFov(), 1.0f, GetDeltaTime() * 10));
@@ -354,12 +355,12 @@ void update_title_state4(void)
 		thiz->cursorPos = 0;
 
 		// 状態遷移
-		thiz->update = &update_title_state5;
+		thiz->update = &update_title_showMenu_B;
 	}
 }
 
 // メニューアニメーションB
-void update_title_state5(void)
+void update_title_showMenu_B(void)
 {
 	syncAnimation();
 	Renderer_SetFov(Lerpf(Renderer_GetFov(), 1.0f, GetDeltaTime() * 10));
@@ -377,12 +378,12 @@ void update_title_state5(void)
 	else
 	{
 		// 状態遷移
-		thiz->update = &update_title_state6;
+		thiz->update = &update_title_menu;
 	}
 }
 
 // メニュー更新処理
-void update_title_state6(void)
+void update_title_menu(void)
 {
 	syncAnimation();
 
@@ -405,7 +406,7 @@ void update_title_state6(void)
 	}
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{
-		thiz->com = (Command)(thiz->cursorPos + 1);
+		thiz->com = (Command)thiz->cursorPos;
 
 		switch (thiz->com)
 		{
@@ -418,7 +419,7 @@ void update_title_state6(void)
 		}
 
 		// 状態遷移
-		thiz->update = &update_title_state0;
+		thiz->update = &update_title_waitFade;
 	}
 
 }
@@ -429,7 +430,7 @@ void update_title_state6(void)
 //----------------------
 
 // 背景ポリゴン
-void update_title_poly(void)
+void update_title_anime_poly(void)
 {
 	static float timer;
 	switch (thiz->polyState)
@@ -484,7 +485,7 @@ void update_title_poly(void)
 }
 
 // ロゴ
-void update_title_logo(void)
+void update_title_anime_logo(void)
 {
 	static float timer;
 	switch (thiz->logoState)
@@ -517,7 +518,7 @@ void update_title_logo(void)
 }
 
 // PRESS KEY
-void update_title_presskey(void)
+void update_title_anime_presskey(void)
 {
 	static float timer;
 	switch (thiz->keyState)
