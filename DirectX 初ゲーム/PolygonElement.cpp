@@ -13,19 +13,19 @@ void initPolygonElement(Object * thiz)
 	thiz->transform->position.y = Randomf(-SCREEN_CENTER_Y - 100, SCREEN_CENTER_Y + 100);
 	thiz->transform->position.z = Randomf(0.01f, 5);
 
-	thisPolygonElement->timer = 0;
-	thisPolygonElement->timerInterval = Randomf(0.3f, 1.0f);
-	thisPolygonElement->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
+	thizz->timer = 0;
+	thizz->timerInterval = Randomf(0.3f, 1.0f);
+	thizz->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
 
 	Polygon_SetColor(thiz->polygon, ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
 
-	thisPolygonElement->update = &update_polyele_state0;
+	thizz->update = &update_polyele_state0;
 }
 
 void updatePolygonElement(Object * thiz)
 {
 	SetThis(PolygonElement);
-	thisPolygonElement->update(thisPolygonElement);
+	thizz->update(thizz);
 }
 
 void uninitPolygonElement(Object * thiz)

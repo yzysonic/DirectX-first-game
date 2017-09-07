@@ -7,17 +7,17 @@ void initBullet(Object * thiz)
 	thiz->polygon = newPolygon(thiz, LAYER_DEFAULT, TEX_BULLET);
 	thiz->rigidbody = newRigidbody(thiz);
 	thiz->rigidbody->useGravity = false;
-	thisBullet->timer = 0;
+	thizz->timer = 0;
 
 }
 
 void updateBullet(Object * thiz)
 {
 	SetThis(Bullet);
-	thisBullet->timer += GetDeltaTime();
+	thizz->timer += GetDeltaTime();
 
-	if (thisBullet->timer > 0.7f)
-		DeleteSubObj(thisBullet);
+	if (thizz->timer > 0.7f)
+		DeleteSubObj(thizz);
 }
 
 void uninitBullet(Object * thiz)

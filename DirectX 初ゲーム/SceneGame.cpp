@@ -1,6 +1,7 @@
 #include "SceneGame.h"
 #include "Core.h"
 #include "Camera.h"
+#include "Player.h"
 
 
 typedef struct _SceneGame

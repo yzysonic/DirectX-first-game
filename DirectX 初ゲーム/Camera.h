@@ -12,3 +12,5 @@ typedef struct _Camera
 void initCamera(Object* thiz);
 void updateCamera(Object* thiz);
 void uninitCamera(Object* thiz);
+
+void newCamera(Transform* target, Vector3 pos = Vector3(0, 0, -1.0f));

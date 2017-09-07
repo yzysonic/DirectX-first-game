@@ -67,7 +67,7 @@ typedef struct _SceneTitle
 
 // 内部用関数のプロトタイプ宣言
 void syncAnimation(void);
-void update_title_waitFade(void);
+void update_title_fadeWait(void);
 void update_title_createPoly(void);
 void update_title_showLogo(void);
 void update_title_pressWait(void);
@@ -121,7 +121,7 @@ void initSceneTitle(void)
 	FadeScreen(FADE_OUT_BK, 0, 0);
 
 	// 初期状態
-	thiz->update = &update_title_waitFade;
+	thiz->update = &update_title_fadeWait;
 }
 
 // グローバル更新処理
@@ -182,7 +182,7 @@ void syncAnimation(void)
 //----------------------
 
 // フェイト処理完了待ち
-void update_title_waitFade(void)
+void update_title_fadeWait(void)
 {
 	// 処理完了
 	if (FadeFinished())
@@ -211,7 +211,7 @@ void update_title_waitFade(void)
 		
 		case COM_START:
 			// シーン遷移
-			SetScene(SCENE_TEST);
+			SetScene(SCENE_GAME);
 			break;
 
 		case COM_EXIT:
@@ -419,7 +419,7 @@ void update_title_menu(void)
 		}
 
 		// 状態遷移
-		thiz->update = &update_title_waitFade;
+		thiz->update = &update_title_fadeWait;
 	}
 
 }

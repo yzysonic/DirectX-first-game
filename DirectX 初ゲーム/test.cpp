@@ -9,28 +9,28 @@ void initTest(Object * thiz)
 	thiz->transform->scale = Vector3(scale, scale, 0);
 	thiz->transform->position = Vector3(Randomf(-2000, 2000), Randomf(-1000, 1000), 0);
 
-	thisTest->timer = newTimer(Randomf(0.2f, 0.7f));
-	thisTest->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f)*2;
-	thisTest->targetZ = Randomf(1, 5);
-	thisTest->targetC = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 50);
-	Polygon_SetColor(thiz->polygon, thisTest->targetC);
+	thizz->timer = newTimer(Randomf(0.2f, 0.7f));
+	thizz->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f)*2;
+	thizz->targetZ = Randomf(1, 5);
+	thizz->targetC = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 50);
+	Polygon_SetColor(thiz->polygon, thizz->targetC);
 }
 
 void updateTest(Object * thiz)
 {
 	SetThis(Test);
-	if (Timer_TimeUp(thisTest->timer))
+	if (Timer_TimeUp(thizz->timer))
 	{
-		thisTest->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f);
-		Timer_Reset(thisTest->timer);
+		thizz->speed = Vector3(Randomf(-50, 50), Randomf(-50, 50), 0.0f);
+		Timer_Reset(thizz->timer);
 	}
-	thiz->transform->position += thisTest->speed*GetDeltaTime();
-	thiz->transform->position.z = Lerpf(thiz->transform->position.z, thisTest->targetZ, 3 * GetDeltaTime());
-	//Polygon_SetOpacity(thiz->polygon, (1-(thisTest->targetZ - thiz->transform->position.z)/(10+ thisTest->targetZ)));
+	thiz->transform->position += thizz->speed*GetDeltaTime();
+	thiz->transform->position.z = Lerpf(thiz->transform->position.z, thizz->targetZ, 3 * GetDeltaTime());
+	//Polygon_SetOpacity(thiz->polygon, (1-(thizz->targetZ - thiz->transform->position.z)/(10+ thizz->targetZ)));
 }
 
 void uninitTest(Object * thiz)
 {
 	SetThis(Test);
-	SafeDelete(thisTest->timer);
+	SafeDelete(thizz->timer);
 }

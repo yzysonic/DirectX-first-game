@@ -1,6 +1,5 @@
 #pragma once
 #include"Scene.h"
-#include"Player.h"
 
 Scene* GetSceneGame(void);
 void initSceneGameBase(void);
