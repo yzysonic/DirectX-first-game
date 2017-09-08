@@ -105,6 +105,9 @@
     <ClCompile Include="FadeScreen.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="NumberUI.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="RendererType.h">
       <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberUI.h">
+      <Filter>Script</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

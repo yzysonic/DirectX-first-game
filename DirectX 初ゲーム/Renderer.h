@@ -5,15 +5,20 @@
 #include "Object.h"
 #include "Layer.h"
 
-#define POOL_SIZE_BG_00		10;
-#define POOL_SIZE_BG_01		10;
-#define POOL_SIZE_BG_02		10;
-#define POOL_SIZE_DEFAULT	ObjectMax;
-#define POOL_SIZE_PLAYER	10;
-#define POOL_SIZE_UI_00		10;
-#define POOL_SIZE_UI_01		10;
-#define POOL_SIZE_UI_02		10;
-#define POOL_SIZE_TOP		10;
+// レイヤーごとのプールサイズ
+const int g_PoolSize[LAYER_MAX] =
+{
+	10,			// BG00
+	10,			// BG01
+	10,			// BG02
+	ObjectMax,	// DEFAULT
+	10,			// PLAYER
+	 1,			// MASK
+	30,			// UI00
+	10,			// UI01
+	10,			// UI02
+	10,			// TOP
+};
 
 void InitRenderer(void);
 void UninitRenderer(void);

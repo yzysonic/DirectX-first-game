@@ -52,5 +52,6 @@ void Polygon_SetSize(RectPolygon* thiz, float x, float y);
 void Polygon_SetColor(RectPolygon *thiz, D3DCOLOR color);
 void Polygon_SetOpacity(RectPolygon *thiz, float opacity);
 float Polygon_GetOpacity(RectPolygon *thiz);
+void Polygon_SetPattern(RectPolygon *thiz, unsigned int pattern);
 
 #endif

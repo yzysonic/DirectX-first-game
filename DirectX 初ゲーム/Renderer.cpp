@@ -26,7 +26,6 @@ PolygonPool	g_PolygonPool[LAYER_MAX];
 Color g_BackColor;
 Transform g_FixedCamera;
 Transform *g_Camera;
-int g_PoolSize[LAYER_MAX];
 char g_DebugText[20][256] = {};
 float g_fov;
 
@@ -71,16 +70,6 @@ void InitRenderer(void)
 	// ポリゴンが使うメモリの確保
 	if (g_PolygonPool[0].polygon != NULL)
 		return;
-
-	g_PoolSize[LAYER_BG_00]		= POOL_SIZE_BG_00;
-	g_PoolSize[LAYER_BG_01]		= POOL_SIZE_BG_01;
-	g_PoolSize[LAYER_BG_02]		= POOL_SIZE_BG_02;
-	g_PoolSize[LAYER_DEFAULT]	= POOL_SIZE_DEFAULT;
-	g_PoolSize[LAYER_PLAYER]	= POOL_SIZE_PLAYER;
-	g_PoolSize[LAYER_UI_00]		= POOL_SIZE_UI_00;
-	g_PoolSize[LAYER_UI_01]		= POOL_SIZE_UI_01;
-	g_PoolSize[LAYER_UI_02]		= POOL_SIZE_UI_02;
-	g_PoolSize[LAYER_TOP]		= POOL_SIZE_TOP;
 
 	for (int i = 0; i < LAYER_MAX; i++)
 	{
@@ -221,6 +210,7 @@ void Renderer_SetCamera(Transform * camera)
 	else
 		g_Camera = &g_FixedCamera;
 }
+
 
 //=============================================================================
 // 頂点の座標変換

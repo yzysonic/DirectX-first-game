@@ -14,7 +14,7 @@ void LoadScene(SceneName scene);
 void InitGameManager(void)
 {
 	InitFadeScreen();
-	LoadScene(SCENE_TITLE);
+	LoadScene(SCENE_GAME);
 }
 
 void UpdateGameManager(void)
@@ -25,6 +25,8 @@ void UpdateGameManager(void)
 	if (GetKeyboardTrigger(DIK_1))
 		SetScene(SCENE_TITLE);
 	if (GetKeyboardTrigger(DIK_2))
+		SetScene(SCENE_GAME);
+	if (GetKeyboardTrigger(DIK_0))
 		SetScene(SCENE_TEST);
 #endif
 }

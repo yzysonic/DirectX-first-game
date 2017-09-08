@@ -29,7 +29,7 @@ Transform* newTransform(Object* object)
 
 
 
-Object* newObject(ObjectType type, void *owner)
+Object* newObject(void *owner, ObjectType type)
 {
 	Object *thiz = ObjectManager_GetObj();
 
@@ -44,10 +44,10 @@ Object* newObject(ObjectType type, void *owner)
 		thiz->isActive		= false;
 		thiz->updateIndex	= -1;
 
-		thiz->init			= GetObjectTypeFunc(type)->init;
-		thiz->update		= GetObjectTypeFunc(type)->update;
-		thiz->uninit		= GetObjectTypeFunc(type)->uninit;
-		thiz->onCollision	= GetObjectTypeFunc(type)->onCollision;
+		thiz->init			= GetObjectFunc(type)->init;
+		thiz->update		= GetObjectFunc(type)->update;
+		thiz->uninit		= GetObjectFunc(type)->uninit;
+		thiz->onCollision	= GetObjectFunc(type)->onCollision;
 
 		strcpy(thiz->name, "Object");
 
@@ -68,18 +68,19 @@ void deleteObject(Object* thiz)
 	if (thiz == NULL)
 		return;
 
-	if(thiz->uninit != NULL)
-		thiz->uninit(thiz);
-
 	Object_SetActive(thiz, false);
 	SafeDelete(thiz->transform);
 	deleteRigidbody(thiz->rigidbody);
 	deleteCollider(thiz->collider);
 	deletePolygon(thiz->polygon);
 
-	thiz->owner = NULL;
+	ObjOwner* owner = (ObjOwner*)thiz->owner;
 
-	ObjectManager_ReleaseObj(thiz);
+	if (thiz->uninit != NULL)
+		thiz->uninit(thiz);
+
+	ObjectManager_ReleaseObj(owner->base);
+
 }
 
 void Object_SetActive(Object* thiz, bool value)

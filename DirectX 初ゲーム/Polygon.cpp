@@ -32,10 +32,10 @@ RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName, Render
 	polygon->vertex[3].diffuse = polygon->color;
 
 	// テクスチャ座標の設定
-	polygon->vertex[0].uv = Vector2(0.0f, 0.0f);
-	polygon->vertex[1].uv = Vector2(1.0f, 0.0f);
-	polygon->vertex[2].uv = Vector2(0.0f, 1.0f);
-	polygon->vertex[3].uv = Vector2(1.0f, 1.0f);
+	polygon->vertex[0].uv = Vector2(0.0f,								0.0f);
+	polygon->vertex[1].uv = Vector2(1.0f / polygon->pTexture->divideX,	0.0f);
+	polygon->vertex[2].uv = Vector2(0.0f,								1.0f / polygon->pTexture->divideY);
+	polygon->vertex[3].uv = Vector2(1.0f / polygon->pTexture->divideX,	1.0f / polygon->pTexture->divideY);
 
 	polygon->pattern = 0;
 
@@ -77,4 +77,18 @@ void Polygon_SetOpacity(RectPolygon * thiz, float opacity)
 float Polygon_GetOpacity(RectPolygon * thiz)
 {
 	return (float)(thiz->color >> 24)/0xff;
+}
+
+void Polygon_SetPattern(RectPolygon * thiz,unsigned int pattern)
+{
+	thiz->pattern = pattern;
+
+	int x = pattern % thiz->pTexture->divideX;
+	int y = pattern / thiz->pTexture->divideX;
+	Vector2 size = Vector2(1.0f / thiz->pTexture->divideX, 1.0f / thiz->pTexture->divideY);
+
+	thiz->vertex[0].uv = Vector2(x*size.x, y*size.y);
+	thiz->vertex[1].uv = Vector2(x*size.x + size.x, y*size.y);
+	thiz->vertex[2].uv = Vector2(x*size.x, y*size.y + size.y);
+	thiz->vertex[3].uv = Vector2(x*size.x + size.x, y*size.y + size.y);
 }

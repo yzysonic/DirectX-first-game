@@ -8,6 +8,7 @@ typedef struct _Player
 {
 	Object *base;
 	Vector3 dir;
+	int lives;
 	float speed;
 	float timer;
 }Player;

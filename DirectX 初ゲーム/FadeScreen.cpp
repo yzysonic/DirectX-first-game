@@ -21,7 +21,7 @@ AnimeState state;
 
 void InitFadeScreen()
 {
-	fadeLayer = newObject();
+	fadeLayer = newObject(&fadeLayer);
 	fadeLayer->polygon = newPolygon(fadeLayer, LAYER_TOP, TEX_NONE, REND_UI);
 	fadeLayer->update = &UpdateFadeScreen;
 

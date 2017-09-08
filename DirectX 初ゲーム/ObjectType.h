@@ -5,6 +5,7 @@ typedef struct _Object Object;
 enum ObjectType
 {
 	Obj_Object,
+	Obj_NumberUI,
 	Obj_PolygonElement,
 	Obj_Camera,
 	Obj_Player,
@@ -14,14 +15,14 @@ enum ObjectType
 	ObjTypeMax
 };
 
-typedef struct _ObjectTypeFunc
+typedef struct _ObjectFunc
 {
 	void(*init)(Object* thiz);
 	void(*update)(Object* thiz);
 	void(*uninit)(Object* thiz);
 	void(*onCollision)(Object* thiz, Object* other);
-}ObjectTypeFunc;
+}ObjectFunc;
 
 
 void InitObjectType(void);
-ObjectTypeFunc* GetObjectTypeFunc(ObjectType type);
+ObjectFunc* GetObjectFunc(ObjectType type);

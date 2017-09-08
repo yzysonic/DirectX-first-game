@@ -101,7 +101,7 @@ void initSceneTitle(void)
 	thiz->timer = 0;
 	thiz->com = COM_WAIT;
 
-	thiz->vignetting = newObject(Obj_Object, &thiz->vignetting);
+	thiz->vignetting = newObject(&thiz->vignetting);
 	thiz->vignetting->polygon = newPolygon(thiz->vignetting, LAYER_UI_02, TEX_VIGNETTING, REND_UI);
 
 	// アニメーション状態初期化
@@ -251,7 +251,7 @@ void update_title_createPoly(void)
 	else 
 	{
 		// ロゴ表示
-		thiz->logo = newObject(Obj_Object, &thiz->logo);
+		thiz->logo = newObject(&thiz->logo);
 		thiz->logo->polygon = newPolygon(thiz->logo, LAYER_UI_00, TEX_TITLE_LOGO, REND_UI);
 		thiz->logo->transform->position = Vector3(0, 200 - SCREEN_CENTER_Y, 0);
 		thiz->timer = 0;
@@ -281,12 +281,12 @@ void update_title_showLogo(void)
 		thiz->logo->transform->scale = Vector3(1.0f, 1.0f, 1.0f);
 
 		// PRESS KEY 表示
-		thiz->presskey = newObject(Obj_Object, &thiz->presskey);
+		thiz->presskey = newObject(&thiz->presskey);
 		thiz->presskey->polygon = newPolygon(thiz->presskey, LAYER_UI_00, TEX_TITLE_PRESSKEY, REND_UI);
 		thiz->presskey->transform->position = Vector3(0, 475 - SCREEN_CENTER_Y, 0);
 
 		// 作者情報表示
-		thiz->info = newObject(Obj_Object, &thiz->info);
+		thiz->info = newObject(&thiz->info);
 		thiz->info->polygon = newPolygon(thiz->info, LAYER_UI_02, TEX_TITLE_INFO, REND_UI);
 		thiz->info->transform->position.x = SCREEN_CENTER_X - thiz->info->polygon->pTexture->size.x / 2 - 30;
 		thiz->info->transform->position.y = SCREEN_CENTER_Y - thiz->info->polygon->pTexture->size.y - 10;
@@ -336,17 +336,17 @@ void update_title_showMenu_A(void)
 	else
 	{
 		// メニュー表示
-		thiz->cursor = newObject(Obj_Object, &thiz->cursor);
+		thiz->cursor = newObject(&thiz->cursor);
 		thiz->cursor->polygon = newPolygon(thiz->cursor, LAYER_UI_00, TEX_TITLE_CURSOR, REND_UI);
 		thiz->cursor->transform->position = Vector3(-80, 415 - SCREEN_CENTER_Y, 0);
 		Polygon_SetOpacity(thiz->cursor->polygon, 0);
 
-		thiz->start = newObject(Obj_Object, &thiz->start);
+		thiz->start = newObject(&thiz->start);
 		thiz->start->polygon = newPolygon(thiz->start, LAYER_UI_00, TEX_TITLE_START, REND_UI);
 		thiz->start->transform->position = Vector3(40, 415 - SCREEN_CENTER_Y, 0);
 		Polygon_SetOpacity(thiz->start->polygon, 0);
 
-		thiz->exit = newObject(Obj_Object, &thiz->exit);
+		thiz->exit = newObject(&thiz->exit);
 		thiz->exit->polygon = newPolygon(thiz->exit, LAYER_UI_00, TEX_TITLE_EXIT, REND_UI);
 		thiz->exit->transform->position = Vector3(40, 500 - SCREEN_CENTER_Y, 0);
 		Polygon_SetOpacity(thiz->exit->polygon, 0);

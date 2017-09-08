@@ -10,6 +10,7 @@ void initPlayer(Object *thiz)
 	thiz->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	thiz->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
 
+	thizz->lives = 3;
 	thizz->speed = 700.0f;
 	thizz->dir = Vector3(0, -1, 0);
 	thizz->timer = 0;
@@ -124,4 +125,9 @@ void onCollisionPlayer(Object * thiz, Object * other)
 	{
 		Polygon_SetColor(other->polygon, ColorRGBA(255, 255, 255, 255));
 	}
+}
+
+int Player_GetLives(Player * thiz)
+{
+	return 0;
 }

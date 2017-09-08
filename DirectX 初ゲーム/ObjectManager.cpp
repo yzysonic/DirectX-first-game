@@ -63,7 +63,7 @@ Object* ObjectManager_GetObj()
 	return thiz;
 }
 
-void ObjectManager_ReleaseObj(Object * thiz)
+void ObjectManager_ReleaseObj(Object*& thiz)
 {
 	int index = thiz->poolIndex;
 	Object *obj = &g_ObjectPool[index];
@@ -78,7 +78,8 @@ void ObjectManager_ReleaseObj(Object * thiz)
 		g_ObjectUpdateList[obj->updateIndex] = obj;
 		if(obj->owner != NULL)
 			((ObjOwner*)obj->owner)->base = obj;
-		obj->transform->object = obj;
+		if(obj->transform)
+			obj->transform->object = obj;
 		if(obj->polygon)
 			obj->polygon->object = obj;
 		if(obj->collider)

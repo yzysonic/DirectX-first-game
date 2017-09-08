@@ -33,6 +33,7 @@ void initSceneTest(void)
 	g_SceneTest.testCount = 0;
 
 	Renderer_SetCamera(g_SceneTest.camera->base->transform);
+	Renderer_SetBackColor(ColorRGBA(210,210,210,255));
 
 	for (int j = 0; j < 1000; j++)
 	{
@@ -40,9 +41,11 @@ void initSceneTest(void)
 		g_SceneTest.testList[g_SceneTest.testCount++] = test;
 	}
 
+	//ShowCursor(false);
+
 	Renderer_SetFov(ProjectMode);
 	SetVolume(BGM_GAME, -1800);
-	PlayBGM(BGM_GAME);
+	//PlayBGM(BGM_GAME);
 }
 
 void updateSceneTest(void)
@@ -94,6 +97,7 @@ void updateSceneTest(void)
 		}
 	}
 
+
 	int line = 0;
 	sprintf(GetDebugText(line++), "ObjectCount: %d", i);
 	sprintf(GetDebugText(line++), "DeltaTime: %3.0fms", GetDeltaTime()*1000);
@@ -101,9 +105,13 @@ void updateSceneTest(void)
 	sprintf(GetDebugText(line++), "PlayerX: %5.1f", g_SceneTest.player->base->transform->position.x);
 	sprintf(GetDebugText(line++), "PlayerY: %5.1f", g_SceneTest.player->base->transform->position.y);
 	sprintf(GetDebugText(line++), "PlayerZ: %5.1f", g_SceneTest.player->base->transform->position.z);
+	sprintf(GetDebugText(line++), "PlayerR: %5.1f", g_SceneTest.player->base->transform->rotation.z);
 	sprintf(GetDebugText(line++), "CameraX: %5.1f", g_SceneTest.camera->base->transform->position.x);
 	sprintf(GetDebugText(line++), "CameraY: %5.1f", g_SceneTest.camera->base->transform->position.y);
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", g_SceneTest.camera->base->transform->position.z);
+	sprintf(GetDebugText(line++), "MouseX: %3f", GetMousePos().x);
+	sprintf(GetDebugText(line++), "MouseY: %3f", GetMousePos().y);
+	sprintf(GetDebugText(line++), "Test: %5.2f", D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
 
 }
 
@@ -112,6 +120,8 @@ void uninitSceneTest(void)
 	DeleteSubObj(g_SceneTest.camera);
 	DeleteSubObj(g_SceneTest.player);
 
+	CleanBullets();
+
 	int &i = g_SceneTest.testCount;
 	while (i > 0)
 	{
@@ -119,8 +129,10 @@ void uninitSceneTest(void)
 		DeleteSubObj(g_SceneTest.testList[i]);
 	}
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 20; i++)
 		strcpy(GetDebugText(i), "");
+
+	ShowCursor(true);
 
 	StopSound(BGM_GAME);
 }

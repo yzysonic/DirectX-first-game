@@ -151,6 +151,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Lerp.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Lerp.h" />
+    <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Direct3D.h" />

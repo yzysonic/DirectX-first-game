@@ -13,8 +13,14 @@ enum TextureName
 	TEX_TITLE_CURSOR,
 	TEX_TITLE_START,
 	TEX_TITLE_EXIT,
+	TEX_NUMBER,
+	TEX_GAME_SCORE,
+	TEX_GAME_TIME,
+	TEX_LIFES,
 	TEX_PLAYER,
+	TEX_ENEMY,
 	TEX_BULLET,
+	TEX_BULLET_E,
 	TEX_MAX
 };
 
@@ -22,7 +28,8 @@ typedef struct _Texture
 {
 	LPDIRECT3DTEXTURE9 pDXTex;	// テクスチャポインタ
 	Vector2 size;				// テクスチャサイズ
-	Vector2 divide;				// テクスチャ内分割数
+	int divideX;				// テクスチャ内X分割数
+	int divideY;				// テクスチャ内Y分割数
 }Texture;
 
 void InitTexture();

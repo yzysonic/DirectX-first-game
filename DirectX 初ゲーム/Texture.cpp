@@ -4,12 +4,13 @@
 
 Texture g_textureList[TEX_MAX];
 
-void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide = Vector2(1.f, 1.f));
+void LoadTexture(TextureName texName, LPSTR fileName, int divX = 1, int divY = 1);
 
 void InitTexture()
 {
 	g_textureList[TEX_NONE].pDXTex = NULL;
-	g_textureList[TEX_NONE].divide = Vector2(1, 1);
+	g_textureList[TEX_NONE].divideX = 1;
+	g_textureList[TEX_NONE].divideY = 1;
 	g_textureList[TEX_NONE].size = Vector2(100, 100);
 
 	LoadTexture(TEX_VIGNETTING,		"vignetting.png");
@@ -19,8 +20,14 @@ void InitTexture()
 	LoadTexture(TEX_TITLE_CURSOR,	"title_cursor_v2.png");
 	LoadTexture(TEX_TITLE_START,	"title_start.png");
 	LoadTexture(TEX_TITLE_EXIT,		"title_exit.png");
+	LoadTexture(TEX_NUMBER,			"number.png", 10);
+	LoadTexture(TEX_GAME_SCORE,		"game_score.png");
+	LoadTexture(TEX_GAME_TIME,		"game_time.png");
+	LoadTexture(TEX_LIFES,			"lives.png", 3);
 	LoadTexture(TEX_PLAYER,			"player.png");
+	LoadTexture(TEX_ENEMY,			"enemy.png");
 	LoadTexture(TEX_BULLET,			"bullet.png");
+	LoadTexture(TEX_BULLET_E,		"bullet_e.png");
 }
 
 void UninitTexture()
@@ -35,7 +42,7 @@ Texture * GetTexture(TextureName texName)
 }
 
 
-void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide)
+void LoadTexture(TextureName texName, LPSTR fileName, int divX, int divY)
 {
 	Texture &texture = g_textureList[texName];
 
@@ -69,9 +76,10 @@ void LoadTexture(TextureName texName, LPSTR fileName, Vector2 divide)
 
 	}
 
-	texture.size.x = info.Width / divide.x;
-	texture.size.y = info.Height / divide.y;
-	texture.divide = divide;
+	texture.size.x = (float)info.Width / divX;
+	texture.size.y = (float)info.Height / divY;
+	texture.divideX = divX;
+	texture.divideY = divY;
 
 	
 }

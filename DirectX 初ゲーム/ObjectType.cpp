@@ -1,13 +1,16 @@
 #include "ObjectType.h"
 #include "Object.h"
 
+#include "NumberUI.h"
 #include "PolygonElement.h"
 #include "Camera.h"
 #include "Player.h"
 #include "Bullet.h"
 #include "test.h"
 
-ObjectTypeFunc g_ObjectTypeFuncList[ObjTypeMax];
+#define AssignObjFunc(type, func) ObjFuncList[Obj_##type].func = &##func##type;
+
+static ObjectFunc ObjFuncList[ObjTypeMax];
 
 void EmptyFunc(Object *) {}
 void EmptyFunc2(Object*, Object*) {};
@@ -16,36 +19,38 @@ void InitObjectType(void)
 {
 	for (int i = 0; i < ObjTypeMax; i++)
 	{
-		g_ObjectTypeFuncList[i].init = &EmptyFunc;
-		g_ObjectTypeFuncList[i].update = &EmptyFunc;
-		g_ObjectTypeFuncList[i].uninit = &EmptyFunc;
-		g_ObjectTypeFuncList[i].onCollision = &EmptyFunc2;
+		ObjFuncList[i].init = &EmptyFunc;
+		ObjFuncList[i].update = &EmptyFunc;
+		ObjFuncList[i].uninit = &EmptyFunc;
+		ObjFuncList[i].onCollision = &EmptyFunc2;
 	}
 
-	g_ObjectTypeFuncList[Obj_PolygonElement].init = &initPolygonElement;
-	g_ObjectTypeFuncList[Obj_PolygonElement].update = &updatePolygonElement;
-	g_ObjectTypeFuncList[Obj_PolygonElement].uninit = &uninitPolygonElement;
+	AssignObjFunc(NumberUI, update);
+	AssignObjFunc(NumberUI, uninit);
 
-	g_ObjectTypeFuncList[Obj_Camera].init = &initCamera;
-	g_ObjectTypeFuncList[Obj_Camera].update = &updateCamera;
-	g_ObjectTypeFuncList[Obj_Camera].uninit = &uninitCamera;
+	AssignObjFunc(PolygonElement, init);
+	AssignObjFunc(PolygonElement, update);
+	AssignObjFunc(PolygonElement, uninit);
 
-	g_ObjectTypeFuncList[Obj_Player].init = &initPlayer;
-	g_ObjectTypeFuncList[Obj_Player].update = &updatePlayer;
-	g_ObjectTypeFuncList[Obj_Player].uninit = &uninitPlayer;
-	g_ObjectTypeFuncList[Obj_Player].onCollision = &onCollisionPlayer;
+	AssignObjFunc(Camera, init);
+	AssignObjFunc(Camera, update);
+	AssignObjFunc(Camera, uninit);
 
-	g_ObjectTypeFuncList[Obj_Bullet].init = &initBullet;
-	g_ObjectTypeFuncList[Obj_Bullet].update = &updateBullet;
-	g_ObjectTypeFuncList[Obj_Bullet].uninit = &uninitBullet;
+	AssignObjFunc(Player, init);
+	AssignObjFunc(Player, update);
+	AssignObjFunc(Player, uninit);
 
-	g_ObjectTypeFuncList[Obj_Test].init = &initTest;
-	g_ObjectTypeFuncList[Obj_Test].update = &updateTest;
-	g_ObjectTypeFuncList[Obj_Test].uninit = &uninitTest;
+	AssignObjFunc(Bullet, init);
+	AssignObjFunc(Bullet, update);
+	AssignObjFunc(Bullet, uninit);
+
+	AssignObjFunc(Test, init);
+	AssignObjFunc(Test, update);
+	AssignObjFunc(Test, uninit);
 
 }
 
-ObjectTypeFunc * GetObjectTypeFunc(ObjectType type)
+ObjectFunc * GetObjectFunc(ObjectType type)
 {
-	return &g_ObjectTypeFuncList[type];
+	return &ObjFuncList[type];
 }
