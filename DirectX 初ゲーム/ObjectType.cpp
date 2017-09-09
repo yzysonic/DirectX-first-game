@@ -5,6 +5,7 @@
 #include "PolygonElement.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Bullet.h"
 #include "test.h"
 
@@ -39,10 +40,17 @@ void InitObjectType(void)
 	AssignObjFunc(Player, init);
 	AssignObjFunc(Player, update);
 	AssignObjFunc(Player, uninit);
+	AssignObjFunc(Player, onCollision);
+
+	AssignObjFunc(Enemy, init);
+	AssignObjFunc(Enemy, update);
+	AssignObjFunc(Enemy, uninit);
+	AssignObjFunc(Enemy, onCollision);
 
 	AssignObjFunc(Bullet, init);
 	AssignObjFunc(Bullet, update);
 	AssignObjFunc(Bullet, uninit);
+	AssignObjFunc(Bullet, onCollision);
 
 	AssignObjFunc(Test, init);
 	AssignObjFunc(Test, update);

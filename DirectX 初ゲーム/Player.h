@@ -8,9 +8,11 @@ typedef struct _Player
 {
 	Object *base;
 	Vector3 dir;
-	int lives;
+	int hp;
 	float speed;
 	float timer;
+	float timer2;
+	bool muteki;
 }Player;
 
 void initPlayer(Object *thiz);

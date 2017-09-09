@@ -6,6 +6,7 @@ typedef struct _PolygonElement
 	Object *base;
 	float timer;
 	float timerInterval;
+	float targetOpacity;
 	Vector3 speed;
 	Vector3 prePos;
 	Color nextColor;

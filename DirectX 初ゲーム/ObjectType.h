@@ -10,6 +10,7 @@ enum ObjectType
 	Obj_Camera,
 	Obj_Player,
 	Obj_Bullet,
+	Obj_Bullet_E,
 	Obj_Enemy,
 	Obj_Test,
 	ObjTypeMax

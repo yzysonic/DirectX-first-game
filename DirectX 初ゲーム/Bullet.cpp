@@ -14,20 +14,32 @@ Bullet * newBullet(const Transform * transform, Vector3 velocity)
 	thiz->base->rigidbody->rotation = transform->rotation;
 	thiz->base->rigidbody->velocity = velocity;
 
+	if (transform->object->type == Obj_Player)
+	{
+		thiz->base->polygon = newPolygon(thiz->base, LAYER_DEFAULT, TEX_BULLET);
+		SetVolume(SE_BULLET, -1000);
+		PlaySE(SE_BULLET);
+	}
+	else
+	{
+		thiz->base->type = Obj_Bullet_E;
+		thiz->base->polygon = newPolygon(thiz->base, LAYER_DEFAULT, TEX_BULLET_E);
+	}
+
 	thiz->index = listTop;
 	thiz->timer = 0;
 
-	SetVolume(SE_BULLET, -1000);
-	PlaySE(SE_BULLET);
 
 	return thiz;
 }
 
 void initBullet(Object * thiz)
 {
-	thiz->polygon = newPolygon(thiz, LAYER_DEFAULT, TEX_BULLET);
 	thiz->rigidbody = newRigidbody(thiz);
 	thiz->rigidbody->useGravity = false;
+	thiz->collider = newCollider(thiz);
+	thiz->collider->size.x += 100.0f;
+	thiz->collider->size.y += 100.0f;
 }
 
 void updateBullet(Object * thiz)
@@ -53,6 +65,24 @@ void uninitBullet(Object * thiz)
 
 	list[listTop] = NULL;
 	listTop--;
+}
+
+void onCollisionBullet(Object * thiz, Object * other)
+{
+	SetThis(Bullet);
+
+	if (thiz->type == Obj_Bullet && other->type == Obj_Enemy)
+	{
+		Polygon_SetOpacity(thiz->polygon, 0.0f);
+		DeleteSubObj(thizz);
+	}
+
+	if (thiz->type == Obj_Bullet_E && other->type == Obj_Player)
+	{
+		Polygon_SetOpacity(thiz->polygon, 0.0f);
+		DeleteSubObj(thizz);
+	}
+
 }
 
 void CleanBullets()

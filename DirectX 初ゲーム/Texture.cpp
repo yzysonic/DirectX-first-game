@@ -23,6 +23,8 @@ void InitTexture()
 	LoadTexture(TEX_NUMBER,			"number.png", 10);
 	LoadTexture(TEX_GAME_SCORE,		"game_score.png");
 	LoadTexture(TEX_GAME_TIME,		"game_time.png");
+	LoadTexture(TEX_GAME_OVER,		"game_over.png");
+	LoadTexture(TEX_CLEAR,			"clear.png");
 	LoadTexture(TEX_LIFES,			"lives.png", 3);
 	LoadTexture(TEX_PLAYER,			"player.png");
 	LoadTexture(TEX_ENEMY,			"enemy.png");

@@ -151,6 +151,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -168,8 +169,10 @@
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Rigidbody.cpp" />
+    <ClCompile Include="SceneClear.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="SceneGameOver.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -182,6 +185,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Layer.h" />
@@ -202,8 +206,10 @@
     <ClInclude Include="RendererType.h" />
     <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneClear.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="SceneGameOver.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Sound.h" />

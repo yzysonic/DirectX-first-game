@@ -108,6 +108,15 @@
     <ClCompile Include="NumberUI.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGameOver.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneClear.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -205,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="NumberUI.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGameOver.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneClear.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "Player.h"
 
+void update_player_muteki(Player *thiz);
 
 void initPlayer(Object *thiz)
 {
@@ -10,10 +11,11 @@ void initPlayer(Object *thiz)
 	thiz->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	thiz->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
 
-	thizz->lives = 3;
+	thizz->hp = 3;
 	thizz->speed = 700.0f;
 	thizz->dir = Vector3(0, -1, 0);
 	thizz->timer = 0;
+	thizz->muteki = false;
 
 }
 
@@ -50,8 +52,8 @@ void updatePlayer(Object *thiz)
 
 	// ‰Á‘¬“ü—Í
 	float boost = 1.0f;
-	if (GetKeyboardPress(DIK_LSHIFT))
-		boost = 2.0f;
+	//if (GetKeyboardPress(DIK_LSHIFT))
+	//	boost = 2.0f;
 
 	// ˆÚ“®ˆ—
 	thiz->transform->position += thizz->speed * boost * controlVector * GetDeltaTime();
@@ -64,8 +66,8 @@ void updatePlayer(Object *thiz)
 	//else
 	//	thiz->transform->rotation.z = PI+acosf(-D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
 
-	D3DXVec3Normalize(&thizz->dir, &GetMousePos());
-	thiz->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
+	//D3DXVec3Normalize(&thizz->dir, &GetMousePos());
+	//thiz->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
 
 	// ’e”­ŽË
 	controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -105,12 +107,14 @@ void updatePlayer(Object *thiz)
 	{
 		if(thizz->timer >= 0.13f)
 		{
-			newBullet(thiz->transform, 2000.0f*thizz->dir + thizz->speed * boost * controlVector);
+			newBullet(thiz->transform, 700.0f*thizz->dir + thizz->speed * boost * controlVector);
 			thizz->timer = 0;
 		}
 		thizz->timer += GetDeltaTime();
 	}
 
+	// –³“Gó‘Ô‚ÌXV
+	update_player_muteki(thizz);
 
 }
 
@@ -121,13 +125,35 @@ void uninitPlayer(Object *thiz)
 
 void onCollisionPlayer(Object * thiz, Object * other)
 {
-	if (other->type == Obj_Test)
+	SetThis(Player);
+
+	if (other->type == Obj_Enemy && !thizz->muteki)
 	{
-		Polygon_SetColor(other->polygon, ColorRGBA(255, 255, 255, 255));
+		Polygon_SetOpacity(thiz->polygon, 0.5f);
+		thizz->hp--;
+		thizz->muteki = true;
+		thizz->timer2 = 0;
 	}
 }
 
 int Player_GetLives(Player * thiz)
 {
 	return 0;
+}
+
+void update_player_muteki(Player *thiz)
+{
+	if (!thiz->muteki)
+		return;
+
+	if (thiz->timer2 > 1.5f)
+	{
+		Polygon_SetOpacity(thiz->base->polygon, 1.0f);
+		thiz->muteki = false;
+		return;
+	}
+
+
+
+	thiz->timer2 += GetDeltaTime();
 }

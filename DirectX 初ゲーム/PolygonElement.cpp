@@ -16,6 +16,7 @@ void initPolygonElement(Object * thiz)
 	thizz->timer = 0;
 	thizz->timerInterval = Randomf(0.3f, 1.0f);
 	thizz->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
+	thizz->targetOpacity = 1.0f;
 
 	Polygon_SetColor(thiz->polygon, ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
 
@@ -37,7 +38,7 @@ void update_polyele_state0(PolygonElement* thiz)
 	float interval = 0.2f;
 	if (thiz->timer < interval)
 	{
-		Polygon_SetOpacity(thiz->base->polygon, thiz->timer / interval);
+		Polygon_SetOpacity(thiz->base->polygon, thiz->targetOpacity*(thiz->timer / interval));
 		thiz->base->transform->scale.x = Lerpf(0.1f, 0.4f, (thiz->timer / interval));
 		thiz->base->transform->scale.y = Lerpf(0.1f, 0.4f, (thiz->timer / interval));
 		thiz->timer += GetDeltaTime();

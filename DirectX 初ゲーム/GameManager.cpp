@@ -5,6 +5,8 @@
 #include "FadeScreen.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
+#include "SceneGameOver.h"
+#include "SceneClear.h"
 #include "SceneTest.h"
 
 Scene* g_CurrentScene;
@@ -14,7 +16,7 @@ void LoadScene(SceneName scene);
 void InitGameManager(void)
 {
 	InitFadeScreen();
-	LoadScene(SCENE_GAME);
+	LoadScene(START_SCENE);
 }
 
 void UpdateGameManager(void)
@@ -26,6 +28,10 @@ void UpdateGameManager(void)
 		SetScene(SCENE_TITLE);
 	if (GetKeyboardTrigger(DIK_2))
 		SetScene(SCENE_GAME);
+	if (GetKeyboardTrigger(DIK_3))
+		SetScene(SCENE_GAMEOVER);
+	if (GetKeyboardTrigger(DIK_4))
+		SetScene(SCENE_CLEAR);
 	if (GetKeyboardTrigger(DIK_0))
 		SetScene(SCENE_TEST);
 #endif
@@ -63,8 +69,18 @@ void LoadScene(SceneName scene)
 		g_CurrentScene->uninit = &uninitSceneGame;
 		break;
 
-	case SCENE_CLEAR:
+	case SCENE_GAMEOVER:
+		g_CurrentScene = GetSceneGameOver();
+		g_CurrentScene->init = &initSceneGameOver;
+		g_CurrentScene->update = &updateSceneGameOver;
+		g_CurrentScene->uninit = &uninitSceneGameOver;
+		break;
 
+	case SCENE_CLEAR:
+		g_CurrentScene = GetSceneClear();
+		g_CurrentScene->init = &initSceneClear;
+		g_CurrentScene->update = &updateSceneClear;
+		g_CurrentScene->uninit = &uninitSceneClear;
 		break;
 
 	case SCENE_TEST:

@@ -122,6 +122,10 @@ void TestCollisions()
 		{
 			a = g_ColliderList[i];
 			b = g_ColliderList[j];
+
+			if (a->object->type == b->object->type)
+				continue;
+			
 			posa = a->object->transform->position + a->offset;
 			posb = b->object->transform->position + b->offset;
 
