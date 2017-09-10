@@ -69,7 +69,7 @@ void initSceneGame(void)
 	thiz->liveUI->polygon = newPolygon(thiz->liveUI, LAYER_UI_00, TEX_LIFES, REND_UI);
 	thiz->liveUI->transform->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SCREEN_CENTER_X, 70 - SCREEN_CENTER_Y, 0.0f);
 
-	// プライヤー
+	// プレイヤー
 	thiz->player = NewSubObj(Player);
 	Object_SetActive(thiz->player->base, false);
 
@@ -208,6 +208,11 @@ void swapEnemy(void)
 {
 	static float timer = 0;
 
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_E))
+		timer = 10;
+#endif
+
 	if (timer > 3.0f)
 	{
 		for (int i = 0; i < ENEMY_MAX; i++)
@@ -218,7 +223,7 @@ void swapEnemy(void)
 				thiz->enemy[i] = NewSubObj(Enemy);
 
 				enemy->target = thiz->player->base->transform;
-				enemy->base->transform->position = Vector3(Randomf(-FIELD_RANG_X, FIELD_RANG_X), Randomf(-FIELD_RANG_Y, FIELD_RANG_X), 0.0f);
+				enemy->base->transform->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_X-500), 0.0f);
 
 				break;
 			}

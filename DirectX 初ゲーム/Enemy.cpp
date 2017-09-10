@@ -22,11 +22,6 @@ void updateEnemy(Object * thiz)
 		thiz->transform->position += dir * ENEMY_SPEED * GetDeltaTime();
 	}
 
-	if (thizz->hp == 0)
-	{
-		AddGameScore(300);
-		DeleteSubObj(thizz);
-	}
 }
 
 void uninitEnemy(Object * thiz)
@@ -40,5 +35,12 @@ void onCollisionEnemy(Object * thiz, Object * other)
 	if (other->type == Obj_Bullet)
 	{
 		thizz->hp--;
+
+		if (thizz->hp == 0)
+		{
+			AddGameScore(300);
+			DeleteSubObj(thizz);
+		}
+
 	}
 }
