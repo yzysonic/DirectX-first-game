@@ -14,8 +14,8 @@ typedef struct _SceneClear
 }SceneClear;
 
 // グローバル変数宣言
-SceneClear g_SceneClear;
-SceneClear *thiz = &g_SceneClear;
+static SceneClear g_SceneClear;
+static SceneClear *thiz = &g_SceneClear;
 
 // プロトタイプ宣言
 void update_clear_fadeWait(void);

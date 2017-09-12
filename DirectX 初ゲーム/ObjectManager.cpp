@@ -23,7 +23,8 @@ void InitObjectManager(void)
 
 	for (int i = 0; i < ObjectMax; i++)
 	{
-		g_ObjectPool[i].poolIndex = i;
+		//g_ObjectPool[i].poolIndex = i;
+		g_ObjectPool[i].poolIndex = -1;
 	}
 
 	InitObjectType();
@@ -53,12 +54,22 @@ Object* ObjectManager_GetObj()
 {
 	Object *thiz = NULL;
 
-	if (g_ObjectPoolNextObj < ObjectMax)
+	for (int i = 0; i < ObjectMax; i++)
 	{
-		thiz = &g_ObjectPool[g_ObjectPoolNextObj];
-		thiz->poolIndex = g_ObjectPoolNextObj;
-		g_ObjectPoolNextObj++;
+		if (g_ObjectPool[i].poolIndex == -1)
+		{
+			thiz = &g_ObjectPool[i];
+			thiz->poolIndex = i;
+			break;
+		}
 	}
+
+	//if (g_ObjectPoolNextObj < ObjectMax)
+	//{
+	//	thiz = &g_ObjectPool[g_ObjectPoolNextObj];
+	//	thiz->poolIndex = g_ObjectPoolNextObj;
+	//	g_ObjectPoolNextObj++;
+	//}
 
 	return thiz;
 }
@@ -68,30 +79,34 @@ void ObjectManager_ReleaseObj(Object*& thiz)
 	int index = thiz->poolIndex;
 	Object *obj = &g_ObjectPool[index];
 
-	if (obj->poolIndex < g_ObjectPoolNextObj - 1)
-	{
-		// 最後尾のオブジェクトをindexのところに移動
-		*obj = g_ObjectPool[g_ObjectPoolNextObj - 1];
-		obj->poolIndex = index;
+	ZeroMemory(obj, sizeof(Object));
 
-		// アドレスが変わったため参照を更新する
-		g_ObjectUpdateList[obj->updateIndex] = obj;
-		if(obj->owner != NULL)
-			((ObjOwner*)obj->owner)->base = obj;
-		if(obj->transform)
-			obj->transform->object = obj;
-		if(obj->polygon)
-			obj->polygon->object = obj;
-		if(obj->collider)
-			obj->collider->object = obj;
-		if(obj->rigidbody)
-			obj->rigidbody->object = obj;
-	}
+	obj->poolIndex = -1;
 
-	// メモリをクリア
-	g_ObjectPool[g_ObjectPoolNextObj - 1] = {};
+	//if (obj->poolIndex < g_ObjectPoolNextObj - 1)
+	//{
+	//	// 最後尾のオブジェクトをindexのところに移動
+	//	*obj = g_ObjectPool[g_ObjectPoolNextObj - 1];
+	//	obj->poolIndex = index;
 
-	g_ObjectPoolNextObj--;
+	//	// アドレスが変わったため参照を更新する
+	//	g_ObjectUpdateList[obj->updateIndex] = obj;
+	//	if(obj->owner != NULL)
+	//		((ObjOwner*)obj->owner)->base = obj;
+	//	if(obj->transform)
+	//		obj->transform->object = obj;
+	//	if(obj->polygon)
+	//		obj->polygon->object = obj;
+	//	if(obj->collider)
+	//		obj->collider->object = obj;
+	//	if(obj->rigidbody)
+	//		obj->rigidbody->object = obj;
+	//}
+
+	//// メモリをクリア
+	//g_ObjectPool[g_ObjectPoolNextObj - 1] = {};
+
+	//g_ObjectPoolNextObj--;
 }
 
 

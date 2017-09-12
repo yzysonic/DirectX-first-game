@@ -80,8 +80,8 @@ void update_title_anime_logo(void);
 void update_title_anime_presskey(void);
 
 // ƒOƒ[ƒoƒ‹•Ï”éŒ¾
-SceneTitle g_SceneTitle;
-SceneTitle* thiz = &g_SceneTitle;
+static SceneTitle g_SceneTitle;
+static SceneTitle* thiz = &g_SceneTitle;
 
 
 /// publicŠÖ”

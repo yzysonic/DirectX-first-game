@@ -2,9 +2,16 @@
 #include "main.h"
 #include "Object.h"
 #include "Time.h"
+#include <list>
 
-Collider *g_ColliderList[ObjectMax];
-Rigidbody *g_RigidbodyList[ObjectMax];
+using namespace std;
+
+//Collider *g_ColliderList[ObjectMax];
+//Rigidbody *g_RigidbodyList[ObjectMax];
+list<Collider*> g_ColliderList;
+list<Collider*>::iterator cia, cib;
+list<Rigidbody*> g_RigidbodyList;
+
 int g_ColliderListTop = -1;
 int g_RigidbodyListTop = -1;
 Vector3 g_Gravaty = Vector3(0, 10, 0);
@@ -20,44 +27,88 @@ void UpdatePhysics()
 
 void Physics_AddCollider(Collider * thiz)
 {
-	if ((g_ColliderListTop + 1) < ObjectMax)
-	{
-		g_ColliderList[++g_ColliderListTop] = thiz;
-		thiz->listIndex = g_ColliderListTop;
-	}
+	g_ColliderList.push_back(thiz);
+	thiz->listIndex = g_ColliderList.size() - 1;
+
+	//if ((g_ColliderListTop + 1) < ObjectMax)
+	//{
+	//	g_ColliderList[++g_ColliderListTop] = thiz;
+	//	thiz->listIndex = g_ColliderListTop;
+	//}
 }
 
 void Physics_RemoveCollider(Collider * thiz)
 {
-	if (thiz->listIndex < g_ColliderListTop)
+
+	for (auto collider = g_ColliderList.begin(); collider != g_ColliderList.end(); collider++)
 	{
-		g_ColliderList[thiz->listIndex] = g_ColliderList[g_ColliderListTop];
-		g_ColliderList[thiz->listIndex]->listIndex = thiz->listIndex;
+		if (*collider == thiz)
+		{
+			if (thiz == *cia || thiz == *cib)
+			{
+				if (thiz == *cia && thiz == *cib)
+					cia = cib = g_ColliderList.erase(collider);
+				else if (thiz == *cia)
+					cia = g_ColliderList.erase(collider);
+				else
+					cib = g_ColliderList.erase(collider);
+			}
+			else
+			{
+				g_ColliderList.erase(collider);
+			}
+
+			break;
+		}
 	}
-	g_ColliderList[g_ColliderListTop] = NULL;
-	g_ColliderListTop--;
+
+
+	//if (thiz->listIndex < g_ColliderListTop)
+	//{
+	//	g_ColliderList[thiz->listIndex] = g_ColliderList[g_ColliderListTop];
+	//	g_ColliderList[thiz->listIndex]->listIndex = thiz->listIndex;
+	//}
+	//g_ColliderList[g_ColliderListTop] = NULL;
+	//g_ColliderListTop--;
 	thiz->listIndex = -1;
+
 }
 
 void Physics_AddRigidbody(Rigidbody * thiz)
 {
-	if ((g_RigidbodyListTop + 1) < ObjectMax)
-	{
-		g_RigidbodyList[++g_RigidbodyListTop] = thiz;
-		thiz->listIndex = g_RigidbodyListTop;
-	}
+	g_RigidbodyList.push_back(thiz);
+	thiz->listIndex = g_RigidbodyList.size() - 1;
+
+	//if ((g_RigidbodyListTop + 1) < ObjectMax)
+	//{
+	//	g_RigidbodyList[++g_RigidbodyListTop] = thiz;
+	//	thiz->listIndex = g_RigidbodyListTop;
+	//}
 }
 
 void Physics_RemoveRigidbody(Rigidbody * thiz)
 {
-	if (thiz->listIndex < g_RigidbodyListTop)
+
+	for (auto rb = g_RigidbodyList.begin(); rb != g_RigidbodyList.end(); rb++)
 	{
-		g_RigidbodyList[thiz->listIndex] = g_RigidbodyList[g_RigidbodyListTop];
-		g_RigidbodyList[thiz->listIndex]->listIndex = thiz->listIndex;
+		if (*rb == thiz)
+		{
+			g_RigidbodyList.erase(rb);
+			break;
+		}
+
 	}
-	g_RigidbodyList[g_RigidbodyListTop] = NULL;
-	g_RigidbodyListTop--;
+
+
+	//if (thiz->listIndex < g_RigidbodyListTop)
+	//{
+	//	g_RigidbodyList[thiz->listIndex] = g_RigidbodyList[g_RigidbodyListTop];
+	//	g_RigidbodyList[thiz->listIndex]->listIndex = thiz->listIndex;
+	//}
+	//g_RigidbodyList[g_RigidbodyListTop] = NULL;
+	//g_RigidbodyListTop--;
 	thiz->listIndex = -1;
+
 }
 
 void Physics_SetGravity(Vector3 value)
@@ -68,13 +119,15 @@ void Physics_SetGravity(Vector3 value)
 
 void UpdateDynamics()
 {
-	Rigidbody *rb;
+	//Rigidbody *rb;
 	float dt = GetDeltaTime();
 
-	for (int i = 0; i <= g_RigidbodyListTop; i++)
+	//for (int i = 0; i <= g_RigidbodyListTop; i++)
+	for(auto rb : g_RigidbodyList)
 	{
 
-		rb = g_RigidbodyList[i];
+		//rb = g_RigidbodyList[i];
+
 		Vector3 a = rb->force / rb->mass;
 
 		//xé≤ÇÃèàóù
@@ -116,30 +169,45 @@ void TestCollisions()
 	Collider *a, *b;
 	Vector3 posa, posb;
 
-	for (int i = 0; i <= g_ColliderListTop - 1; i++)
+	if (g_ColliderList.size() == 0)
+		return;
+
+	//for (int i = 0; i <= g_ColliderListTop - 1; i++)
+	for (cia = g_ColliderList.begin(); cia != std::prev(g_ColliderList.end(), 1); cia++)
 	{
-		for (int j = i + 1; j <= g_ColliderListTop; j++)
+		//for (int j = i + 1; j <= g_ColliderListTop; j++)
+		for (cib = std::next(cia, 1); cib != g_ColliderList.end(); cib++)
 		{
-			a = g_ColliderList[i];
-			b = g_ColliderList[j];
+			//a = g_ColliderList.[i];
+			//b = g_ColliderList[j];
+			a = *cia;
+			b = *cib;
 
 			if (a->object->type == b->object->type)
 				continue;
-			
+
 			posa = a->object->transform->position + a->offset;
 			posb = b->object->transform->position + b->offset;
 
 			if (
-				((posa.x - a->size.x / 2)<(posb.x + b->size.x / 2)) &&
-				((posa.x + a->size.x / 2)>(posb.x - b->size.x / 2)) &&
-				((posa.y - a->size.y / 2)<(posb.y + b->size.y / 2)) &&
-				((posa.y + a->size.y / 2)>(posb.y - b->size.y / 2))
+				((posa.x - a->size.x / 2) < (posb.x + b->size.x / 2)) &&
+				((posa.x + a->size.x / 2) > (posb.x - b->size.x / 2)) &&
+				((posa.y - a->size.y / 2) < (posb.y + b->size.y / 2)) &&
+				((posa.y + a->size.y / 2) > (posb.y - b->size.y / 2))
 				)
 			{
 				a->object->onCollision(a->object, b->object);
-				b->object->onCollision(b->object, b->object);
+				if (a != *cia)
+					continue;
+				b->object->onCollision(b->object, a->object);
 			}
 
+			if (cib == g_ColliderList.end())
+				break;
 		}
+		if (cia == prev(g_ColliderList.end(), 1))
+			break;
 	}
+
+	cia = cib = g_ColliderList.begin();
 }

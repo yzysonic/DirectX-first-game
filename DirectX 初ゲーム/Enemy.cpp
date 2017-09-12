@@ -7,6 +7,8 @@ void initEnemy(Object * thiz)
 
 	thiz->polygon = newPolygon(thiz, LAYER_DEFAULT, TEX_ENEMY);
 	thiz->collider = newCollider(thiz);
+	thiz->collider->size.x -= 100;
+	thiz->collider->size.y -= 100;
 
 	thizz->hp = 10;
 }
@@ -35,12 +37,5 @@ void onCollisionEnemy(Object * thiz, Object * other)
 	if (other->type == Obj_Bullet)
 	{
 		thizz->hp--;
-
-		if (thizz->hp == 0)
-		{
-			AddGameScore(300);
-			DeleteSubObj(thizz);
-		}
-
 	}
 }

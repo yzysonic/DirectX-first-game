@@ -11,8 +11,8 @@ typedef struct _SceneGameOver
 }SceneGameOver;
 
 // グローバル変数宣言
-SceneGameOver g_SceneGameOver;
-SceneGameOver *thiz = &g_SceneGameOver;
+static SceneGameOver g_SceneGameOver;
+static SceneGameOver *thiz = &g_SceneGameOver;
 
 // プロトタイプ宣言
 void update_gameover_fadeWait(void);

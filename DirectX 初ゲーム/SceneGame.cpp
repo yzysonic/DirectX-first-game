@@ -30,8 +30,8 @@ typedef struct _SceneGame
 }SceneGame;
 
 // グローバル変数宣言
-SceneGame g_SceneGame;
-SceneGame *thiz = &g_SceneGame;
+static SceneGame g_SceneGame;
+static SceneGame *thiz = &g_SceneGame;
 
 // プロトタイプ宣言
 void update_game_fadeWait(void);
@@ -171,6 +171,20 @@ void update_game_main(void)
 	// 敵の生成
 	swapEnemy();
 
+	for (int i = 0; i < ENEMY_MAX; i++)
+	{
+		if (thiz->enemy[i] == NULL)
+			continue;
+
+		if (thiz->enemy[i]->hp == 0)
+		{
+			AddGameScore(300);
+			DeleteSubObj(thiz->enemy[i]);
+			thiz->enemy[i] = NULL;
+		}
+	}
+	
+
 	// プレイヤーの移動制限
 	Vector3 &playerPos = thiz->player->base->transform->position;
 	if (playerPos.x < -FIELD_RANG_X)
@@ -197,11 +211,18 @@ void update_game_main(void)
 
 	// シーン遷移→クリアシーン
 	if (thiz->timer < 0)
+	{
 		SetScene(SCENE_CLEAR);
+		return;
+	}
 
 	// シーン遷移→ゲームオーバー
-	if(thiz->player->hp == 0)
+	if (thiz->player->hp == 0)
+	{
 		SetScene(SCENE_GAMEOVER);
+		return;
+	}
+
 }
 
 void swapEnemy(void)

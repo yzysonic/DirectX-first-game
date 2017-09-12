@@ -38,8 +38,6 @@ void initBullet(Object * thiz)
 	thiz->rigidbody = newRigidbody(thiz);
 	thiz->rigidbody->useGravity = false;
 	thiz->collider = newCollider(thiz);
-	thiz->collider->size.x += 100.0f;
-	thiz->collider->size.y += 100.0f;
 }
 
 void updateBullet(Object * thiz)
@@ -76,8 +74,7 @@ void onCollisionBullet(Object * thiz, Object * other)
 		Polygon_SetOpacity(thiz->polygon, 0.0f);
 		DeleteSubObj(thizz);
 	}
-
-	if (thiz->type == Obj_Bullet_E && other->type == Obj_Player)
+	else if (thiz->type == Obj_Bullet_E && other->type == Obj_Player)
 	{
 		Polygon_SetOpacity(thiz->polygon, 0.0f);
 		DeleteSubObj(thizz);
