@@ -1,7 +1,7 @@
 #pragma once
 
-enum RendererType
+enum struct RendererType
 {
-	REND_DEFAULT,
-	REND_UI
+	Default,
+	UI
 };

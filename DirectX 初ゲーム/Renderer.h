@@ -4,9 +4,12 @@
 #include "Polygon.h"
 #include "Object.h"
 #include "Layer.h"
+#include "Singleton.h"
+#include "Camera.h"
+#include <vector>
 
 // レイヤーごとのプールサイズ
-const int g_PoolSize[LAYER_MAX] =
+const int g_PoolSize[(int)Layer::MAX] =
 {
 	10,			// BG00
 	10,			// BG01
@@ -20,13 +23,24 @@ const int g_PoolSize[LAYER_MAX] =
 	10,			// TOP
 };
 
-void InitRenderer(void);
-void UninitRenderer(void);
-void DrawFrame(void);
-RectPolygon* Renderer_GetPolygon(Layer layer);
-void Renderer_ReleasePolygon(RectPolygon* thiz);
-void Renderer_SetBackColor(Color value);
-void Renderer_SetCamera(Transform *camera);
+class Renderer : public Singleton<Renderer>
+{
+public:
+	Renderer(void) {};
+	static void Create(void);
+	static void Destroy(void);
+	void drawFrame(void);
+	void addList(RectPolygon* poly);
+	void removeList(RectPolygon* poly);
+	Camera* getCamera(void);
+	void setCamera(Camera* camera);
+
+private:
+	std::vector<RectPolygon*> list[(int)Layer::MAX];
+	Camera fixedCamera;
+	Camera* camera;
+
+	void transformVertex(RectPolygon* poly);
+};
+
 char *GetDebugText(int line);
-float Renderer_GetFov();
-void Renderer_SetFov(float value);

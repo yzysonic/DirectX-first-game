@@ -1,192 +1,149 @@
 #include "SceneGame.h"
 #include "GameManager.h"
-#include "Core.h"
-#include "NumberUI.h"
-#include "Camera.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Bullet.h"
-#include "PolygonElement.h"
-
-
-typedef struct _SceneGame
-{
-	Scene base;
-
-	Object* vignetting = NULL;
-	Object* liveUI = NULL;
-	NumberUI* scoreUI = NULL;
-	NumberUI* timeUI[2] = {};
-	Camera* camera = NULL;
-	PolygonElement *polyList[GAME_POLY_MAX] = {};
-	Player* player = NULL;
-	Enemy* enemy[ENEMY_MAX] = {};
-	
-	int score;
-	float timer;
-	int polyCount;
-
-	void(*update)(void);
-}SceneGame;
-
-// グローバル変数宣言
-static SceneGame g_SceneGame;
-static SceneGame *thiz = &g_SceneGame;
-
-// プロトタイプ宣言
-void update_game_fadeWait(void);
-void update_game_main(void);
-void swapEnemy(void);
 
 
 /// public関数
 
-// インスタンスの取得
-Scene * GetSceneGame(void)
-{
-	return (Scene*)&g_SceneGame;
-}
-
 // 初期化処理
-void initSceneGame(void)
+void SceneGame::init(void)
 {
 	// 口径食効果
-	thiz->vignetting = newObject(&thiz->vignetting);
-	thiz->vignetting->polygon = newPolygon(thiz->vignetting, LAYER_MASK, TEX_VIGNETTING, REND_UI);
+	this->vignetting = new Object;
+	this->vignetting->setPolygon(Layer::MASK, TEX_VIGNETTING, RendererType::UI);
 
 	// スコアUI
-	thiz->scoreUI = newNumberUI(5, SCREEN_CENTER_X - 300, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_SCORE);
-	NumberUI_SetOffset(thiz->scoreUI, 130, 0);
+	this->scoreUI = new NumberUI(5, SCREEN_CENTER_X - 300, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_SCORE);
+	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
 	const int x_offset = 35;
-	thiz->timeUI[0] = newNumberUI(2, x_offset - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_TIME);
-	thiz->timeUI[1] = newNumberUI(2, x_offset + 116 - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER);
-	NumberUI_SetOffset(thiz->timeUI[0], 180, 0);
+	this->timeUI[0] = new NumberUI(2, x_offset - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_TIME);
+	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER);
+	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
-	thiz->liveUI = newObject(&thiz->liveUI);
-	thiz->liveUI->polygon = newPolygon(thiz->liveUI, LAYER_UI_00, TEX_LIFES, REND_UI);
-	thiz->liveUI->transform->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SCREEN_CENTER_X, 70 - SCREEN_CENTER_Y, 0.0f);
+	this->liveUI = new Object;
+	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
+	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SCREEN_CENTER_X, 70 - SCREEN_CENTER_Y, 0.0f);
 
 	// プレイヤー
-	thiz->player = NewSubObj(Player);
-	Object_SetActive(thiz->player->base, false);
+	this->player = new Player;
+	this->player->setActive(false);
 
-	// カメラ
-	thiz->camera = newCamera(thiz->player->base->transform, Vector3(0, -50, -5));
-	Object_SetActive(thiz->camera->base, false);
-
-	// レンダラー設定
-	Renderer_SetCamera(thiz->camera->base->transform);
-	Renderer_SetBackColor(ColorRGBA(210, 210, 210, 255));
-	Renderer_SetFov(1);
+	// カメラ設定
+	this->camera = new SmoothCamera(this->player->getTransform(), Vector3(0, -50, -5));
+	this->camera->setActive(false);
+	this->camera->backColor = ColorRGBA(210, 210, 210, 255);
+	this->camera->fov = 1;
+	Renderer::GetInstance()->setCamera(this->camera);
 
 	// ゲームで使う変数
-	thiz->score = 0;
-	thiz->timer = 60.0f;
-	thiz->polyCount = 0;
+	this->score = 0;
+	this->timer = 60.0f;
+	this->polyCount = 0;
 
 	for (int i = 0; i < ENEMY_MAX; i++)
-		thiz->enemy[i] = NULL;
+		this->enemy[i] = NULL;
 
 	// 背景ポリゴン生成
 	for (int i = 0; i < GAME_POLY_MAX; i++)
 	{
-		thiz->polyList[i] = NewSubObj(PolygonElement);
-		thiz->polyList[i]->base->transform->position.x = Randomf(-FIELD_RANG_X, FIELD_RANG_X);
-		thiz->polyList[i]->base->transform->position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
-		thiz->polyList[i]->base->transform->position.z = Randomf(0.01f, 3);
-		thiz->polyList[i]->targetOpacity = 0.7f;
-		thiz->polyCount++;
+		this->polyList[i] = new PolygonElement;
+		this->polyList[i]->getTransform()->position.x = Randomf(-FIELD_RANG_X, FIELD_RANG_X);
+		this->polyList[i]->getTransform()->position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
+		this->polyList[i]->getTransform()->position.z = Randomf(0.01f, 3);
+		this->polyList[i]->targetOpacity = 0.7f;
+		this->polyCount++;
 	}
 
 	// フェイトイン効果
-	FadeScreen(FADE_IN_WH, 0, 0.7f);
+	FadeScreen::Fade(FADE_IN_WH, 0, 0.7f);
 	
 	// BGMを再生
 	SetVolume(BGM_GAME, -1800);
 	PlayBGM(BGM_GAME);
 
 	// ゲーム状態→フェイト処理完了待ち
-	thiz->update = &update_game_fadeWait;
+	SceneGame::pUpdate = &SceneGame::update_fadeWait;
 }
 
 // グローバル更新処理
-void updateSceneGame(void)
+void SceneGame::update(void)
 {
-	thiz->update();
+	(this->*pUpdate)();
 }
 
 // 終了処理
-void uninitSceneGame(void)
+void SceneGame::uninit(void)
 {
 	StopSound(BGM_GAME);
 
-	deleteObject(thiz->vignetting);
-	deleteObject(thiz->liveUI);
-	DeleteSubObj(thiz->scoreUI);
-	DeleteSubObj(thiz->timeUI[0]);
-	DeleteSubObj(thiz->timeUI[1]);
-	DeleteSubObj(thiz->camera);
-	DeleteSubObj(thiz->player);
-	for (int i = 0; i < thiz->polyCount; i++)
-		DeleteSubObj(thiz->polyList[i]);
+	delete this->vignetting;
+	delete this->liveUI;
+	delete this->scoreUI;
+	delete this->timeUI[0];
+	delete this->timeUI[1];
+	delete this->camera;
+	delete this->player;
+
+	for (int i = 0; i < this->polyCount; i++)
+		delete (this->polyList[i]);
+
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
-		if(thiz->enemy[i] != NULL)
-			DeleteSubObj(thiz->enemy[i]);
+		if(this->enemy[i] != nullptr)
+			delete this->enemy[i];
 	}
 
-	CleanBullets();
+	Bullet::Clear();
 }
 
 // スコアの取得
-int GetGameScore(void)
+int SceneGame::getGameScore(void)
 {
-	return thiz->score;
+	return this->score;
 }
 
-void AddGameScore(int score)
+void SceneGame::addGameScore(int score)
 {
-	thiz->score += score;
+	this->score += score;
 }
 
 
 /// private関数
 
 // ファイト処理完了待ち
-void update_game_fadeWait(void)
+void SceneGame::update_fadeWait(void)
 {
 	//if (FadeFinished())
 	{
-		Object_SetActive(thiz->player->base, true);
-		Object_SetActive(thiz->camera->base, true);
-		thiz->update = &update_game_main;
+		this->player->setActive(true);
+		this->camera->setActive(true);
+		SceneGame::pUpdate = &SceneGame::update_main;
 	}
 }
 
-void update_game_main(void)
+void SceneGame::update_main(void)
 {
 	// 敵の生成
 	swapEnemy();
 
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
-		if (thiz->enemy[i] == NULL)
+		if (this->enemy[i] == nullptr)
 			continue;
 
-		if (thiz->enemy[i]->hp == 0)
+		if (this->enemy[i]->hp == 0)
 		{
-			AddGameScore(300);
-			DeleteSubObj(thiz->enemy[i]);
-			thiz->enemy[i] = NULL;
+			this->addGameScore(300);
+			delete this->enemy[i];
+			this->enemy[i] = nullptr;
 		}
 	}
 	
 
 	// プレイヤーの移動制限
-	Vector3 &playerPos = thiz->player->base->transform->position;
+	Vector3 &playerPos = this->player->getTransform()->position;
 	if (playerPos.x < -FIELD_RANG_X)
 		playerPos.x = -FIELD_RANG_X;
 	if (playerPos.x > FIELD_RANG_X)
@@ -197,35 +154,35 @@ void update_game_main(void)
 		playerPos.y = FIELD_RANG_Y;
 
 	// 残機表示の更新
-	Polygon_SetPattern(thiz->liveUI->polygon, thiz->player->hp-1);
+	this->liveUI->getPolygon()->setPattern(this->player->hp-1);
 
 	// カウントダウン更新
-	thiz->timer -= GetDeltaTime();
+	this->timer -= Time::DeltaTime();
 
 	// カウントダウン表示更新
-	NumberUI_SetNumber(thiz->timeUI[0], (int)(thiz->timer*100)%100);
-	NumberUI_SetNumber(thiz->timeUI[1], (int)thiz->timer);
+	this->timeUI[0]->setNumber((int)(this->timer*100)%100);
+	this->timeUI[0]->setNumber((int)this->timer);
 
 	// スコア表示更新
-	NumberUI_SetNumber(thiz->scoreUI, thiz->score);
+	this->scoreUI->setNumber(this->score);
 
 	// シーン遷移→クリアシーン
-	if (thiz->timer < 0)
+	if (this->timer < 0)
 	{
-		SetScene(SCENE_CLEAR);
+		GameManager::SetScene(SceneName::CLEAR);
 		return;
 	}
 
 	// シーン遷移→ゲームオーバー
-	if (thiz->player->hp == 0)
+	if (this->player->hp == 0)
 	{
-		SetScene(SCENE_GAMEOVER);
+		GameManager::SetScene(SceneName::GAMEOVER);
 		return;
 	}
 
 }
 
-void swapEnemy(void)
+void SceneGame::swapEnemy(void)
 {
 	static float timer = 0;
 
@@ -238,13 +195,13 @@ void swapEnemy(void)
 	{
 		for (int i = 0; i < ENEMY_MAX; i++)
 		{
-			if (thiz->enemy[i] == NULL)
+			if (this->enemy[i] == NULL)
 			{
 				Enemy* enemy = 
-				thiz->enemy[i] = NewSubObj(Enemy);
+				this->enemy[i] = new Enemy;
 
-				enemy->target = thiz->player->base->transform;
-				enemy->base->transform->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_X-500), 0.0f);
+				enemy->target = this->player->getTransform();
+				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_X-500), 0.0f);
 
 				break;
 			}
@@ -252,5 +209,5 @@ void swapEnemy(void)
 		timer = 0;
 	}
 
-	timer += GetDeltaTime();
+	timer += Time::DeltaTime();
 }

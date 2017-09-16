@@ -3,6 +3,7 @@
 #include "Polygon.h"
 #include "Collider.h"
 #include "Rigidbody.h"
+#include "Physics.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -12,93 +13,103 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-Transform* newTransform(Object* object);
 
 
-Transform* newTransform(Object* object)
+Transform::Transform(Object* object)
 {
-	Transform *transform = New(Transform);
 
-	transform->object		= object;
-	transform->position		= Vector3(0, 0, 0);
-	transform->rotation		= Vector3(0, 0, 0);
-	transform->scale		= Vector3(1, 1, 1);
+	this->object		= object;
+	this->position		= Vector3(0, 0, 0);
+	this->rotation		= Vector3(0, 0, 0);
+	this->scale			= Vector3(1, 1, 1);
 
-	return transform;
 }
 
 
 
-Object* newObject(void *owner, ObjectType type)
+Object::Object()
 {
-	Object *thiz = ObjectManager_GetObj();
 
-	if (thiz != NULL)
-	{
-		thiz->owner = owner;
-		thiz->transform		= newTransform(thiz);
-		thiz->polygon		= NULL;
-		thiz->rigidbody		= NULL;
-		thiz->collider		= NULL;
-		thiz->type			= type;
-		thiz->isActive		= false;
-		thiz->updateIndex	= -1;
-
-		thiz->init			= GetObjectFunc(type)->init;
-		thiz->update		= GetObjectFunc(type)->update;
-		thiz->uninit		= GetObjectFunc(type)->uninit;
-		thiz->onCollision	= GetObjectFunc(type)->onCollision;
-
-		strcpy(thiz->name, "Object");
-
-		Object_SetActive(thiz, true);
-
-		if(owner != NULL)
-			((ObjOwner*)owner)->base = thiz;
-
-		if (thiz->init)
-			thiz->init(thiz);
-	}
-
-	return thiz;
-}
-
-void deleteObject(Object* thiz)
-{
-	if (thiz == NULL)
-		return;
-
-	Object_SetActive(thiz, false);
-	SafeDelete(thiz->transform);
-	deleteRigidbody(thiz->rigidbody);
-	deleteCollider(thiz->collider);
-	deletePolygon(thiz->polygon);
-
-	ObjOwner* owner = (ObjOwner*)thiz->owner;
-
-	if (thiz->uninit != NULL)
-		thiz->uninit(thiz);
-
-	ObjectManager_ReleaseObj(owner->base);
+	this->transform		= std::make_shared<Transform>(this);
+	this->type			= ObjectType::Object;
+	this->isActive		= false;
+	this->updateIndex	= -1;
+	this->name			= "Object";
+	this->setActive(true);
 
 }
 
-void Object_SetActive(Object* thiz, bool value)
+Object::~Object()
 {
-	if (thiz->update == NULL)
-		return;
 
-	if (thiz->isActive != value)
+	this->setActive(false);
+	this->transform.reset();
+	this->polygon.reset();
+	this->rigidbody.reset();
+	this->collider.reset();
+}
+
+
+Transform * Object::getTransform(void)
+{
+	return this->transform.get();
+}
+
+RectPolygon * Object::getPolygon(void)
+{
+	return this->polygon.get();
+}
+
+void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+{
+	this->polygon.reset();
+	this->polygon = std::make_shared<RectPolygon>(this, layer, texName, rendType);
+}
+
+Rigidbody * Object::getRigidbody(void)
+{
+	return this->rigidbody.get();
+}
+
+void Object::setRigidbody(void)
+{
+	this->rigidbody.reset();
+	this->rigidbody = std::make_shared<Rigidbody>(this);
+	Physics::GetInstance()->addRigidbody(this->rigidbody);
+}
+
+Collider * Object::getCollider(void)
+{
+	return this->collider.get();
+}
+
+void Object::setCollider(void)
+{
+	this->collider.reset();
+	this->collider = std::make_shared<Collider>(this);
+	Physics::GetInstance()->addCollider(this->collider);
+}
+
+void Object::setActive(bool value)
+{
+	ObjectManager* manager = ObjectManager::GetInstance();
+
+	if (this->isActive != value)
 	{
 		if (value)
 		{
-			if (ObjectManager_UpdateList_Add(thiz))
-				thiz->isActive = true;
+			manager->addUpdate(this);
+			this->isActive = true;
 		}
 		else
 		{
-			ObjectManager_UpdateList_Remove(thiz);
-			thiz->isActive = false;
+			manager->removeUpdate(this);
+			this->isActive = false;
 		}
 	}
+}
+
+bool Object::getActive(void)
+{
+	return this->isActive;
 }

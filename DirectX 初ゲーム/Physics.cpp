@@ -2,131 +2,83 @@
 #include "main.h"
 #include "Object.h"
 #include "Time.h"
-#include <list>
 
 using namespace std;
 
-//Collider *g_ColliderList[ObjectMax];
-//Rigidbody *g_RigidbodyList[ObjectMax];
-list<Collider*> g_ColliderList;
-list<Collider*>::iterator cia, cib;
-list<Rigidbody*> g_RigidbodyList;
-
-int g_ColliderListTop = -1;
-int g_RigidbodyListTop = -1;
-Vector3 g_Gravaty = Vector3(0, 10, 0);
-
-void UpdateDynamics();
-void TestCollisions();
-
-void UpdatePhysics()
+void Physics::Create(void)
 {
-	UpdateDynamics();
-	TestCollisions();
+	Singleton::Create();
+
+	m_pInstance->gravaty = Vector3(0, 10, 0);
+	m_pInstance->colliderList.reserve(ObjectMax);
+	m_pInstance->rigidbodyList.reserve(ObjectMax);
 }
 
-void Physics_AddCollider(Collider * thiz)
+void Physics::Destroy(void)
 {
-	g_ColliderList.push_back(thiz);
-	thiz->listIndex = g_ColliderList.size() - 1;
+	m_pInstance->colliderList.clear();
+	m_pInstance->rigidbodyList.clear();
 
-	//if ((g_ColliderListTop + 1) < ObjectMax)
-	//{
-	//	g_ColliderList[++g_ColliderListTop] = thiz;
-	//	thiz->listIndex = g_ColliderListTop;
-	//}
+	Singleton::Destroy();
 }
 
-void Physics_RemoveCollider(Collider * thiz)
+void Physics::update()
+{
+	this->updateDynamics();
+	this->testCollisions();
+}
+
+void Physics::addCollider(shared_ptr<Collider> collider)
+{
+	this->colliderList.push_back(collider);
+	collider->listIndex = this->colliderList.size() - 1;
+}
+
+void Physics::removeCollider(Collider * collider)
+{
+	int index = collider->listIndex;
+
+	this->colliderList[index].reset();
+	this->colliderList[index] = move(this->colliderList.back());
+	this->colliderList[index].lock()->listIndex = index;
+	this->colliderList.pop_back();
+
+	collider->listIndex = -1;
+
+}
+
+void Physics::addRigidbody(shared_ptr<Rigidbody> rigidbody)
+{
+	this->rigidbodyList.push_back(rigidbody);
+	rigidbody->listIndex = this->rigidbodyList.size() - 1;
+}
+
+void Physics::removeRigidbody(Rigidbody * rigidbody)
 {
 
-	for (auto collider = g_ColliderList.begin(); collider != g_ColliderList.end(); collider++)
+	int index = rigidbody->listIndex;
+
+	this->rigidbodyList[index].reset();
+	this->rigidbodyList[index] = move(this->rigidbodyList.back());
+	this->rigidbodyList[index].lock()->listIndex = index;
+	this->rigidbodyList.pop_back();
+
+	rigidbody->listIndex = -1;
+}
+
+void Physics::setGravity(Vector3 value)
+{
+	this->gravaty = value;
+}
+
+
+void Physics::updateDynamics()
+{
+	float dt = Time::DeltaTime();
+
+	for(auto wrb : this->rigidbodyList)
 	{
-		if (*collider == thiz)
-		{
-			if (thiz == *cia || thiz == *cib)
-			{
-				if (thiz == *cia && thiz == *cib)
-					cia = cib = g_ColliderList.erase(collider);
-				else if (thiz == *cia)
-					cia = g_ColliderList.erase(collider);
-				else
-					cib = g_ColliderList.erase(collider);
-			}
-			else
-			{
-				g_ColliderList.erase(collider);
-			}
-
-			break;
-		}
-	}
-
-
-	//if (thiz->listIndex < g_ColliderListTop)
-	//{
-	//	g_ColliderList[thiz->listIndex] = g_ColliderList[g_ColliderListTop];
-	//	g_ColliderList[thiz->listIndex]->listIndex = thiz->listIndex;
-	//}
-	//g_ColliderList[g_ColliderListTop] = NULL;
-	//g_ColliderListTop--;
-	thiz->listIndex = -1;
-
-}
-
-void Physics_AddRigidbody(Rigidbody * thiz)
-{
-	g_RigidbodyList.push_back(thiz);
-	thiz->listIndex = g_RigidbodyList.size() - 1;
-
-	//if ((g_RigidbodyListTop + 1) < ObjectMax)
-	//{
-	//	g_RigidbodyList[++g_RigidbodyListTop] = thiz;
-	//	thiz->listIndex = g_RigidbodyListTop;
-	//}
-}
-
-void Physics_RemoveRigidbody(Rigidbody * thiz)
-{
-
-	for (auto rb = g_RigidbodyList.begin(); rb != g_RigidbodyList.end(); rb++)
-	{
-		if (*rb == thiz)
-		{
-			g_RigidbodyList.erase(rb);
-			break;
-		}
-
-	}
-
-
-	//if (thiz->listIndex < g_RigidbodyListTop)
-	//{
-	//	g_RigidbodyList[thiz->listIndex] = g_RigidbodyList[g_RigidbodyListTop];
-	//	g_RigidbodyList[thiz->listIndex]->listIndex = thiz->listIndex;
-	//}
-	//g_RigidbodyList[g_RigidbodyListTop] = NULL;
-	//g_RigidbodyListTop--;
-	thiz->listIndex = -1;
-
-}
-
-void Physics_SetGravity(Vector3 value)
-{
-	g_Gravaty = value;
-}
-
-
-void UpdateDynamics()
-{
-	//Rigidbody *rb;
-	float dt = GetDeltaTime();
-
-	//for (int i = 0; i <= g_RigidbodyListTop; i++)
-	for(auto rb : g_RigidbodyList)
-	{
-
-		//rb = g_RigidbodyList[i];
+		shared_ptr<Rigidbody> rb = wrb.lock();
 
 		Vector3 a = rb->force / rb->mass;
 
@@ -134,9 +86,9 @@ void UpdateDynamics()
 		if (!rb->constraints.pos_x)
 		{
 			rb->position.x += rb->velocity.x*dt + 0.5f*a.x*dt*dt;			//位置の更新
-			rb->velocity.x += 0.5f*(a.x + rb->useGravity*g_Gravaty.x)*dt;	//速度の更新(1)
+			rb->velocity.x += 0.5f*(a.x + rb->useGravity*this->gravaty.x)*dt;	//速度の更新(1)
 																			//力の計算
-			rb->velocity.x += 0.5f*(a.x + rb->useGravity*g_Gravaty.x)*dt;	//速度の更新(2)
+			rb->velocity.x += 0.5f*(a.x + rb->useGravity*this->gravaty.x)*dt;	//速度の更新(2)
 		}
 
 		//y軸の処理
@@ -144,8 +96,8 @@ void UpdateDynamics()
 		{
 			//x軸の処理と同じく
 			rb->position.y += rb->velocity.y*dt + 0.5f*a.y*dt*dt;			
-			rb->velocity.y += 0.5f*(a.y + rb->useGravity*g_Gravaty.y)*dt;	
-			rb->velocity.y += 0.5f*(a.y + rb->useGravity*g_Gravaty.y)*dt;	
+			rb->velocity.y += 0.5f*(a.y + rb->useGravity*this->gravaty.y)*dt;	
+			rb->velocity.y += 0.5f*(a.y + rb->useGravity*this->gravaty.y)*dt;	
 		}
 
 		//z軸の処理
@@ -153,41 +105,35 @@ void UpdateDynamics()
 		{
 			//x軸の処理と同じく
 			rb->position.z += rb->velocity.z*dt + 0.5f*a.z*dt*dt;			
-			rb->velocity.z += 0.5f*(a.z + rb->useGravity*g_Gravaty.z)*dt;	
-			rb->velocity.z += 0.5f*(a.z + rb->useGravity*g_Gravaty.z)*dt;	
+			rb->velocity.z += 0.5f*(a.z + rb->useGravity*this->gravaty.z)*dt;	
+			rb->velocity.z += 0.5f*(a.z + rb->useGravity*this->gravaty.z)*dt;	
 		}
 
-		rb->object->transform->position = rb->position;
-		rb->object->transform->rotation = rb->rotation;
+		rb->object->getTransform()->position = rb->position;
+		rb->object->getTransform()->rotation = rb->rotation;
 
 	}
 
 }
 
-void TestCollisions()
+void Physics::testCollisions()
 {
-	Collider *a, *b;
 	Vector3 posa, posb;
 
-	if (g_ColliderList.size() == 0)
-		return;
-
-	//for (int i = 0; i <= g_ColliderListTop - 1; i++)
-	for (cia = g_ColliderList.begin(); cia != std::prev(g_ColliderList.end(), 1); cia++)
+	for (size_t i = 0; i < this->colliderList.size(); i++)
 	{
-		//for (int j = i + 1; j <= g_ColliderListTop; j++)
-		for (cib = std::next(cia, 1); cib != g_ColliderList.end(); cib++)
+		for (size_t j = i + 1; j < this->colliderList.size(); j++)
 		{
-			//a = g_ColliderList.[i];
-			//b = g_ColliderList[j];
-			a = *cia;
-			b = *cib;
+			shared_ptr<Collider> a, b;
+
+			a = this->colliderList[i].lock();
+			b = this->colliderList[j].lock();
 
 			if (a->object->type == b->object->type)
 				continue;
 
-			posa = a->object->transform->position + a->offset;
-			posb = b->object->transform->position + b->offset;
+			posa = a->object->getTransform()->position + a->offset;
+			posb = b->object->getTransform()->position + b->offset;
 
 			if (
 				((posa.x - a->size.x / 2) < (posb.x + b->size.x / 2)) &&
@@ -196,18 +142,10 @@ void TestCollisions()
 				((posa.y + a->size.y / 2) > (posb.y - b->size.y / 2))
 				)
 			{
-				a->object->onCollision(a->object, b->object);
-				if (a != *cia)
-					continue;
-				b->object->onCollision(b->object, a->object);
+				a->object->onCollision(b->object);
+				if(b.use_count() > 1)
+					b->object->onCollision(a->object);
 			}
-
-			if (cib == g_ColliderList.end())
-				break;
 		}
-		if (cia == prev(g_ColliderList.end(), 1))
-			break;
 	}
-
-	cia = cib = g_ColliderList.begin();
 }

@@ -1,116 +1,90 @@
 #include "FadeScreen.h"
 
-enum AnimeState
+FadeScreen::FadeScreen(void)
 {
-	Set,
-	Run,
-	Stop,
-};
+	this->setPolygon(Layer::TOP, TEX_NONE, RendererType::UI);
 
-void UpdateFadeScreen(Object* thiz);
-
-void(*update_fade)(void);
-Object *fadeLayer;
-float fadeTime;
-float timer;
-float targetOpacity;
-float oldOpacity;
-Color fadeColor;
-AnimeState state;
-
-
-void InitFadeScreen()
-{
-	fadeLayer = newObject(&fadeLayer);
-	fadeLayer->polygon = newPolygon(fadeLayer, LAYER_TOP, TEX_NONE, REND_UI);
-	fadeLayer->update = &UpdateFadeScreen;
-
-	Polygon_SetSize(fadeLayer->polygon, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Polygon_SetOpacity(fadeLayer->polygon, 0.0f);
+	this->polygon->setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->polygon->setOpacity(0.0f);
 
 	state = Stop;
 
-	Object_SetActive(fadeLayer, false);
+	this->setActive(false);
 }
 
-void UpdateFadeScreen(Object* thiz)
+void FadeScreen::update()
 {
 
 	switch (state)
 	{
 	case Set:
-		Polygon_SetOpacity(fadeLayer->polygon, targetOpacity);
+		this->polygon->setOpacity(targetOpacity);
 		state = Stop;
 		break;
 	case Run:
 		if (timer < fadeTime + 0.1f)
 		{
-			float t = Polygon_GetOpacity(fadeLayer->polygon);
-			Polygon_SetOpacity(fadeLayer->polygon, Lerpf(oldOpacity, targetOpacity, timer / fadeTime));
+			float t = this->polygon->getOpacity();
+			this->polygon->setOpacity(Lerpf(oldOpacity, targetOpacity, timer / fadeTime));
 		}
 		else
 		{
 			state = Stop;
 		}
-		timer += GetDeltaTime();
+		timer += Time::DeltaTime();
 		break;
 	case Stop:
-		Object_SetActive(fadeLayer, false);
+		this->setActive(false);
 		break;
 	}
 
 }
 
-void UninitFadeScreen()
-{
-	deleteObject(fadeLayer);
-}
-
-void FadeScreen(FadeType type, Color color, float interval)
+void FadeScreen::Fade(FadeType type, Color color, float interval)
 {
 	switch (type)
 	{
 	case FADE_IN:
-		targetOpacity = 0.0f;
-		Polygon_SetColor(fadeLayer->polygon, color);
+		m_pInstance->targetOpacity = 0.0f;
+		m_pInstance->polygon->setColor(color);
 		break;
 	case FADE_OUT:
-		targetOpacity = 1.0f;
-		Polygon_SetColor(fadeLayer->polygon, color);
+		m_pInstance->targetOpacity = 1.0f;
+		m_pInstance->polygon->setColor(color);
 		break;
 	case FADE_IN_BK:
-		targetOpacity = 0.0f;
-		Polygon_SetColor(fadeLayer->polygon, ColorRGBA(0, 0, 0, 255));
+		m_pInstance->targetOpacity = 0.0f;
+		m_pInstance->polygon->setColor(ColorRGBA(0, 0, 0, 255));
 		break;
 	case FADE_OUT_BK:
-		targetOpacity = 1.0f;
-		Polygon_SetColor(fadeLayer->polygon, ColorRGBA(0, 0, 0, 0));
+		m_pInstance->targetOpacity = 1.0f;
+		m_pInstance->polygon->setColor(ColorRGBA(0, 0, 0, 0));
 		break;
 	case FADE_IN_WH:
-		targetOpacity = 0.0f;
-		Polygon_SetColor(fadeLayer->polygon, ColorRGBA(255, 255, 255, 255));
+		m_pInstance->targetOpacity = 0.0f;
+		m_pInstance->polygon->setColor(ColorRGBA(255, 255, 255, 255));
 		break;
 	case FADE_OUT_WH:
-		targetOpacity = 1.0f;
-		Polygon_SetColor(fadeLayer->polygon, ColorRGBA(255, 255, 255, 0));
+		m_pInstance->targetOpacity = 1.0f;
+		m_pInstance->polygon->setColor(ColorRGBA(255, 255, 255, 0));
 		break;
 	}
 
-	fadeTime = interval;
+	m_pInstance->fadeTime = interval;
 
-	if (fadeTime > 0)
-		state = Run;
+	if (m_pInstance->fadeTime > 0)
+		m_pInstance->state = Run;
 	else
-		state = Set;
+		m_pInstance->state = Set;
 
-	timer = 0;
-	oldOpacity = Polygon_GetOpacity(fadeLayer->polygon);
-	Object_SetActive(fadeLayer, true);
+	m_pInstance->timer = 0;
+	m_pInstance->oldOpacity = m_pInstance->polygon->getOpacity();
+	m_pInstance->setActive(true);
 }
 
-bool FadeFinished(void)
+bool FadeScreen::Finished(void)
 {
-	if (state == Stop)
+	if (m_pInstance->state == Stop)
 		return true;
 	else
 		return false;

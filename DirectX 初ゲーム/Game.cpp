@@ -20,36 +20,42 @@ MSG g_Msg;
 // ゲーム初期化
 void InitGame(void)
 {
-	InitTime();
+	Time::Init();
 	InitTexture();
-	InitRenderer();
-	InitObjectManager();
-	InitGameManager();
+	ObjectManager::Create();
+	Renderer::Create();
+	Physics::Create();
+	GameManager::Create();
 }
 
 // ゲームループ
 void RunGame(void)
 {
+	Renderer* renderer			= Renderer::GetInstance();
+	Physics* physics			= Physics::GetInstance();
+	ObjectManager* objManager	= ObjectManager::GetInstance();
+
 	while (g_bRunGame)
 	{
 		CheckWinMesg();
 		UpdateInput();
-		UpdateGameManager();
-		UpdateObjectManager();
-		UpdatePhysics();
-		DrawFrame();
-		FramerateControl();
+		GameManager::Update();
+		objManager->update();
+		physics->update();
+		renderer->drawFrame();
+		Time::FramerateControl();
 	}
 }
 
 // ゲーム終了処理
 void UninitGame(void)
 {
-	UninitGameManager();
-	UninitObjectManager();
-	UninitRenderer();
+	GameManager::Destroy();
+	Physics::Destroy();
+	Renderer::Destroy();
+	ObjectManager::Destroy();
 	UninitTexture();
-	UninitTime();
+	Time::Uninit();
 }
 
 // ゲーム終了

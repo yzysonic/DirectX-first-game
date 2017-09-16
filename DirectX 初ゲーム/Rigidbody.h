@@ -1,17 +1,18 @@
 #pragma once
 #include "main.h"
 
-typedef struct _Object Object;
+class Object;
 
-typedef struct _RigidbodyConstraints
+struct RigidbodyConstraints
 {
 	bool pos_x;
 	bool pos_y;
 	bool pos_z;
-}RigidbodyConstraints;
+};
 
-typedef struct _Rigidbody
+class Rigidbody
 {
+public:
 	Object *object;
 	Vector3 position;
 	Vector3 rotation;
@@ -21,7 +22,7 @@ typedef struct _Rigidbody
 	bool useGravity;
 	int listIndex;
 	RigidbodyConstraints constraints;
-}Rigidbody;
 
-Rigidbody* newRigidbody(Object* object);
-void deleteRigidbody(Rigidbody* thiz);
+	Rigidbody(Object* object);
+	~Rigidbody(void);
+};

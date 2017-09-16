@@ -1,41 +1,33 @@
 #include "Enemy.h"
 #include "SceneGame.h"
 
-void initEnemy(Object * thiz)
+Enemy::Enemy()
 {
-	SetThis(Enemy);
 
-	thiz->polygon = newPolygon(thiz, LAYER_DEFAULT, TEX_ENEMY);
-	thiz->collider = newCollider(thiz);
-	thiz->collider->size.x -= 100;
-	thiz->collider->size.y -= 100;
+	this->setPolygon(Layer::DEFAULT, TEX_ENEMY);
+	this->setCollider();
+	this->collider->size.x -= 100;
+	this->collider->size.y -= 100;
 
-	thizz->hp = 10;
+	this->hp = 10;
 }
 
-void updateEnemy(Object * thiz)
+void Enemy::update()
 {
-	SetThis(Enemy);
-	
-	if (thizz->target)
+
+	if (this->target)
 	{
 		Vector3 dir;
-		D3DXVec3Normalize(&dir, &(thizz->target->position - thiz->transform->position));
-		thiz->transform->position += dir * ENEMY_SPEED * GetDeltaTime();
+		D3DXVec3Normalize(&dir, &(this->target->position - this->transform->position));
+		this->transform->position += dir * ENEMY_SPEED * Time::DeltaTime();
 	}
 
 }
 
-void uninitEnemy(Object * thiz)
+void Enemy::onCollision(Object * other)
 {
-}
-
-void onCollisionEnemy(Object * thiz, Object * other)
-{
-	SetThis(Enemy);
-
-	if (other->type == Obj_Bullet)
+	if (other->type == ObjectType::Bullet)
 	{
-		thizz->hp--;
+		this->hp--;
 	}
 }

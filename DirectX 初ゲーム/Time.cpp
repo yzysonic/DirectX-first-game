@@ -2,103 +2,101 @@
 
 #pragma comment (lib, "winmm.lib")
 
-Timer* g_pFrameTimer;
-Timer* g_pFPSTimer;
-DWORD g_FrameError;
-DWORD g_FrameCount;
-int g_fps;
-float g_DeltaTime;
+Timer*	Time::s_pFrameTimer;
+Timer*	Time::s_pFPSTimer;
+DWORD	Time::s_FrameError;
+DWORD	Time::s_FrameCount;
+float	Time::s_DeltaTime;
+int		Time::s_fps;
 
-void InitTime()
+void Time::Init()
 {
 	timeBeginPeriod(1); // •ª‰ð”\‚ðÝ’è
-	g_pFrameTimer = newTimer(1.0f/MAX_FPS);
-	g_pFPSTimer = newTimer(1.0f);
-	g_FrameError = 0;
-	g_FrameCount = 0;
+	s_pFrameTimer = new Timer(1.0f/MAX_FPS);
+	s_pFPSTimer = new Timer(1.0f);
+	s_FrameError = 0;
+	s_FrameCount = 0;
 }
 
-void UninitTime()
+void Time::Uninit()
 {
-	SafeDelete(g_pFrameTimer);
-	SafeDelete(g_pFPSTimer);
+	SafeDelete(s_pFrameTimer);
+	SafeDelete(s_pFPSTimer);
 }
 
-float GetDeltaTime()
+float Time::DeltaTime()
 {
-	return g_DeltaTime;
+	return s_DeltaTime;
 }
 
-int GetFPS()
+int Time::FPS()
 {
-	return g_fps;
+	return s_fps;
 }
 
-Timer * newTimer(float interval)
+Timer::Timer(float interval)
 {
-	Timer* thiz = New(Timer);
-	thiz->startTime = timeGetTime();
-	thiz->interval = (DWORD)(interval * 1000);
-	return thiz;
+	this->startTime = timeGetTime();
+	this->interval = (DWORD)(interval * 1000);
 }
 
-void Timer_Reset(Timer * timer)
+void Timer::reset()
 {
-	timer->startTime = timeGetTime();
+	this->startTime = timeGetTime();
 }
 
-float Timer_ElapsedTime(Timer * timer)
+float Timer::elapsedTime()
 {
-	return (timeGetTime() - timer->startTime)/1000.0f;
+	return (timeGetTime() - this->startTime)/1000.0f;
 }
 
-bool Timer_TimeUp(Timer * timer)
+bool Timer::timeUp()
 {
-	if ((timeGetTime() - timer->startTime) >= timer->interval)
+	if ((timeGetTime() - this->startTime) >= this->interval)
 		return true;
 	else
 		return false;
 }
 
 
-void FramerateControl()
+void Time::FramerateControl()
 {
 	static DWORD elapsed, sleep, _elapsed, _error;
 
 	// fpsŒv‘ª
-	g_FrameCount++;
-	elapsed = timeGetTime() - g_pFPSTimer->startTime;
+	s_FrameCount++;
+	elapsed = timeGetTime() - s_pFPSTimer->startTime;
 	//if (elapsed >= g_pFPSTimer->interval)
-	if (g_FrameCount == 30)
+	if (s_FrameCount == 30)
 	{
 		//g_fps = g_FrameCount / (g_pFPSTimer->interval / 1000.0f);
-		g_fps = (int)(g_FrameCount / Timer_ElapsedTime(g_pFPSTimer));
-		g_FrameCount = 0;
-		Timer_Reset(g_pFPSTimer);
+		s_fps = (int)(s_FrameCount / s_pFPSTimer->elapsedTime());
+		s_FrameCount = 0;
+		s_pFPSTimer->reset();
 	}
 
 	// fps‡‚í‚¹
-	elapsed = timeGetTime() - g_pFrameTimer->startTime;
+	elapsed = timeGetTime() - s_pFrameTimer->startTime;
 	//sleep = g_pFrameTimer->interval - min(elapsed + g_FrameError, g_pFrameTimer->interval);
-	sleep = g_pFrameTimer->interval - min(elapsed, g_pFrameTimer->interval);
+	sleep = s_pFrameTimer->interval - min(elapsed, s_pFrameTimer->interval);
 	if (sleep > 0)
 	{
 		Sleep(sleep);
 		//_elapsed = elapsed;
-		elapsed = (timeGetTime() - g_pFrameTimer->startTime);
+		elapsed = (timeGetTime() - s_pFrameTimer->startTime);
 		//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
 	}
 	//else
 	//	g_FrameError = 0;
 	
 	//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
-	g_DeltaTime = min(elapsed / 1000.0f, (1.0f / MAX_FPS)*3);
+	s_DeltaTime = min(elapsed / 1000.0f, (1.0f / MAX_FPS)*3);
 
-	Timer_Reset(g_pFrameTimer);
+	s_pFrameTimer->reset();
 
 #ifdef _DEBUG
 	char s[256];
-	sprintf_s(s, "%s FPS:%d", WINDOW_TITLE, GetFPS());
+	sprintf_s(s, "%s FPS:%d", WINDOW_TITLE, FPS());
 	SetWindowText(GetHWnd(), s);
 	//sprintf_s(s, "%d\n", elapsed);
 	//OutputDebugString(s);

@@ -1,5 +1,4 @@
-#ifndef _POLYGON_H_
-#define _POLYGON_H_
+#pragma once
 
 #include "main.h"
 #include "Texture.h"
@@ -18,40 +17,44 @@
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-typedef struct _Object Object;
+class Object;
 
-typedef struct _VERTEX_2D
+struct Vertex2D
 {
 	Vector3 vtx;		// 頂点座標
 	float rhw;			// テクスチャのパースペクティブコレクト用
 	Color diffuse;		// 反射光
 	Vector2 uv;			// テクスチャ座標
-} Vertex2D;
+};
 
-typedef struct _RectPolygon
+class RectPolygon
 {
+public:
 	Object *object;							// 所有するオブジェクトへの参照
 	RendererType rendType;					// 描画方法指定
 	Vertex2D vertex[RECT_NUM_VERTEX];		// 頂点情報格納ワーク
 	Texture *pTexture;						// テクスチャーへのポインタ
-	Vector2 size;							// 表示するサイズ
-	int pattern;							// 表示するパターン
-	Layer layer;							// 描画のレイヤー
-	int poolIndex;							// 識別番号
+	int listIndex;							// 識別番号
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
-	Color color;							// 色（読込専用）
-}RectPolygon;
+	
+	RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType);
+	~RectPolygon(void);
+	Layer getLayer(void);
+	Vector2 getSize(void);
+	void setSize(float x, float y);
+	D3DCOLOR getColor(void);
+	void setColor(D3DCOLOR color);
+	float getOpacity(void);
+	void setOpacity(float value);
+	void setPattern(unsigned int pattern);
 
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-RectPolygon* newPolygon(Object* object, Layer layer = LAYER_DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = REND_DEFAULT);
-void deletePolygon(RectPolygon* thiz);
-void Polygon_SetSize(RectPolygon* thiz, float x, float y);
-void Polygon_SetColor(RectPolygon *thiz, D3DCOLOR color);
-void Polygon_SetOpacity(RectPolygon *thiz, float opacity);
-float Polygon_GetOpacity(RectPolygon *thiz);
-void Polygon_SetPattern(RectPolygon *thiz, unsigned int pattern);
+protected:
+	Layer layer;							// 描画のレイヤー
+	Vector2 size;							// 表示するサイズ
+	Color color;							// 色
+	int pattern;							// 表示するパターン
 
-#endif
+	friend class Renderer;
+};
+

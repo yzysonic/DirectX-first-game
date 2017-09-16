@@ -1,89 +1,71 @@
 #include "Bullet.h"
 
-static Bullet *list[BULLET_MAX];
-static int listTop = -1;
+std::list<Bullet*> Bullet::list;
 
-Bullet * newBullet(const Transform * transform, Vector3 velocity)
+Bullet::Bullet(Object * owner, Vector3 velocity)
 {
-	if (listTop == BULLET_MAX - 1)
-		return NULL;
+	this->setCollider();
 
-	Bullet* thiz = list[++listTop] = NewSubObj(Bullet);
+	this->setRigidbody();
+	this->rigidbody->useGravity = false;
+	this->rigidbody->position = owner->getTransform()->position;
+	this->rigidbody->rotation = owner->getTransform()->rotation;
+	this->rigidbody->velocity = velocity;
 
-	thiz->base->rigidbody->position = transform->position;
-	thiz->base->rigidbody->rotation = transform->rotation;
-	thiz->base->rigidbody->velocity = velocity;
-
-	if (transform->object->type == Obj_Player)
+	if (owner->getTransform()->object->type == ObjectType::Player)
 	{
-		thiz->base->polygon = newPolygon(thiz->base, LAYER_DEFAULT, TEX_BULLET);
+		this->setPolygon(Layer::DEFAULT, TEX_BULLET);
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
 	}
 	else
 	{
-		thiz->base->type = Obj_Bullet_E;
-		thiz->base->polygon = newPolygon(thiz->base, LAYER_DEFAULT, TEX_BULLET_E);
+		this->type = ObjectType::Bullet_E;
+		this->setPolygon(Layer::DEFAULT, TEX_BULLET_E);
 	}
 
-	thiz->index = listTop;
-	thiz->timer = 0;
+	this->timer = 0;
 
+	this->index = Bullet::list.size();
+	Bullet::list.push_back(this);
 
-	return thiz;
 }
 
-void initBullet(Object * thiz)
+Bullet::~Bullet(void)
 {
-	thiz->rigidbody = newRigidbody(thiz);
-	thiz->rigidbody->useGravity = false;
-	thiz->collider = newCollider(thiz);
+	Bullet::list.erase(std::next(Bullet::list.begin(), this->index));
 }
 
-void updateBullet(Object * thiz)
-{
-	SetThis(Bullet);
-	thizz->timer += GetDeltaTime();
 
-	if (thizz->timer > 1.5f)
-		DeleteSubObj(thizz);
+void Bullet::update()
+{
+	this->timer += Time::DeltaTime();
+
+	if (this->timer > 1.5f)
+		delete this;
 }
 
-void uninitBullet(Object * thiz)
+void Bullet::onCollision(Object * other)
 {
-	SetThis(Bullet);
 
-	int index = thizz->index;
-
-	if (index < listTop)
+	if (this->type == ObjectType::Bullet && other->type == ObjectType::Enemy)
 	{
-		list[index] = list[listTop];
-		list[index]->index = index;
+		this->polygon->setOpacity(0.0f);
+		delete this;
 	}
-
-	list[listTop] = NULL;
-	listTop--;
-}
-
-void onCollisionBullet(Object * thiz, Object * other)
-{
-	SetThis(Bullet);
-
-	if (thiz->type == Obj_Bullet && other->type == Obj_Enemy)
+	else if (this->type == ObjectType::Bullet_E && other->type == ObjectType::Player)
 	{
-		Polygon_SetOpacity(thiz->polygon, 0.0f);
-		DeleteSubObj(thizz);
-	}
-	else if (thiz->type == Obj_Bullet_E && other->type == Obj_Player)
-	{
-		Polygon_SetOpacity(thiz->polygon, 0.0f);
-		DeleteSubObj(thizz);
+		this->polygon->setOpacity(0.0f);
+		delete this;
 	}
 
 }
 
-void CleanBullets()
+void Bullet::Clear()
 {
-	for (int i = listTop; i >= 0; i--)
-		DeleteSubObj(list[i]);
+	for (auto bullet : Bullet::list)
+	{
+		delete bullet;
+	}
+	Bullet::list.clear();
 }

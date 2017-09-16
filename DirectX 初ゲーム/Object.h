@@ -1,67 +1,64 @@
-#ifndef _GAME_OBJECT_H_
-#define _GAME_OBJECT_H_
+#pragma once
 
 #include "main.h"
 #include "ObjectType.h"
+#include "Layer.h"
+#include "Texture.h"
+#include "RendererType.h"
 
-//*****************************************************************************
-// マクロ定義
-//*****************************************************************************
-#define NewSubObj(type)		(type*)(newObject(New(type), Obj_##type)->owner);
-#define DeleteSubObj(ptr)	if(ptr != NULL) {deleteObject(ptr->base); SafeDelete(ptr)}
-#define DeleteObj(ptr)		if(ptr != NULL) {deleteObject(ptr); ptr = NULL;}
-#define SetThis(type)		type* thizz = (type*)(thiz->owner);
+#include <string>
+#include <memory>
 
 
 //*****************************************************************************
-// 構造体定義
+// クラス定義
 //*****************************************************************************
-typedef struct _Object Object;
-typedef struct _RectPolygon RectPolygon;
-typedef struct _Collider Collider;
-typedef struct _Rigidbody Rigidbody;
+class Object;
+class RectPolygon;
+class Rigidbody;
+class Collider;
 
-typedef struct _Transform
+class Transform
 {
+public:
 	Object *object;
 	Vector3 position;
 	Vector3 rotation;
 	Vector3 scale;
-}Transform;
 
-typedef struct _Object
+	Transform(Object* object);
+};
+
+class Object
 {
-	void *owner;
-	Transform *transform;
-	RectPolygon *polygon;
-	Rigidbody *rigidbody;
-	Collider *collider;
-	
+public:
 	ObjectType type;
 	int updateIndex;
-	int poolIndex;
-	char name[128];
+	std::string name;
+
+	Object(void);
+	~Object(void);
+	
+	virtual void update(void) {};
+	virtual void onCollision(Object* other) {};
+
+	Transform*		getTransform(void);
+	RectPolygon*	getPolygon(void);
+	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Default);
+	Rigidbody*		getRigidbody(void);
+	void			setRigidbody(void);
+	Collider*		getCollider(void);
+	void			setCollider(void);
+
+	void setActive(bool value);
+	bool getActive(void);
+
+protected:
+	std::shared_ptr<Transform> transform;
+	std::shared_ptr<RectPolygon> polygon;
+	std::shared_ptr<Rigidbody> rigidbody;
+	std::shared_ptr<Collider> collider;
+
+private:
 	bool isActive;
-
-	void(*init)(Object*);
-	void(*update)(Object*);
-	void(*uninit)(Object*);
-	void(*onCollision)(Object*, Object*);
-}Object;
-
-
-typedef struct _ObjOwner
-{
-	Object *base;
-}ObjOwner;
-
-
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-Object* newObject(void *owner, ObjectType type = Obj_Object);
-void deleteObject(Object* thiz);
-void Object_SetActive(Object* thiz, bool value);
-
-
-#endif
+};

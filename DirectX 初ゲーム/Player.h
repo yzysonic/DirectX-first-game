@@ -4,18 +4,20 @@
 #include "Bullet.h"
 
 
-typedef struct _Player
+class Player : public Object
 {
-	Object *base;
-	Vector3 dir;
+public:
 	int hp;
+
+	Player(void);
+	void update(void) override;
+	void onCollision(Object* other) override;
+private:
+	Vector3 dir;
 	float speed;
 	float timer;
 	float timer2;
 	bool muteki;
-}Player;
 
-void initPlayer(Object *thiz);
-void updatePlayer(Object *thiz);
-void uninitPlayer(Object *thiz);
-void onCollisionPlayer(Object *thiz, Object *other);
+	void update_muteki(void);
+};

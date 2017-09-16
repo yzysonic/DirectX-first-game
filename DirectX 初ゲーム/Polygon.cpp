@@ -3,92 +3,103 @@
 #include "Renderer.h"
 
 
-RectPolygon* newPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon::RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType)
 {
-	RectPolygon *polygon = Renderer_GetPolygon(layer);
 
-	polygon->object		= object;
-	polygon->rendType	= rendType;
-	polygon->pTexture	= GetTexture(texName);
-	if(polygon->pTexture->pDXTex)
-		polygon->size	= polygon->pTexture->size;
+	this->object	= object;
+	this->layer		= layer;
+	this->rendType	= rendType;
+	this->pTexture	= GetTexture(texName);
+	if(this->pTexture->pDXTex)
+		this->size	= this->pTexture->size;
 	else
-		polygon->size	= Vector2(100.f, 100.f);
+		this->size	= Vector2(100.f, 100.f);
 
-	polygon->radius = D3DXVec2Length(&(polygon->size/2));
-	polygon->baseAngle = atan2f(polygon->size.y, polygon->size.x);
-	polygon->color = ColorRGBA(255, 255, 255, 255);
+	this->radius = D3DXVec2Length(&(this->size/2));
+	this->baseAngle = atan2f(this->size.y, this->size.x);
+	this->color = ColorRGBA(255, 255, 255, 255);
 
 	// rhwの設定
-	polygon->vertex[0].rhw =
-	polygon->vertex[1].rhw =
-	polygon->vertex[2].rhw =
-	polygon->vertex[3].rhw = 1.0f;
+	this->vertex[0].rhw =
+	this->vertex[1].rhw =
+	this->vertex[2].rhw =
+	this->vertex[3].rhw = 1.0f;
 
 	// 反射光の設定
-	polygon->vertex[0].diffuse =
-	polygon->vertex[1].diffuse =
-	polygon->vertex[2].diffuse =
-	polygon->vertex[3].diffuse = polygon->color;
+	this->vertex[0].diffuse =
+	this->vertex[1].diffuse =
+	this->vertex[2].diffuse =
+	this->vertex[3].diffuse = this->color;
 
 	// テクスチャ座標の設定
-	polygon->vertex[0].uv = Vector2(0.0f,								0.0f);
-	polygon->vertex[1].uv = Vector2(1.0f / polygon->pTexture->divideX,	0.0f);
-	polygon->vertex[2].uv = Vector2(0.0f,								1.0f / polygon->pTexture->divideY);
-	polygon->vertex[3].uv = Vector2(1.0f / polygon->pTexture->divideX,	1.0f / polygon->pTexture->divideY);
+	this->vertex[0].uv = Vector2(0.0f,								0.0f);
+	this->vertex[1].uv = Vector2(1.0f / this->pTexture->divideX,	0.0f);
+	this->vertex[2].uv = Vector2(0.0f,								1.0f / this->pTexture->divideY);
+	this->vertex[3].uv = Vector2(1.0f / this->pTexture->divideX,	1.0f / this->pTexture->divideY);
 
-	polygon->pattern = 0;
+	this->pattern = 0;
 
-	return polygon;
+	Renderer::GetInstance()->addList(this);
 }
 
-void deletePolygon(RectPolygon * thiz)
+RectPolygon::~RectPolygon(void)
 {
-	if (thiz == NULL) return;
-
-	thiz->object = NULL;
-	thiz->pTexture = NULL;
-	Renderer_ReleasePolygon(thiz);
+	Renderer::GetInstance()->removeList(this);
 }
 
-void Polygon_SetSize(RectPolygon * thiz, float x, float y)
+Layer RectPolygon::getLayer(void)
 {
-	thiz->size = Vector2(x, y);
-	thiz->radius = D3DXVec2Length(&(thiz->size / 2));
-	thiz->baseAngle = atan2f(thiz->size.y, thiz->size.x);
+	return this->layer;
+}
+
+Vector2 RectPolygon::getSize(void)
+{
+	return this->size;
+}
+
+D3DCOLOR RectPolygon::getColor(void)
+{
+	return this->color;
+}
+
+void RectPolygon::setSize(float x, float y)
+{
+	this->size = Vector2(x, y);
+	this->radius = D3DXVec2Length(&(this->size / 2));
+	this->baseAngle = atan2f(this->size.y, this->size.x);
 }
 
 
-void Polygon_SetColor(RectPolygon * thiz, D3DCOLOR color)
+void RectPolygon::setColor(D3DCOLOR color)
 {
 	for (int i = 0; i < RECT_NUM_VERTEX; i++)
-		thiz->vertex[i].diffuse = color;
-	thiz->color = color;
+		this->vertex[i].diffuse = color;
+	this->color = color;
 }
 
-void Polygon_SetOpacity(RectPolygon * thiz, float opacity)
+void RectPolygon::setOpacity(float opacity)
 {
-	thiz->color &= 0x00ffffff;
-	thiz->color += (BYTE)(opacity * 0xff) << 24;
+	this->color &= 0x00ffffff;
+	this->color += (BYTE)(opacity * 0xff) << 24;
 
-	Polygon_SetColor(thiz, thiz->color);
+	this->setColor(this->color);
 }
 
-float Polygon_GetOpacity(RectPolygon * thiz)
+float RectPolygon::getOpacity()
 {
-	return (float)(thiz->color >> 24)/0xff;
+	return (float)(this->color >> 24)/0xff;
 }
 
-void Polygon_SetPattern(RectPolygon * thiz,unsigned int pattern)
+void RectPolygon::setPattern(unsigned int pattern)
 {
-	thiz->pattern = pattern;
+	this->pattern = pattern;
 
-	int x = pattern % thiz->pTexture->divideX;
-	int y = pattern / thiz->pTexture->divideX;
-	Vector2 size = Vector2(1.0f / thiz->pTexture->divideX, 1.0f / thiz->pTexture->divideY);
+	int x = pattern % this->pTexture->divideX;
+	int y = pattern / this->pTexture->divideX;
+	Vector2 size = Vector2(1.0f / this->pTexture->divideX, 1.0f / this->pTexture->divideY);
 
-	thiz->vertex[0].uv = Vector2(x*size.x, y*size.y);
-	thiz->vertex[1].uv = Vector2(x*size.x + size.x, y*size.y);
-	thiz->vertex[2].uv = Vector2(x*size.x, y*size.y + size.y);
-	thiz->vertex[3].uv = Vector2(x*size.x + size.x, y*size.y + size.y);
+	this->vertex[0].uv = Vector2(x*size.x, y*size.y);
+	this->vertex[1].uv = Vector2(x*size.x + size.x, y*size.y);
+	this->vertex[2].uv = Vector2(x*size.x, y*size.y + size.y);
+	this->vertex[3].uv = Vector2(x*size.x + size.x, y*size.y + size.y);
 }

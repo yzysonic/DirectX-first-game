@@ -1,16 +1,17 @@
 #pragma once
 #include "main.h"
 
-typedef struct _Object Object;
+class Object;
 
-typedef struct _Collider
+class Collider
 {
+public:
 	Object* object;
 	bool isTrigger;
 	Vector3 offset;
 	Vector3 size;
 	int listIndex;
-}Collider;
 
-Collider* newCollider(Object* object);
-void deleteCollider(Collider* thiz);
+	Collider(Object* object);
+	~Collider(void);
+};

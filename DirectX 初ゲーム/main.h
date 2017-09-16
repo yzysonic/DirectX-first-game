@@ -4,16 +4,13 @@
 // 作者：GP11A143 38 楊子毅
 //
 //=============================================================================
-#ifndef _MAIN_H_
-#define _MAIN_H_
+#pragma once
 
 #include <windows.h>
 #include <tchar.h>
 #include <string.h>
 #include <stdio.h>
 #include <d3dx9math.h>
-//#include <stdio.h>
-//#include "mmsystem.h"
 
 
 #define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
@@ -25,8 +22,13 @@
 #define MAX_FPS				(60)					// 最大FPS
 #define ObjectMax			(30000)					// 最大オブジェクト数
 
-#define New(obj)			(obj*)malloc(sizeof(obj))
-#define SafeDelete(ptr)		if(ptr != NULL) {free(ptr); ptr = NULL; }
+template<class T> 
+void SafeDelete(T *&ptr)
+{
+	delete ptr;
+	ptr = nullptr;
+}
+
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
@@ -47,5 +49,3 @@ typedef D3DCOLOR	Color;
 HWND GetHWnd();
 bool GetWindowMode(void);
 void SetWindowMode(bool windowMode);
-
-#endif

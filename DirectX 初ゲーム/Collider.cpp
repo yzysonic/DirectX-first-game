@@ -3,29 +3,22 @@
 #include "Polygon.h"
 #include "Physics.h"
 
-Collider* newCollider(Object * object)
+Collider::Collider(Object * object)
 {
-	Collider* thiz = New(Collider);
 	
-	thiz->object = object;
-	thiz->isTrigger = false;
-	thiz->offset = Vector3(0, 0, 0);
-	if (object->polygon != NULL)
-		thiz->size = Vector3(object->polygon->size.x, object->polygon->size.y, 0.0f);
+	this->object = object;
+	this->isTrigger = false;
+	this->offset = Vector3(0, 0, 0);
+	if (object->getPolygon() != NULL)
+		this->size = Vector3(object->getPolygon()->getSize().x, object->getPolygon()->getSize().y, 0.0f);
 	else
-		thiz->size = Vector3(100, 100, 100);
-	thiz->listIndex = -1;
+		this->size = Vector3(100, 100, 100);
+	this->listIndex = -1;
 
-	Physics_AddCollider(thiz);
-
-	return thiz;
 }
 
-void deleteCollider(Collider * thiz)
+Collider::~Collider()
 {
-	if (thiz == NULL) return;
-
-	Physics_RemoveCollider(thiz);
-	SafeDelete(thiz);
+	Physics::GetInstance()->removeCollider(this);
 }
 

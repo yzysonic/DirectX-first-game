@@ -1,17 +1,17 @@
 #pragma once
 
 
-enum Layer
+enum struct Layer
 {
-	LAYER_BG_00,
-	LAYER_BG_01,
-	LAYER_BG_02,
-	LAYER_DEFAULT,
-	LAYER_PLAYER,
-	LAYER_MASK,
-	LAYER_UI_00,
-	LAYER_UI_01,
-	LAYER_UI_02,
-	LAYER_TOP,
-	LAYER_MAX
+	BG_00,
+	BG_01,
+	BG_02,
+	DEFAULT,
+	PLAYER,
+	MASK,
+	UI_00,
+	UI_01,
+	UI_02,
+	TOP,
+	MAX
 };
