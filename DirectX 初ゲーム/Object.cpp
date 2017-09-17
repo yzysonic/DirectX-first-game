@@ -39,6 +39,12 @@ Object::Object()
 
 }
 
+Object::Object(Vector3 position, Vector3 rotation) : Object()
+{
+	this->transform->position = position;
+	this->transform->rotation = rotation;
+}
+
 Object::~Object()
 {
 
@@ -47,6 +53,7 @@ Object::~Object()
 	this->polygon.reset();
 	this->rigidbody.reset();
 	this->collider.reset();
+
 }
 
 
@@ -75,6 +82,8 @@ void Object::setRigidbody(void)
 {
 	this->rigidbody.reset();
 	this->rigidbody = std::make_shared<Rigidbody>(this);
+	this->rigidbody->position = this->transform->position;
+	this->rigidbody->rotation = this->transform->rotation;
 	Physics::GetInstance()->addRigidbody(this->rigidbody);
 }
 

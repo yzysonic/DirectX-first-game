@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #ifdef _DEBUG
-#define START_SCENE SceneName::TITLE
+#define START_SCENE SceneName::GAME
 #else
 #define START_SCENE SceneName::TITLE
 #endif

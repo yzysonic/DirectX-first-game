@@ -2,6 +2,7 @@
 
 PolygonElement::PolygonElement()
 {
+	this->type = ObjectType::PolygonElement;
 	this->setPolygon();
 	this->transform->scale = Vector3(0.1f, 0.1f, 1.0f);
 

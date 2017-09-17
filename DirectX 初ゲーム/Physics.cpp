@@ -38,9 +38,12 @@ void Physics::removeCollider(Collider * collider)
 {
 	int index = collider->listIndex;
 
-	this->colliderList[index].reset();
-	this->colliderList[index] = move(this->colliderList.back());
-	this->colliderList[index].lock()->listIndex = index;
+	if (index < this->colliderList.size() - 1)
+	{
+		this->colliderList[index].reset();
+		this->colliderList[index] = move(this->colliderList.back());
+		this->colliderList[index].lock()->listIndex = index;
+	}
 	this->colliderList.pop_back();
 
 	collider->listIndex = -1;
@@ -58,9 +61,12 @@ void Physics::removeRigidbody(Rigidbody * rigidbody)
 
 	int index = rigidbody->listIndex;
 
-	this->rigidbodyList[index].reset();
-	this->rigidbodyList[index] = move(this->rigidbodyList.back());
-	this->rigidbodyList[index].lock()->listIndex = index;
+	if (index < this->rigidbodyList.size() - 1)
+	{
+		this->rigidbodyList[index].reset();
+		this->rigidbodyList[index] = move(this->rigidbodyList.back());
+		this->rigidbodyList[index].lock()->listIndex = index;
+	}
 	this->rigidbodyList.pop_back();
 
 	rigidbody->listIndex = -1;

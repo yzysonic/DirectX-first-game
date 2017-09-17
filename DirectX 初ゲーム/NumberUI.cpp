@@ -2,7 +2,7 @@
 
 NumberUI::NumberUI(int digits, int x, int y, TextureName texture_digit, TextureName texture_title)
 {
-
+	this->type = ObjectType::NumberUI;
 	this->transform->position = Vector3((float)x, (float)y, 0.0f);
 
 	if (texture_title != TEX_NONE)

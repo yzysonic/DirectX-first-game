@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-
+	this->type = ObjectType::Enemy;
 	this->setPolygon(Layer::DEFAULT, TEX_ENEMY);
 	this->setCollider();
 	this->collider->size.x -= 100;

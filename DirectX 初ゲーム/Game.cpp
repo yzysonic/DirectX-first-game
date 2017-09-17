@@ -40,8 +40,8 @@ void RunGame(void)
 		CheckWinMesg();
 		UpdateInput();
 		GameManager::Update();
-		objManager->update();
 		physics->update();
+		objManager->update();
 		renderer->drawFrame();
 		Time::FramerateControl();
 	}

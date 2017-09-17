@@ -1,19 +1,19 @@
 #include "Bullet.h"
 
+
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(Object * owner, Vector3 velocity)
+Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()->position, owner->getTransform()->rotation)
 {
 	this->setCollider();
 
 	this->setRigidbody();
 	this->rigidbody->useGravity = false;
-	this->rigidbody->position = owner->getTransform()->position;
-	this->rigidbody->rotation = owner->getTransform()->rotation;
 	this->rigidbody->velocity = velocity;
 
-	if (owner->getTransform()->object->type == ObjectType::Player)
+	if (owner->type == ObjectType::Player)
 	{
+		this->type = ObjectType::Bullet;
 		this->setPolygon(Layer::DEFAULT, TEX_BULLET);
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
@@ -33,16 +33,26 @@ Bullet::Bullet(Object * owner, Vector3 velocity)
 
 Bullet::~Bullet(void)
 {
-	Bullet::list.erase(std::next(Bullet::list.begin(), this->index));
+	Bullet::list.back()->index = this->index;
+	*std::next(Bullet::list.begin(), this->index) = Bullet::list.back();
+	Bullet::list.pop_back();
 }
 
 
 void Bullet::update()
 {
-	this->timer += Time::DeltaTime();
+	//if (this->rigidbody->position.x > Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X)
+	//	this->rigidbody->position.x = Renderer::GetInstance()->getCamera()->getTransform()->position.x - SCREEN_CENTER_X;
+	//if (this->rigidbody->position.x < Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X)
+	//	this->rigidbody->position.x = Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X;
+	//if (this->rigidbody->position.y > Renderer::GetInstance()->getCamera()->getTransform()->position.y + SCREEN_CENTER_Y)
+	//	this->rigidbody->position.y = Renderer::GetInstance()->getCamera()->getTransform()->position.y - SCREEN_CENTER_Y;
+	//if (this->rigidbody->position.y < Renderer::GetInstance()->getCamera()->getTransform()->position.y - SCREEN_CENTER_X)
+	//	this->rigidbody->position.y = Renderer::GetInstance()->getCamera()->getTransform()->position.y + SCREEN_CENTER_Y;
+	//this->timer += Time::DeltaTime();
 
-	if (this->timer > 1.5f)
-		delete this;
+	//if (this->timer > 1.5f)
+	//	delete this;
 }
 
 void Bullet::onCollision(Object * other)
@@ -63,9 +73,10 @@ void Bullet::onCollision(Object * other)
 
 void Bullet::Clear()
 {
+	std::list<Bullet*> tList;
 	for (auto bullet : Bullet::list)
-	{
+		tList.push_back(bullet);
+
+	for (auto bullet : tList)
 		delete bullet;
-	}
-	Bullet::list.clear();
 }

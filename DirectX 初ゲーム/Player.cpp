@@ -2,7 +2,7 @@
 
 Player::Player()
 {
-
+	this->type = ObjectType::Player;
 	this->setPolygon(Layer::PLAYER, TEX_PLAYER);
 	this->setCollider();
 	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);

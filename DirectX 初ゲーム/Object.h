@@ -37,6 +37,7 @@ public:
 	std::string name;
 
 	Object(void);
+	Object(Vector3 position, Vector3 rotation);
 	~Object(void);
 	
 	virtual void update(void) {};
