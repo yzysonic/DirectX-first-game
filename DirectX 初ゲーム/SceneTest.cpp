@@ -7,8 +7,8 @@
 
 void SceneTest::init(void)
 {
-	this->camera = new SmoothCamera(this->player->getTransform());
 	this->player = new Player;
+	this->camera = new SmoothCamera(this->player->getTransform());
 
 	this->testCount = 0;
 

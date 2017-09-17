@@ -33,6 +33,7 @@ void SceneClear::update(void)
 
 void SceneClear::uninit(void)
 {
+	StopSound(BGM_CLEAR);
 	delete this->score;
 	delete this->bk;
 }
@@ -60,7 +61,6 @@ void SceneClear::update_clear_state1(void)
 {
 	if (this->timer > 1.0f)
 	{
-		StopSound(BGM_CLEAR);
 		GameManager::SetScene(SceneName::TITLE);
 	}
 		

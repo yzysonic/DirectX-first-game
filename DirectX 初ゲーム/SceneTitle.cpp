@@ -51,18 +51,17 @@ void SceneTitle::update(void)
 // I—¹ˆ—
 void SceneTitle::uninit(void)
 {
-	delete this->cursor;
-	delete this->start;
-	delete this->exit;
-	delete this->logo;
-	delete this->presskey;
-	delete this->info;
-	delete this->vignetting;
-
+	SafeDelete(this->cursor);
+	SafeDelete(this->start);
+	SafeDelete(this->exit);
+	SafeDelete(this->logo);
+	SafeDelete(this->presskey);
+	SafeDelete(this->info);
+	SafeDelete(this->vignetting);
 	SafeDelete(this->beat);
 
 	for(int i=0;i<this->polyCount;i++)
-		delete this->polyList[i];
+		SafeDelete(this->polyList[i]);
 
 	StopSound(BGM_TITLE);
 }

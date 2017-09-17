@@ -41,18 +41,10 @@ Bullet::~Bullet(void)
 
 void Bullet::update()
 {
-	//if (this->rigidbody->position.x > Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X)
-	//	this->rigidbody->position.x = Renderer::GetInstance()->getCamera()->getTransform()->position.x - SCREEN_CENTER_X;
-	//if (this->rigidbody->position.x < Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X)
-	//	this->rigidbody->position.x = Renderer::GetInstance()->getCamera()->getTransform()->position.x + SCREEN_CENTER_X;
-	//if (this->rigidbody->position.y > Renderer::GetInstance()->getCamera()->getTransform()->position.y + SCREEN_CENTER_Y)
-	//	this->rigidbody->position.y = Renderer::GetInstance()->getCamera()->getTransform()->position.y - SCREEN_CENTER_Y;
-	//if (this->rigidbody->position.y < Renderer::GetInstance()->getCamera()->getTransform()->position.y - SCREEN_CENTER_X)
-	//	this->rigidbody->position.y = Renderer::GetInstance()->getCamera()->getTransform()->position.y + SCREEN_CENTER_Y;
-	//this->timer += Time::DeltaTime();
+	this->timer += Time::DeltaTime();
 
-	//if (this->timer > 1.5f)
-	//	delete this;
+	if (this->timer > 1.5f)
+		delete this;
 }
 
 void Bullet::onCollision(Object * other)

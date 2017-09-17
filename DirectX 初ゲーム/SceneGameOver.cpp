@@ -26,6 +26,7 @@ void SceneGameOver::update(void)
 
 void SceneGameOver::uninit(void)
 {
+	StopSound(BGM_GAMEOVER);
 	delete this->bk;
 }
 
@@ -52,7 +53,6 @@ void SceneGameOver::update_state1(void)
 {
 	if (this->timer > 1.0f)
 	{
-		StopSound(BGM_GAMEOVER);
 		GameManager::SetScene(SceneName::TITLE);
 	}
 }

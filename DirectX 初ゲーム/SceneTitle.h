@@ -34,13 +34,13 @@ private:
 	};
 
 	// 画像
-	Object *vignetting;
-	Object *logo;
-	Object *presskey;
-	Object *info;
-	Object *cursor;
-	Object *start;
-	Object *exit;
+	Object *vignetting = nullptr;
+	Object *logo = nullptr;
+	Object *presskey = nullptr;
+	Object *info = nullptr;
+	Object *cursor = nullptr;
+	Object *start = nullptr;
+	Object *exit = nullptr;
 
 	// 背景ポリゴン
 	PolygonElement* polyList[TitlePolyMax];
@@ -48,7 +48,7 @@ private:
 
 	// 時間計測
 	float timer;
-	Timer *beat;
+	Timer *beat = nullptr;
 	int beatCount;
 
 	// アニメーション状態

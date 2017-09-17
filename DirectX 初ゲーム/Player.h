@@ -8,10 +8,10 @@ class Player : public Object
 {
 public:
 	int hp;
-
 	Player(void);
 	void update(void) override;
 	void onCollision(Object* other) override;
+
 private:
 	Vector3 dir;
 	float speed;
