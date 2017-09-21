@@ -15,14 +15,14 @@ public:
 	static void Update(void);
 	void addCollider(std::shared_ptr<Collider> collider);
 	void removeCollider(Collider* collider);
-	void addRigidbody(std::shared_ptr<Rigidbody> rigidbody);
+	void addRigidbody(Rigidbody* rigidbody);
 	void removeRigidbody(Rigidbody* rigidbody);
 	void setGravity(Vector3 value);
 
 private:
 	Vector3 gravaty;
 	std::vector<std::weak_ptr<Collider>> colliderList;
-	std::vector<std::weak_ptr<Rigidbody>> rigidbodyList;
+	std::vector<Rigidbody*> rigidbodyList;
 
 	void updateDynamics();
 	void testCollisions();

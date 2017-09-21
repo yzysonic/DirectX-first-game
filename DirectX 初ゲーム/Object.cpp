@@ -30,7 +30,7 @@ Transform::Transform(Object* object)
 Object::Object()
 {
 
-	this->transform		= std::make_shared<Transform>(this);
+	this->transform		= std::make_unique<Transform>(this);
 	this->type			= ObjectType::Object;
 	this->isActive		= false;
 	this->updateIndex	= -1;
@@ -70,7 +70,7 @@ RectPolygon * Object::getPolygon(void)
 void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
 {
 	this->polygon.reset();
-	this->polygon = std::make_shared<RectPolygon>(this, layer, texName, rendType);
+	this->polygon = std::make_unique<RectPolygon>(this, layer, texName, rendType);
 }
 
 Rigidbody * Object::getRigidbody(void)
@@ -81,10 +81,10 @@ Rigidbody * Object::getRigidbody(void)
 void Object::setRigidbody(void)
 {
 	this->rigidbody.reset();
-	this->rigidbody = std::make_shared<Rigidbody>(this);
+	this->rigidbody = std::make_unique<Rigidbody>(this);
 	this->rigidbody->position = this->transform->position;
 	this->rigidbody->rotation = this->transform->rotation;
-	Physics::GetInstance()->addRigidbody(this->rigidbody);
+	Physics::GetInstance()->addRigidbody(this->rigidbody.get());
 }
 
 Collider * Object::getCollider(void)

@@ -55,9 +55,9 @@ public:
 	bool getActive(void);
 
 protected:
-	std::shared_ptr<Transform> transform;
-	std::shared_ptr<RectPolygon> polygon;
-	std::shared_ptr<Rigidbody> rigidbody;
+	std::unique_ptr<Transform> transform;
+	std::unique_ptr<RectPolygon> polygon;
+	std::unique_ptr<Rigidbody> rigidbody;
 	std::shared_ptr<Collider> collider;
 
 private:

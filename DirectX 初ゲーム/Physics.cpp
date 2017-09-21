@@ -50,7 +50,7 @@ void Physics::removeCollider(Collider * collider)
 
 }
 
-void Physics::addRigidbody(shared_ptr<Rigidbody> rigidbody)
+void Physics::addRigidbody(Rigidbody* rigidbody)
 {
 	this->rigidbodyList.push_back(rigidbody);
 	rigidbody->listIndex = this->rigidbodyList.size() - 1;
@@ -63,9 +63,8 @@ void Physics::removeRigidbody(Rigidbody * rigidbody)
 
 	if (index < this->rigidbodyList.size() - 1)
 	{
-		this->rigidbodyList[index].reset();
-		this->rigidbodyList[index] = move(this->rigidbodyList.back());
-		this->rigidbodyList[index].lock()->listIndex = index;
+		this->rigidbodyList[index] = this->rigidbodyList.back();
+		this->rigidbodyList[index]->listIndex = index;
 	}
 	this->rigidbodyList.pop_back();
 
@@ -82,9 +81,8 @@ void Physics::updateDynamics()
 {
 	float dt = Time::DeltaTime();
 
-	for(auto wrb : this->rigidbodyList)
+	for(auto rb : this->rigidbodyList)
 	{
-		shared_ptr<Rigidbody> rb = wrb.lock();
 
 		Vector3 a = rb->force / rb->mass;
 
