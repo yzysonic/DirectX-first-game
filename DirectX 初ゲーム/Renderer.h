@@ -29,7 +29,7 @@ public:
 	Renderer(void) {};
 	static void Create(void);
 	static void Destroy(void);
-	void drawFrame(void);
+	static void DrawFrame(void);
 	void addList(RectPolygon* poly);
 	void removeList(RectPolygon* poly);
 	Camera* getCamera(void);

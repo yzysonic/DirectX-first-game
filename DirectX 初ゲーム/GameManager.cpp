@@ -11,13 +11,12 @@
 
 void GameManager::Create(void)
 {
-	Singleton::Create();
+	Singleton<GameManager>::Create();
+	InitRandom();
 	FadeScreen::Create();
-	SceneTitle::Create();
-	SceneGame::Create();
-	SceneGameOver::Create();
-	SceneClear::Create();
-	SceneTest::Create();
+
+	m_pInstance->score = 0;
+
 	LoadScene(START_SCENE);
 }
 
@@ -42,13 +41,8 @@ void GameManager::Update(void)
 void GameManager::Destroy(void)
 {
 	m_pInstance->currentScene->uninit();
-	SceneTitle::Destroy();
-	SceneGame::Destroy();
-	SceneGameOver::Destroy();
-	SceneClear::Destroy();
-	SceneTest::Destroy();
 	FadeScreen::Destroy();
-	Singleton::Destroy();
+	Singleton<GameManager>::Destroy();
 }
 
 void GameManager::SetScene(SceneName scene)
@@ -62,28 +56,27 @@ void GameManager::LoadScene(SceneName scene)
 	switch (scene)
 	{
 	case SceneName::TITLE:
-		m_pInstance->currentScene = SceneTitle::GetInstance();
+		m_pInstance->currentScene.reset(new SceneTitle);
 		break;
 
 	case SceneName::GAME:
-		m_pInstance->currentScene = SceneGame::GetInstance();
+		m_pInstance->currentScene.reset(new SceneGame);
 		break;
 
 	case SceneName::GAMEOVER:
-		m_pInstance->currentScene = SceneGameOver::GetInstance();
+		m_pInstance->currentScene.reset(new SceneGameOver);
 		break;
 
 	case SceneName::CLEAR:
-		m_pInstance->currentScene = SceneClear::GetInstance();
+		m_pInstance->currentScene.reset(new SceneClear);
 		break;
 
 	case SceneName::TEST:
-		m_pInstance->currentScene = SceneTest::GetInstance();
+		m_pInstance->currentScene.reset(new SceneTest);
 		break;
 
 	}
 
-	InitRandom();
 	m_pInstance->currentScene->init();
 
 }

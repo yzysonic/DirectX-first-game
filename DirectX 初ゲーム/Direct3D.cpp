@@ -6,7 +6,7 @@
 //=============================================================================
 #include "Direct3D.h"
 #include "main.h"
-#include "Texture.h"
+#include "Window.h"
 #include <DxErr.h>
 
 #pragma comment (lib, "d3d9.lib")
@@ -14,33 +14,30 @@
 #pragma comment (lib, "dxerr.lib")
 #pragma comment (lib, "legacy_stdio_definitions.lib")
 
-//*****************************************************************************
-// グローバル変数:
-//*****************************************************************************
-LPDIRECT3D9				g_pD3D = NULL;				// Direct3Dオブジェクト
-LPDIRECT3DDEVICE9		g_pD3DDevice = NULL;		// Deviceオブジェクト(描画に必要)
-LPD3DXFONT				g_pD3DXFont = NULL;			// フォント
-D3DPRESENT_PARAMETERS	g_d3dpp = {};				// デバイスのプレゼンテーションパラメータ
 
-void D3D_SetWindowMode(D3DPRESENT_PARAMETERS *d3dpp, bool windowMode);
+LPDIRECT3D9				Direct3D::s_pD3D = NULL;
+LPDIRECT3DDEVICE9		Direct3D::s_pDevice = NULL;
+LPD3DXFONT				Direct3D::s_pFont = NULL;
+D3DPRESENT_PARAMETERS	Direct3D::s_d3dpp = {};
+
 
 //=============================================================================
 // グラフィックの初期化処理
 //=============================================================================
-HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode)
+HRESULT Direct3D::Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode)
 {
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE d3ddm;
 
 	// Direct3Dオブジェクトの作成
-	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	if (g_pD3D == NULL)
+	s_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+	if (s_pD3D == NULL)
 	{
 		return E_FAIL;
 	}
 
 	// 現在のディスプレイモードを取得
-	if (FAILED(g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
+	if (FAILED(s_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
 	{
 		return E_FAIL;
 	}
@@ -53,39 +50,38 @@ HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowM
 	d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;			// バックバッファのフォーマットは現在設定されているものを使う
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;			// 映像信号に同期してフリップする
 	d3dpp.hDeviceWindow = hWnd;							// 使用するウィンド
+	d3dpp.Windowed = bWindowMode;						// ウィンドウモードの設定
 	d3dpp.EnableAutoDepthStencil = TRUE;				// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
 	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;			// デプスバッファとして16bitを使う
 	d3dpp.BackBufferFormat = d3ddm.Format;				// カラーモードの指定
 
-	D3D_SetWindowMode(&d3dpp, bWindowMode);
-
 	// デバイスの生成
 	// ディスプレイアダプタを表すためのデバイスを作成
 	// 描画と頂点処理をハードウェアで行なう
-	if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,							// ディスプレイアダプタ
+	if (FAILED(s_pD3D->CreateDevice(D3DADAPTER_DEFAULT,							// ディスプレイアダプタ
 		D3DDEVTYPE_HAL,								// ディスプレイタイプ
 		hWnd,										// フォーカスするウインドウへのハンドル
 		D3DCREATE_HARDWARE_VERTEXPROCESSING,		// デバイス作成制御の組み合わせ
 		&d3dpp,										// デバイスのプレゼンテーションパラメータ
-		&g_pD3DDevice)))							// デバイスインターフェースへのポインタ
+		&s_pDevice)))							// デバイスインターフェースへのポインタ
 	{
 		// 上記の設定が失敗したら
 		// 描画をハードウェアで行い、頂点処理はCPUで行なう
-		if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
+		if (FAILED(s_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL,
 			hWnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 			&d3dpp,
-			&g_pD3DDevice)))
+			&s_pDevice)))
 		{
 			// 上記の設定が失敗したら
 			// 描画と頂点処理をCPUで行なう
-			if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
+			if (FAILED(s_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
 				D3DDEVTYPE_REF,
 				hWnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 				&d3dpp,
-				&g_pD3DDevice)))
+				&s_pDevice)))
 			{
 				// 初期化失敗
 				return E_FAIL;
@@ -93,10 +89,10 @@ HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowM
 		}
 	}
 
-	g_d3dpp = d3dpp;
+	s_d3dpp = d3dpp;
 
-	D3DXCreateFont(g_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
-		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &g_pD3DXFont);
+	D3DXCreateFont(s_pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &s_pFont);
 
 	return S_OK;
 }
@@ -104,65 +100,61 @@ HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowM
 //=============================================================================
 // グラフィックの終了処理
 //=============================================================================
-void UninitDirect3D()
+void Direct3D::Uninit()
 {
-	SafeRelease(g_pD3DDevice);
-	SafeRelease(g_pD3D);
+	SafeRelease(s_pDevice);
+	SafeRelease(s_pD3D);
 }
 
 
-LPDIRECT3DDEVICE9 GetDevice()
+LPDIRECT3DDEVICE9 Direct3D::GetDevice()
 {
-	return g_pD3DDevice;
+	return s_pDevice;
 }
 
-bool ResetDevice(bool windowMode)
+bool Direct3D::ResetDevice()
 {
-	D3DPRESENT_PARAMETERS d3dpp = g_d3dpp;
 
-	D3D_SetWindowMode(&d3dpp, windowMode);
+	s_pFont->OnLostDevice();
 
-	g_pD3DXFont->OnLostDevice();
+	HRESULT hr = s_pDevice->Reset(&s_d3dpp);
 
-	HRESULT hr = g_pD3DDevice->Reset(&d3dpp);
-
-	g_pD3DXFont->OnResetDevice();
+	s_pFont->OnResetDevice();
 
 	if (FAILED(hr))
 	{
-		MessageBox(GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
-		hr = g_pD3DDevice->TestCooperativeLevel();
-		MessageBox(GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+		MessageBox(Window::GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+		hr = s_pDevice->TestCooperativeLevel();
+		MessageBox(Window::GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
 		return false;
 	}
-
-	g_d3dpp = d3dpp;
 
 	return true;
 }
 
-LPD3DXFONT GetFont()
+LPD3DXFONT Direct3D::GetFont()
 {
-	return g_pD3DXFont;
+	return s_pFont;
 }
 
-void D3D_SetWindowMode(D3DPRESENT_PARAMETERS *d3dpp, bool windowMode)
+bool Direct3D::SetWindowMode(bool windowMode)
 {
-	d3dpp->Windowed = windowMode;
+	s_d3dpp.Windowed = windowMode;
 
 	// ウィンドウモード
 	if (windowMode)
 	{
-		d3dpp->BackBufferFormat = D3DFMT_UNKNOWN;						// バックバッファ
-		d3dpp->FullScreen_RefreshRateInHz = 0;							// リフレッシュレート
-		d3dpp->PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル
+		s_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;						// バックバッファ
+		s_d3dpp.FullScreen_RefreshRateInHz = 0;							// リフレッシュレート
+		s_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル
 	}
 	// フルスクリーンモード
 	else
 	{
-		d3dpp->BackBufferFormat = D3DFMT_X8R8G8B8;						// バックバッファ
-		d3dpp->FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート
-		d3dpp->PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;		// インターバル
+		s_d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;						// バックバッファ
+		s_d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート
+		s_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;		// インターバル
 	}
 
+	return ResetDevice();
 }

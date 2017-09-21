@@ -4,7 +4,7 @@
 #include "SmoothCamera.h"
 #include "Player.h"
 
-class SceneTest : public Scene, public Singleton<SceneTest>
+class SceneTest : public Scene
 {
 public:
 	void init(void) override;

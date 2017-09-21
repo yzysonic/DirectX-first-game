@@ -11,7 +11,7 @@ void SceneClear::init(void)
 
 	this->score = new NumberUI(5, -120, 0, TEX_NUMBER, TEX_GAME_SCORE);
 	this->score->setOffset(130, 0);
-	this->score->setNumber(SceneGame::GetInstance()->getGameScore());
+	this->score->setNumber(GameManager::GetInstance()->score);
 
 	this->timer = 0;
 

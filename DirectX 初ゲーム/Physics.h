@@ -12,7 +12,7 @@ class Physics : public Singleton<Physics>
 public:
 	static void Create(void);
 	static void Destroy(void);
-	void update(void);
+	static void Update(void);
 	void addCollider(std::shared_ptr<Collider> collider);
 	void removeCollider(Collider* collider);
 	void addRigidbody(std::shared_ptr<Rigidbody> rigidbody);

@@ -20,12 +20,12 @@ void ObjectManager::Destroy(void)
 
 }
 
-void ObjectManager::update(void)
+void ObjectManager::Update(void)
 {
 
-	for (size_t i = 0; i < this->updateList.size(); i++)
+	for (size_t i = 0; i < m_pInstance->updateList.size(); i++)
 	{
-		this->updateList[i]->update();
+		m_pInstance->updateList[i]->update();
 	}
 }
 

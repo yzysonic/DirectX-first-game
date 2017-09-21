@@ -45,7 +45,3 @@ void SafeDelete(T *&ptr)
 typedef D3DXVECTOR2 Vector2;
 typedef D3DXVECTOR3 Vector3;
 typedef D3DCOLOR	Color;
-
-HWND GetHWnd();
-bool GetWindowMode(void);
-void SetWindowMode(bool windowMode);

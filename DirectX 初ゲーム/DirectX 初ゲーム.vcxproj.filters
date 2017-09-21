@@ -108,14 +108,14 @@
     <ClCompile Include="SceneClear.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SmoothCamera.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Core\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="SmoothCamera.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Core\Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

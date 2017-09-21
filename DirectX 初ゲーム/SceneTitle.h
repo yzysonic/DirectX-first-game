@@ -8,7 +8,7 @@
 #define TitlePolyMax (700)
 #define TitleBGMBPS (130)
 
-class SceneTitle : public Scene, public Singleton<SceneTitle>
+class SceneTitle : public Scene
 {
 public:
 	void init(void) override;

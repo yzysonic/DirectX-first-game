@@ -174,11 +174,11 @@
     <ClCompile Include="SceneGameOver.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
-    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="SmoothCamera.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -217,6 +217,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

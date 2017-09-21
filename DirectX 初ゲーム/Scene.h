@@ -10,7 +10,7 @@ enum struct SceneName
 	TEST
 };
 
-class Scene
+class Scene 
 {
 public:
 	virtual void init(void) {};

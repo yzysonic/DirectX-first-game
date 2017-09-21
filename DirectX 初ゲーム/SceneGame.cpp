@@ -76,6 +76,8 @@ void SceneGame::update(void)
 // I—¹ˆ—
 void SceneGame::uninit(void)
 {
+	GameManager::GetInstance()->score = this->score;
+
 	StopSound(BGM_GAME);
 
 	delete this->vignetting;

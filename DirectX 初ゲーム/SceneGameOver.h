@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "Core.h"
 
-class SceneGameOver : public Scene, public Singleton<SceneGameOver>
+class SceneGameOver : public Scene
 {
 public:
 	void init(void) override;

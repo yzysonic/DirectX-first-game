@@ -14,7 +14,7 @@
 #define ENEMY_MAX (10)
 #define GAME_POLY_MAX (1000)
 
-class SceneGame : public Scene, public Singleton<SceneGame>
+class SceneGame : public Scene
 {
 public:
 	void init(void) override;

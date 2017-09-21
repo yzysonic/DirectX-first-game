@@ -6,6 +6,7 @@
 //=============================================================================
 #include "input.h"
 #include "main.h"
+#include "Window.h"
 
 #pragma comment (lib, "dinput8.lib")
 
@@ -354,7 +355,7 @@ HRESULT UpdateMouse()
 	RECT rect;
 	POINT p;
 	GetCursorPos(&p);
-	GetWindowRect(GetHWnd(), &rect);
+	GetWindowRect(Window::GetHWnd(), &rect);
 
 	mousePos.x = (float)p.x - rect.left - SCREEN_CENTER_X;
 	mousePos.y = (float)p.y - rect.top - SCREEN_CENTER_Y;

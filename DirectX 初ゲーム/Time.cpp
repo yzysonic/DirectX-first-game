@@ -1,4 +1,5 @@
-#include"Time.h"
+#include "Time.h"
+#include "Window.h"
 
 #pragma comment (lib, "winmm.lib")
 
@@ -97,7 +98,7 @@ void Time::FramerateControl()
 #ifdef _DEBUG
 	char s[256];
 	sprintf_s(s, "%s FPS:%d", WINDOW_TITLE, FPS());
-	SetWindowText(GetHWnd(), s);
+	SetWindowText(Window::GetHWnd(), s);
 	//sprintf_s(s, "%d\n", elapsed);
 	//OutputDebugString(s);
 #endif

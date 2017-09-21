@@ -22,10 +22,10 @@ void Physics::Destroy(void)
 	Singleton::Destroy();
 }
 
-void Physics::update()
+void Physics::Update()
 {
-	this->updateDynamics();
-	this->testCollisions();
+	m_pInstance->updateDynamics();
+	m_pInstance->testCollisions();
 }
 
 void Physics::addCollider(shared_ptr<Collider> collider)
@@ -36,7 +36,7 @@ void Physics::addCollider(shared_ptr<Collider> collider)
 
 void Physics::removeCollider(Collider * collider)
 {
-	int index = collider->listIndex;
+	size_t index = collider->listIndex;
 
 	if (index < this->colliderList.size() - 1)
 	{
@@ -59,7 +59,7 @@ void Physics::addRigidbody(shared_ptr<Rigidbody> rigidbody)
 void Physics::removeRigidbody(Rigidbody * rigidbody)
 {
 
-	int index = rigidbody->listIndex;
+	size_t index = rigidbody->listIndex;
 
 	if (index < this->rigidbodyList.size() - 1)
 	{

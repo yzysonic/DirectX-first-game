@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "NumberUI.h"
 
-class SceneClear : public Scene, public Singleton<SceneClear>
+class SceneClear : public Scene
 {
 public:
 	void init(void) override;
