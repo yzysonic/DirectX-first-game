@@ -161,7 +161,6 @@
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjectType.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Polygon.cpp" />
@@ -175,10 +174,11 @@
     <ClCompile Include="SceneGameOver.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="SmoothCamera.cpp" />
     <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="test.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -212,10 +212,12 @@
     <ClInclude Include="SceneGameOver.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SmoothCamera.h" />
     <ClInclude Include="Sound.h" />
-    <ClInclude Include="test.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

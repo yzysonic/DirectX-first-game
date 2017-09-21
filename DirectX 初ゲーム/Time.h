@@ -1,21 +1,34 @@
 #pragma once
 
-#include"main.h"
+#include "main.h"
+#include "Singleton.h"
 
-typedef struct _Timer
+class Timer
 {
+public:
 	DWORD startTime;
 	DWORD interval;
-}Timer;
 
-void InitTime();
-void UninitTime();
-float GetDeltaTime();
-int GetFPS();
+	Timer(float interval = 0.0f);
+	void reset(void);
+	float elapsedTime(void);
+	bool timeUp(void);
+};
 
-Timer* newTimer(float interval = 0.0f);
-void Timer_Reset(Timer* timer);
-float Timer_ElapsedTime(Timer* timer);
-bool Timer_TimeUp(Timer* timer);
+class Time
+{
+public:
+	static void Init(void);
+	static void Uninit(void);
+	static float DeltaTime(void);
+	static void FramerateControl();
+	static int FPS();
 
-void FramerateControl();
+private:
+	static Timer* s_pFrameTimer;
+	static Timer* s_pFPSTimer;
+	static DWORD s_FrameError;
+	static DWORD s_FrameCount;
+	static float s_DeltaTime;
+	static int s_fps;
+};

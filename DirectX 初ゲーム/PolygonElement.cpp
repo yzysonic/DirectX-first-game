@@ -1,64 +1,57 @@
 #include "PolygonElement.h"
 
-void update_polyele_state0(PolygonElement* thiz);
-void update_polyele_state1(PolygonElement* thiz);
-
-void initPolygonElement(Object * thiz)
+PolygonElement::PolygonElement()
 {
-	SetThis(PolygonElement);
-	thiz->polygon = newPolygon(thiz);
-	thiz->transform->scale = Vector3(0.1f, 0.1f, 1.0f);
+	this->type = ObjectType::PolygonElement;
+	this->setPolygon();
+	this->transform->scale = Vector3(0.1f, 0.1f, 1.0f);
 
-	thiz->transform->position.x = Randomf(-SCREEN_CENTER_X - 100, SCREEN_CENTER_X + 100);
-	thiz->transform->position.y = Randomf(-SCREEN_CENTER_Y - 100, SCREEN_CENTER_Y + 100);
-	thiz->transform->position.z = Randomf(0.01f, 5);
+	this->transform->position.x = Randomf(-SCREEN_CENTER_X - 100, SCREEN_CENTER_X + 100);
+	this->transform->position.y = Randomf(-SCREEN_CENTER_Y - 100, SCREEN_CENTER_Y + 100);
+	this->transform->position.z = Randomf(0.01f, 5);
 
-	thizz->timer = 0;
-	thizz->timerInterval = Randomf(0.3f, 1.0f);
-	thizz->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
-	thizz->targetOpacity = 1.0f;
+	this->timer = 0;
+	this->timerInterval = Randomf(0.3f, 1.0f);
+	this->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
+	this->targetOpacity = 1.0f;
 
-	Polygon_SetColor(thiz->polygon, ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
+	this->polygon->setColor(ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
 
-	thizz->update = &update_polyele_state0;
+	PolygonElement::pUpdate = &PolygonElement::update_state0;
 }
 
-void updatePolygonElement(Object * thiz)
+void PolygonElement::update()
 {
-	SetThis(PolygonElement);
-	thizz->update(thizz);
+	(this->*pUpdate)();
 }
 
-void uninitPolygonElement(Object * thiz)
-{
-}
 
-void update_polyele_state0(PolygonElement* thiz)
+void PolygonElement::update_state0()
 {
 	float interval = 0.2f;
-	if (thiz->timer < interval)
+	if (this->timer < interval)
 	{
-		Polygon_SetOpacity(thiz->base->polygon, thiz->targetOpacity*(thiz->timer / interval));
-		thiz->base->transform->scale.x = Lerpf(0.1f, 0.4f, (thiz->timer / interval));
-		thiz->base->transform->scale.y = Lerpf(0.1f, 0.4f, (thiz->timer / interval));
-		thiz->timer += GetDeltaTime();
+		this->polygon->setOpacity(this->targetOpacity*(this->timer / interval));
+		this->transform->scale.x = Lerpf(0.1f, 0.4f, (this->timer / interval));
+		this->transform->scale.y = Lerpf(0.1f, 0.4f, (this->timer / interval));
+		this->timer += Time::DeltaTime();
 	}
 	else
 	{
-		thiz->update = &update_polyele_state1;
+		PolygonElement::pUpdate = &PolygonElement::update_state1;
 	}
 }
 
-void update_polyele_state1(PolygonElement* thiz)
+void PolygonElement::update_state1()
 {
-	if (thiz->timer >= thiz->timerInterval)
+	if (this->timer >= this->timerInterval)
 	{
-		thiz->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
-		thiz->timerInterval = Randomf(0.2f, 0.7f);
-		thiz->timer = 0;
+		this->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
+		this->timerInterval = Randomf(0.2f, 0.7f);
+		this->timer = 0;
 	}
 
-	thiz->base->transform->position += thiz->speed*GetDeltaTime();
+	this->transform->position += this->speed*Time::DeltaTime();
 
-	thiz->timer += GetDeltaTime();
+	this->timer += Time::DeltaTime();
 }

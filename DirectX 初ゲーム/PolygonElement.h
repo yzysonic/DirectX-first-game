@@ -1,18 +1,22 @@
 #pragma once
 #include "Core.h"
 
-typedef struct _PolygonElement
+class PolygonElement : public Object
 {
-	Object *base;
-	float timer;
-	float timerInterval;
+public:
 	float targetOpacity;
-	Vector3 speed;
 	Vector3 prePos;
 	Color nextColor;
-	void(*update)(_PolygonElement*);
-}PolygonElement;
 
-void initPolygonElement(Object *thiz);
-void updatePolygonElement(Object *thiz);
-void uninitPolygonElement(Object *thiz);
+	PolygonElement(void);
+	void update(void) override;
+
+private:
+	float timer;
+	float timerInterval;
+	Vector3 speed;
+	void(PolygonElement::*pUpdate)();
+	void update_state0();
+	void update_state1();
+};
+

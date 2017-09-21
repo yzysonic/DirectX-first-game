@@ -1,18 +1,19 @@
 #pragma once
 #include "Core.h"
+#
 
 #define BULLET_MAX (100)
 
-typedef struct _Bullet
+class Bullet : public Object
 {
-	Object* base;
+public:
+	Bullet(Object* owner, Vector3 velocity);
+	~Bullet(void);
+	void update(void) override;
+	void onCollision(Object* other) override;
+	static void Clear();
+private:
+	static std::list<Bullet*> list;
 	float timer;
 	int index;
-}Bullet;
-
-Bullet* newBullet(const Transform* transform, Vector3 velocity);
-void initBullet(Object* thiz);
-void updateBullet(Object* thiz);
-void uninitBullet(Object* thiz);
-void onCollisionBullet(Object* thiz, Object* other);
-void CleanBullets();
+};

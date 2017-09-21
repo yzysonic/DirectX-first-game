@@ -4,19 +4,24 @@
 // 作者：GP11A143 38 楊子毅
 //
 //=============================================================================
-#ifndef _GRAPHICS_H_
-#define _GRAPHICS_H_
+#pragma once
 
 #include <d3dx9.h>
 
+class Direct3D
+{
+public:
+	static HRESULT Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode);
+	static void Uninit(void);
+	static LPDIRECT3DDEVICE9 GetDevice(void);
+	static bool ResetDevice(void);
+	static LPD3DXFONT GetFont(void);
+	static bool SetWindowMode(bool windowMode);
 
-HRESULT InitDirect3D(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode);
-void UninitDirect3D();
-LPDIRECT3DDEVICE9 GetDevice();
-bool ResetDevice(bool windowMode);
-LPD3DXFONT GetFont();
-
-
-#endif // _GRAPHICS_H_
-
+private:
+	static LPDIRECT3D9				s_pD3D;			// Direct3Dオブジェクト
+	static LPDIRECT3DDEVICE9		s_pDevice;	// Deviceオブジェクト(描画に必要)
+	static LPD3DXFONT				s_pFont;	// フォント
+	static D3DPRESENT_PARAMETERS	s_d3dpp;		// デバイスのプレゼンテーションパラメータ
+};
 

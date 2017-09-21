@@ -2,16 +2,17 @@
 
 #include "Core.h"
 
-typedef struct _NumberUI
+class NumberUI : public Object
 {
-	Object *base;
-	Object **digitList;
+public:
+	NumberUI(int digits, int x, int y, TextureName texture_digit, TextureName texture_title = TEX_NONE);
+	~NumberUI(void);
+	void setNumber(unsigned int value);
+	void setOffset(int x, int y);
+
+private:
 	int digitNum;
 	int value;
-}NumberUI;
+	std::vector<Object*> digitList;
 
-NumberUI* newNumberUI(int digits, int x, int y, TextureName texture_digit, TextureName texture_title = TEX_NONE);
-void updateNumberUI(Object *thiz);
-void uninitNumberUI(Object *thiz);
-void NumberUI_SetNumber(NumberUI *thiz, unsigned int value);
-void NumberUI_SetOffset(NumberUI *thiz, int x, int y);
+};

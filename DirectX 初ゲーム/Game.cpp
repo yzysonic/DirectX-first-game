@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <windows.h>
+#include "Window.h"
 #include "Direct3D.h"
 #include "Input.h"
 #include "Time.h"
@@ -9,22 +9,18 @@
 #include "Physics.h"
 #include "GameManager.h"
 
-// プロトタイプ宣言
-void CheckWinMesg();
-
 // グローバル変数
 bool g_bRunGame = true;
-MSG g_Msg;
-
 
 // ゲーム初期化
 void InitGame(void)
 {
-	InitTime();
+	Time::Init();
 	InitTexture();
-	InitRenderer();
-	InitObjectManager();
-	InitGameManager();
+	ObjectManager::Create();
+	Renderer::Create();
+	Physics::Create();
+	GameManager::Create();
 }
 
 // ゲームループ
@@ -32,49 +28,35 @@ void RunGame(void)
 {
 	while (g_bRunGame)
 	{
-		CheckWinMesg();
+		Window::CheckMesg();
 		UpdateInput();
-		UpdateGameManager();
-		UpdateObjectManager();
-		UpdatePhysics();
-		DrawFrame();
-		FramerateControl();
+		GameManager::Update();
+		Physics::Update();
+		ObjectManager::Update();
+		Renderer::DrawFrame();
+		Time::FramerateControl();
 	}
 }
 
 // ゲーム終了処理
 void UninitGame(void)
 {
-	UninitGameManager();
-	UninitObjectManager();
-	UninitRenderer();
+	GameManager::Destroy();
+	Physics::Destroy();
+	Renderer::Destroy();
+	ObjectManager::Destroy();
 	UninitTexture();
-	UninitTime();
+	Time::Uninit();
+}
+
+// ゲーム終了確認
+bool EndGame(void)
+{
+	return true;
 }
 
 // ゲーム終了
 void StopGame(void)
 {
-	DestroyWindow(GetHWnd());	// ウィンドウを破棄するよう指示する
+	g_bRunGame = false;
 }
-
-// ウィンドウズメッセージ処理
-void CheckWinMesg()
-{
-	if (PeekMessage(&g_Msg, NULL, 0, 0, PM_REMOVE))
-	{
-		// PostQuitMessage()が呼ばれたらゲーム終了
-		if (g_Msg.message == WM_QUIT)
-		{
-			g_bRunGame = false;
-			return;
-		}
-		// メッセージの翻訳とディスパッチ
-		else
-		{
-			TranslateMessage(&g_Msg);
-			DispatchMessage(&g_Msg);
-		}
-	}
-}
-

@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "Direct3D.h"
+#include "Window.h"
 
 
 Texture g_textureList[TEX_MAX];
@@ -57,7 +58,7 @@ void LoadTexture(TextureName texName, LPSTR fileName, int divX, int divY)
 	{
 		//テクスチャ読込
 		D3DXCreateTextureFromFileEx(
-			GetDevice(),
+			Direct3D::GetDevice(),
 			fileDir,
 			info.Width, info.Height,
 			1, 0,
@@ -73,7 +74,7 @@ void LoadTexture(TextureName texName, LPSTR fileName, int divX, int divY)
 	{
 		TCHAR s[128];
 		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), fileName);
-		MessageBox(GetHWnd(), s, _T("エラー"), MB_OK | MB_ICONWARNING);
+		MessageBox(Window::GetHWnd(), s, _T("エラー"), MB_OK | MB_ICONWARNING);
 		return;
 
 	}

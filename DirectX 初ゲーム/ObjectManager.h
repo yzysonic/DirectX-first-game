@@ -1,14 +1,18 @@
 #pragma once
-#include"Object.h"
 
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-void InitObjectManager(void);
-void UpdateObjectManager(void);
-void UninitObjectManager(void);
+#include "Object.h"
+#include "Singleton.h"
+#include <vector>
 
-Object* ObjectManager_GetObj();
-void ObjectManager_ReleaseObj(Object*& thiz);
-bool ObjectManager_UpdateList_Add(Object* thiz);
-void ObjectManager_UpdateList_Remove(Object* thiz);
+class ObjectManager : public Singleton<ObjectManager>
+{
+public:
+	static void Create(void);
+	static void Destroy(void);
+	static void Update(void);
+	void addUpdate(Object* obj);
+	void removeUpdate(Object* obj);
+
+private:
+	std::vector<Object*> updateList;
+};

@@ -1,8 +1,17 @@
 #pragma once
 
 #include"Scene.h"
+#include "SmoothCamera.h"
+#include "Player.h"
 
-Scene* GetSceneTest(void);
-void initSceneTest(void);
-void updateSceneTest(void);
-void uninitSceneTest(void);
+class SceneTest : public Scene
+{
+public:
+	void init(void) override;
+	void update(void) override;
+	void uninit(void) override;
+
+	SmoothCamera* camera = nullptr;
+	Player* player = nullptr;
+	int testCount;
+};

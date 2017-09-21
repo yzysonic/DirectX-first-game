@@ -1,13 +1,25 @@
 #pragma once
+
 #include "Scene.h"
+#include <memory>
 
 #ifdef _DEBUG
-#define START_SCENE SCENE_GAME
+#define START_SCENE SceneName::GAME
 #else
-#define START_SCENE SCENE_TITLE
+#define START_SCENE SceneName::TITLE
 #endif
 
-void InitGameManager(void);
-void UpdateGameManager(void);
-void UninitGameManager(void);
-void SetScene(SceneName scene);
+class GameManager : public Singleton<GameManager>
+{
+public:
+	int score;
+
+	static void Create(void);
+	static void Destroy(void);
+	static void Update(void);
+	static void SetScene(SceneName scene);
+
+private:
+	std::unique_ptr<Scene> currentScene;
+	static void LoadScene(SceneName scene);
+};

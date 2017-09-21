@@ -9,92 +9,74 @@
 #include "SceneClear.h"
 #include "SceneTest.h"
 
-Scene* g_CurrentScene;
-
-void LoadScene(SceneName scene);
-
-void InitGameManager(void)
+void GameManager::Create(void)
 {
-	InitFadeScreen();
+	Singleton<GameManager>::Create();
+	InitRandom();
+	FadeScreen::Create();
+
+	m_pInstance->score = 0;
+
 	LoadScene(START_SCENE);
 }
 
-void UpdateGameManager(void)
+void GameManager::Update(void)
 {
-	g_CurrentScene->update();
+	m_pInstance->currentScene->update();
 
 #ifdef _DEBUG
 	if (GetKeyboardTrigger(DIK_1))
-		SetScene(SCENE_TITLE);
+		SetScene(SceneName::TITLE);
 	if (GetKeyboardTrigger(DIK_2))
-		SetScene(SCENE_GAME);
+		SetScene(SceneName::GAME);
 	if (GetKeyboardTrigger(DIK_3))
-		SetScene(SCENE_GAMEOVER);
+		SetScene(SceneName::GAMEOVER);
 	if (GetKeyboardTrigger(DIK_4))
-		SetScene(SCENE_CLEAR);
+		SetScene(SceneName::CLEAR);
 	if (GetKeyboardTrigger(DIK_0))
-		SetScene(SCENE_TEST);
+		SetScene(SceneName::TEST);
 #endif
 }
 
-void UninitGameManager(void)
+void GameManager::Destroy(void)
 {
-	g_CurrentScene->uninit();
-	UninitFadeScreen();
+	m_pInstance->currentScene->uninit();
+	FadeScreen::Destroy();
+	Singleton<GameManager>::Destroy();
 }
 
-void SetScene(SceneName scene)
+void GameManager::SetScene(SceneName scene)
 {
-	if (g_CurrentScene->uninit != NULL)
-		g_CurrentScene->uninit();
-
+	m_pInstance->currentScene->uninit();
 	LoadScene(scene);
 }
 
-void LoadScene(SceneName scene)
+void GameManager::LoadScene(SceneName scene)
 {
 	switch (scene)
 	{
-	case SCENE_TITLE:
-		g_CurrentScene = GetSceneTitle();
-		g_CurrentScene->init = &initSceneTitle;
-		g_CurrentScene->update = &updateSceneTitle;
-		g_CurrentScene->uninit = &uninitSceneTitle;
+	case SceneName::TITLE:
+		m_pInstance->currentScene.reset(new SceneTitle);
 		break;
 
-	case SCENE_GAME:
-		g_CurrentScene = GetSceneGame();
-		g_CurrentScene->init = &initSceneGame;
-		g_CurrentScene->update = &updateSceneGame;
-		g_CurrentScene->uninit = &uninitSceneGame;
+	case SceneName::GAME:
+		m_pInstance->currentScene.reset(new SceneGame);
 		break;
 
-	case SCENE_GAMEOVER:
-		g_CurrentScene = GetSceneGameOver();
-		g_CurrentScene->init = &initSceneGameOver;
-		g_CurrentScene->update = &updateSceneGameOver;
-		g_CurrentScene->uninit = &uninitSceneGameOver;
+	case SceneName::GAMEOVER:
+		m_pInstance->currentScene.reset(new SceneGameOver);
 		break;
 
-	case SCENE_CLEAR:
-		g_CurrentScene = GetSceneClear();
-		g_CurrentScene->init = &initSceneClear;
-		g_CurrentScene->update = &updateSceneClear;
-		g_CurrentScene->uninit = &uninitSceneClear;
+	case SceneName::CLEAR:
+		m_pInstance->currentScene.reset(new SceneClear);
 		break;
 
-	case SCENE_TEST:
-		g_CurrentScene = GetSceneTest();
-		g_CurrentScene->init = &initSceneTest;
-		g_CurrentScene->update = &updateSceneTest;
-		g_CurrentScene->uninit = &uninitSceneTest;
+	case SceneName::TEST:
+		m_pInstance->currentScene.reset(new SceneTest);
 		break;
 
 	}
 
-	InitRandom();
-
-	if (g_CurrentScene->init != NULL)
-		g_CurrentScene->init();
+	m_pInstance->currentScene->init();
 
 }

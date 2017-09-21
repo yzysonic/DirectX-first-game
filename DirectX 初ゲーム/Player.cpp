@@ -1,28 +1,23 @@
 #include "Player.h"
 
-void update_player_muteki(Player *thiz);
-
-void initPlayer(Object *thiz)
+Player::Player()
 {
-	SetThis(Player);
+	this->type = ObjectType::Player;
+	this->setPolygon(Layer::PLAYER, TEX_PLAYER);
+	this->setCollider();
+	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);
+	this->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
 
-	thiz->polygon = newPolygon(thiz, LAYER_PLAYER, TEX_PLAYER);
-	thiz->collider = newCollider(thiz);
-	thiz->transform->position = Vector3(0.0f, 0.0f, 0.0f);
-	thiz->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
-
-	thizz->hp = 3;
-	thizz->speed = 700.0f;
-	thizz->dir = Vector3(0, -1, 0);
-	thizz->timer = 0;
-	thizz->muteki = false;
+	this->hp = 3;
+	this->speed = 700.0f;
+	this->dir = Vector3(0, -1, 0);
+	this->timer = 0;
+	this->muteki = false;
 
 }
 
-void updatePlayer(Object *thiz)
+void Player::update()
 {
-	SetThis(Player);
-
 
 	// ˆÚ“®“ü—Í
 	D3DXVECTOR3 controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -46,8 +41,8 @@ void updatePlayer(Object *thiz)
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
 		D3DXVec3Normalize(&controlVector, &controlVector);
-		thizz->dir = controlVector;
-		thiz->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
+		this->dir = controlVector;
+		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
 	}
 
 	// ‰Á‘¬“ü—Í
@@ -56,18 +51,18 @@ void updatePlayer(Object *thiz)
 	//	boost = 2.0f;
 
 	// ˆÚ“®ˆ—
-	thiz->transform->position += thizz->speed * boost * controlVector * GetDeltaTime();
+	this->transform->position += this->speed * boost * controlVector * Time::DeltaTime();
 
 
 	// ƒ}ƒEƒXÆ€‚ÌŒvŽZ
 
 	//if(GetMousePos().x > 0)
-	//	thiz->transform->rotation.z = acosf(D3DXVec3Dot(&Vector3(0,-1,0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
+	//	this->transform->rotation.z = acosf(D3DXVec3Dot(&Vector3(0,-1,0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
 	//else
-	//	thiz->transform->rotation.z = PI+acosf(-D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
+	//	this->transform->rotation.z = PI+acosf(-D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
 
-	//D3DXVec3Normalize(&thizz->dir, &GetMousePos());
-	//thiz->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
+	//D3DXVec3Normalize(&this->dir, &GetMousePos());
+	//this->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
 
 	// ’e”­ŽË
 	controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -91,8 +86,8 @@ void updatePlayer(Object *thiz)
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
 		D3DXVec3Normalize(&controlVector, &controlVector);
-		thizz->dir = controlVector;
-		thiz->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
+		this->dir = controlVector;
+		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
 	}
 
 	// ’e”­ŽË
@@ -105,55 +100,41 @@ void updatePlayer(Object *thiz)
 		IsMouseLeftPressed()
 		)
 	{
-		if(thizz->timer >= 0.13f)
+		if(this->timer >= 0.13f)
 		{
-			newBullet(thiz->transform, 700.0f*thizz->dir + thizz->speed * boost * controlVector);
-			thizz->timer = 0;
+			new Bullet(this, 700.0f*this->dir + this->speed * boost * controlVector);
+			this->timer = 0;
 		}
-		thizz->timer += GetDeltaTime();
+		this->timer += Time::DeltaTime();
 	}
 
 	// –³“Gó‘Ô‚ÌXV
-	update_player_muteki(thizz);
+	this->update_muteki();
 
 }
 
-void uninitPlayer(Object *thiz)
+void Player::onCollision(Object * other)
 {
-
-}
-
-void onCollisionPlayer(Object * thiz, Object * other)
-{
-	SetThis(Player);
-
-	if (other->type == Obj_Enemy && !thizz->muteki)
+	if (other->type == ObjectType::Enemy && !this->muteki)
 	{
-		Polygon_SetOpacity(thiz->polygon, 0.5f);
-		thizz->hp--;
-		thizz->muteki = true;
-		thizz->timer2 = 0;
+		this->polygon->setOpacity(0.5f);
+		this->hp--;
+		this->muteki = true;
+		this->timer2 = 0;
 	}
 }
 
-int Player_GetLives(Player * thiz)
+void Player::update_muteki()
 {
-	return 0;
-}
-
-void update_player_muteki(Player *thiz)
-{
-	if (!thiz->muteki)
+	if (!this->muteki)
 		return;
 
-	if (thiz->timer2 > 1.5f)
+	if (this->timer2 > 1.5f)
 	{
-		Polygon_SetOpacity(thiz->base->polygon, 1.0f);
-		thiz->muteki = false;
+		this->polygon->setOpacity(1.0f);
+		this->muteki = false;
 		return;
 	}
 
-
-
-	thiz->timer2 += GetDeltaTime();
+	this->timer2 += Time::DeltaTime();
 }

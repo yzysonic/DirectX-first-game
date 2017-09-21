@@ -1,80 +1,58 @@
 #include "SceneGameOver.h"
-#include "Core.h"
 #include "GameManager.h"
 
-typedef struct _SceneGameOver
+
+void SceneGameOver::init(void)
 {
-	Scene base;
-	Object *bk;
-	float timer;
-	void(*update)(void);
-}SceneGameOver;
-
-// グローバル変数宣言
-SceneGameOver g_SceneGameOver;
-SceneGameOver *thiz = &g_SceneGameOver;
-
-// プロトタイプ宣言
-void update_gameover_fadeWait(void);
-void update_gameover_state0(void);
-void update_gameover_state1(void);
-
-Scene * GetSceneGameOver(void)
-{
-	return (Scene*)&g_SceneGameOver;
-}
-
-void initSceneGameOver(void)
-{
-	thiz->bk = newObject(&thiz->bk);
-	thiz->bk->polygon = newPolygon(thiz->bk, LAYER_BG_00, TEX_GAME_OVER, REND_UI);
-	thiz->timer = 0;
+	this->bk = new Object;
+	this->bk->setPolygon(Layer::BG_00, TEX_GAME_OVER, RendererType::UI);
+	this->timer = 0;
 
 	// BGMを再生
 	SetVolume(BGM_GAMEOVER, -1800);
 	PlayBGM(BGM_GAMEOVER);
 
 	// フェイトイン効果
-	FadeScreen(FADE_IN_WH);
+	FadeScreen::Fade(FADE_IN_WH);
 
-	thiz->update = &update_gameover_fadeWait;
+	SceneGameOver::pUpdate = &SceneGameOver::update_fadeWait;
 }
 
-void updateSceneGameOver(void)
+void SceneGameOver::update(void)
 {
-	thiz->update();
-	thiz->timer += GetDeltaTime();
+	(this->*pUpdate)();
+	this->timer += Time::DeltaTime();
 }
 
-void uninitSceneGameOver(void)
+void SceneGameOver::uninit(void)
 {
-	deleteObject(thiz->bk);
+	StopSound(BGM_GAMEOVER);
+	delete this->bk;
 }
 
-void update_gameover_fadeWait(void)
+void SceneGameOver::update_fadeWait(void)
 {
-	if (FadeFinished())
+	if (FadeScreen::Finished())
 	{
-		thiz->update = &update_gameover_state0;
+		SceneGameOver::pUpdate = &SceneGameOver::update_state0;
 	}
 }
 
-void update_gameover_state0(void)
+void SceneGameOver::update_state0(void)
 {
-	if (thiz->timer > 4.0f)
+	if (this->timer > 4.0f)
 	{
-		FadeScreen(FADE_OUT_BK, 0, 0.7f);
-		thiz->timer = 0;
-		thiz->update = &update_gameover_state1;
+		FadeScreen::Fade(FADE_OUT_BK, 0, 0.7f);
+		this->timer = 0;
+		SceneGameOver::pUpdate = &SceneGameOver::update_state1;
 	}
 		
 }
 
-void update_gameover_state1(void)
+void SceneGameOver::update_state1(void)
 {
-	if (thiz->timer > 1.0f)
+	if (this->timer > 1.0f)
 	{
-		StopSound(BGM_GAMEOVER);
-		SetScene(SCENE_TITLE);
+		GameManager::SetScene(SceneName::TITLE);
 	}
 }

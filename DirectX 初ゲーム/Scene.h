@@ -1,17 +1,19 @@
 #pragma once
+#include "Singleton.h"
 
-enum SceneName
+enum struct SceneName
 {
-	SCENE_TITLE,
-	SCENE_GAME,
-	SCENE_GAMEOVER,
-	SCENE_CLEAR,
-	SCENE_TEST
+	TITLE,
+	GAME,
+	GAMEOVER,
+	CLEAR,
+	TEST
 };
 
-typedef struct _Scene
+class Scene 
 {
-	void(*init)(void);
-	void(*update)(void);
-	void(*uninit)(void);
-}Scene;
+public:
+	virtual void init(void) {};
+	virtual void update(void) = 0;
+	virtual void uninit(void) {};
+};
