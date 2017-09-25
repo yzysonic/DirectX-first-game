@@ -26,20 +26,24 @@
 
 
 /* game pad情報 */
-#define BUTTON_UP		0x00000001l	// 方向キー上(.IY<0)
-#define BUTTON_DOWN		0x00000002l	// 方向キー下(.IY>0)
-#define BUTTON_LEFT		0x00000004l	// 方向キー左(.IX<0)
-#define BUTTON_RIGHT	0x00000008l	// 方向キー右(.IX>0)
-#define BUTTON_A		0x00000010l	// Ａボタン(.rgbButtons[0]&0x80)
-#define BUTTON_B		0x00000020l	// Ｂボタン(.rgbButtons[1]&0x80)
-#define BUTTON_C		0x00000040l	// Ｃボタン(.rgbButtons[2]&0x80)
-#define BUTTON_X		0x00000080l	// Ｘボタン(.rgbButtons[3]&0x80)
-#define BUTTON_Y		0x00000100l	// Ｙボタン(.rgbButtons[4]&0x80)
-#define BUTTON_Z		0x00000200l	// Ｚボタン(.rgbButtons[5]&0x80)
-#define BUTTON_L		0x00000400l	// Ｌボタン(.rgbButtons[6]&0x80)
-#define BUTTON_R		0x00000800l	// Ｒボタン(.rgbButtons[7]&0x80)
-#define BUTTON_START	0x00001000l	// ＳＴＡＲＴボタン(.rgbButtons[8]&0x80)
-#define BUTTON_M		0x00002000l	// Ｍボタン(.rgbButtons[9]&0x80)
+#define BUTTON_UP		0x00000001l	// 方向キー上
+#define BUTTON_DOWN		0x00000002l	// 方向キー下
+#define BUTTON_LEFT		0x00000004l	// 方向キー左
+#define BUTTON_RIGHT	0x00000008l	// 方向キー右
+#define BUTTON_SQ		0x00000010l	// □ボタン(.rgbButtons[0]&0x80)
+#define BUTTON_CR		0x00000020l	// ×ボタン(.rgbButtons[1]&0x80)
+#define BUTTON_CI		0x00000040l	// ○ボタン(.rgbButtons[2]&0x80)
+#define BUTTON_TR		0x00000080l	// △ボタン(.rgbButtons[3]&0x80)
+#define BUTTON_L1		0x00000100l	// L1ボタン(.rgbButtons[4]&0x80)
+#define BUTTON_R1		0x00000200l	// R1ボタン(.rgbButtons[5]&0x80)
+#define BUTTON_L2		0x00000400l	// L2ボタン(.rgbButtons[6]&0x80)
+#define BUTTON_R2		0x00000800l	// R2ボタン(.rgbButtons[7]&0x80)
+#define BUTTON_SHARE	0x00001000l	// SHAREボタン(.rgbButtons[8]&0x80)
+#define BUTTON_OPTIONS	0x00002000l	// OPTIONSボタン(.rgbButtons[9]&0x80)
+#define BUTTON_L3		0x00004000l	// L3ボタン(.rgbButtons[10]&0x80)
+#define BUTTON_R3		0x00008000l	// R3ボタン(.rgbButtons[11]&0x80)
+#define BUTTON_PS		0x00010000l	// PSボタン(.rgbButtons[12]&0x80)
+#define BUTTON_PAD		0x00020000l	// PADボタン(.rgbButtons[13]&0x80)
 #define GAMEPADMAX		4			// 同時に接続するジョイパッドの最大数をセット
 
 
@@ -69,9 +73,13 @@ long GetMouseMoveY(void);           // マウスがY方向に動いた相対値
 long GetMouseMoveZ(void);           // マウスホイールが動いた相対値
 Vector3 GetMousePos(void);          // マウスの座標
 
-									//---------------------------- game pad
+//---------------------------- game pad
 BOOL IsButtonPressed(int padNo, DWORD button);
 BOOL IsButtonTriggered(int padNo, DWORD button);
+float GetPadLX(void);
+float GetPadLY(void);
+float GetPadRX(void);
+float GetPadRY(void);
 
 
 #endif

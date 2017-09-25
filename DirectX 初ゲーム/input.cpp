@@ -65,6 +65,10 @@ static LPDIRECTINPUTDEVICE8	pGamePad[GAMEPADMAX] = {NULL,NULL,NULL,NULL};// パッ
 static DWORD	padState[GAMEPADMAX];	// パッド情報（複数対応）
 static DWORD	padTrigger[GAMEPADMAX];
 static int		padCount = 0;			// 検出したパッドの数
+static long		padLX = 0;
+static long		padLY = 0;
+static long		padRX = 0;
+static long		padRY = 0;
 
 
 //=============================================================================
@@ -528,35 +532,48 @@ void UpdatePad(void)
 				result = pGamePad[i]->Acquire();
 		}
 
+		padLX = dijs.lX;
+		padLY = dijs.lY;
+		padRX = dijs.lZ;
+		padRY = dijs.lRz;
+
 		// ３２の各ビットに意味を持たせ、ボタン押下に応じてビットをオンにする
-		//* y-axis (forward)
-		if ( dijs.lY < 0 )					padState[i] |= BUTTON_UP;
-		//* y-axis (backward)
-		if ( dijs.lY > 0 )					padState[i] |= BUTTON_DOWN;
-		//* x-axis (left)
-		if ( dijs.lX < 0 )					padState[i] |= BUTTON_LEFT;
-		//* x-axis (right)
-		if ( dijs.lX > 0 )					padState[i] |= BUTTON_RIGHT;
-		//* Ａボタン
-		if ( dijs.rgbButtons[0] & 0x80 )	padState[i] |= BUTTON_A;
-		//* Ｂボタン
-		if ( dijs.rgbButtons[1] & 0x80 )	padState[i] |= BUTTON_B;
-		//* Ｃボタン
-		if ( dijs.rgbButtons[2] & 0x80 )	padState[i] |= BUTTON_C;
-		//* Ｘボタン
-		if ( dijs.rgbButtons[3] & 0x80 )	padState[i] |= BUTTON_X;
-		//* Ｙボタン
-		if ( dijs.rgbButtons[4] & 0x80 )	padState[i] |= BUTTON_Y;
-		//* Ｚボタン
-		if ( dijs.rgbButtons[5] & 0x80 )	padState[i] |= BUTTON_Z;
-		//* Ｌボタン
-		if ( dijs.rgbButtons[6] & 0x80 )	padState[i] |= BUTTON_L;
-		//* Ｒボタン
-		if ( dijs.rgbButtons[7] & 0x80 )	padState[i] |= BUTTON_R;
-		//* ＳＴＡＲＴボタン
-		if ( dijs.rgbButtons[8] & 0x80 )	padState[i] |= BUTTON_START;
-		//* Ｍボタン
-		if ( dijs.rgbButtons[9] & 0x80 )	padState[i] |= BUTTON_M;
+		//* pov up
+		if ( dijs.rgdwPOV[0] == 0)			padState[i] |= BUTTON_UP;
+		//* pov down
+		if ( dijs.rgdwPOV[0] == 180 * DI_DEGREES)	padState[i] |= BUTTON_DOWN;
+		//* pov left
+		if ( dijs.rgdwPOV[0] == 270 * DI_DEGREES)	padState[i] |= BUTTON_LEFT;
+		//* pov left
+		if ( dijs.rgdwPOV[0] == 90 * DI_DEGREES)	padState[i] |= BUTTON_RIGHT;
+		//* □ボタン
+		if ( dijs.rgbButtons[0] & 0x80 )	padState[i] |= BUTTON_SQ;
+		//* ×ボタン
+		if ( dijs.rgbButtons[1] & 0x80 )	padState[i] |= BUTTON_CR;
+		//* ○ボタン
+		if ( dijs.rgbButtons[2] & 0x80 )	padState[i] |= BUTTON_CI;
+		//* △ボタン
+		if ( dijs.rgbButtons[3] & 0x80 )	padState[i] |= BUTTON_TR;
+		//* L1ボタン
+		if ( dijs.rgbButtons[4] & 0x80 )	padState[i] |= BUTTON_L1;
+		//* R1ボタン
+		if ( dijs.rgbButtons[5] & 0x80 )	padState[i] |= BUTTON_R1;
+		//* L2ボタン
+		if ( dijs.rgbButtons[6] & 0x80 )	padState[i] |= BUTTON_L2;
+		//* R2ボタン
+		if ( dijs.rgbButtons[7] & 0x80 )	padState[i] |= BUTTON_R2;
+		//* SHAREボタン
+		if ( dijs.rgbButtons[8] & 0x80 )	padState[i] |= BUTTON_SHARE;
+		//* OPTIONSボタン
+		if ( dijs.rgbButtons[9] & 0x80 )	padState[i] |= BUTTON_OPTIONS;
+		//* L3ボタン
+		if ( dijs.rgbButtons[10] & 0x80 )	padState[i] |= BUTTON_L3;
+		//* R3ボタン
+		if ( dijs.rgbButtons[11] & 0x80 )	padState[i] |= BUTTON_R3;
+		//* PSボタン
+		if ( dijs.rgbButtons[12] & 0x80 )	padState[i] |= BUTTON_PS;
+		//* PADボタン
+		if ( dijs.rgbButtons[13] & 0x80 )	padState[i] |= BUTTON_PAD;
 
 		// Trigger設定
 		padTrigger[i] = ((lastPadState ^ padState[i])	// 前回と違っていて
@@ -574,4 +591,24 @@ BOOL IsButtonPressed(int padNo,DWORD button)
 BOOL IsButtonTriggered(int padNo,DWORD button)
 {
 	return (button & padTrigger[padNo]);
+}
+
+float GetPadLX(void)
+{
+	return (float)padLX / RANGE_MAX;
+}
+
+float GetPadLY(void)
+{
+	return (float)padLY / RANGE_MAX;
+}
+
+float GetPadRX(void)
+{
+	return (padRX-32768)/32768.0f;
+}
+
+float GetPadRY(void)
+{
+	return (padRY-32768)/32768.0f;
 }

@@ -38,6 +38,8 @@ void Player::update()
 		controlVector += Vector3(1.0f, 0.0f, 0.0f);
 	}
 
+	controlVector = Vector3(GetPadLX(), GetPadLY(), 0);
+
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
 		controlVector = controlVector.normalized();
@@ -83,6 +85,9 @@ void Player::update()
 		controlVector += Vector3(1.0f, 0.0f, 0.0f);
 	}
 
+	if (fabsf(GetPadRX()) > 0.1f || fabsf(GetPadRY() > 0.1f))
+		controlVector = Vector3(GetPadRX(), GetPadRY(), 0);
+
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
 		controlVector = controlVector.normalized();
@@ -96,7 +101,10 @@ void Player::update()
 		GetKeyboardPress(DIK_DOWN)		|| 
 		GetKeyboardPress(DIK_LEFT)		|| 
 		GetKeyboardPress(DIK_RIGHT)		|| 
-		GetKeyboardPress(DIK_RSHIFT)	|| 
+		GetKeyboardPress(DIK_RSHIFT)	||
+		IsButtonPressed(0, BUTTON_R1)	||
+		fabsf(GetPadRX()) > 0.1f		||
+		fabsf(GetPadRY()) > 0.1f		||
 		IsMouseLeftPressed()
 		)
 	{

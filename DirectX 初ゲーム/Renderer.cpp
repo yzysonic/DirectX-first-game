@@ -13,7 +13,7 @@
 //=============================================================================
 // グローバル変数
 //=============================================================================
-char g_DebugText[20][256] = {};
+char g_DebugText[40][256] = {};
 
 //=============================================================================
 // プロトタイプ宣言
@@ -248,7 +248,7 @@ char *GetDebugText(int line)
 void DrawDebug()
 {
 	RECT rect;
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 40; i++)
 	{
 		rect = { 0,i*20,SCREEN_WIDTH,SCREEN_HEIGHT };
 		Direct3D::GetFont()->DrawText(NULL, g_DebugText[i], -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));

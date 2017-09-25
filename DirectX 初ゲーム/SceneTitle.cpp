@@ -216,7 +216,7 @@ void SceneTitle::update_pressWait(void)
 	syncAnimation();
 
 	// メニュー表示
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(0, BUTTON_CI))
 	{
 		this->timer = 0;
 
@@ -295,7 +295,7 @@ void SceneTitle::update_menu(void)
 	syncAnimation();
 
 	// メニュー操作
-	if (GetKeyboardTrigger(DIK_UP))
+	if (GetKeyboardTrigger(DIK_UP) || IsButtonTriggered(0, BUTTON_UP))
 	{
 		if (this->cursorPos > 0)
 		{
@@ -303,7 +303,7 @@ void SceneTitle::update_menu(void)
 			this->cursorPos--;
 		}
 	}
-	if (GetKeyboardTrigger(DIK_DOWN))
+	if (GetKeyboardTrigger(DIK_DOWN) || IsButtonTriggered(0, BUTTON_DOWN))
 	{
 		if (this->cursorPos < 1)
 		{
@@ -311,7 +311,7 @@ void SceneTitle::update_menu(void)
 			this->cursorPos++;
 		}
 	}
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(0, BUTTON_CI))
 	{
 		this->com = (Command)this->cursorPos;
 
