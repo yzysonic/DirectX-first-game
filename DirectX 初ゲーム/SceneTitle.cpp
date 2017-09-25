@@ -238,7 +238,7 @@ void SceneTitle::update_showMenu_A(void)
 	float progress = this->timer / interval;
 	if (this->timer <= interval+0.1f)
 	{
-		this->presskey->getTransform()->scale = LerpV3(Vector3(1, 1, 0), Vector3(1.3f, 0.8f, 0), progress);
+		this->presskey->getTransform()->scale = Vector3::Lerp(Vector3(1, 1, 0), Vector3(1.3f, 0.8f, 0), progress);
 		this->presskey->getPolygon()->setOpacity(Lerpf(1, 0.0f, progress));
 	}
 	else

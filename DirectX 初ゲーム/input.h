@@ -11,7 +11,8 @@
 #include <dinput.h>
 #include <windows.h>
 #include <tchar.h>
-#include <d3dx9math.h>
+#include "Vector.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -66,7 +67,7 @@ BOOL IsMouseCenterTriggered(void);  // 中クリックした瞬間
 long GetMouseMoveX(void);           // マウスがX方向に動いた相対値
 long GetMouseMoveY(void);           // マウスがY方向に動いた相対値
 long GetMouseMoveZ(void);           // マウスホイールが動いた相対値
-D3DXVECTOR3 GetMousePos(void);          // マウスの座標
+Vector3 GetMousePos(void);          // マウスの座標
 
 									//---------------------------- game pad
 BOOL IsButtonPressed(int padNo, DWORD button);

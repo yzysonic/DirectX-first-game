@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "Texture.h"
 #include "RendererType.h"
+#include "Vector.h"
 
 #include <string>
 #include <memory>

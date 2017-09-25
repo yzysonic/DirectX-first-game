@@ -58,7 +58,7 @@ void SceneTest::update(void)
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", this->camera->getTransform()->position.z);
 	sprintf(GetDebugText(line++), "MouseX: %3f", GetMousePos().x);
 	sprintf(GetDebugText(line++), "MouseY: %3f", GetMousePos().y);
-	sprintf(GetDebugText(line++), "Test: %5.2f", D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
+	sprintf(GetDebugText(line++), "Test: %5.2f", Vector3::Dot(Vector3(0, -1, 0), GetMousePos()) / GetMousePos().length());
 
 }
 

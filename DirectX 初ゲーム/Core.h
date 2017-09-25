@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Time.h"
 #include "Random.h"
+#include "Vector.h"
 #include "Lerp.h"
 #include "Object.h"
 #include "ObjectType.h"

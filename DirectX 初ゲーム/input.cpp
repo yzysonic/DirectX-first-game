@@ -56,7 +56,7 @@ static LPDIRECTINPUTDEVICE8 pMouse = NULL; // mouse
 
 static DIMOUSESTATE2   mouseState;		// マウスのダイレクトな状態
 static DIMOUSESTATE2   mouseTrigger;	// 押された瞬間だけON
-static D3DXVECTOR3     mousePos;		// マウスの座標
+static Vector3     mousePos;		// マウスの座標
 
 //--------------------------------- game pad
 
@@ -404,7 +404,7 @@ long GetMouseMoveZ(void)
 {
 	return mouseState.lZ;
 }
-D3DXVECTOR3 GetMousePos(void)
+Vector3 GetMousePos(void)
 {
 	return mousePos;
 }

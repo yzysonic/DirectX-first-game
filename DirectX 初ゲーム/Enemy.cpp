@@ -17,8 +17,7 @@ void Enemy::update()
 
 	if (this->target)
 	{
-		Vector3 dir;
-		D3DXVec3Normalize(&dir, &(this->target->position - this->transform->position));
+		Vector3 dir = (this->target->position - this->transform->position).normalized();
 		this->transform->position += dir * ENEMY_SPEED * Time::DeltaTime();
 	}
 

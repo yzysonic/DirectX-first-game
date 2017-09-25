@@ -15,7 +15,7 @@ RectPolygon::RectPolygon(Object* object, Layer layer, TextureName texName, Rende
 	else
 		this->size	= Vector2(100.f, 100.f);
 
-	this->radius = D3DXVec2Length(&(this->size/2));
+	this->radius = this->size.length()/2;
 	this->baseAngle = atan2f(this->size.y, this->size.x);
 	this->color = ColorRGBA(255, 255, 255, 255);
 
@@ -65,7 +65,7 @@ D3DCOLOR RectPolygon::getColor(void)
 void RectPolygon::setSize(float x, float y)
 {
 	this->size = Vector2(x, y);
-	this->radius = D3DXVec2Length(&(this->size / 2));
+	this->radius = this->size.length()/2;
 	this->baseAngle = atan2f(this->size.y, this->size.x);
 }
 

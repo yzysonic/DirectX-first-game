@@ -1,5 +1,4 @@
 #include "Texture.h"
-#include "Direct3D.h"
 #include "Window.h"
 
 

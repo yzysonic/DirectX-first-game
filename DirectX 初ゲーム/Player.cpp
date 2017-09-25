@@ -20,27 +20,27 @@ void Player::update()
 {
 
 	// ˆÚ“®“ü—Í
-	D3DXVECTOR3 controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	Vector3 controlVector = Vector3(0.0f, 0.0f, 0.0f);
 	if (GetKeyboardPress(DIK_W))
 	{
-		controlVector += D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		controlVector += Vector3(0.0f, -1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_S))
 	{
-		controlVector += D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		controlVector += Vector3(0.0f, 1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_A))
 	{
-		controlVector += D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		controlVector += Vector3(-1.0f, 0.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_D))
 	{
-		controlVector += D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		controlVector += Vector3(1.0f, 0.0f, 0.0f);
 	}
 
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
-		D3DXVec3Normalize(&controlVector, &controlVector);
+		controlVector = controlVector.normalized();
 		this->dir = controlVector;
 		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
 	}
@@ -51,7 +51,7 @@ void Player::update()
 	//	boost = 2.0f;
 
 	// ˆÚ“®ˆ—
-	this->transform->position += this->speed * boost * controlVector * Time::DeltaTime();
+	this->transform->position += controlVector * this->speed * boost * Time::DeltaTime();
 
 
 	// ƒ}ƒEƒXÆ€‚ÌŒvŽZ
@@ -65,27 +65,27 @@ void Player::update()
 	//this->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
 
 	// ’e”­ŽË
-	controlVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	controlVector = Vector3(0.0f, 0.0f, 0.0f);
 	if (GetKeyboardPress(DIK_UP))
 	{
-		controlVector += D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		controlVector += Vector3(0.0f, -1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_DOWN))
 	{
-		controlVector += D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		controlVector += Vector3(0.0f, 1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_LEFT))
 	{
-		controlVector += D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		controlVector += Vector3(-1.0f, 0.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_RIGHT))
 	{
-		controlVector += D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		controlVector += Vector3(1.0f, 0.0f, 0.0f);
 	}
 
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
-		D3DXVec3Normalize(&controlVector, &controlVector);
+		controlVector = controlVector.normalized();
 		this->dir = controlVector;
 		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
 	}

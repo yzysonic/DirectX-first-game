@@ -1,5 +1,5 @@
 #pragma once
-#include "main.h"
+#include "Vector.h"
 #include "Object.h"
 
 class Camera : public Object

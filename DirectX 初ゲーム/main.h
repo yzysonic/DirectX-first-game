@@ -41,7 +41,4 @@ void SafeDelete(T *&ptr)
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
-
-typedef D3DXVECTOR2 Vector2;
-typedef D3DXVECTOR3 Vector3;
 typedef D3DCOLOR	Color;

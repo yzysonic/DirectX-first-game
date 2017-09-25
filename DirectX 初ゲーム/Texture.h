@@ -1,5 +1,7 @@
 #pragma once
-#include"main.h"
+#include "main.h"
+#include "Direct3D.h"
+#include "Vector.h"
 
 #define TEX_DIR "Data/Texture/"
 
