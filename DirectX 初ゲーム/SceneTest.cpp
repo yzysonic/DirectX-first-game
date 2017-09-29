@@ -13,10 +13,9 @@ void SceneTest::init(void)
 	this->testCount = 0;
 
 	Renderer::GetInstance()->setCamera(this->camera);
-	this->camera->backColor = ColorRGBA(210,210,210,255);
+	this->camera->setBackColor(210,210,210,255);
 	this->camera->fov = ProjectMode;
 
-	//ShowCursor(false);
 
 	SetVolume(BGM_GAME, -1800);
 	//PlayBGM(BGM_GAME);
@@ -52,7 +51,7 @@ void SceneTest::update(void)
 	sprintf(GetDebugText(line++), "PlayerX: %5.1f", this->player->getTransform()->position.x);
 	sprintf(GetDebugText(line++), "PlayerY: %5.1f", this->player->getTransform()->position.y);
 	sprintf(GetDebugText(line++), "PlayerZ: %5.1f", this->player->getTransform()->position.z);
-	sprintf(GetDebugText(line++), "PlayerR: %5.1f", this->player->getTransform()->rotation.z);
+	sprintf(GetDebugText(line++), "PlayerR: %5.1f", this->player->getTransform()->getRotation().z);
 	sprintf(GetDebugText(line++), "CameraX: %5.1f", this->camera->getTransform()->position.x);
 	sprintf(GetDebugText(line++), "CameraY: %5.1f", this->camera->getTransform()->position.y);
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", this->camera->getTransform()->position.z);
@@ -77,7 +76,7 @@ void SceneTest::uninit(void)
 
 	Bullet::Clear();
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 40; i++)
 		strcpy(GetDebugText(i), "");
 
 	ShowCursor(true);

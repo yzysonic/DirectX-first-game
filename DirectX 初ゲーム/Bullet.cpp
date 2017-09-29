@@ -3,7 +3,7 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()->position, owner->getTransform()->rotation)
+Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()->position, owner->getTransform()->getRotation())
 {
 	this->setCollider();
 
@@ -22,6 +22,7 @@ Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()-
 	{
 		this->type = ObjectType::Bullet_E;
 		this->setPolygon(Layer::DEFAULT, TEX_BULLET_E);
+		this->collider->size *= 0.5f;
 	}
 
 	this->timer = 0;
@@ -43,21 +44,19 @@ void Bullet::update()
 {
 	this->timer += Time::DeltaTime();
 
-	if (this->timer > 1.5f)
+	if (this->timer > 3.0f)
 		delete this;
 }
 
 void Bullet::onCollision(Object * other)
 {
 
-	if (this->type == ObjectType::Bullet && other->type == ObjectType::Enemy)
+	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))
 	{
-		this->polygon->setOpacity(0.0f);
 		delete this;
 	}
-	else if (this->type == ObjectType::Bullet_E && other->type == ObjectType::Player)
+	else if (this->type == ObjectType::Bullet_E && (other->type == ObjectType::Player /*|| other->type == ObjectType::Bullet*/))
 	{
-		this->polygon->setOpacity(0.0f);
 		delete this;
 	}
 

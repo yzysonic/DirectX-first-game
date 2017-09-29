@@ -6,8 +6,9 @@
 class Enemy : public Object
 {
 public:
-	const Transform *target = NULL;
+	Transform *target = NULL;
 	int hp;
+	float timer;
 
 	Enemy(void);
 	void update(void) override;

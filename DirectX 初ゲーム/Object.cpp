@@ -4,6 +4,8 @@
 #include "Collider.h"
 #include "Rigidbody.h"
 #include "Physics.h"
+#include "Lerp.h"
+#include "Time.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -22,7 +24,73 @@ Transform::Transform(Object* object)
 	this->position		= Vector3(0, 0, 0);
 	this->rotation		= Vector3(0, 0, 0);
 	this->scale			= Vector3(1, 1, 1);
+	this->up			= Vector3(0, 1, 0);
 
+}
+
+Vector3 Transform::getRotation(void)
+{
+	return this->rotation;
+}
+
+void Transform::setRotation(Vector3 rotation)
+{
+	this->rotation = rotation;
+	this->updateVector();
+}
+
+void Transform::setRotation(float x, float y, float z)
+{
+	this->rotation.x = x;
+	this->rotation.y = y;
+	this->rotation.z = z;
+	this->updateVector();
+
+}
+
+Vector3 Transform::getUp(void)
+{
+	return this->up;
+}
+
+void Transform::rotate(Vector3 angle)
+{
+	this->rotation += angle;
+	this->up.x = this->up.x * cosf(angle.z) - this->up.y * sinf(angle.z);
+	this->up.y = this->up.x * sinf(angle.z) - this->up.y * cosf(angle.z);
+	this->updateVector();
+}
+
+void Transform::rotate(float x, float y, float z)
+{
+	this->rotation.x += x;
+	this->rotation.y += y;
+	this->rotation.z += z;
+	this->updateVector();
+}
+
+void Transform::lookAt(Vector3 const & target, float speed)
+{
+	Vector3 dis = target - this->position;
+	float angle;
+
+	if (dis.x > 0)
+		angle = acosf(Vector3::Dot(Vector3(0, -1, 0), dis) / (dis.length()));
+	else
+		angle = PI + acosf(-Vector3::Dot(Vector3(0, -1, 0), dis) / (dis.length()));
+
+	this->rotation.z = Lerpf(this->rotation.z, angle, speed * Time::DeltaTime());
+}
+
+void Transform::lookAt(Transform * target, float speed)
+{
+	lookAt(target->position, speed);
+}
+
+void Transform::updateVector(void)
+{
+	this->up.x = cosf(rotation.z + PI / 2);
+	this->up.y = sinf(rotation.z + PI / 2);
 }
 
 
@@ -42,7 +110,7 @@ Object::Object()
 Object::Object(Vector3 position, Vector3 rotation) : Object()
 {
 	this->transform->position = position;
-	this->transform->rotation = rotation;
+	this->transform->setRotation(rotation);
 }
 
 Object::~Object()
@@ -83,7 +151,7 @@ void Object::setRigidbody(void)
 	this->rigidbody.reset();
 	this->rigidbody = std::make_unique<Rigidbody>(this);
 	this->rigidbody->position = this->transform->position;
-	this->rigidbody->rotation = this->transform->rotation;
+	this->rigidbody->rotation = this->transform->getRotation();
 	Physics::GetInstance()->addRigidbody(this->rigidbody.get());
 }
 

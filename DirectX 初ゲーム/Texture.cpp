@@ -30,6 +30,7 @@ void InitTexture()
 	LoadTexture(TEX_ENEMY,			"enemy.png");
 	LoadTexture(TEX_BULLET,			"bullet.png");
 	LoadTexture(TEX_BULLET_E,		"bullet_e.png");
+	LoadTexture(TEX_GUIDE,			"guide.png");
 }
 
 void UninitTexture()

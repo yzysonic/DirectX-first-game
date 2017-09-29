@@ -15,7 +15,8 @@ PolygonElement::PolygonElement()
 	this->speed = Vector3(Randomf(-1, 1), Randomf(-1, 1), 0.0f)*30.0f;
 	this->targetOpacity = 1.0f;
 
-	this->polygon->setColor(ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 0));
+	int min = 150;
+	this->polygon->setColor(Random(min, 255), Random(min, 255), Random(min, 255), 0);
 
 	PolygonElement::pUpdate = &PolygonElement::update_state0;
 }

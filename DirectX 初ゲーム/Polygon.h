@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "Layer.h"
 #include "RendererType.h"
+#include "Color.h"
 
 //*****************************************************************************
 // É}ÉNÉçíËã`
@@ -43,8 +44,9 @@ public:
 	Layer getLayer(void);
 	Vector2 getSize(void);
 	void setSize(float x, float y);
-	D3DCOLOR getColor(void);
-	void setColor(D3DCOLOR color);
+	Color getColor(void);
+	void setColor(Color color);
+	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	float getOpacity(void);
 	void setOpacity(float value);
 	void setPattern(unsigned int pattern);

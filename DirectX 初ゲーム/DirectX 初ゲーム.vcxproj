@@ -151,6 +151,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="SceneGameOver.cpp" />
+    <ClCompile Include="SceneGuide.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="SmoothCamera.cpp" />
@@ -185,6 +187,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
@@ -211,6 +214,7 @@
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="SceneGameOver.h" />
+    <ClInclude Include="SceneGuide.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Singleton.h" />

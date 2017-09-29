@@ -25,11 +25,11 @@ void SceneTitle::init(void)
 
 	// カメラの初期化
 	Renderer::GetInstance()->setCamera(NULL);
-	Renderer::GetInstance()->getCamera()->backColor = ColorRGBA(243, 242, 238, 255);
+	Renderer::GetInstance()->getCamera()->setBackColor(243, 242, 238, 255);
 	Renderer::GetInstance()->getCamera()->fov = 0.0f;
 
 	// フェイトアウト
-	FadeScreen::Fade(FADE_OUT_BK, 0, 0);
+	FadeScreen::FadeOut(Color::black, 0);
 
 	// 初期状態
 	SceneTitle::pUpdate = &SceneTitle::update_fadeWait;
@@ -101,7 +101,7 @@ void SceneTitle::update_fadeWait(void)
 			{
 				this->com = COM_OP;
 				// フェイトイン
-				FadeScreen::Fade(FADE_IN_BK, 0, 0.7f);
+				FadeScreen::FadeIn(Color::black, 0.7f);
 			}
 			this->timer += Time::DeltaTime();
 			break;
@@ -118,7 +118,7 @@ void SceneTitle::update_fadeWait(void)
 		
 		case COM_START:
 			// シーン遷移
-			GameManager::SetScene(SceneName::GAME);
+			GameManager::SetScene(SceneName::GUIDE);
 			break;
 
 		case COM_EXIT:
@@ -318,10 +318,10 @@ void SceneTitle::update_menu(void)
 		switch (this->com)
 		{
 		case COM_START:
-			FadeScreen::Fade(FADE_OUT_WH, 0);
+			FadeScreen::FadeOut(Color::white);
 			break;
 		case COM_EXIT:
-			FadeScreen::Fade(FADE_OUT_BK, 0);
+			FadeScreen::FadeOut(Color::black);
 			break;
 		}
 
@@ -346,7 +346,7 @@ void SceneTitle::update_anime_poly(void)
 		for (int i = 0; i < this->polyCount; i++)
 		{
 			this->polyList[i]->prePos = this->polyList[i]->getTransform()->position;
-			this->polyList[i]->nextColor = ColorRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 200);
+			this->polyList[i]->nextColor.setRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 200);
 		}
 		this->polyState = Phase1;
 		timer = 0;

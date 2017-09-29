@@ -7,11 +7,7 @@
 enum FadeType
 {
 	FADE_IN,
-	FADE_IN_BK,
-	FADE_IN_WH,
 	FADE_OUT,
-	FADE_OUT_BK,
-	FADE_OUT_WH
 };
 
 class FadeScreen : public Object, public Singleton<FadeScreen>
@@ -19,7 +15,9 @@ class FadeScreen : public Object, public Singleton<FadeScreen>
 public:
 	FadeScreen(void);
 	void update(void) override;
-	static void Fade(FadeType type, Color color = 0, float interval = DEFAULT_FADE_TIME);
+	static void Fade(FadeType type, Color color = Color::none, float interval = DEFAULT_FADE_TIME);
+	static void FadeIn(Color color, float interval = DEFAULT_FADE_TIME);
+	static void FadeOut(Color color, float interval = DEFAULT_FADE_TIME);
 	static bool Finished(void);
 
 private:

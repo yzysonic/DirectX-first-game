@@ -25,6 +25,7 @@ enum TextureName
 	TEX_ENEMY,
 	TEX_BULLET,
 	TEX_BULLET_E,
+	TEX_GUIDE,
 	TEX_MAX
 };
 

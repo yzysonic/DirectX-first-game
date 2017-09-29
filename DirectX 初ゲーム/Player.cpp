@@ -7,44 +7,59 @@ Player::Player()
 	this->setCollider();
 	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	this->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
+	this->collider->size *= 0.3f;
 
 	this->hp = 3;
 	this->speed = 700.0f;
 	this->dir = Vector3(0, -1, 0);
 	this->timer = 0;
 	this->muteki = false;
+	this->autoAim = false;
 
 }
 
 void Player::update()
 {
+	// 自動照準
+	if (GetKeyboardTrigger(DIK_RSHIFT) || IsButtonTriggered(0, BUTTON_L1))
+		this->autoAim = !this->autoAim;
+	if (this->autoAim)
+	{
+		// TODO 自動照準
+	}
 
 	// 移動入力
 	Vector3 controlVector = Vector3(0.0f, 0.0f, 0.0f);
-	if (GetKeyboardPress(DIK_W))
-	{
-		controlVector += Vector3(0.0f, -1.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_S))
-	{
-		controlVector += Vector3(0.0f, 1.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_A))
-	{
-		controlVector += Vector3(-1.0f, 0.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_D))
-	{
-		controlVector += Vector3(1.0f, 0.0f, 0.0f);
-	}
 
 	controlVector = Vector3(GetPadLX(), GetPadLY(), 0);
+
+	if (controlVector.sqrLength() < 0.01f)
+	{
+		if (GetKeyboardPress(DIK_W))
+		{
+			controlVector += Vector3(0.0f, -1.0f, 0.0f);
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			controlVector += Vector3(0.0f, 1.0f, 0.0f);
+		}
+		if (GetKeyboardPress(DIK_A))
+		{
+			controlVector += Vector3(-1.0f, 0.0f, 0.0f);
+		}
+		if (GetKeyboardPress(DIK_D))
+		{
+			controlVector += Vector3(1.0f, 0.0f, 0.0f);
+		}
+
+	}
+
 
 	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
 	{
 		controlVector = controlVector.normalized();
 		this->dir = controlVector;
-		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
+		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) + PI / 2);
 	}
 
 	// 加速入力
@@ -57,6 +72,7 @@ void Player::update()
 
 
 	// マウス照準の計算
+	//this->transform->lookAt(GetMousePos());
 
 	//if(GetMousePos().x > 0)
 	//	this->transform->rotation.z = acosf(D3DXVec3Dot(&Vector3(0,-1,0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
@@ -92,7 +108,7 @@ void Player::update()
 	{
 		controlVector = controlVector.normalized();
 		this->dir = controlVector;
-		this->transform->rotation.z = atan2f(controlVector.y, controlVector.x) + PI / 2;
+		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) + PI / 2);
 	}
 
 	// 弾発射
@@ -123,7 +139,7 @@ void Player::update()
 
 void Player::onCollision(Object * other)
 {
-	if (other->type == ObjectType::Enemy && !this->muteki)
+	if ((other->type == ObjectType::Enemy || other->type == ObjectType::Bullet_E) && !this->muteki)
 	{
 		this->polygon->setOpacity(0.5f);
 		this->hp--;

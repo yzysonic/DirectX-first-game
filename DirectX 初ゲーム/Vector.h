@@ -68,7 +68,7 @@ public:
 	Vector3(const Vector3&);
 	Vector3(float x, float y, float z);
 
-	float length(void);
-	float sqrLength(void);
-	Vector3 normalized(void);
+	float length(void) const;
+	float sqrLength(void) const;
+	Vector3 normalized(void) const;
 };

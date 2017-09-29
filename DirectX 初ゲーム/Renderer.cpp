@@ -82,7 +82,7 @@ void Renderer::DrawFrame()
 	RectPolygon*			poly;
 
 	// バックバッファ＆Ｚバッファのクリア
-	Direct3D::GetDevice()->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_pInstance->camera->backColor, 1.0f, 0);
+	Direct3D::GetDevice()->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_pInstance->camera->getD3DBackColor(), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(Direct3D::GetDevice()->BeginScene()))
@@ -179,7 +179,7 @@ void Renderer::transformVertex(RectPolygon *poly)
 {
 	// ワールド変換
 	Vector3 pos = poly->object->getTransform()->position;
-	Vector3 rot = poly->object->getTransform()->rotation;
+	Vector3 rot = poly->object->getTransform()->getRotation();
 	Vector3 radius = poly->radius * poly->object->getTransform()->scale;
 
 	poly->vertex[0].vtx.x = pos.x - cosf(poly->baseAngle + rot.z) * radius.x;
@@ -228,10 +228,10 @@ void Renderer::transformVertex(RectPolygon *poly)
 	}
 
 	// スクリーン変換
-	poly->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
-	poly->vertex[1].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
-	poly->vertex[2].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
-	poly->vertex[3].vtx += Vector3(SCREEN_CENTER_X + 0.5f, SCREEN_CENTER_Y + 0.5f, 0.0f);
+	poly->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
+	poly->vertex[1].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
+	poly->vertex[2].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
+	poly->vertex[3].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
 }
 
 //=============================================================================

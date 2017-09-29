@@ -24,10 +24,23 @@ class Transform
 public:
 	Object *object;
 	Vector3 position;
-	Vector3 rotation;
 	Vector3 scale;
 
 	Transform(Object* object);
+	Vector3 getRotation(void);
+	void setRotation(Vector3 rotation);
+	void setRotation(float x, float y, float z);
+	Vector3 getUp(void);
+	void rotate(Vector3 angle);
+	void rotate(float x, float y, float z);
+	void lookAt(Vector3 const& target, float speed = 60);
+	void lookAt(Transform *target, float speed = 60);
+
+private:
+	Vector3 rotation;
+	Vector3 up;
+
+	void updateVector(void);
 };
 
 class Object

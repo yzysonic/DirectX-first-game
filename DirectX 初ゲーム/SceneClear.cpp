@@ -20,7 +20,7 @@ void SceneClear::init(void)
 	PlayBGM(BGM_CLEAR);
 
 	// フェイトイン効果
-	FadeScreen(FADE_IN_WH);
+	FadeScreen::FadeIn(Color::white);
 
 	SceneClear::pUpdate = &SceneClear::update_clear_fadeWait;
 }
@@ -50,7 +50,7 @@ void SceneClear::update_clear_state0(void)
 {
 	if (this->timer > 4.0f)
 	{
-		FadeScreen::Fade(FADE_OUT_BK, 0, 0.7f);
+		FadeScreen::FadeOut(Color::black, 0.7f);
 		this->timer = 0;
 		SceneClear::pUpdate = &SceneClear::update_clear_state1;
 	}

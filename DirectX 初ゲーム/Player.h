@@ -18,6 +18,7 @@ private:
 	float timer;
 	float timer2;
 	bool muteki;
+	bool autoAim;
 
 	void update_muteki(void);
 };

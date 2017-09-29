@@ -201,17 +201,17 @@ Vector3::Vector3(float x, float y, float z)
 	this->z = z;
 }
 
-float Vector3::length(void)
+float Vector3::length(void) const
 {
 	return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
-float Vector3::sqrLength(void)
+float Vector3::sqrLength(void) const
 {
 	return this->x * this->x + this->y * this->y + this->z * this->z;
 }
 
-Vector3 Vector3::normalized(void)
+Vector3 Vector3::normalized(void) const
 {
 	float m = this->length();
 	return Vector3(this->x / m, this->y / m, this->z / m);

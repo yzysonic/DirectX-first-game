@@ -120,6 +120,12 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="SceneGuide.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -234,6 +240,12 @@
       <Filter>Core\Main</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGuide.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

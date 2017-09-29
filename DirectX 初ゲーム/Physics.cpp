@@ -114,7 +114,7 @@ void Physics::updateDynamics()
 		}
 
 		rb->object->getTransform()->position = rb->position;
-		rb->object->getTransform()->rotation = rb->rotation;
+		rb->object->getTransform()->setRotation(rb->rotation);
 
 	}
 

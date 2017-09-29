@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "FadeScreen.h"
 #include "SceneTitle.h"
+#include "SceneGuide.h"
 #include "SceneGame.h"
 #include "SceneGameOver.h"
 #include "SceneClear.h"
@@ -57,6 +58,10 @@ void GameManager::LoadScene(SceneName scene)
 	{
 	case SceneName::TITLE:
 		m_pInstance->currentScene.reset(new SceneTitle);
+		break;
+
+	case SceneName::GUIDE:
+		m_pInstance->currentScene.reset(new SceneGuide);
 		break;
 
 	case SceneName::GAME:

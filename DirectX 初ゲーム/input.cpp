@@ -67,8 +67,8 @@ static DWORD	padTrigger[GAMEPADMAX];
 static int		padCount = 0;			// 検出したパッドの数
 static long		padLX = 0;
 static long		padLY = 0;
-static long		padRX = 0;
-static long		padRY = 0;
+static long		padRX = 32768;
+static long		padRY = 32768;
 
 
 //=============================================================================

@@ -17,7 +17,7 @@ RectPolygon::RectPolygon(Object* object, Layer layer, TextureName texName, Rende
 
 	this->radius = this->size.length()/2;
 	this->baseAngle = atan2f(this->size.y, this->size.x);
-	this->color = ColorRGBA(255, 255, 255, 255);
+	this->color.setRGBA(255, 255, 255, 255);
 
 	// rhw‚ÌÝ’è
 	this->vertex[0].rhw =
@@ -57,7 +57,7 @@ Vector2 RectPolygon::getSize(void)
 	return this->size;
 }
 
-D3DCOLOR RectPolygon::getColor(void)
+Color RectPolygon::getColor(void)
 {
 	return this->color;
 }
@@ -70,24 +70,29 @@ void RectPolygon::setSize(float x, float y)
 }
 
 
-void RectPolygon::setColor(D3DCOLOR color)
+void RectPolygon::setColor(Color color)
 {
 	for (int i = 0; i < RECT_NUM_VERTEX; i++)
 		this->vertex[i].diffuse = color;
 	this->color = color;
 }
 
+void RectPolygon::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	for (int i = 0; i < RECT_NUM_VERTEX; i++)
+		this->vertex[i].diffuse.setRGBA(r, g, b, a);
+	this->color.setRGBA(r, g, b, a);
+}
+
 void RectPolygon::setOpacity(float opacity)
 {
-	this->color &= 0x00ffffff;
-	this->color += (BYTE)(opacity * 0xff) << 24;
-
+	this->color.a = (unsigned char)(opacity * 0xff);
 	this->setColor(this->color);
 }
 
 float RectPolygon::getOpacity()
 {
-	return (float)(this->color >> 24)/0xff;
+	return (float)(this->color.a)/0xff;
 }
 
 void RectPolygon::setPattern(unsigned int pattern)

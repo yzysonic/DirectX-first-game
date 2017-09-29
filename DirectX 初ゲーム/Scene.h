@@ -4,6 +4,7 @@
 enum struct SceneName
 {
 	TITLE,
+	GUIDE,
 	GAME,
 	GAMEOVER,
 	CLEAR,

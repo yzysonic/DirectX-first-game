@@ -48,6 +48,8 @@ HRESULT Window::Init()
 	if (s_hWnd == NULL)
 		return E_FAIL;
 
+	ShowCursor(false);
+
 	//ウィンドウをスクリーンに表示する
 	ShowWindow(s_hWnd, SW_SHOW);
 	UpdateWindow(s_hWnd);

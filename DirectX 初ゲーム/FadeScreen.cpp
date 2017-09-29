@@ -47,26 +47,12 @@ void FadeScreen::Fade(FadeType type, Color color, float interval)
 	case FADE_IN:
 		m_pInstance->targetOpacity = 0.0f;
 		m_pInstance->polygon->setColor(color);
+		m_pInstance->polygon->setOpacity(1.0f);
 		break;
 	case FADE_OUT:
 		m_pInstance->targetOpacity = 1.0f;
 		m_pInstance->polygon->setColor(color);
-		break;
-	case FADE_IN_BK:
-		m_pInstance->targetOpacity = 0.0f;
-		m_pInstance->polygon->setColor(ColorRGBA(0, 0, 0, 255));
-		break;
-	case FADE_OUT_BK:
-		m_pInstance->targetOpacity = 1.0f;
-		m_pInstance->polygon->setColor(ColorRGBA(0, 0, 0, 0));
-		break;
-	case FADE_IN_WH:
-		m_pInstance->targetOpacity = 0.0f;
-		m_pInstance->polygon->setColor(ColorRGBA(255, 255, 255, 255));
-		break;
-	case FADE_OUT_WH:
-		m_pInstance->targetOpacity = 1.0f;
-		m_pInstance->polygon->setColor(ColorRGBA(255, 255, 255, 0));
+		m_pInstance->polygon->setOpacity(0.0f);
 		break;
 	}
 
@@ -80,6 +66,16 @@ void FadeScreen::Fade(FadeType type, Color color, float interval)
 	m_pInstance->timer = 0;
 	m_pInstance->oldOpacity = m_pInstance->polygon->getOpacity();
 	m_pInstance->setActive(true);
+}
+
+void FadeScreen::FadeIn(Color color, float interval)
+{
+	Fade(FADE_IN, color, interval);
+}
+
+void FadeScreen::FadeOut(Color color, float interval)
+{
+	Fade(FADE_OUT, color, interval);
 }
 
 bool FadeScreen::Finished(void)

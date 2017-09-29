@@ -13,7 +13,7 @@ void SceneGameOver::init(void)
 	PlayBGM(BGM_GAMEOVER);
 
 	// フェイトイン効果
-	FadeScreen::Fade(FADE_IN_WH);
+	FadeScreen::FadeIn(Color::black);
 
 	SceneGameOver::pUpdate = &SceneGameOver::update_fadeWait;
 }
@@ -42,7 +42,7 @@ void SceneGameOver::update_state0(void)
 {
 	if (this->timer > 4.0f)
 	{
-		FadeScreen::Fade(FADE_OUT_BK, 0, 0.7f);
+		FadeScreen::FadeOut(Color::black, 0.7f);
 		this->timer = 0;
 		SceneGameOver::pUpdate = &SceneGameOver::update_state1;
 	}

@@ -33,7 +33,7 @@ void SceneGame::init(void)
 	// カメラ設定
 	this->camera = new SmoothCamera(this->player->getTransform(), Vector3(0, -50, -5));
 	this->camera->setActive(false);
-	this->camera->backColor = ColorRGBA(210, 210, 210, 255);
+	this->camera->setBackColor(210, 210, 210, 255);
 	this->camera->fov = 1;
 	Renderer::GetInstance()->setCamera(this->camera);
 
@@ -57,7 +57,7 @@ void SceneGame::init(void)
 	}
 
 	// フェイトイン効果
-	FadeScreen::Fade(FADE_IN_WH, 0, 0.7f);
+	FadeScreen::FadeIn(Color::white, 0.7f);
 	
 	// BGMを再生
 	SetVolume(BGM_GAME, -1800);
