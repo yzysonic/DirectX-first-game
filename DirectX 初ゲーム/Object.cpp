@@ -11,7 +11,6 @@
 // マクロ定義
 //*****************************************************************************
 
-
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -56,8 +55,6 @@ Vector3 Transform::getUp(void)
 void Transform::rotate(Vector3 angle)
 {
 	this->rotation += angle;
-	this->up.x = this->up.x * cosf(angle.z) - this->up.y * sinf(angle.z);
-	this->up.y = this->up.x * sinf(angle.z) - this->up.y * cosf(angle.z);
 	this->updateVector();
 }
 
@@ -66,25 +63,29 @@ void Transform::rotate(float x, float y, float z)
 	this->rotation.x += x;
 	this->rotation.y += y;
 	this->rotation.z += z;
+	if (rotation.x > 2 * PI)
+		rotation.x -= (int)(rotation.x / 2 / PI) * 2 * PI;
+	if (rotation.y > 2 * PI)
+		rotation.y -= (int)(rotation.y / 2 / PI) * 2 * PI;
+	if (rotation.z > 2 * PI)
+		rotation.z -= (int)(rotation.z / 2 / PI) * 2 * PI;
 	this->updateVector();
 }
 
-void Transform::lookAt(Vector3 const & target, float speed)
+void Transform::lookAt(Vector3 const & target)
 {
 	Vector3 dis = target - this->position;
 	float angle;
 
-	if (dis.x > 0)
-		angle = acosf(Vector3::Dot(Vector3(0, -1, 0), dis) / (dis.length()));
-	else
-		angle = PI + acosf(-Vector3::Dot(Vector3(0, -1, 0), dis) / (dis.length()));
+	angle = atan2f(dis.x, -dis.y);
 
-	this->rotation.z = Lerpf(this->rotation.z, angle, speed * Time::DeltaTime());
+	this->rotation.z = angle;
+
 }
 
-void Transform::lookAt(Transform * target, float speed)
+void Transform::lookAt(Transform * target)
 {
-	lookAt(target->position, speed);
+	lookAt(target->position);
 }
 
 void Transform::updateVector(void)

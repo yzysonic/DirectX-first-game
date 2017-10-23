@@ -8,6 +8,7 @@ public:
 
 	static Vector2 Lerp(Vector2 const& a, Vector2 const& b, float t);
 	static float Dot(Vector2 const& a, Vector2 const& b);
+	static float Cross(Vector2 const& a, Vector2 const& b);
 public:
 	float x;
 	float y;
@@ -44,6 +45,7 @@ public:
 
 	static Vector3 Lerp(Vector3 const& a, Vector3 const& b, float t);
 	static float Dot(Vector3 const& a, Vector3 const& b);
+	static Vector3 Cross(Vector3 const& a, Vector3 const& b);
 public:
 	float x;
 	float y;
@@ -71,4 +73,5 @@ public:
 	float length(void) const;
 	float sqrLength(void) const;
 	Vector3 normalized(void) const;
+	Vector2 toVector2(void) const;
 };

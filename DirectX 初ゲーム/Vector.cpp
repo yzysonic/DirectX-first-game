@@ -22,6 +22,11 @@ float Vector2::Dot(Vector2 const& a, Vector2 const& b)
 	return a.x * b.x + a.y * b.y;
 }
 
+float Vector2::Cross(Vector2 const & a, Vector2 const & b)
+{
+	return a.x * b.y - a.y * b.x;
+}
+
 Vector2 & Vector2::operator+=(const Vector2 v)
 {
 	this->x += v.x;
@@ -125,6 +130,11 @@ float Vector3::Dot(Vector3 const& a, Vector3 const& b)
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+Vector3 Vector3::Cross(Vector3 const & a, Vector3 const & b)
+{
+	return Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+
 Vector3 & Vector3::operator+=(const Vector3 v)
 {
 	this->x += v.x;
@@ -215,6 +225,11 @@ Vector3 Vector3::normalized(void) const
 {
 	float m = this->length();
 	return Vector3(this->x / m, this->y / m, this->z / m);
+}
+
+Vector2 Vector3::toVector2(void) const
+{
+	return Vector2(this->x, this->y);
 }
 
 Vector2 operator*(float f, const Vector2 & v)

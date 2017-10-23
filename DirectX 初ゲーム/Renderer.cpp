@@ -182,20 +182,20 @@ void Renderer::transformVertex(RectPolygon *poly)
 	Vector3 rot = poly->object->getTransform()->getRotation();
 	Vector3 radius = poly->radius * poly->object->getTransform()->scale;
 
-	poly->vertex[0].vtx.x = pos.x - cosf(poly->baseAngle + rot.z) * radius.x;
-	poly->vertex[0].vtx.y = pos.y - sinf(poly->baseAngle + rot.z) * radius.y;
+	poly->vertex[0].vtx.x = pos.x - cosf(poly->baseAngle - rot.z) * radius.x;
+	poly->vertex[0].vtx.y = pos.y + sinf(poly->baseAngle - rot.z) * radius.y;
 	poly->vertex[0].vtx.z = pos.z;
 
-	poly->vertex[1].vtx.x = pos.x + cosf(poly->baseAngle - rot.z) * radius.x;
-	poly->vertex[1].vtx.y = pos.y - sinf(poly->baseAngle - rot.z) * radius.y;
+	poly->vertex[1].vtx.x = pos.x + cosf(poly->baseAngle + rot.z) * radius.x;
+	poly->vertex[1].vtx.y = pos.y + sinf(poly->baseAngle + rot.z) * radius.y;
 	poly->vertex[1].vtx.z = pos.z;
 
-	poly->vertex[2].vtx.x = pos.x - cosf(poly->baseAngle - rot.z) * radius.x;
-	poly->vertex[2].vtx.y = pos.y + sinf(poly->baseAngle - rot.z) * radius.y;
+	poly->vertex[2].vtx.x = pos.x - cosf(poly->baseAngle + rot.z) * radius.x;
+	poly->vertex[2].vtx.y = pos.y - sinf(poly->baseAngle + rot.z) * radius.y;
 	poly->vertex[2].vtx.z = pos.z;
 
-	poly->vertex[3].vtx.x = pos.x + cosf(poly->baseAngle + rot.z) * radius.x;
-	poly->vertex[3].vtx.y = pos.y + sinf(poly->baseAngle + rot.z) * radius.y;
+	poly->vertex[3].vtx.x = pos.x + cosf(poly->baseAngle - rot.z) * radius.x;
+	poly->vertex[3].vtx.y = pos.y - sinf(poly->baseAngle - rot.z) * radius.y;
 	poly->vertex[3].vtx.z = pos.z;
 
 	if (poly->rendType == RendererType::Default)
@@ -228,10 +228,17 @@ void Renderer::transformVertex(RectPolygon *poly)
 	}
 
 	// ƒXƒNƒŠ[ƒ“•ÏŠ·
+	poly->vertex[0].vtx.y = -poly->vertex[0].vtx.y;
+	poly->vertex[1].vtx.y = -poly->vertex[1].vtx.y;
+	poly->vertex[2].vtx.y = -poly->vertex[2].vtx.y;
+	poly->vertex[3].vtx.y = -poly->vertex[3].vtx.y;
+
 	poly->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
 	poly->vertex[1].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
 	poly->vertex[2].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
 	poly->vertex[3].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
+
+	
 }
 
 //=============================================================================

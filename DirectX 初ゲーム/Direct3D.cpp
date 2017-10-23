@@ -170,7 +170,7 @@ bool Direct3D::SetWindowMode(bool windowMode)
 	// フルスクリーンモード
 	else
 	{
-		s_d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;						// バックバッファ
+		s_d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;						// バックバッファ
 		s_d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート
 		s_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;		// インターバル
 	}

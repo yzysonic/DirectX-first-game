@@ -3,6 +3,7 @@
 #include"Scene.h"
 #include "SmoothCamera.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class SceneTest : public Scene
 {
@@ -13,5 +14,7 @@ public:
 
 	SmoothCamera* camera = nullptr;
 	Player* player = nullptr;
+	Enemy* enemy = nullptr;
+
 	int testCount;
 };

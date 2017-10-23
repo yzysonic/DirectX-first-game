@@ -4,7 +4,7 @@
 #include <memory>
 
 #ifdef _DEBUG
-#define START_SCENE SceneName::GAME
+#define START_SCENE SceneName::TEST
 #else
 #define START_SCENE SceneName::TITLE
 #endif

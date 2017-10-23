@@ -8,6 +8,9 @@
 void SceneTest::init(void)
 {
 	this->player = new Player;
+	this->enemy = new Enemy;
+	enemy->target = this->player->getTransform();
+	enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
 
 	this->testCount = 0;
@@ -57,15 +60,6 @@ void SceneTest::update(void)
 	sprintf(GetDebugText(line++), "CameraZ: %5.1f", this->camera->getTransform()->position.z);
 	sprintf(GetDebugText(line++), "MouseX: %3f", GetMousePos().x);
 	sprintf(GetDebugText(line++), "MouseY: %3f", GetMousePos().y);
-	sprintf(GetDebugText(line++), "PADLx: %2.1f", GetPadLX());
-	sprintf(GetDebugText(line++), "PADLx: %2.1f", GetPadLY());
-	sprintf(GetDebugText(line++), "PADRx: %2.1f", GetPadRX());
-	sprintf(GetDebugText(line++), "PADRy: %2.1f", GetPadRY());
-	sprintf(GetDebugText(line++), "BUTTON: %d", IsButtonPressed(0, BUTTON_R1));
-	sprintf(GetDebugText(line++), "BUTTON: %d", IsButtonPressed(0, BUTTON_L2));
-	sprintf(GetDebugText(line++), "BUTTON: %d", IsButtonPressed(0, BUTTON_R2));
-	sprintf(GetDebugText(line++), "BUTTON: %d", IsButtonPressed(0, BUTTON_SHARE));
-	sprintf(GetDebugText(line++), "BUTTON: %d", IsButtonPressed(0, BUTTON_OPTIONS));
 
 }
 
@@ -73,6 +67,7 @@ void SceneTest::uninit(void)
 {
 	delete(this->camera);
 	delete(this->player);
+	delete(this->enemy);
 
 	Bullet::Clear();
 

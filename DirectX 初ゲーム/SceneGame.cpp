@@ -12,19 +12,19 @@ void SceneGame::init(void)
 	this->vignetting->setPolygon(Layer::MASK, TEX_VIGNETTING, RendererType::UI);
 
 	// スコアUI
-	this->scoreUI = new NumberUI(5, SCREEN_CENTER_X - 300, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_SCORE);
+	this->scoreUI = new NumberUI(5, SCREEN_CENTER_X - 300, SCREEN_CENTER_Y - 30, TEX_NUMBER, TEX_GAME_SCORE);
 	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
 	const int x_offset = 35;
-	this->timeUI[0] = new NumberUI(2, x_offset - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER, TEX_GAME_TIME);
-	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SCREEN_CENTER_X, 30 - SCREEN_CENTER_Y, TEX_NUMBER);
+	this->timeUI[0] = new NumberUI(2, x_offset - SCREEN_CENTER_X, SCREEN_CENTER_Y - 30, TEX_NUMBER, TEX_GAME_TIME);
+	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SCREEN_CENTER_X, SCREEN_CENTER_Y - 30, TEX_NUMBER);
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
 	this->liveUI = new Object;
 	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
-	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SCREEN_CENTER_X, 70 - SCREEN_CENTER_Y, 0.0f);
+	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SCREEN_CENTER_X, SCREEN_CENTER_Y - 70, 0.0f);
 
 	// プレイヤー
 	this->player = new Player;
@@ -176,11 +176,11 @@ void SceneGame::update_main(void)
 	}
 
 	// シーン遷移→ゲームオーバー
-	if (this->player->hp == 0)
-	{
-		GameManager::SetScene(SceneName::GAMEOVER);
-		return;
-	}
+	//if (this->player->hp == 0)
+	//{
+	//	GameManager::SetScene(SceneName::GAMEOVER);
+	//	return;
+	//}
 
 }
 

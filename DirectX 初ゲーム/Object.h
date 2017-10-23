@@ -33,8 +33,8 @@ public:
 	Vector3 getUp(void);
 	void rotate(Vector3 angle);
 	void rotate(float x, float y, float z);
-	void lookAt(Vector3 const& target, float speed = 60);
-	void lookAt(Transform *target, float speed = 60);
+	void lookAt(Vector3 const& target);
+	void lookAt(Transform *target);
 
 private:
 	Vector3 rotation;

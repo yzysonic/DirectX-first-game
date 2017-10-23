@@ -34,9 +34,9 @@ HRESULT Window::Init()
 		0,							//拡張スタイル（任意）
 		WINDOW_CLASS_NAME,			//クラス名
 		WINDOW_TITLE,				//ウィンドウ名（タイトル）
-		(s_bWindowMode ? (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU) : WS_POPUP),		//スタイル
-		(s_bWindowMode ? ((GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2) : 0),		//横方向の位置
-		(s_bWindowMode ? ((GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2) : 0),	//縦方向の位置
+		(WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU),		//スタイル
+		((GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2),		//横方向の位置
+		((GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2),	//縦方向の位置
 		SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,		//幅
 		SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	//高さ
 		NULL,						//親ウィンドウ
@@ -150,20 +150,20 @@ void Window::SetWindowMode(bool windowMode)
 
 	if (windowMode)
 	{
-		SetWindowLong(s_hWnd, GWL_STYLE, WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU);
+		//SetWindowLong(s_hWnd, GWL_STYLE, WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU);
 		SetWindowPos(s_hWnd, NULL,
 			(GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2,
 			(GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2,
 			0, 0,
 			SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 	}
-	else
-	{
-		SetWindowLong(s_hWnd, GWL_STYLE, WS_POPUP | WS_EX_TOPMOST);
-	}
+	//else
+	//{
+	//	SetWindowLong(s_hWnd, GWL_STYLE, WS_POPUP | WS_EX_TOPMOST);
+	//}
 
 
-	ShowWindow(s_hWnd, SW_SHOW);
+	//ShowWindow(s_hWnd, SW_SHOW);
 
 	s_bWindowMode = windowMode;
 }
