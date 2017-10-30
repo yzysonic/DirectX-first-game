@@ -126,6 +126,9 @@
     <ClCompile Include="Color.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalUpdate.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -162,9 +165,6 @@
       <Filter>Core\Main</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>Core\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
       <Filter>Core\Main</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
@@ -247,6 +247,15 @@
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalUpdate.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Core\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreBase.h">
+      <Filter>Core\Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

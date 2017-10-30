@@ -153,6 +153,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GlobalUpdate.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -188,10 +189,13 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="CoreBase.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GlobalUpdate.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Lerp.h" />
     <ClInclude Include="NumberUI.h" />
@@ -199,7 +203,6 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />

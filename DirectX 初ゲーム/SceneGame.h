@@ -1,6 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "main.h"
 #include "Core.h"
 #include "NumberUI.h"
 #include "SmoothCamera.h"

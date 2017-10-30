@@ -4,12 +4,9 @@
 // 作者：GP11A143 38 楊子毅
 //
 //=============================================================================
-#include "main.h"
-#include "Direct3D.h"
-#include "Window.h"
-#include "Input.h"
-#include "Sound.h"
-#include "Game.h"
+#include "CoreBase.h"
+#include "SceneTitle.h"
+#include "GlobalUpdate.h"
 
 
 //*****************************************************************************
@@ -28,7 +25,8 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 初期化
 	if (FAILED(InitSystem()))
 		return 1;
-	InitGame();
+	InitGame(new SceneTitle);
+	SetGlobalUpdate(&GlobalUpdate);
 
 	// ゲームループ
 	RunGame();

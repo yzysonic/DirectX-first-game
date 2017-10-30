@@ -1,6 +1,6 @@
 #include "SceneGameOver.h"
 #include "GameManager.h"
-
+#include "SceneTitle.h"
 
 void SceneGameOver::init(void)
 {
@@ -53,6 +53,6 @@ void SceneGameOver::update_state1(void)
 {
 	if (this->timer > 1.0f)
 	{
-		GameManager::SetScene(SceneName::TITLE);
+		GameManager::SetScene(new SceneTitle);
 	}
 }

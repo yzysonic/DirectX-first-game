@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// ファイル名：main.h
+// ファイル名：common.h
 // 作者：GP11A143 38 楊子毅
 //
 //=============================================================================
@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <d3dx9math.h>
 
-
 #define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
 #define WINDOW_TITLE		_T("DirectX 初ゲーム")	// ウインドウのキャプション名
 #define SCREEN_WIDTH		(1280)					// ウインドウの幅
@@ -22,7 +21,7 @@
 #define MAX_FPS				(60)					// 最大FPS
 #define ObjectMax			(30000)					// 最大オブジェクト数
 
-template<class T> 
+template<class T>
 void SafeDelete(T *&ptr)
 {
 	delete ptr;
@@ -32,7 +31,7 @@ void SafeDelete(T *&ptr)
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
-#define PI D3DX_PI
+#define PI ((FLOAT)  3.141592654f)
 
 // メモリリーク自動検出
 #ifdef _DEBUG

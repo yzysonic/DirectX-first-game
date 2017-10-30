@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.h"
+#include "Common.h"
 #include "Singleton.h"
 
 class Timer

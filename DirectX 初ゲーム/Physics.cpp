@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "main.h"
+#include "Common.h"
 #include "Object.h"
 #include "Time.h"
 

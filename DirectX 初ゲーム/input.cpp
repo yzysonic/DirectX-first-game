@@ -5,7 +5,7 @@
 //
 //=============================================================================
 #include "input.h"
-#include "main.h"
+#include "Common.h"
 #include "Window.h"
 
 #pragma comment (lib, "dinput8.lib")

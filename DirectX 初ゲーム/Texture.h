@@ -1,5 +1,4 @@
 #pragma once
-#include "main.h"
 #include "Direct3D.h"
 #include "Vector.h"
 

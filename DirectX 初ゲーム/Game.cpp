@@ -11,9 +11,10 @@
 
 // グローバル変数
 bool g_bRunGame = true;
+void(*g_pGlobalUpdate)(void) = [](void) {};
 
 // ゲーム初期化
-void InitGame(void)
+void InitGame(Scene* startScene)
 {
 	Time::Init();
 	InitTexture();
@@ -21,6 +22,7 @@ void InitGame(void)
 	Renderer::Create();
 	Physics::Create();
 	GameManager::Create();
+	GameManager::GetInstance()->LoadScene(startScene);
 }
 
 // ゲームループ
@@ -30,6 +32,7 @@ void RunGame(void)
 	{
 		Window::CheckMesg();
 		UpdateInput();
+		g_pGlobalUpdate();
 		GameManager::Update();
 		Physics::Update();
 		ObjectManager::Update();
@@ -59,4 +62,12 @@ bool EndGame(void)
 void StopGame(void)
 {
 	g_bRunGame = false;
+}
+
+void SetGlobalUpdate(void(*update)(void))
+{
+	if(update != nullptr)
+		g_pGlobalUpdate = update;
+	else
+		g_pGlobalUpdate = [](void) {};
 }

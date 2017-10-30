@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.h"
+#include "Common.h"
 #include "Texture.h"
 #include "Layer.h"
 #include "RendererType.h"

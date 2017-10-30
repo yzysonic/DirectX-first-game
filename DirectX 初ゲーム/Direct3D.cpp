@@ -5,7 +5,7 @@
 //
 //=============================================================================
 #include "Direct3D.h"
-#include "main.h"
+#include "Common.h"
 #include "Window.h"
 #include <DxErr.h>
 

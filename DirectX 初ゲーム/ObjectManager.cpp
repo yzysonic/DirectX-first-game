@@ -1,5 +1,5 @@
 #include "ObjectManager.h"
-#include "main.h"
+#include "Common.h"
 
 void ObjectManager::Create(void)
 {

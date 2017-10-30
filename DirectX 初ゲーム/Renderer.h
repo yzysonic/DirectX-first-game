@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.h"
+#include "Common.h"
 #include "Polygon.h"
 #include "Object.h"
 #include "Layer.h"

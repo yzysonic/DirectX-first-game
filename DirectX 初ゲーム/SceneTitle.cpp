@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GameManager.h"
 #include "Renderer.h"
+#include "SceneGuide.h"
 
 
 // ‰Šú‰»
@@ -118,7 +119,7 @@ void SceneTitle::update_fadeWait(void)
 		
 		case COM_START:
 			// ƒV[ƒ“‘JˆÚ
-			GameManager::SetScene(SceneName::GUIDE);
+			GameManager::SetScene(new SceneGuide);
 			break;
 
 		case COM_EXIT:

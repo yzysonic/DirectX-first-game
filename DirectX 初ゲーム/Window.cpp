@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "main.h"
+#include "Common.h"
 #include "Direct3D.h"
 #include "Game.h"
 

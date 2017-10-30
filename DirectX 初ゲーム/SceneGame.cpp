@@ -1,5 +1,6 @@
 #include "SceneGame.h"
 #include "GameManager.h"
+#include "SceneClear.h"
 
 
 /// public関数
@@ -76,7 +77,7 @@ void SceneGame::update(void)
 // 終了処理
 void SceneGame::uninit(void)
 {
-	GameManager::GetInstance()->score = this->score;
+	GameManager::GetInstance()->var<int>("score") = this->score;
 
 	StopSound(BGM_GAME);
 
@@ -171,7 +172,7 @@ void SceneGame::update_main(void)
 	// シーン遷移→クリアシーン
 	if (this->timer < 0)
 	{
-		GameManager::SetScene(SceneName::CLEAR);
+		GameManager::SetScene(new SceneClear);
 		return;
 	}
 
