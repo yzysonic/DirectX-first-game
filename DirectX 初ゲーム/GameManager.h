@@ -20,11 +20,13 @@ public:
 	static void Create(void);
 	static void Destroy(void);
 	static void Update(void);
+	static void SetGlobalScene(Scene* scene);
 	static void SetScene(Scene* scene);
-	static void LoadScene(Scene* scene);
 
 private:
-	std::unique_ptr<Scene> currentScene;
+	std::unique_ptr<Scene> scene[2];
+
+	static void SetScene(Scene* scene, int no);
 };
 
 template<typename T>

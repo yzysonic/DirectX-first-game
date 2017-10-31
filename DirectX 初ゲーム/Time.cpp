@@ -13,7 +13,7 @@ int		Time::s_fps;
 void Time::Init()
 {
 	timeBeginPeriod(1); // •ª‰ð”\‚ðÝ’è
-	s_pFrameTimer = new Timer(1.0f/MAX_FPS);
+	s_pFrameTimer = new Timer(1.0f/SystemParameters::FPS);
 	s_pFPSTimer = new Timer(1.0f);
 	s_FrameError = 0;
 	s_FrameCount = 0;
@@ -91,13 +91,13 @@ void Time::FramerateControl()
 	//	g_FrameError = 0;
 	
 	//g_FrameError = max(elapsed - g_pFrameTimer->interval, 0);
-	s_DeltaTime = min(elapsed / 1000.0f, (1.0f / MAX_FPS)*3);
+	s_DeltaTime = min(elapsed / 1000.0f, (1.0f / SystemParameters::FPS)*3);
 
 	s_pFrameTimer->reset();
 
 #ifdef _DEBUG
 	char s[256];
-	sprintf_s(s, "%s FPS:%d", WINDOW_TITLE, FPS());
+	sprintf_s(s, "%s FPS:%d", SystemParameters::windowTitle, FPS());
 	SetWindowText(Window::GetHWnd(), s);
 	//sprintf_s(s, "%d\n", elapsed);
 	//OutputDebugString(s);
@@ -122,7 +122,7 @@ void Time::FramerateControl()
 //	}
 //
 //	// fps‡‚í‚¹
-//	t1 = (DWORD)(1000.f / MAX_FPS*(g_FrameCount));
+//	t1 = (DWORD)(1000.f / SystemParameters::FPS*(g_FrameCount));
 //	sleep = t1 - min(t2, t1);
 //	if (sleep > 0)
 //	{

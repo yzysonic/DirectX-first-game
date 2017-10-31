@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "GameManager.h"
 #include "Input.h"
 #include "Sound.h"
 #include "Renderer.h"

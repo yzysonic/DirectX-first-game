@@ -233,10 +233,10 @@ void Renderer::transformVertex(RectPolygon *poly)
 	poly->vertex[2].vtx.y = -poly->vertex[2].vtx.y;
 	poly->vertex[3].vtx.y = -poly->vertex[3].vtx.y;
 
-	poly->vertex[0].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
-	poly->vertex[1].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
-	poly->vertex[2].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
-	poly->vertex[3].vtx += Vector3(SCREEN_CENTER_X + 0.0f, SCREEN_CENTER_Y + 0.0f, 0.0f);
+	poly->vertex[0].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
+	poly->vertex[1].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
+	poly->vertex[2].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
+	poly->vertex[3].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
 
 	
 }
@@ -257,7 +257,7 @@ void DrawDebug()
 	RECT rect;
 	for (int i = 0; i < 40; i++)
 	{
-		rect = { 0,i*20,SCREEN_WIDTH,SCREEN_HEIGHT };
+		rect = { 0,i * 20,SystemParameters::ResolutionX,SystemParameters::ResolutionY };
 		Direct3D::GetFont()->DrawText(NULL, g_DebugText[i], -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 	}
 }

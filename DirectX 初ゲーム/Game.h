@@ -1,7 +1,6 @@
 #pragma once
-#include "Scene.h"
 
-void InitGame(Scene* startScene);
+void InitGame(void);
 void RunGame(void);
 void UninitGame(void);
 bool EndGame(void);

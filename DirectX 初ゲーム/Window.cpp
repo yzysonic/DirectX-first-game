@@ -7,6 +7,7 @@ HINSTANCE Window::s_hInstance = NULL;
 HWND Window::s_hWnd = NULL;
 MSG  Window::s_Msg;
 bool Window::s_bWindowMode = true;
+char* Window::s_ClassName = "MainWindow";
 
 //=============================================================================
 // Windowsの初期化処理
@@ -14,6 +15,8 @@ bool Window::s_bWindowMode = true;
 HRESULT Window::Init()
 {
 	s_hInstance = GetModuleHandle(NULL);
+	int width = SystemParameters::ResolutionX;
+	int height = SystemParameters::ResolutionY;
 
 	// ウィンドウクラスを登録する
 	WNDCLASSEX	wcex = {};
@@ -22,7 +25,7 @@ HRESULT Window::Init()
 	wcex.style = CS_CLASSDC;
 	wcex.lpfnWndProc = WindowProc;
 	wcex.hInstance = s_hInstance;
-	wcex.lpszClassName = WINDOW_CLASS_NAME;
+	wcex.lpszClassName = s_ClassName;
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);
 
@@ -32,13 +35,13 @@ HRESULT Window::Init()
 	// ウィンドウオブジェクトを作成する.
 	s_hWnd = CreateWindowEx(
 		0,							//拡張スタイル（任意）
-		WINDOW_CLASS_NAME,			//クラス名
-		WINDOW_TITLE,				//ウィンドウ名（タイトル）
+		s_ClassName,			//クラス名
+		SystemParameters::windowTitle,				//ウィンドウ名（タイトル）
 		(WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU),		//スタイル
-		((GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2),		//横方向の位置
-		((GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2),	//縦方向の位置
-		SCREEN_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,		//幅
-		SCREEN_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	//高さ
+		((GetSystemMetrics(SM_CXSCREEN) - width) / 2),		//横方向の位置
+		((GetSystemMetrics(SM_CYSCREEN) - height) / 2),	//縦方向の位置
+		width + GetSystemMetrics(SM_CXDLGFRAME) * 2,		//幅
+		height + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	//高さ
 		NULL,						//親ウィンドウ
 		NULL,						//メニュー
 		s_hInstance,				//アプリケーションインスタンスのハンドル
@@ -68,7 +71,7 @@ void Window::Uninit()
 	s_hWnd = NULL;
 
 	// ウィンドウクラスの登録を解除
-	UnregisterClass(WINDOW_CLASS_NAME, s_hInstance);
+	UnregisterClass(s_ClassName, s_hInstance);
 	s_hInstance = NULL;
 }
 
@@ -152,8 +155,8 @@ void Window::SetWindowMode(bool windowMode)
 	{
 		//SetWindowLong(s_hWnd, GWL_STYLE, WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU);
 		SetWindowPos(s_hWnd, NULL,
-			(GetSystemMetrics(SM_CXSCREEN) - SCREEN_WIDTH) / 2,
-			(GetSystemMetrics(SM_CYSCREEN) - SCREEN_HEIGHT) / 2,
+			(GetSystemMetrics(SM_CXSCREEN) - SystemParameters::ResolutionX) / 2,
+			(GetSystemMetrics(SM_CYSCREEN) - SystemParameters::ResolutionY) / 2,
 			0, 0,
 			SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 	}

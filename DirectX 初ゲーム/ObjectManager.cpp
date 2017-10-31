@@ -5,7 +5,7 @@ void ObjectManager::Create(void)
 {
 	Singleton::Create();
 
-	m_pInstance->updateList.reserve(ObjectMax);
+	m_pInstance->updateList.reserve(SystemParameters::ObjectMax);
 
 }
 

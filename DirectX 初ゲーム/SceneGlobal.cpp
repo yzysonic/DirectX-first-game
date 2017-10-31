@@ -1,4 +1,5 @@
-#include "GlobalUpdate.h"
+#include "SceneGlobal.h"
+#include "Core.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneGameOver.h"
@@ -6,7 +7,12 @@
 #include "SceneTest.h"
 
 
-void GlobalUpdate(void)
+void SceneGlobal::init(void)
+{
+	FadeScreen::Create();
+}
+
+void SceneGlobal::update(void)
 {
 #ifdef _DEBUG
 	GameManager* gm = GameManager::GetInstance();
@@ -22,4 +28,9 @@ void GlobalUpdate(void)
 	if (GetKeyboardTrigger(DIK_0))
 		gm->SetScene(new SceneTest);
 #endif
+}
+
+void SceneGlobal::uninit(void)
+{
+	FadeScreen::Destroy();
 }

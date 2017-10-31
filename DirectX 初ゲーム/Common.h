@@ -12,14 +12,16 @@
 #include <stdio.h>
 #include <d3dx9math.h>
 
-#define WINDOW_CLASS_NAME	_T("MainClass")			// ウインドウのクラス名
-#define WINDOW_TITLE		_T("DirectX 初ゲーム")	// ウインドウのキャプション名
-#define SCREEN_WIDTH		(1280)					// ウインドウの幅
-#define SCREEN_HEIGHT		(720)					// ウインドウの高さ
-#define SCREEN_CENTER_X		(SCREEN_WIDTH / 2)		// ウインドウの中心Ｘ座標
-#define SCREEN_CENTER_Y		(SCREEN_HEIGHT / 2)		// ウインドウの中心Ｙ座標
-#define MAX_FPS				(60)					// 最大FPS
-#define ObjectMax			(30000)					// 最大オブジェクト数
+//システムのパラメータ
+//数値の変更に反映するのはシステム初期化するときのみ。
+struct SystemParameters
+{
+	static char* windowTitle;	// ウィンドウタイトル
+	static int ResolutionX;		// 画面の解像度X
+	static int ResolutionY;		// 画面の解像度Y
+	static int FPS;				// 最大FPS
+	static int SystemParameters::ObjectMax;		// 最大オブジェクト数
+};
 
 template<class T>
 void SafeDelete(T *&ptr)
@@ -33,7 +35,7 @@ void SafeDelete(T *&ptr)
 
 #define PI ((FLOAT)  3.141592654f)
 
-// メモリリーク自動検出
+// メモリリークの自動検出
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>

@@ -4,7 +4,7 @@ FadeScreen::FadeScreen(void)
 {
 	this->setPolygon(Layer::TOP, TEX_NONE, RendererType::UI);
 
-	this->polygon->setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->polygon->setSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
 	this->polygon->setOpacity(0.0f);
 
 	state = Stop;

@@ -6,7 +6,6 @@
 //=============================================================================
 #include "Direct3D.h"
 #include "Common.h"
-#include "Window.h"
 #include <DxErr.h>
 
 #pragma comment (lib, "d3d9.lib")
@@ -19,12 +18,13 @@ LPDIRECT3D9				Direct3D::s_pD3D = NULL;
 LPDIRECT3DDEVICE9		Direct3D::s_pDevice = NULL;
 LPD3DXFONT				Direct3D::s_pFont = NULL;
 D3DPRESENT_PARAMETERS	Direct3D::s_d3dpp = {};
+HWND					Direct3D::s_hWnd = NULL;
 
 
 //=============================================================================
 // グラフィックの初期化処理
 //=============================================================================
-HRESULT Direct3D::Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode)
+HRESULT Direct3D::Init(HWND hWnd, bool bWindowMode)
 {
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE d3ddm;
@@ -45,8 +45,8 @@ HRESULT Direct3D::Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindo
 	// デバイスのプレゼンテーションパラメータの設定
 	ZeroMemory(&d3dpp, sizeof(d3dpp));					// ワークをゼロクリア
 	d3dpp.BackBufferCount = 1;							// バックバッファの数
-	d3dpp.BackBufferWidth = screenWidth;				// ゲーム画面サイズ(幅)
-	d3dpp.BackBufferHeight = screenHeight;				// ゲーム画面サイズ(高さ)
+	d3dpp.BackBufferWidth = SystemParameters::ResolutionX;	// ゲーム画面サイズ(幅)
+	d3dpp.BackBufferHeight = SystemParameters::ResolutionY;	// ゲーム画面サイズ(高さ)
 	d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;			// バックバッファのフォーマットは現在設定されているものを使う
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;			// 映像信号に同期してフリップする
 	d3dpp.hDeviceWindow = hWnd;							// 使用するウィンド
@@ -90,6 +90,7 @@ HRESULT Direct3D::Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindo
 	}
 
 	s_d3dpp = d3dpp;
+	s_hWnd = hWnd;
 
 	D3DXCreateFont(s_pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &s_pFont);
@@ -123,9 +124,9 @@ bool Direct3D::ResetDevice()
 
 	if (FAILED(hr))
 	{
-		MessageBox(Window::GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+		MessageBox(s_hWnd, DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
 		hr = s_pDevice->TestCooperativeLevel();
-		MessageBox(Window::GetHWnd(), DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+		MessageBox(s_hWnd, DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
 		return false;
 	}
 

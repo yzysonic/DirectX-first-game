@@ -10,26 +10,29 @@
     <Filter Include="Core\Object">
       <UniqueIdentifier>{fae98817-9a3f-4bfb-90d4-b0e1710ae4b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Main">
-      <UniqueIdentifier>{44dfceed-49ad-4153-8dd8-9d49b7befe40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Script">
-      <UniqueIdentifier>{43191d23-f096-4291-8655-4f8b427463d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{effbbba1-fd5e-4c1c-b0a3-ebf572acb3c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Physics">
       <UniqueIdentifier>{18ba455b-7671-49d5-b817-eda05d1fd10a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\System">
+      <UniqueIdentifier>{3da9586d-57c9-4fc1-9314-548bca389026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Struct">
+      <UniqueIdentifier>{1a886ad4-09ee-46e3-a3fd-a7a23337b98a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{c61089de-93cc-4015-9915-a0f2debb4cdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Game">
+      <UniqueIdentifier>{0ef02e79-5c37-45b8-9938-335b8743a7be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{43191d23-f096-4291-8655-4f8b427463d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Input.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Direct3D.cpp">
       <Filter>Core\Graphics</Filter>
     </ClCompile>
@@ -51,29 +54,11 @@
     <ClCompile Include="SceneGame.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Core\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Core\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Core\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Core\Main</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Core</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SceneTest.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Lerp.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Core\Physics</Filter>
@@ -85,22 +70,19 @@
       <Filter>Core\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SceneTitle.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="PolygonElement.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="FadeScreen.cpp">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="NumberUI.cpp">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SceneGameOver.cpp">
       <Filter>Scene</Filter>
@@ -112,31 +94,56 @@
       <Filter>Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SmoothCamera.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Core\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>Core</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SceneGuide.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="System.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
     <ClCompile Include="Color.cpp">
+      <Filter>Core\Struct</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Core\Struct</Filter>
+    </ClCompile>
+    <ClCompile Include="Lerp.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalUpdate.cpp">
-      <Filter>Script</Filter>
+    <ClCompile Include="SceneGlobal.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeScreen.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Input.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Direct3D.h">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
@@ -161,29 +168,14 @@
     <ClInclude Include="SceneGame.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Core\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Core\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Core\Main</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="SceneTest.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Lerp.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Core\Physics</Filter>
@@ -191,35 +183,29 @@
     <ClInclude Include="Collider.h">
       <Filter>Core\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Rigidbody.h">
       <Filter>Core\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="SceneTitle.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="PolygonElement.h">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObjectType.h">
       <Filter>Core\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="FadeScreen.h">
-      <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="RendererType.h">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="NumberUI.h">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Script</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="SceneGameOver.h">
       <Filter>Scene</Filter>
@@ -234,28 +220,55 @@
       <Filter>Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="SmoothCamera.h">
-      <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Core\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Core</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="SceneGuide.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="System.h">
+      <Filter>Core\System</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalUpdate.h">
-      <Filter>Script</Filter>
+    <ClInclude Include="Window.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Core\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Core\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Lerp.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Core\Game</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
-      <Filter>Core\Main</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="CoreBase.h">
-      <Filter>Core\Main</Filter>
+    <ClInclude Include="SceneGlobal.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeScreen.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

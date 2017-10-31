@@ -361,8 +361,8 @@ HRESULT UpdateMouse()
 	GetCursorPos(&p);
 	GetWindowRect(Window::GetHWnd(), &rect);
 
-	mousePos.x = (float)p.x - rect.left - SCREEN_CENTER_X;
-	mousePos.y = (float)p.y - rect.top - SCREEN_CENTER_Y;
+	mousePos.x = (float)p.x - rect.left - SystemParameters::ResolutionX/2;
+	mousePos.y = (float)p.y - rect.top - SystemParameters::ResolutionY/2;
 	mousePos.z = 0.0f;
 
 

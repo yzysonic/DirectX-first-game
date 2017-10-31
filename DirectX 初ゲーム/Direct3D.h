@@ -11,7 +11,7 @@
 class Direct3D
 {
 public:
-	static HRESULT Init(HWND hWnd, int screenWidth, int screenHeight, bool bWindowMode);
+	static HRESULT Init(HWND hWnd, bool bWindowMode);
 	static void Uninit(void);
 	static LPDIRECT3DDEVICE9 GetDevice(void);
 	static bool ResetDevice(void);
@@ -19,9 +19,10 @@ public:
 	static bool SetWindowMode(bool windowMode);
 
 private:
-	static LPDIRECT3D9				s_pD3D;			// Direct3Dオブジェクト
+	static LPDIRECT3D9				s_pD3D;		// Direct3Dオブジェクト
 	static LPDIRECT3DDEVICE9		s_pDevice;	// Deviceオブジェクト(描画に必要)
 	static LPD3DXFONT				s_pFont;	// フォント
-	static D3DPRESENT_PARAMETERS	s_d3dpp;		// デバイスのプレゼンテーションパラメータ
+	static D3DPRESENT_PARAMETERS	s_d3dpp;	// デバイスのプレゼンテーションパラメータ
+	static HWND						s_hWnd;		// ウィンドウハンドル
 };
 

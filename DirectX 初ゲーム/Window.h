@@ -19,4 +19,5 @@ private:
 	static HWND	s_hWnd;
 	static MSG s_Msg;
 	static bool	s_bWindowMode;
+	static char* s_ClassName;
 };

@@ -1,35 +1,50 @@
 #include "GameManager.h"
-#include "Random.h"
 #include "FadeScreen.h"
 
 void GameManager::Create(void)
 {
 	Singleton<GameManager>::Create();
-	InitRandom();
-	FadeScreen::Create();
 }
 
 void GameManager::Update(void)
 {
-	m_pInstance->currentScene->update();
+	if(m_pInstance->scene[0] != nullptr)
+		m_pInstance->scene[0]->update();
+
+	if(m_pInstance->scene[1] != nullptr)
+		m_pInstance->scene[1]->update();
 }
+
+
 
 void GameManager::Destroy(void)
 {
-	m_pInstance->currentScene->uninit();
-	FadeScreen::Destroy();
+	if (m_pInstance->scene[1] != nullptr)
+		m_pInstance->scene[1]->uninit();
+
+	if (m_pInstance->scene[0] != nullptr)
+		m_pInstance->scene[0]->uninit();
+
 	Singleton<GameManager>::Destroy();
+}
+
+void GameManager::SetGlobalScene(Scene * scene)
+{
+	SetScene(scene, 0);
 }
 
 void GameManager::SetScene(Scene* scene)
 {
-	m_pInstance->currentScene->uninit();
-	LoadScene(scene);
+	SetScene(scene, 1);
 }
 
-void GameManager::LoadScene(Scene * scene)
+void GameManager::SetScene(Scene * scene, int no)
 {
-	m_pInstance->currentScene.reset(scene);
-	m_pInstance->currentScene->init();
+	if(m_pInstance->scene[no] != nullptr)
+		m_pInstance->scene[no]->uninit();
 
+	m_pInstance->scene[no].reset(scene);
+
+	if (scene != nullptr)
+		m_pInstance->scene[no]->init();
 }

@@ -3,26 +3,27 @@
 #include "Direct3D.h"
 #include "Input.h"
 #include "Time.h"
-#include "Texture.h"
 #include "ObjectManager.h"
 #include "Renderer.h"
 #include "Physics.h"
 #include "GameManager.h"
+#include "Random.h"
+#include "Texture.h"
 
 // グローバル変数
 bool g_bRunGame = true;
 void(*g_pGlobalUpdate)(void) = [](void) {};
 
 // ゲーム初期化
-void InitGame(Scene* startScene)
+void InitGame()
 {
 	Time::Init();
-	InitTexture();
 	ObjectManager::Create();
 	Renderer::Create();
 	Physics::Create();
 	GameManager::Create();
-	GameManager::GetInstance()->LoadScene(startScene);
+	InitRandom();
+	InitTexture();
 }
 
 // ゲームループ

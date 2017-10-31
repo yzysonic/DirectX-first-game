@@ -14,7 +14,7 @@ const int g_PoolSize[(int)Layer::MAX] =
 	10,			// BG00
 	10,			// BG01
 	10,			// BG02
-	ObjectMax,	// DEFAULT
+	SystemParameters::ObjectMax,	// DEFAULT
 	10,			// PLAYER
 	 1,			// MASK
 	30,			// UI00
