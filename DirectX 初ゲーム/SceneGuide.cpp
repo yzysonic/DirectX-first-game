@@ -1,5 +1,6 @@
 #include "SceneGuide.h"
-#include "GameManager.h"
+#include "SceneGame.h"
+#include "FadeScreen.h"
 
 void SceneGuide::init(void)
 {
@@ -25,7 +26,7 @@ void SceneGuide::update(void)
 	case 1:
 		if (FadeScreen::Finished())
 		{
-			GameManager::SetScene(SceneName::GAME);
+			GameManager::SetScene(new SceneGame);
 		}
 		break;
 	}

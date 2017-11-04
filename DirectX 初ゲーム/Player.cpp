@@ -37,11 +37,11 @@ void Player::update()
 	{
 		if (GetKeyboardPress(DIK_W))
 		{
-			controlVector += Vector3(0.0f, -1.0f, 0.0f);
+			controlVector += Vector3(0.0f, 1.0f, 0.0f);
 		}
 		if (GetKeyboardPress(DIK_S))
 		{
-			controlVector += Vector3(0.0f, 1.0f, 0.0f);
+			controlVector += Vector3(0.0f, -1.0f, 0.0f);
 		}
 		if (GetKeyboardPress(DIK_A))
 		{
@@ -59,7 +59,7 @@ void Player::update()
 	{
 		controlVector = controlVector.normalized();
 		this->dir = controlVector;
-		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) + PI / 2);
+		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) - PI / 2);
 	}
 
 	// ‰Á‘¬“ü—Í
@@ -86,11 +86,11 @@ void Player::update()
 	controlVector = Vector3(0.0f, 0.0f, 0.0f);
 	if (GetKeyboardPress(DIK_UP))
 	{
-		controlVector += Vector3(0.0f, -1.0f, 0.0f);
+		controlVector += Vector3(0.0f, 1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_DOWN))
 	{
-		controlVector += Vector3(0.0f, 1.0f, 0.0f);
+		controlVector += Vector3(0.0f, -1.0f, 0.0f);
 	}
 	if (GetKeyboardPress(DIK_LEFT))
 	{
@@ -108,7 +108,7 @@ void Player::update()
 	{
 		controlVector = controlVector.normalized();
 		this->dir = controlVector;
-		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) + PI / 2);
+		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) - PI / 2);
 	}
 
 	// ’e”­ŽË

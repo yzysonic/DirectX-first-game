@@ -18,16 +18,24 @@ void Enemy::update()
 
 	if (this->target)
 	{
-		Vector3 dir = (this->target->position - this->transform->position).normalized();
-		this->transform->position += dir * ENEMY_SPEED * Time::DeltaTime();
-		this->transform->lookAt(this->target);
+		// ターゲットとのベクトルを計算する
+		Vector3 dis = this->target->position - this->transform->position;
+		// 外積を計算する
+		float cross = asinf(Vector2::Cross(this->transform->getUp().toVector2(), dis.toVector2()) / dis.length() );
+		// 外積の結果により回転する方向を決める
+		this->transform->rotate(0, 0, 0.02f * ((cross > 0) ? 1 : -1));
 
+		// 自分の前方へ進む
+		this->transform->position += this->transform->getUp() * ENEMY_SPEED * Time::DeltaTime();
+
+		// 一定の時間に弾発射
 		if (this->timer > 0.5f)
 		{
-			new Bullet(this, 300 * Vector3(cosf(this->transform->getRotation().z - PI/2), sinf(this->transform->getRotation().z - PI / 2), 0));
-			this->timer = 0;
+			new Bullet(this, 300 * this->transform->getUp());
+			this->timer = 0; // タイマーのリセット
 		}
 
+		// タイマーの更新
 		this->timer += Time::DeltaTime();
 	}
 

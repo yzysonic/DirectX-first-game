@@ -1,7 +1,7 @@
 #pragma once
 
-#include"Scene.h"
-#include "Core.h"
+#include"Core/Scene.h"
+#include "Core/Core.h"
 #include "PolygonElement.h"
 
 // É}ÉNÉçíËã`

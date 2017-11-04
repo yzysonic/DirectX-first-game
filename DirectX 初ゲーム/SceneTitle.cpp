@@ -1,7 +1,7 @@
 #include "SceneTitle.h"
-#include "Game.h"
-#include "GameManager.h"
-#include "Renderer.h"
+#include "Core\Game.h"
+#include "SceneGuide.h"
+#include "FadeScreen.h"
 
 
 // 初期化
@@ -118,7 +118,7 @@ void SceneTitle::update_fadeWait(void)
 		
 		case COM_START:
 			// シーン遷移
-			GameManager::SetScene(SceneName::GUIDE);
+			GameManager::SetScene(new SceneGuide);
 			break;
 
 		case COM_EXIT:
@@ -161,7 +161,7 @@ void SceneTitle::update_createPoly(void)
 		// ロゴ表示
 		this->logo = new Object;
 		this->logo->setPolygon(Layer::UI_00, TEX_TITLE_LOGO, RendererType::UI);
-		this->logo->getTransform()->position = Vector3(0, 200 - SCREEN_CENTER_Y, 0);
+		this->logo->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f -200, 0);
 		this->timer = 0;
 		this->logo->getPolygon()->setOpacity(0);
 
@@ -191,13 +191,13 @@ void SceneTitle::update_showLogo(void)
 		// PRESS KEY 表示
 		this->presskey = new Object;
 		this->presskey->setPolygon(Layer::UI_00, TEX_TITLE_PRESSKEY, RendererType::UI);
-		this->presskey->getTransform()->position = Vector3(0, 475 - SCREEN_CENTER_Y, 0);
+		this->presskey->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f - 475, 0);
 
 		// 作者情報表示
 		this->info = new Object;
 		this->info->setPolygon(Layer::UI_02, TEX_TITLE_INFO, RendererType::UI);
-		this->info->getTransform()->position.x = SCREEN_CENTER_X - this->info->getPolygon()->pTexture->size.x / 2 - 30;
-		this->info->getTransform()->position.y = SCREEN_CENTER_Y - this->info->getPolygon()->pTexture->size.y - 10;
+		this->info->getTransform()->position.x = SystemParameters::ResolutionX/2 - this->info->getPolygon()->pTexture->size.x / 2 - 30;
+		this->info->getTransform()->position.y = -SystemParameters::ResolutionY/2 + this->info->getPolygon()->pTexture->size.y + 10;
 		this->info->getTransform()->position.z = 0;
 
 		this->logoState = Wait;
@@ -246,17 +246,17 @@ void SceneTitle::update_showMenu_A(void)
 		// メニュー表示
 		this->cursor = new Object;
 		this->cursor->setPolygon(Layer::UI_00, TEX_TITLE_CURSOR, RendererType::UI);
-		this->cursor->getTransform()->position = Vector3(-80, 415 - SCREEN_CENTER_Y, 0);
+		this->cursor->getTransform()->position = Vector3(-80, SystemParameters::ResolutionY/2.f - 415, 0);
 		this->cursor->getPolygon()->setOpacity(0);
 
 		this->start = new Object;
 		this->start->setPolygon(Layer::UI_00, TEX_TITLE_START, RendererType::UI);
-		this->start->getTransform()->position = Vector3(40, 415 - SCREEN_CENTER_Y, 0);
+		this->start->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 415, 0);
 		this->start->getPolygon()->setOpacity(0);
 
 		this->exit = new Object;
 		this->exit->setPolygon(Layer::UI_00, TEX_TITLE_EXIT, RendererType::UI);
-		this->exit->getTransform()->position = Vector3(40, 500 - SCREEN_CENTER_Y, 0);
+		this->exit->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 500, 0);
 		this->exit->getPolygon()->setOpacity(0);
 
 		this->cursorPos = 0;
@@ -299,7 +299,7 @@ void SceneTitle::update_menu(void)
 	{
 		if (this->cursorPos > 0)
 		{
-			this->cursor->getTransform()->position.y -= 85;
+			this->cursor->getTransform()->position.y += 85;
 			this->cursorPos--;
 		}
 	}
@@ -307,7 +307,7 @@ void SceneTitle::update_menu(void)
 	{
 		if (this->cursorPos < 1)
 		{
-			this->cursor->getTransform()->position.y += 85;
+			this->cursor->getTransform()->position.y -= 85;
 			this->cursorPos++;
 		}
 	}

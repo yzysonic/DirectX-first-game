@@ -1,7 +1,7 @@
 #include "SceneClear.h"
-#include "GameManager.h"
-#include "Core.h"
-#include "SceneGame.h"
+#include "Core/Core.h"
+#include "SceneTitle.h"
+#include "FadeScreen.h"
 
 
 void SceneClear::init(void)
@@ -11,7 +11,7 @@ void SceneClear::init(void)
 
 	this->score = new NumberUI(5, -120, 0, TEX_NUMBER, TEX_GAME_SCORE);
 	this->score->setOffset(130, 0);
-	this->score->setNumber(GameManager::GetInstance()->score);
+	this->score->setNumber(GameManager::GetInstance()->var<int>("score"));
 
 	this->timer = 0;
 
@@ -61,7 +61,7 @@ void SceneClear::update_clear_state1(void)
 {
 	if (this->timer > 1.0f)
 	{
-		GameManager::SetScene(SceneName::TITLE);
+		GameManager::SetScene(new SceneTitle);
 	}
 		
 }

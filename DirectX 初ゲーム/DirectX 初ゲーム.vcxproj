@@ -58,9 +58,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Directx9Debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Directx9Release32.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -71,16 +73,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\yang.tzui\Source\Repos\GameCore\Release\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\yang.tzui\Source\Repos\GameCore\Release\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -122,6 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,82 +151,87 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\GameCore\Camera.cpp" />
+    <ClCompile Include="..\..\GameCore\Collider.cpp" />
+    <ClCompile Include="..\..\GameCore\Color.cpp" />
+    <ClCompile Include="..\..\GameCore\Common.cpp" />
+    <ClCompile Include="..\..\GameCore\Direct3D.cpp" />
+    <ClCompile Include="..\..\GameCore\Game.cpp" />
+    <ClCompile Include="..\..\GameCore\GameManager.cpp" />
+    <ClCompile Include="..\..\GameCore\Input.cpp" />
+    <ClCompile Include="..\..\GameCore\Lerp.cpp" />
+    <ClCompile Include="..\..\GameCore\Object.cpp" />
+    <ClCompile Include="..\..\GameCore\ObjectManager.cpp" />
+    <ClCompile Include="..\..\GameCore\Physics.cpp" />
+    <ClCompile Include="..\..\GameCore\Polygon.cpp" />
+    <ClCompile Include="..\..\GameCore\Random.cpp" />
+    <ClCompile Include="..\..\GameCore\Renderer.cpp" />
+    <ClCompile Include="..\..\GameCore\Rigidbody.cpp" />
+    <ClCompile Include="..\..\GameCore\Sound.cpp" />
+    <ClCompile Include="..\..\GameCore\System.cpp" />
+    <ClCompile Include="..\..\GameCore\Texture.cpp" />
+    <ClCompile Include="..\..\GameCore\Time.cpp" />
+    <ClCompile Include="..\..\GameCore\Vector.cpp" />
+    <ClCompile Include="..\..\GameCore\Window.cpp" />
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Lerp.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Direct3D.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PolygonElement.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Rigidbody.cpp" />
     <ClCompile Include="SceneClear.cpp" />
     <ClCompile Include="SceneGame.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="SceneGameOver.cpp" />
+    <ClCompile Include="SceneGlobal.cpp" />
     <ClCompile Include="SceneGuide.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="SmoothCamera.cpp" />
-    <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\GameCore\Camera.h" />
+    <ClInclude Include="..\..\GameCore\Collider.h" />
+    <ClInclude Include="..\..\GameCore\Color.h" />
+    <ClInclude Include="..\..\GameCore\Common.h" />
+    <ClInclude Include="..\..\GameCore\Core.h" />
+    <ClInclude Include="..\..\GameCore\Direct3D.h" />
+    <ClInclude Include="..\..\GameCore\Game.h" />
+    <ClInclude Include="..\..\GameCore\GameManager.h" />
+    <ClInclude Include="..\..\GameCore\Input.h" />
+    <ClInclude Include="..\..\GameCore\Layer.h" />
+    <ClInclude Include="..\..\GameCore\Lerp.h" />
+    <ClInclude Include="..\..\GameCore\Object.h" />
+    <ClInclude Include="..\..\GameCore\ObjectManager.h" />
+    <ClInclude Include="..\..\GameCore\ObjectType.h" />
+    <ClInclude Include="..\..\GameCore\Physics.h" />
+    <ClInclude Include="..\..\GameCore\Polygon.h" />
+    <ClInclude Include="..\..\GameCore\Random.h" />
+    <ClInclude Include="..\..\GameCore\Renderer.h" />
+    <ClInclude Include="..\..\GameCore\RendererType.h" />
+    <ClInclude Include="..\..\GameCore\Rigidbody.h" />
+    <ClInclude Include="..\..\GameCore\Scene.h" />
+    <ClInclude Include="..\..\GameCore\Singleton.h" />
+    <ClInclude Include="..\..\GameCore\Sound.h" />
+    <ClInclude Include="..\..\GameCore\System.h" />
+    <ClInclude Include="..\..\GameCore\Texture.h" />
+    <ClInclude Include="..\..\GameCore\Time.h" />
+    <ClInclude Include="..\..\GameCore\Vector.h" />
+    <ClInclude Include="..\..\GameCore\Window.h" />
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collider.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Core.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Layer.h" />
-    <ClInclude Include="Lerp.h" />
     <ClInclude Include="NumberUI.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Direct3D.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="ObjectType.h" />
-    <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonElement.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="RendererType.h" />
-    <ClInclude Include="Rigidbody.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneClear.h" />
     <ClInclude Include="SceneGame.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="SceneGameOver.h" />
+    <ClInclude Include="SceneGlobal.h" />
     <ClInclude Include="SceneGuide.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
-    <ClInclude Include="Singleton.h" />
     <ClInclude Include="SmoothCamera.h" />
-    <ClInclude Include="Sound.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Time.h" />
-    <ClInclude Include="Vector.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
