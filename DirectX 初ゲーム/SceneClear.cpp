@@ -1,7 +1,7 @@
 #include "SceneClear.h"
-#include "GameManager.h"
-#include "Core.h"
+#include "Core/Core.h"
 #include "SceneTitle.h"
+#include "FadeScreen.h"
 
 
 void SceneClear::init(void)

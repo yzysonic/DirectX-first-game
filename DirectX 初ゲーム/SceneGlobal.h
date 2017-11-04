@@ -1,5 +1,5 @@
 #pragma once
-#include "Scene.h"
+#include "Core/Scene.h"
 
 class SceneGlobal : public Scene
 {

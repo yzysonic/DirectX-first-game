@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "FadeScreen.h"
 
 void GameManager::Create(void)
 {

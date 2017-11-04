@@ -1,6 +1,6 @@
 #include "SceneGameOver.h"
-#include "GameManager.h"
 #include "SceneTitle.h"
+#include "FadeScreen.h"
 
 void SceneGameOver::init(void)
 {

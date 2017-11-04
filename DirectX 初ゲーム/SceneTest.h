@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Scene.h"
+#include"Core/Scene.h"
 #include "SmoothCamera.h"
 #include "Player.h"
 #include "Enemy.h"

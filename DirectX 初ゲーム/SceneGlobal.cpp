@@ -1,10 +1,11 @@
 #include "SceneGlobal.h"
-#include "Core.h"
+#include "Core/Core.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneGameOver.h"
 #include "SceneClear.h"
 #include "SceneTest.h"
+#include "FadeScreen.h"
 
 
 void SceneGlobal::init(void)

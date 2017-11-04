@@ -4,9 +4,9 @@
 // çÏé“ÅFGP11A143 38 ókéqãB
 //
 //=============================================================================
-#include "System.h"
-#include "Game.h"
-#include "GameManager.h"
+#include "Core/System.h"
+#include "Core/Game.h"
+#include "Core/GameManager.h"
 #include "SceneGlobal.h"
 #include "SceneTitle.h"
 

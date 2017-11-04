@@ -1,6 +1,6 @@
 #include "SceneGame.h"
-#include "GameManager.h"
 #include "SceneClear.h"
+#include "FadeScreen.h"
 
 
 /// publicŠÖ”

@@ -1,8 +1,7 @@
 #include "SceneTitle.h"
-#include "Game.h"
-#include "GameManager.h"
-#include "Renderer.h"
+#include "Core\Game.h"
 #include "SceneGuide.h"
+#include "FadeScreen.h"
 
 
 // ‰Šú‰»

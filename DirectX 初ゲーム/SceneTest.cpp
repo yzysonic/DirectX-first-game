@@ -1,6 +1,6 @@
 #include "SceneTest.h"
 #include "Time.h"
-#include "Renderer.h"
+#include "Core/Renderer.h"
 
 #define testMax 2000
 #define ProjectMode 0

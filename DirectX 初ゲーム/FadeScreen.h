@@ -1,6 +1,6 @@
 #pragma once
-#include "Core.h"
-#include "Singleton.h"
+#include "Core/Core.h"
+#include "Core/Singleton.h"
 
 #define DEFAULT_FADE_TIME (0.3f)
 

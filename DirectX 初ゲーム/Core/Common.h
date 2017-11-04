@@ -10,7 +10,6 @@
 #include <tchar.h>
 #include <string.h>
 #include <stdio.h>
-#include <d3dx9math.h>
 
 //システムのパラメータ
 //数値の変更に反映するのはシステム初期化するときのみ。
@@ -36,8 +35,9 @@ void SafeDelete(T *&ptr)
 #define PI ((FLOAT)  3.141592654f)
 
 // メモリリークの自動検出
+
 #ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define _CRTDBG_MAP_ALLOC
+//#include <crtdbg.h>
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif

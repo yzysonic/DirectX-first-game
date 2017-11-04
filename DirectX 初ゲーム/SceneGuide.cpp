@@ -1,6 +1,6 @@
 #include "SceneGuide.h"
-#include "GameManager.h"
 #include "SceneGame.h"
+#include "FadeScreen.h"
 
 void SceneGuide::init(void)
 {

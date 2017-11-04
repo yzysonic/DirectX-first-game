@@ -233,10 +233,10 @@ void Renderer::transformVertex(RectPolygon *poly)
 	poly->vertex[2].vtx.y = -poly->vertex[2].vtx.y;
 	poly->vertex[3].vtx.y = -poly->vertex[3].vtx.y;
 
-	poly->vertex[0].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
-	poly->vertex[1].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
-	poly->vertex[2].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
-	poly->vertex[3].vtx += Vector3(SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2, 0.0f);
+	poly->vertex[0].vtx += Vector3(SystemParameters::ResolutionX/2.f, SystemParameters::ResolutionY/2.f, 0.0f);
+	poly->vertex[1].vtx += Vector3(SystemParameters::ResolutionX/2.f, SystemParameters::ResolutionY/2.f, 0.0f);
+	poly->vertex[2].vtx += Vector3(SystemParameters::ResolutionX/2.f, SystemParameters::ResolutionY/2.f, 0.0f);
+	poly->vertex[3].vtx += Vector3(SystemParameters::ResolutionX/2.f, SystemParameters::ResolutionY/2.f, 0.0f);
 
 	
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "Scene.h"
-#include "Core.h"
+#include "Core/Scene.h"
+#include "Core/Core.h"
 
 class SceneGuide : public Scene
 {
