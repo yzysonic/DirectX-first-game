@@ -1,5 +1,4 @@
 #include "SceneGlobal.h"
-#include "Core/Core.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneGameOver.h"
@@ -11,6 +10,7 @@
 void SceneGlobal::init(void)
 {
 	FadeScreen::Create();
+	this->control_type = kKeyboard | kMouse;
 }
 
 void SceneGlobal::update(void)

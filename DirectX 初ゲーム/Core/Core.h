@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "Time.h"
 #include "Random.h"
+#include "PerlinNoise.h"
 #include "Vector.h"
 #include "Color.h"
 #include "Lerp.h"

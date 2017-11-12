@@ -6,6 +6,7 @@ class PolygonElement : public Object
 public:
 	float targetOpacity;
 	Vector3 prePos;
+	Vector3 targetScale;
 	Color nextColor;
 
 	PolygonElement(void);

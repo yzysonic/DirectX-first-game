@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "SceneGlobal.h"
+#include "SceneGame.h"
 
 Player::Player()
 {
@@ -11,7 +13,7 @@ Player::Player()
 
 	this->hp = 3;
 	this->speed = 700.0f;
-	this->dir = Vector3(0, -1, 0);
+	this->boost = 1.0f;
 	this->timer = 0;
 	this->muteki = false;
 	this->autoAim = false;
@@ -20,121 +22,20 @@ Player::Player()
 
 void Player::update()
 {
-	// 自動照準
-	if (GetKeyboardTrigger(DIK_RSHIFT) || IsButtonTriggered(0, BUTTON_L1))
-		this->autoAim = !this->autoAim;
-	if (this->autoAim)
-	{
-		// TODO 自動照準
-	}
-
-	// 移動入力
-	Vector3 controlVector = Vector3(0.0f, 0.0f, 0.0f);
-
-	controlVector = Vector3(GetPadLX(), GetPadLY(), 0);
-
-	if (controlVector.sqrLength() < 0.01f)
-	{
-		if (GetKeyboardPress(DIK_W))
-		{
-			controlVector += Vector3(0.0f, 1.0f, 0.0f);
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			controlVector += Vector3(0.0f, -1.0f, 0.0f);
-		}
-		if (GetKeyboardPress(DIK_A))
-		{
-			controlVector += Vector3(-1.0f, 0.0f, 0.0f);
-		}
-		if (GetKeyboardPress(DIK_D))
-		{
-			controlVector += Vector3(1.0f, 0.0f, 0.0f);
-		}
-
-	}
-
-
-	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
-	{
-		controlVector = controlVector.normalized();
-		this->dir = controlVector;
-		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) - PI / 2);
-	}
-
-	// 加速入力
-	float boost = 1.0f;
-	//if (GetKeyboardPress(DIK_LSHIFT))
-	//	boost = 2.0f;
+	this->control = Vector3::zero;
 
 	// 移動処理
-	this->transform->position += controlVector * this->speed * boost * Time::DeltaTime();
+	this->move();
 
+	// 射撃処理
+	this->shoot();
 
-	// マウス照準の計算
-	//this->transform->lookAt(GetMousePos());
-
-	//if(GetMousePos().x > 0)
-	//	this->transform->rotation.z = acosf(D3DXVec3Dot(&Vector3(0,-1,0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
-	//else
-	//	this->transform->rotation.z = PI+acosf(-D3DXVec3Dot(&Vector3(0, -1, 0), &GetMousePos()) / (D3DXVec3Length(&GetMousePos())));
-
-	//D3DXVec3Normalize(&this->dir, &GetMousePos());
-	//this->transform->rotation.z = atan2f(GetMousePos().y, GetMousePos().x) + PI / 2;
-
-	// 弾発射
-	controlVector = Vector3(0.0f, 0.0f, 0.0f);
-	if (GetKeyboardPress(DIK_UP))
-	{
-		controlVector += Vector3(0.0f, 1.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_DOWN))
-	{
-		controlVector += Vector3(0.0f, -1.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_LEFT))
-	{
-		controlVector += Vector3(-1.0f, 0.0f, 0.0f);
-	}
-	if (GetKeyboardPress(DIK_RIGHT))
-	{
-		controlVector += Vector3(1.0f, 0.0f, 0.0f);
-	}
-
-	if (fabsf(GetPadRX()) > 0.1f || fabsf(GetPadRY() > 0.1f))
-		controlVector = Vector3(GetPadRX(), GetPadRY(), 0);
-
-	if ((controlVector.x != 0.0f) || controlVector.y != 0.0f)
-	{
-		controlVector = controlVector.normalized();
-		this->dir = controlVector;
-		this->transform->setRotation(0, 0, atan2f(controlVector.y, controlVector.x) - PI / 2);
-	}
-
-	// 弾発射
-	if (
-		GetKeyboardPress(DIK_UP)		|| 
-		GetKeyboardPress(DIK_DOWN)		|| 
-		GetKeyboardPress(DIK_LEFT)		|| 
-		GetKeyboardPress(DIK_RIGHT)		|| 
-		GetKeyboardPress(DIK_RSHIFT)	||
-		IsButtonPressed(0, BUTTON_R1)	||
-		fabsf(GetPadRX()) > 0.1f		||
-		fabsf(GetPadRY()) > 0.1f		||
-		IsMouseLeftPressed()
-		)
-	{
-		if(this->timer >= 0.13f)
-		{
-			new Bullet(this, 700.0f*this->dir + this->speed * boost * controlVector);
-			this->timer = 0;
-		}
-		this->timer += Time::DeltaTime();
-	}
+	// 向きの設定
+	if ((control.x != 0.0f) || control.y != 0.0f)
+		this->transform->setUp(control);
 
 	// 無敵状態の更新
 	this->update_muteki();
-
 }
 
 void Player::onCollision(Object * other)
@@ -145,6 +46,7 @@ void Player::onCollision(Object * other)
 		this->hp--;
 		this->muteki = true;
 		this->timer2 = 0;
+		((SceneGame*)GameManager::GetScene())->getCamera()->Shake();
 	}
 }
 
@@ -161,4 +63,76 @@ void Player::update_muteki()
 	}
 
 	this->timer2 += Time::DeltaTime();
+}
+
+void Player::move(void)
+{
+
+	// キーボード入力
+	if (GetKeyboardPress(DIK_W))
+		control += Vector3(0.0f, 1.0f, 0.0f);
+	if (GetKeyboardPress(DIK_S))
+		control += Vector3(0.0f, -1.0f, 0.0f);
+	if (GetKeyboardPress(DIK_A))
+		control += Vector3(-1.0f, 0.0f, 0.0f);
+	if (GetKeyboardPress(DIK_D))
+		control += Vector3(1.0f, 0.0f, 0.0f);
+
+	// パッド入力
+	control += Vector3(GetPadLX(), -GetPadLY(), 0);
+
+
+	// 加速入力
+	//if (GetKeyboardPress(DIK_LSHIFT))
+	//	boost = 2.0f;
+
+	// 移動処理
+	this->transform->position += control * this->speed * this->boost * Time::DeltaTime();
+
+}
+
+void Player::shoot(void)
+{
+	Vector3 shoot_control;
+
+	// キーボード入力
+	if (GetKeyboardPress(DIK_UP))
+		shoot_control += Vector3(0.0f, 1.0f, 0.0f);
+	if (GetKeyboardPress(DIK_DOWN))
+		shoot_control += Vector3(0.0f, -1.0f, 0.0f);
+	if (GetKeyboardPress(DIK_LEFT))
+		shoot_control += Vector3(-1.0f, 0.0f, 0.0f);
+	if (GetKeyboardPress(DIK_RIGHT))
+		shoot_control += Vector3(1.0f, 0.0f, 0.0f);
+
+	// パッド入力
+	if (fabsf(GetPadRX()) > 0.1f || fabsf(GetPadRY() > 0.1f))
+		shoot_control = Vector3(GetPadRX(), -GetPadRY(), 0);
+
+	// マウス入力
+	if (IsMouseLeftPressed())
+		shoot_control = GetMousePos();
+
+	// 自動照準
+	//if (GetKeyboardTrigger(DIK_RSHIFT) || IsButtonTriggered(0, BUTTON_L1))
+	//	this->autoAim = !this->autoAim;
+	//if (this->autoAim)
+	//{
+	//	// TODO 自動照準
+	//}
+
+	//弾発射
+	if ((shoot_control.x != 0.0f) || shoot_control.y != 0.0f)
+	{
+		shoot_control = shoot_control.normalized();
+
+		if (this->timer >= 0.13f)
+		{
+			new Bullet(this, 1.7f * this->speed * shoot_control);
+			this->timer = 0;
+		}
+		this->control = shoot_control;
+		this->timer += Time::DeltaTime();
+	}
+
 }

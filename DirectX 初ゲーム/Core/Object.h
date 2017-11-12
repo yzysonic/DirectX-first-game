@@ -9,6 +9,7 @@
 
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 
 //*****************************************************************************
@@ -18,6 +19,7 @@ class Object;
 class RectPolygon;
 class Rigidbody;
 class Collider;
+class Script;
 
 class Transform
 {
@@ -31,6 +33,7 @@ public:
 	void setRotation(Vector3 rotation);
 	void setRotation(float x, float y, float z);
 	Vector3 getUp(void);
+	void setUp(Vector3 up);
 	void rotate(Vector3 angle);
 	void rotate(float x, float y, float z);
 	void lookAt(Vector3 const& target);
@@ -45,6 +48,8 @@ private:
 
 class Object
 {
+	friend class ObjectManager;
+
 public:
 	ObjectType type;
 	int updateIndex;
@@ -64,6 +69,10 @@ public:
 	void			setRigidbody(void);
 	Collider*		getCollider(void);
 	void			setCollider(void);
+	template<class T>
+	Script*			getScript(void);
+	template<class T>
+	void			setScript(void);
 
 	void setActive(bool value);
 	bool getActive(void);
@@ -73,6 +82,7 @@ protected:
 	std::unique_ptr<RectPolygon> polygon;
 	std::unique_ptr<Rigidbody> rigidbody;
 	std::shared_ptr<Collider> collider;
+	std::unordered_map<size_t, std::unique_ptr<Script>> script;
 
 private:
 	bool isActive;

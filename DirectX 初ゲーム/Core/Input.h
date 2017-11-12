@@ -46,6 +46,12 @@
 #define BUTTON_PAD		0x00020000l	// PADボタン(.rgbButtons[13]&0x80)
 #define GAMEPADMAX		4			// 同時に接続するジョイパッドの最大数をセット
 
+enum ControlType
+{
+	kKeyboard = 0x01,
+	kMouse = 0x02,
+	kPad = 0x04
+};
 
 //*****************************************************************************
 // プロトタイプ宣言

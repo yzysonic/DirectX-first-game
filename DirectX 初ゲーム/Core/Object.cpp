@@ -3,6 +3,7 @@
 #include "Polygon.h"
 #include "Collider.h"
 #include "Rigidbody.h"
+#include "Script.h"
 #include "Physics.h"
 #include "Lerp.h"
 #include "Time.h"
@@ -52,6 +53,12 @@ Vector3 Transform::getUp(void)
 	return this->up;
 }
 
+void Transform::setUp(Vector3 up)
+{
+	this->up = up.normalized();
+	this->rotation.z = atan2f(up.y, up.x) - PI / 2;
+}
+
 void Transform::rotate(Vector3 angle)
 {
 	this->rotation += angle;
@@ -75,12 +82,9 @@ void Transform::rotate(float x, float y, float z)
 void Transform::lookAt(Vector3 const & target)
 {
 	Vector3 dis = target - this->position;
-	float angle;
 
-	angle = atan2f(dis.x, -dis.y);
-
-	this->rotation.z = angle;
-
+	this->rotation.z = atan2f(dis.y, dis.x) - PI / 2.0f;
+	this->updateVector();
 }
 
 void Transform::lookAt(Transform * target)
@@ -105,7 +109,6 @@ Object::Object()
 	this->updateIndex	= -1;
 	this->name			= "Object";
 	this->setActive(true);
-
 }
 
 Object::Object(Vector3 position, Vector3 rotation) : Object()
@@ -167,6 +170,19 @@ void Object::setCollider(void)
 	this->collider = std::make_shared<Collider>(this);
 	Physics::GetInstance()->addCollider(this->collider);
 }
+
+template<class T>
+Script * Object::getScript(void)
+{
+	return this->script[typeid(T).hash_code()].get();
+}
+
+template<class T>
+void Object::setScript(void)
+{
+	this->script[typeid(T).hash_code()].reset(new T);
+}
+
 
 void Object::setActive(bool value)
 {

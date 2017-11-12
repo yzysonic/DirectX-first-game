@@ -37,6 +37,11 @@ void GameManager::SetScene(Scene* scene)
 	SetScene(scene, 1);
 }
 
+Scene * GameManager::GetScene(void)
+{
+	return m_pInstance->scene[1].get();
+}
+
 void GameManager::SetScene(Scene * scene, int no)
 {
 	if(m_pInstance->scene[no] != nullptr)

@@ -1,5 +1,6 @@
 #include "SceneGame.h"
 #include "SceneClear.h"
+#include "SceneGameOver.h"
 #include "FadeScreen.h"
 
 
@@ -54,6 +55,7 @@ void SceneGame::init(void)
 		this->polyList[i]->getTransform()->position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
 		this->polyList[i]->getTransform()->position.z = Randomf(0.01f, 3);
 		this->polyList[i]->targetOpacity = 0.7f;
+		this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
 		this->polyCount++;
 	}
 
@@ -77,7 +79,7 @@ void SceneGame::update(void)
 // 終了処理
 void SceneGame::uninit(void)
 {
-	GameManager::GetInstance()->var<int>("score") = this->score;
+	GameManager::Var<int>("score") = this->score;
 
 	StopSound(BGM_GAME);
 
@@ -99,6 +101,11 @@ void SceneGame::uninit(void)
 	}
 
 	Bullet::Clear();
+}
+
+SmoothCamera * SceneGame::getCamera(void)
+{
+	return camera;
 }
 
 // スコアの取得
@@ -177,11 +184,11 @@ void SceneGame::update_main(void)
 	}
 
 	// シーン遷移→ゲームオーバー
-	//if (this->player->hp == 0)
-	//{
-	//	GameManager::SetScene(SceneName::GAMEOVER);
-	//	return;
-	//}
+	if (this->player->hp == 0)
+	{
+		GameManager::SetScene(new SceneGameOver);
+		return;
+	}
 
 }
 
@@ -204,7 +211,7 @@ void SceneGame::swapEnemy(void)
 				this->enemy[i] = new Enemy;
 
 				enemy->target = this->player->getTransform();
-				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_X-500), 0.0f);
+				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_Y-500), 0.0f);
 
 				break;
 			}

@@ -13,12 +13,15 @@ public:
 	void onCollision(Object* other) override;
 
 private:
-	Vector3 dir;
+	Vector3 control;
 	float speed;
+	float boost;
 	float timer;
 	float timer2;
 	bool muteki;
 	bool autoAim;
 
 	void update_muteki(void);
+	void move(void);
+	void shoot(void);
 };

@@ -1,5 +1,6 @@
 #include "ObjectManager.h"
 #include "Common.h"
+#include "Script.h"
 
 void ObjectManager::Create(void)
 {
@@ -27,6 +28,7 @@ void ObjectManager::Update(void)
 	{
 		m_pInstance->updateList[i]->update();
 	}
+
 }
 
 void ObjectManager::addUpdate(Object * obj)

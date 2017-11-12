@@ -362,7 +362,7 @@ HRESULT UpdateMouse()
 	GetWindowRect(Window::GetHWnd(), &rect);
 
 	mousePos.x = (float)p.x - rect.left - SystemParameters::ResolutionX/2;
-	mousePos.y = (float)p.y - rect.top - SystemParameters::ResolutionY/2;
+	mousePos.y = GetSystemMetrics(SM_CXDLGFRAME) + GetSystemMetrics(SM_CYCAPTION) - ((float)p.y - rect.top - SystemParameters::ResolutionY/2);
 	mousePos.z = 0.0f;
 
 

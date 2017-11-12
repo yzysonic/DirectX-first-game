@@ -149,6 +149,7 @@ void SceneTitle::update_createPoly(void)
 		for (int i = 0; i < 10; i++)
 		{
 			PolygonElement *poly = new PolygonElement;
+			poly->targetScale = Vector3(0.5f, 0.5f, 1.0f);
 			this->polyList[this->polyCount++] = poly;
 			if (this->polyCount == TitlePolyMax)
 				break;

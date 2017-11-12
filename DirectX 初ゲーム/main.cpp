@@ -19,10 +19,14 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 初期化
 	if (FAILED(InitSystem()))
 		return 1;
+
+	// マウスを隠す
+	//ShowCursor(false);
 	
 	// ゲーム初期化
 	InitGame();
-	GameManager::GetInstance()->SetGlobalScene(new SceneGlobal);
+	SceneGlobal::Create();
+	GameManager::GetInstance()->SetGlobalScene(SceneGlobal::GetInstance());
 	GameManager::GetInstance()->SetScene(new SceneTitle);
 
 	// ゲームループ

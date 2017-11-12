@@ -11,7 +11,7 @@
 #define FIELD_RANG_X (SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (SystemParameters::ResolutionY/2+500)
 #define ENEMY_MAX (5)
-#define GAME_POLY_MAX (1000)
+#define GAME_POLY_MAX (1500)
 
 class SceneGame : public Scene
 {
@@ -19,6 +19,7 @@ public:
 	void init(void) override;
 	void update(void) override;
 	void uninit(void) override;
+	SmoothCamera* getCamera(void);
 	int getGameScore(void);
 	void addGameScore(int score);
 
