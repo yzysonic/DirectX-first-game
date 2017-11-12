@@ -26,7 +26,7 @@ void SceneGame::init(void)
 	// 残機UI 
 	this->liveUI = new Object;
 	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
-	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70, 0.0f);
+	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
 	// プレイヤー
 	this->player = new Player;
@@ -53,7 +53,7 @@ void SceneGame::init(void)
 		this->polyList[i] = new PolygonElement;
 		this->polyList[i]->getTransform()->position.x = Randomf(-FIELD_RANG_X, FIELD_RANG_X);
 		this->polyList[i]->getTransform()->position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
-		this->polyList[i]->getTransform()->position.z = Randomf(0.01f, 3);
+		this->polyList[i]->getTransform()->position.z = Randomf(0.01f, 3.0f);
 		this->polyList[i]->targetOpacity = 0.7f;
 		this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
 		this->polyCount++;

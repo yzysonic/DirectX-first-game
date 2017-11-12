@@ -8,8 +8,8 @@
 #include "Bullet.h"
 #include "PolygonElement.h"
 
-#define FIELD_RANG_X (SystemParameters::ResolutionX/2+500)
-#define FIELD_RANG_Y (SystemParameters::ResolutionY/2+500)
+#define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
+#define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
 #define ENEMY_MAX (5)
 #define GAME_POLY_MAX (1500)
 
