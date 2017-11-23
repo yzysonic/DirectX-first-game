@@ -6,8 +6,8 @@ Enemy::Enemy()
 	this->type = ObjectType::Enemy;
 	this->setPolygon(Layer::DEFAULT, TEX_ENEMY);
 	this->setCollider();
-	this->collider->size.x -= 100;
-	this->collider->size.y -= 100;
+	this->collider->size.x -= 50;
+	this->collider->size.y -= 50;
 
 	this->hp = 3;
 	this->timer = 0;
@@ -46,5 +46,9 @@ void Enemy::onCollision(Object * other)
 	if (other->type == ObjectType::Bullet)
 	{
 		this->hp--;
+	}
+	if (other->type == ObjectType::Enemy)
+	{
+		this->transform->position += (this->transform->position - other->getTransform()->position).normalized();
 	}
 }

@@ -133,9 +133,6 @@ void Physics::testCollisions()
 			a = this->colliderList[i].lock();
 			b = this->colliderList[j].lock();
 
-			if (a->object->type == b->object->type)
-				continue;
-
 			posa = a->object->getTransform()->position + a->offset;
 			posb = b->object->getTransform()->position + b->offset;
 
