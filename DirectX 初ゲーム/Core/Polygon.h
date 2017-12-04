@@ -50,7 +50,35 @@ public:
 	float getOpacity(void);
 	void setOpacity(float value);
 	void setPattern(unsigned int pattern);
+	// void 
+	/*
+	void changeRendering();
+	void changeRendering{
+		switch( rendType )
+		{
+	case Default:
+				// 頂点座標の更新
+				m_pInstance->transformVertex(poly);
 
+				// 頂点フォーマットの設定
+				Direct3D::GetDevice()->SetFVF(FVF_VERTEX_2D);
+
+				// テクスチャの設定
+				Direct3D::GetDevice()->SetTexture(0, poly->pTexture->pDXTex);
+	case Add:
+				// 頂点座標の更新
+				m_pInstance->transformVertex(poly);
+
+				// 頂点フォーマットの設定
+				Direct3D::GetDevice()->SetFVF(FVF_VERTEX_2D);
+
+				// テクスチャの設定
+				Direct3D::GetDevice()->setBlendState(AddState);
+
+
+		}
+	}
+	*/
 protected:
 	Layer layer;							// 描画のレイヤー
 	Vector2 size;							// 表示するサイズ

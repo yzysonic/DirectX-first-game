@@ -47,8 +47,8 @@ void Enemy::onCollision(Object * other)
 	{
 		this->hp--;
 	}
-	if (other->type == ObjectType::Enemy)
-	{
-		this->transform->position += (this->transform->position - other->getTransform()->position).normalized();
-	}
+	//if (other->type == ObjectType::Enemy)
+	//{
+	//	this->transform->position += (this->transform->position - other->getTransform()->position).normalized()*2.0f;
+	//}
 }

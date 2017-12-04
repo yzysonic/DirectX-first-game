@@ -17,7 +17,9 @@ private:
 	float speed;
 	float boost;
 	float timer;
-	float timer2;
+	float timer_flash;
+	float timer_muteki;
+
 	bool muteki;
 	bool autoAim;
 

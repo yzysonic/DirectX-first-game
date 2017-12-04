@@ -45,24 +45,38 @@ void Player::onCollision(Object * other)
 		this->polygon->setOpacity(0.5f);
 		this->hp--;
 		this->muteki = true;
-		this->timer2 = 0;
+		this->timer_flash =
+		this->timer_muteki = 0;
 		((SceneGame*)GameManager::GetScene())->getCamera()->Shake();
 	}
 }
 
 void Player::update_muteki()
 {
+	static bool sw = false;
+
 	if (!this->muteki)
 		return;
 
-	if (this->timer2 > 1.5f)
+	if (this->timer_flash > (0.07f - 0.04f*(this->timer_muteki/1.5f)) )
+	{
+		if(sw)
+			this->polygon->setOpacity(1.0f);
+		else
+			this->polygon->setOpacity(0.3f);
+		sw = !sw;
+		this->timer_flash = 0.0f;
+	}
+
+	if (this->timer_muteki > 1.5f)
 	{
 		this->polygon->setOpacity(1.0f);
 		this->muteki = false;
 		return;
 	}
 
-	this->timer2 += Time::DeltaTime();
+	this->timer_flash += Time::DeltaTime();
+	this->timer_muteki += Time::DeltaTime();
 }
 
 void Player::move(void)

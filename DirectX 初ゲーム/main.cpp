@@ -10,11 +10,24 @@
 #include "SceneGlobal.h"
 #include "SceneTitle.h"
 
+// メモリリークの自動検出
+#ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
 //=============================================================================
 // メイン関数
 //=============================================================================
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+
+#ifdef _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // メモリリーク自動検出
+#endif
+
+	SystemParameters::windowTitle = "ヒットポリゴン";
 
 	// 初期化
 	if (FAILED(InitSystem()))

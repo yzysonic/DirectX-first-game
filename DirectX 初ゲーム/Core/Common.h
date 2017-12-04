@@ -33,11 +33,3 @@ void SafeDelete(T *&ptr)
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
 #define PI ((FLOAT)  3.141592654f)
-
-// ƒƒ‚ƒŠƒŠ[ƒN‚Ì©“®ŒŸo
-
-#ifdef _DEBUG
-//#define _CRTDBG_MAP_ALLOC
-//#include <crtdbg.h>
-//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#endif

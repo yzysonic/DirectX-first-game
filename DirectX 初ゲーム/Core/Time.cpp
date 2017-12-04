@@ -97,7 +97,7 @@ void Time::FramerateControl()
 
 #ifdef _DEBUG
 	char s[256];
-	sprintf_s(s, "%s FPS:%d", SystemParameters::windowTitle, FPS());
+	sprintf_s(s, "%s FPS:%d", SystemParameters::windowTitle, s_fps);
 	SetWindowText(Window::GetHWnd(), s);
 	//sprintf_s(s, "%d\n", elapsed);
 	//OutputDebugString(s);

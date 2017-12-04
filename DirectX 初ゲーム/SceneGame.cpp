@@ -183,7 +183,7 @@ void SceneGame::update_main(void)
 		return;
 	}
 
-	// シーン遷移→ゲームオーバー
+	 //シーン遷移→ゲームオーバー
 	if (this->player->hp == 0)
 	{
 		GameManager::SetScene(new SceneGameOver);
