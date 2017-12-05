@@ -4,7 +4,7 @@
 #include "Color.h"
 #include <D3d9types.h>
 
-class Camera : public Object
+class Camera : public ObjectBase
 {
 public:
 	Vector3 at;

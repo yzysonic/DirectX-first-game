@@ -4,7 +4,7 @@
 #include "Lerp.h"
 
 
-RectPolygon2D::RectPolygon2D(Object* object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType)
 {
 
 	this->object	= object;
@@ -171,8 +171,50 @@ void RectPolygon2D::transformVertex(void)
 
 }
 
-RectPolygon::RectPolygon(Object * object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon::RectPolygon(ObjectBase * object, Layer layer, TextureName texName, RendererType rendType)
 {
+	this->object = object;
+	this->layer = layer;
+	this->rendType = rendType;
+	this->pTexture = GetTexture(texName);
+	if (this->pTexture->pDXTex)
+		this->size = this->pTexture->size;
+	else
+		this->size = Vector2(100.f, 100.f);
+
+	// 頂点座標の設定(ローカル座標)
+	vertex[0].vtx = Vector3(-0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
+	vertex[1].vtx = Vector3(0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
+	vertex[2].vtx = Vector3(-0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
+	vertex[3].vtx = Vector3(0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
+
+	// 法線ベクトルの設定
+	vertex[0].nor =
+	vertex[1].nor =
+	vertex[2].nor =
+	vertex[3].nor = Vector3(0.0f, 0.0f, -1.0f);
+
+	// 反射光の設定
+	vertex[0].diffuse = 
+	vertex[1].diffuse = 
+	vertex[2].diffuse = 
+	vertex[3].diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// テクスチャ座標の設定
+	vertex[0].uv = Vector2(0.0f, 0.0f);
+	vertex[1].uv = Vector2(1.0f, 0.0f);
+	vertex[2].uv = Vector2(0.0f, 1.0f);
+	vertex[3].uv = Vector2(1.0f, 1.0f);
+
+	// オブジェクトの頂点バッファを生成
+	Direct3D::GetDevice()->CreateVertexBuffer(sizeof(Vertex3D) * RECT_NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
+		FVF_VERTEX_3D,				// 使用する頂点フォーマット
+		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
+		&this->pVtxBuff,			// 頂点バッファインターフェースへのポインタ
+		NULL);
+
+	setVtxBuff();
 
 }
 
@@ -201,6 +243,8 @@ void RectPolygon::draw(void)
 	// プロジェクションマトリクスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &Renderer::GetInstance()->getCamera()->getProjectionMatrix(false));
 
+	setVtxBuff();
+
 	// 頂点バッファをデバイスのデータストリームにバインド
 	pDevice->SetStreamSource(0, this->pVtxBuff, 0, sizeof(Vertex3D));
 	// 頂点フォーマットの設定
@@ -219,5 +263,18 @@ void RectPolygon::setColor(Color color)
 
 void RectPolygon::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
+
+}
+
+void RectPolygon::setVtxBuff(void)
+{
+	Vertex3D *pVtx;
+
+	// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	this->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	// 頂点情報をバッファへ転送
+	memcpy(pVtx, &vertex, sizeof(vertex));
+	// 頂点データをアンロックする
+	this->pVtxBuff->Unlock();
 
 }

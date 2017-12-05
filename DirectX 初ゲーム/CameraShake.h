@@ -2,7 +2,7 @@
 
 #include "Core\Core.h"
 
-class CameraShake : public Object
+class CameraShake : public ObjectBase
 {
 public:
 	float strength;	// U“®‚Ì‹­“xi‘å‚«‚¢‚Ù‚Ç•‚ªL‚­‚È‚éj

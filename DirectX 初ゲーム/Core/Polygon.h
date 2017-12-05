@@ -20,7 +20,7 @@
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-class Object;
+class ObjectBase;
 
 struct Vertex2D
 {
@@ -46,7 +46,7 @@ public:
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
 	
-	RectPolygon2D(Object* object, Layer layer, TextureName texName, RendererType rendType);
+	RectPolygon2D(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
@@ -65,13 +65,18 @@ class RectPolygon : public Drawable
 {
 public:
 	Vertex3D vertex[RECT_NUM_VERTEX];
-	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	Texture *pTexture;
 
-	RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType);
+	RectPolygon(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 
+protected:
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
+	Vector2 size;
+
+private:
+	void setVtxBuff(void);
 
 };

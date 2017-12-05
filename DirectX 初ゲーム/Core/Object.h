@@ -15,20 +15,21 @@
 //*****************************************************************************
 // ƒNƒ‰ƒX’è‹`
 //*****************************************************************************
-class Object;
+class ObjectBase;
+class RectPolygon;
 class RectPolygon2D;
-class Rigidbody;
+class Rigidbody2D;
 class Collider2D;
 class Script;
 
 class Transform
 {
 public:
-	Object *object;
+	ObjectBase *object;
 	Vector3 position;
 	Vector3 scale;
 
-	Transform(Object* object);
+	Transform(ObjectBase* object);
 	Vector3 getRotation(void);
 	void setRotation(Vector3 rotation);
 	void setRotation(float x, float y, float z);
@@ -46,7 +47,7 @@ private:
 	void updateVector(void);
 };
 
-class Object
+class ObjectBase
 {
 	friend class ObjectManager;
 
@@ -55,12 +56,11 @@ public:
 	int updateIndex;
 	std::string name;
 
-	Object(void);
-	Object(Vector3 position, Vector3 rotation);
-	~Object(void);
+	ObjectBase(void);
+	ObjectBase(Vector3 position, Vector3 rotation);
+	~ObjectBase(void);
 	
 	virtual void update(void) {};
-	virtual void onCollision(Object* other) {};
 
 	Transform*		getTransform(void);
 	template<class T>
@@ -79,22 +79,38 @@ private:
 	bool isActive;
 };
 
-class Object2D : public Object
+class Object : public ObjectBase
+{
+public:
+	Object(void);
+	Object(Vector3 position, Vector3 rotation);
+	~Object(void);
+	virtual void onCollision(Object* other) {};
+
+	RectPolygon*	getPolygon(void);
+	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Default);
+
+protected:
+	std::unique_ptr<RectPolygon> polygon;
+};
+
+class Object2D : public ObjectBase
 {
 public:
 	Object2D(void);
 	Object2D(Vector3 position, Vector3 rotation);
 	~Object2D(void);
+	virtual void onCollision(Object2D* other) {};
 
 	RectPolygon2D*	getPolygon(void);
 	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Classic2D);
-	Rigidbody*		getRigidbody(void);
+	Rigidbody2D*	getRigidbody(void);
 	void			setRigidbody(void);
 	Collider2D*		getCollider(void);
 	void			setCollider(void);
 
 protected:
 	std::unique_ptr<RectPolygon2D> polygon;
-	std::unique_ptr<Rigidbody> rigidbody;
+	std::unique_ptr<Rigidbody2D> rigidbody;
 	std::shared_ptr<Collider2D> collider;
 };

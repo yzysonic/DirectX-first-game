@@ -1,6 +1,6 @@
 #include "Script.h"
 #include "Object.h"
 
-Script::Script(Object& object) : object(object), transform(*object.getTransform())
+Script::Script(ObjectBase& object) : object(object), transform(*object.getTransform())
 {
 }

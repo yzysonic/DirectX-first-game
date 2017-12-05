@@ -15,6 +15,7 @@ public:
 	SmoothCamera* camera = nullptr;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
+	Object* test = nullptr;
 
 	int testCount;
 };

@@ -38,6 +38,7 @@ void SceneGame::init(void)
 	this->camera->setBackColor(210, 210, 210, 255);
 	this->camera->fov = 1;
 	Renderer::GetInstance()->setCamera(this->camera);
+	this->player->camera = this->camera;
 
 	// ƒQ[ƒ€‚ÅŽg‚¤•Ï”
 	this->score = 0;

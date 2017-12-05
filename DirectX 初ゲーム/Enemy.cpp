@@ -41,7 +41,7 @@ void Enemy::update()
 
 }
 
-void Enemy::onCollision(Object * other)
+void Enemy::onCollision(Object2D * other)
 {
 	if (other->type == ObjectType::Bullet)
 	{

@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector.h"
 
-class Object;
+class ObjectBase;
 
 struct RigidbodyConstraints
 {
@@ -10,10 +10,10 @@ struct RigidbodyConstraints
 	bool pos_z;
 };
 
-class Rigidbody
+class Rigidbody2D
 {
 public:
-	Object *object;
+	ObjectBase *object;
 	Vector3 position;
 	Vector3 rotation;
 	Vector3 velocity;
@@ -23,6 +23,6 @@ public:
 	int listIndex;
 	RigidbodyConstraints constraints;
 
-	Rigidbody(Object* object);
-	~Rigidbody(void);
+	Rigidbody2D(ObjectBase* object);
+	~Rigidbody2D(void);
 };

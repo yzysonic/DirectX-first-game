@@ -1,13 +1,13 @@
 #pragma once
 
-class Object;
+class ObjectBase;
 class Transform;
 
 class Script
 {
 public:
-	Object& object;
+	ObjectBase& object;
 	Transform& transform;
-	Script(Object& object);
+	Script(ObjectBase& object);
 	virtual void Update(void) {};
 };

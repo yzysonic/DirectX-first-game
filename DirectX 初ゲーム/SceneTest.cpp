@@ -12,6 +12,10 @@ void SceneTest::init(void)
 	enemy->target = this->player->getTransform();
 	enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
+	this->player->camera = this->camera;
+
+	this->test = new Object;
+	this->test->setPolygon();
 
 	this->testCount = 0;
 

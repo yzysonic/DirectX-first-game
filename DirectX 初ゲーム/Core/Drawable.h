@@ -8,12 +8,12 @@
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-class Object;
+class ObjectBase;
 
 class Drawable
 {
 public:
-	Object *object;			// 所有するオブジェクトへの参照
+	ObjectBase *object;			// 所有するオブジェクトへの参照
 	RendererType rendType;	// 描画方法指定
 	int list_index;			// 識別番号
 

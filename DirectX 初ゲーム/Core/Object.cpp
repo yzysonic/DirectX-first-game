@@ -17,7 +17,7 @@
 //*****************************************************************************
 
 
-Transform::Transform(Object* object)
+Transform::Transform(ObjectBase* object)
 {
 
 	this->object		= object;
@@ -100,7 +100,7 @@ void Transform::updateVector(void)
 
 
 
-Object::Object()
+ObjectBase::ObjectBase()
 {
 
 	this->transform		= std::make_unique<Transform>(this);
@@ -111,13 +111,13 @@ Object::Object()
 	this->setActive(true);
 }
 
-Object::Object(Vector3 position, Vector3 rotation) : Object()
+ObjectBase::ObjectBase(Vector3 position, Vector3 rotation) : ObjectBase()
 {
 	this->transform->position = position;
 	this->transform->setRotation(rotation);
 }
 
-Object::~Object()
+ObjectBase::~ObjectBase()
 {
 
 	this->setActive(false);
@@ -126,14 +126,71 @@ Object::~Object()
 }
 
 
-Transform * Object::getTransform(void)
+Transform * ObjectBase::getTransform(void)
 {
 	return this->transform.get();
 }
 
-Object2D::Object2D(void) : Object(){}
+template<class T>
+Script * ObjectBase::getScript(void)
+{
+	return this->script[typeid(T).hash_code()].get();
+}
 
-Object2D::Object2D(Vector3 position, Vector3 rotation) : Object(position, rotation){}
+template<class T>
+void ObjectBase::setScript(void)
+{
+	this->script[typeid(T).hash_code()].reset(new T);
+}
+
+
+void ObjectBase::setActive(bool value)
+{
+	ObjectManager* manager = ObjectManager::GetInstance();
+
+	if (this->isActive != value)
+	{
+		if (value)
+		{
+			manager->addUpdate(this);
+			this->isActive = true;
+		}
+		else
+		{
+			manager->removeUpdate(this);
+			this->isActive = false;
+		}
+	}
+}
+
+bool ObjectBase::getActive(void)
+{
+	return this->isActive;
+}
+
+Object::Object(void) : ObjectBase() {}
+
+Object::Object(Vector3 position, Vector3 rotation) : ObjectBase(position, rotation) {}
+
+Object::~Object(void)
+{
+	this->polygon.reset();
+}
+
+RectPolygon* Object::getPolygon(void)
+{
+	return this->polygon.get();
+}
+
+void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+{
+	this->polygon.reset();
+	this->polygon = std::make_unique<RectPolygon>(this, layer, texName, rendType);
+}
+
+Object2D::Object2D(void) : ObjectBase() {}
+
+Object2D::Object2D(Vector3 position, Vector3 rotation) : ObjectBase(position, rotation) {}
 
 Object2D::~Object2D(void)
 {
@@ -153,7 +210,7 @@ void Object2D::setPolygon(Layer layer, TextureName texName, RendererType rendTyp
 	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType);
 }
 
-Rigidbody * Object2D::getRigidbody(void)
+Rigidbody2D * Object2D::getRigidbody(void)
 {
 	return this->rigidbody.get();
 }
@@ -161,7 +218,7 @@ Rigidbody * Object2D::getRigidbody(void)
 void Object2D::setRigidbody(void)
 {
 	this->rigidbody.reset();
-	this->rigidbody = std::make_unique<Rigidbody>(this);
+	this->rigidbody = std::make_unique<Rigidbody2D>(this);
 	this->rigidbody->position = this->transform->position;
 	this->rigidbody->rotation = this->transform->getRotation();
 	Physics::GetInstance()->addRigidbody(this->rigidbody.get());
@@ -179,39 +236,3 @@ void Object2D::setCollider(void)
 	Physics::GetInstance()->addCollider(this->collider);
 }
 
-template<class T>
-Script * Object::getScript(void)
-{
-	return this->script[typeid(T).hash_code()].get();
-}
-
-template<class T>
-void Object::setScript(void)
-{
-	this->script[typeid(T).hash_code()].reset(new T);
-}
-
-
-void Object::setActive(bool value)
-{
-	ObjectManager* manager = ObjectManager::GetInstance();
-
-	if (this->isActive != value)
-	{
-		if (value)
-		{
-			manager->addUpdate(this);
-			this->isActive = true;
-		}
-		else
-		{
-			manager->removeUpdate(this);
-			this->isActive = false;
-		}
-	}
-}
-
-bool Object::getActive(void)
-{
-	return this->isActive;
-}

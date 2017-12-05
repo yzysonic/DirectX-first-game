@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "Physics.h"
 
-Rigidbody::Rigidbody(Object * object)
+Rigidbody2D::Rigidbody2D(ObjectBase * object)
 {
 
 	this->object = object;
@@ -19,7 +19,7 @@ Rigidbody::Rigidbody(Object * object)
 
 }
 
-Rigidbody::~Rigidbody()
+Rigidbody2D::~Rigidbody2D()
 {
 	Physics::GetInstance()->removeRigidbody(this);
 }

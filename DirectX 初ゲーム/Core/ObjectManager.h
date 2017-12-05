@@ -10,9 +10,9 @@ public:
 	static void Create(void);
 	static void Destroy(void);
 	static void Update(void);
-	void addUpdate(Object* obj);
-	void removeUpdate(Object* obj);
+	void addUpdate(ObjectBase* obj);
+	void removeUpdate(ObjectBase* obj);
 
 private:
-	std::vector<Object*> updateList;
+	std::vector<ObjectBase*> updateList;
 };

@@ -3,7 +3,7 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(Object * owner, Vector3 velocity) : Object2D(owner->getTransform()->position, owner->getTransform()->getRotation())
+Bullet::Bullet(ObjectBase * owner, Vector3 velocity) : Object2D(owner->getTransform()->position, owner->getTransform()->getRotation())
 {
 	this->setCollider();
 
@@ -48,7 +48,7 @@ void Bullet::update()
 		delete this;
 }
 
-void Bullet::onCollision(Object * other)
+void Bullet::onCollision(Object2D * other)
 {
 
 	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))

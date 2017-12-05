@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "SceneGlobal.h"
-#include "SceneGame.h"
 
 Player::Player()
 {
@@ -17,6 +16,8 @@ Player::Player()
 	this->timer = 0;
 	this->muteki = false;
 	this->autoAim = false;
+
+	this->camera = nullptr;
 
 }
 
@@ -38,7 +39,7 @@ void Player::update()
 	this->update_muteki();
 }
 
-void Player::onCollision(Object * other)
+void Player::onCollision(Object2D * other)
 {
 	if ((other->type == ObjectType::Enemy || other->type == ObjectType::Bullet_E) && !this->muteki)
 	{
@@ -47,7 +48,8 @@ void Player::onCollision(Object * other)
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		((SceneGame*)GameManager::GetScene())->getCamera()->Shake();
+		if (this->camera)
+			camera->Shake();
 	}
 }
 

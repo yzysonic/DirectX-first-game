@@ -50,13 +50,13 @@ void Physics::removeCollider(Collider2D * collider)
 
 }
 
-void Physics::addRigidbody(Rigidbody* rigidbody)
+void Physics::addRigidbody(Rigidbody2D* rigidbody)
 {
 	this->rigidbodyList.push_back(rigidbody);
 	rigidbody->listIndex = this->rigidbodyList.size() - 1;
 }
 
-void Physics::removeRigidbody(Rigidbody * rigidbody)
+void Physics::removeRigidbody(Rigidbody2D * rigidbody)
 {
 
 	size_t index = rigidbody->listIndex;

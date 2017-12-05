@@ -31,13 +31,13 @@ void ObjectManager::Update(void)
 
 }
 
-void ObjectManager::addUpdate(Object * obj)
+void ObjectManager::addUpdate(ObjectBase * obj)
 {
 	obj->updateIndex = this->updateList.size();
 	this->updateList.push_back(obj);
 }
 
-void ObjectManager::removeUpdate(Object * obj)
+void ObjectManager::removeUpdate(ObjectBase * obj)
 {
 	int index = obj->updateIndex;
 

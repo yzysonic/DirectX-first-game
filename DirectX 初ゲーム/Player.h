@@ -1,7 +1,8 @@
 #pragma once
 
-#include"Core/Core.h"
+#include "Core/Core.h"
 #include "Bullet.h"
+#include "SmoothCamera.h"
 
 
 class Player : public Object2D
@@ -10,7 +11,8 @@ public:
 	int hp;
 	Player(void);
 	void update(void) override;
-	void onCollision(Object* other) override;
+	void onCollision(Object2D* other) override;
+	SmoothCamera* camera;
 
 private:
 	Vector3 control;

@@ -12,5 +12,5 @@ public:
 
 	Enemy(void);
 	void update(void) override;
-	void onCollision(Object* other) override;
+	void onCollision(Object2D* other) override;
 };
