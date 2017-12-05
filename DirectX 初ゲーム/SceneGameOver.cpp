@@ -5,7 +5,7 @@
 void SceneGameOver::init(void)
 {
 	this->bk = new Object2D;
-	this->bk->setPolygon(Layer::BG_00, TEX_GAME_OVER, RendererType::UI);
+	this->bk->setPolygon(Layer::BG_00, Texture::Get("game_over"), RendererType::UI);
 	this->timer = 0;
 
 	// BGM‚ğÄ¶

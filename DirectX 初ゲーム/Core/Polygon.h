@@ -46,7 +46,7 @@ public:
 	float radius;							// í∏ì_åvéZópîºåa
 	float baseAngle;						// í∏ì_åvéZópäpìx
 	
-	RectPolygon2D(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType);
+	RectPolygon2D(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
@@ -67,7 +67,7 @@ public:
 	Vertex3D vertex[RECT_NUM_VERTEX];
 	Texture *pTexture;
 
-	RectPolygon(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType);
+	RectPolygon(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;

@@ -4,7 +4,7 @@
 Enemy::Enemy()
 {
 	this->type = ObjectType::Enemy;
-	this->setPolygon(Layer::DEFAULT, TEX_ENEMY);
+	this->setPolygon(Layer::DEFAULT, Texture::Get("enemy"));
 	this->setCollider();
 	this->collider->size.x -= 50;
 	this->collider->size.y -= 50;

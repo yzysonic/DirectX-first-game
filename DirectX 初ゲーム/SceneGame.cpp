@@ -11,22 +11,22 @@ void SceneGame::init(void)
 {
 	// 口径食効果
 	this->vignetting = new Object2D;
-	this->vignetting->setPolygon(Layer::MASK, TEX_VIGNETTING, RendererType::UI);
+	this->vignetting->setPolygon(Layer::MASK, Texture::Get("vignetting"), RendererType::UI);
 
 	// スコアUI
-	this->scoreUI = new NumberUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER, TEX_GAME_SCORE);
+	this->scoreUI = new NumberUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_score"));
 	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
 	const int x_offset = 35;
-	this->timeUI[0] = new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER, TEX_GAME_TIME);
-	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER);
+	this->timeUI[0] = new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_time"));
+	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"));
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
 	this->liveUI = new Object2D;
-	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
-	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
+	this->liveUI->setPolygon(Layer::UI_00, Texture::Get("lives"), RendererType::UI);
+	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + Texture::Get("lives")->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
 	// プレイヤー
 	this->player = new Player;

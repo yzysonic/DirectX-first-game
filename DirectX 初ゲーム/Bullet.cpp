@@ -14,14 +14,14 @@ Bullet::Bullet(ObjectBase * owner, Vector3 velocity) : Object2D(owner->getTransf
 	if (owner->type == ObjectType::Player)
 	{
 		this->type = ObjectType::Bullet;
-		this->setPolygon(Layer::DEFAULT, TEX_BULLET);
+		this->setPolygon(Layer::DEFAULT, Texture::Get("bullet"));
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
 	}
 	else
 	{
 		this->type = ObjectType::Bullet_E;
-		this->setPolygon(Layer::DEFAULT, TEX_BULLET_E);
+		this->setPolygon(Layer::DEFAULT, Texture::Get("bullet_e"));
 		this->collider->size *= 0.5f;
 	}
 

@@ -182,7 +182,7 @@ RectPolygon* Object::getPolygon(void)
 	return this->polygon.get();
 }
 
-void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+void Object::setPolygon(Layer layer, Texture* texName, RendererType rendType)
 {
 	this->polygon.reset();
 	this->polygon = std::make_unique<RectPolygon>(this, layer, texName, rendType);
@@ -204,7 +204,7 @@ RectPolygon2D * Object2D::getPolygon(void)
 	return this->polygon.get();
 }
 
-void Object2D::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+void Object2D::setPolygon(Layer layer, Texture* texName, RendererType rendType)
 {
 	this->polygon.reset();
 	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType);

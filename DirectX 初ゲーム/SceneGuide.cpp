@@ -5,7 +5,7 @@
 void SceneGuide::init(void)
 {
 	this->bk = new Object2D;
-	this->bk->setPolygon(Layer::BG_00, TEX_GUIDE, RendererType::UI);
+	this->bk->setPolygon(Layer::BG_00, Texture::Get("guide"), RendererType::UI);
 	this->state = 0;
 	this->timer = 0;
 	

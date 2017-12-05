@@ -14,7 +14,7 @@ void SceneTitle::init(void)
 	this->com = COM_WAIT;
 
 	this->vignetting = new Object2D;
-	this->vignetting->setPolygon(Layer::UI_02, TEX_VIGNETTING, RendererType::UI);
+	this->vignetting->setPolygon(Layer::UI_02, Texture::Get("vignetting"), RendererType::UI);
 
 	// アニメーション状態初期化
 	this->logoState =
@@ -161,7 +161,7 @@ void SceneTitle::update_createPoly(void)
 	{
 		// ロゴ表示
 		this->logo = new Object2D;
-		this->logo->setPolygon(Layer::UI_00, TEX_TITLE_LOGO, RendererType::UI);
+		this->logo->setPolygon(Layer::UI_00, Texture::Get("title_logo"), RendererType::UI);
 		this->logo->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f -200, 0);
 		this->timer = 0;
 		this->logo->getPolygon()->setOpacity(0);
@@ -191,12 +191,12 @@ void SceneTitle::update_showLogo(void)
 
 		// PRESS KEY 表示
 		this->presskey = new Object2D;
-		this->presskey->setPolygon(Layer::UI_00, TEX_TITLE_PRESSKEY, RendererType::UI);
+		this->presskey->setPolygon(Layer::UI_00, Texture::Get("title_presskey"), RendererType::UI);
 		this->presskey->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f - 475, 0);
 
 		// 作者情報表示
 		this->info = new Object2D;
-		this->info->setPolygon(Layer::UI_02, TEX_TITLE_INFO, RendererType::UI);
+		this->info->setPolygon(Layer::UI_02, Texture::Get("title_info"), RendererType::UI);
 		this->info->getTransform()->position.x = SystemParameters::ResolutionX/2 - this->info->getPolygon()->pTexture->size.x / 2 - 30;
 		this->info->getTransform()->position.y = -SystemParameters::ResolutionY/2 + this->info->getPolygon()->pTexture->size.y + 10;
 		this->info->getTransform()->position.z = 0;
@@ -246,17 +246,17 @@ void SceneTitle::update_showMenu_A(void)
 	{
 		// メニュー表示
 		this->cursor = new Object2D;
-		this->cursor->setPolygon(Layer::UI_00, TEX_TITLE_CURSOR, RendererType::UI);
+		this->cursor->setPolygon(Layer::UI_00, Texture::Get("title_cursor"), RendererType::UI);
 		this->cursor->getTransform()->position = Vector3(-80, SystemParameters::ResolutionY/2.f - 415, 0);
 		this->cursor->getPolygon()->setOpacity(0);
 
 		this->start = new Object2D;
-		this->start->setPolygon(Layer::UI_00, TEX_TITLE_START, RendererType::UI);
+		this->start->setPolygon(Layer::UI_00, Texture::Get("title_start"), RendererType::UI);
 		this->start->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 415, 0);
 		this->start->getPolygon()->setOpacity(0);
 
 		this->exit = new Object2D;
-		this->exit->setPolygon(Layer::UI_00, TEX_TITLE_EXIT, RendererType::UI);
+		this->exit->setPolygon(Layer::UI_00, Texture::Get("title_exit"), RendererType::UI);
 		this->exit->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 500, 0);
 		this->exit->getPolygon()->setOpacity(0);
 

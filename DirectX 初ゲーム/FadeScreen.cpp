@@ -2,7 +2,7 @@
 
 FadeScreen::FadeScreen(void)
 {
-	this->setPolygon(Layer::TOP, TEX_NONE, RendererType::UI);
+	this->setPolygon(Layer::TOP, Texture::none, RendererType::UI);
 
 	this->polygon->setSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
 	this->polygon->setOpacity(0.0f);

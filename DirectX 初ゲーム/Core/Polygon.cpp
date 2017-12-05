@@ -4,17 +4,14 @@
 #include "Lerp.h"
 
 
-RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, RendererType rendType)
 {
 
 	this->object	= object;
 	this->layer		= layer;
 	this->rendType	= rendType;
-	this->pTexture	= GetTexture(texName);
-	if(this->pTexture->pDXTex)
-		this->size	= this->pTexture->size;
-	else
-		this->size	= Vector2(100.f, 100.f);
+	this->pTexture	= texture;
+	this->size	= this->pTexture->size;
 
 	this->radius = this->size.length()/2;
 	this->baseAngle = atan2f(this->size.y, this->size.x);
@@ -171,12 +168,12 @@ void RectPolygon2D::transformVertex(void)
 
 }
 
-RectPolygon::RectPolygon(ObjectBase * object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon::RectPolygon(ObjectBase * object, Layer layer, Texture* texture, RendererType rendType)
 {
 	this->object = object;
 	this->layer = layer;
 	this->rendType = rendType;
-	this->pTexture = GetTexture(texName);
+	this->pTexture = texture;
 	if (this->pTexture->pDXTex)
 		this->size = this->pTexture->size;
 	else

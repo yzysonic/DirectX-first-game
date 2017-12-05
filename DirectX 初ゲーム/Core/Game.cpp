@@ -23,7 +23,7 @@ void InitGame()
 	Physics::Create();
 	GameManager::Create();
 	InitRandom();
-	InitTexture();
+	Texture::Init();
 }
 
 // ゲームループ
@@ -45,11 +45,11 @@ void RunGame(void)
 // ゲーム終了処理
 void UninitGame(void)
 {
+	Texture::Uninit();
 	GameManager::Destroy();
 	Physics::Destroy();
 	Renderer::Destroy();
 	ObjectManager::Destroy();
-	UninitTexture();
 	Time::Uninit();
 }
 

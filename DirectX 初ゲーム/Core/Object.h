@@ -88,7 +88,7 @@ public:
 	virtual void onCollision(Object* other) {};
 
 	RectPolygon*	getPolygon(void);
-	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Default);
+	void			setPolygon(Layer layer = Layer::DEFAULT, Texture* texName = Texture::none, RendererType rendType = RendererType::Default);
 
 protected:
 	std::unique_ptr<RectPolygon> polygon;
@@ -103,7 +103,7 @@ public:
 	virtual void onCollision(Object2D* other) {};
 
 	RectPolygon2D*	getPolygon(void);
-	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Classic2D);
+	void			setPolygon(Layer layer = Layer::DEFAULT, Texture* texName = Texture::none, RendererType rendType = RendererType::Classic2D);
 	Rigidbody2D*	getRigidbody(void);
 	void			setRigidbody(void);
 	Collider2D*		getCollider(void);

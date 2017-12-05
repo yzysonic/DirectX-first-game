@@ -1,14 +1,14 @@
 #include "NumberUI.h"
 
-NumberUI::NumberUI(int digits, int x, int y, TextureName texture_digit, TextureName texture_title)
+NumberUI::NumberUI(int digits, int x, int y, Texture* texture_digit, Texture* texture_title)
 {
 	this->type = ObjectType::NumberUI;
 	this->transform->position = Vector3((float)x, (float)y, 0.0f);
 
-	if (texture_title != TEX_NONE)
+	if (texture_title != Texture::none)
 	{
 		this->setPolygon(Layer::UI_00, texture_title, RendererType::UI);
-		this->transform->position.x += GetTexture(texture_title)->size.x / 2;
+		this->transform->position.x += texture_title->size.x / 2;
 	}
 
 	this->digitNum = digits;
@@ -20,7 +20,7 @@ NumberUI::NumberUI(int digits, int x, int y, TextureName texture_digit, TextureN
 		
 		digit->setPolygon(Layer::UI_00, texture_digit, RendererType::UI);
 		digit->getTransform()->position.x;
-		digit->getTransform()->position.x = x + (digits - i - 0.5f)*GetTexture(texture_digit)->size.x;
+		digit->getTransform()->position.x = x + (digits - i - 0.5f)*texture_digit->size.x;
 		digit->getTransform()->position.y = (float)y;
 
 		this->digitList.push_back(digit);

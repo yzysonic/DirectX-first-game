@@ -4,7 +4,7 @@
 Player::Player()
 {
 	this->type = ObjectType::Player;
-	this->setPolygon(Layer::PLAYER, TEX_PLAYER);
+	this->setPolygon(Layer::PLAYER, Texture::Get("player"));
 	this->setCollider();
 	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	this->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
