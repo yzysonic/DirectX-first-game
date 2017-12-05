@@ -43,11 +43,6 @@ RectPolygon2D::RectPolygon2D(Object* object, Layer layer, TextureName texName, R
 	Renderer::GetInstance()->addList(this);
 }
 
-RectPolygon2D::~RectPolygon2D(void)
-{
-	Renderer::GetInstance()->removeList(this);
-}
-
 void RectPolygon2D::draw(void)
 {
 	// 頂点座標の更新
@@ -214,5 +209,15 @@ void RectPolygon::draw(void)
 	pDevice->SetTexture(0, this->pTexture->pDXTex);
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, RECT_NUM_POLYGON);
+
+}
+
+void RectPolygon::setColor(Color color)
+{
+
+}
+
+void RectPolygon::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
 
 }

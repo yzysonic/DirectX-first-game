@@ -47,7 +47,6 @@ public:
 	float baseAngle;						// í∏ì_åvéZópäpìx
 	
 	RectPolygon2D(Object* object, Layer layer, TextureName texName, RendererType rendType);
-	~RectPolygon2D(void);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
@@ -70,7 +69,6 @@ public:
 	Texture *pTexture;
 
 	RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType);
-	~RectPolygon(void);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;

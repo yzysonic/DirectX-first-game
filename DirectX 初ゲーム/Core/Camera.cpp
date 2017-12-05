@@ -27,8 +27,8 @@ D3DXMATRIX Camera::getViewMatrix(bool update)
 
 		// ビューマトリクスの作成
 		D3DXVECTOR3 eye = D3DXVECTOR3(transform->position.x, transform->position.y, transform->position.z);
-		D3DXVECTOR3 at = D3DXVECTOR3(at.x, at.y, at.z);
-		D3DXVECTOR3 up = D3DXVECTOR3(up.x, up.y, up.z);
+		D3DXVECTOR3 at = D3DXVECTOR3(this->at.x, this->at.y, this->at.z);
+		D3DXVECTOR3 up = D3DXVECTOR3(this->up.x, this->up.y, this->up.z);
 		D3DXMatrixLookAtLH(&view, &eye, &at, &up);
 	}
 
