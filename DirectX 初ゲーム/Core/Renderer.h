@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include "Polygon.h"
+#include "Drawable.h"
 #include "Object.h"
 #include "Layer.h"
 #include "Singleton.h"
@@ -30,17 +30,15 @@ public:
 	static void Create(void);
 	static void Destroy(void);
 	static void DrawFrame(void);
-	void addList(RectPolygon* poly);
-	void removeList(RectPolygon* poly);
+	void addList(Drawable* poly);
+	void removeList(Drawable* poly);
 	Camera* getCamera(void);
 	void setCamera(Camera* camera);
 
 private:
-	std::vector<RectPolygon*> list[(int)Layer::MAX];
+	std::vector<Drawable*> list[(int)Layer::MAX];
 	Camera fixedCamera;
 	Camera* camera;
-
-	void transformVertex(RectPolygon* poly);
 };
 
 char *GetDebugText(int line);

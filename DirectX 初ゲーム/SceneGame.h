@@ -24,8 +24,8 @@ public:
 	void addGameScore(int score);
 
 private:
-	Object* vignetting = nullptr;
-	Object* liveUI = nullptr;
+	Object2D* vignetting = nullptr;
+	Object2D* liveUI = nullptr;
 	NumberUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
 	SmoothCamera* camera = nullptr;

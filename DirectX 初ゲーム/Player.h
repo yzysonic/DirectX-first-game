@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 
-class Player : public Object
+class Player : public Object2D
 {
 public:
 	int hp;

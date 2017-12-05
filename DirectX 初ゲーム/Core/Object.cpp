@@ -122,9 +122,6 @@ Object::~Object()
 
 	this->setActive(false);
 	this->transform.reset();
-	this->polygon.reset();
-	this->rigidbody.reset();
-	this->collider.reset();
 
 }
 
@@ -134,23 +131,34 @@ Transform * Object::getTransform(void)
 	return this->transform.get();
 }
 
-RectPolygon * Object::getPolygon(void)
+Object2D::Object2D(void) : Object(){}
+
+Object2D::Object2D(Vector3 position, Vector3 rotation) : Object(position, rotation){}
+
+Object2D::~Object2D(void)
+{
+	this->polygon.reset();
+	this->rigidbody.reset();
+	this->collider.reset();
+}
+
+RectPolygon2D * Object2D::getPolygon(void)
 {
 	return this->polygon.get();
 }
 
-void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+void Object2D::setPolygon(Layer layer, TextureName texName, RendererType rendType)
 {
 	this->polygon.reset();
-	this->polygon = std::make_unique<RectPolygon>(this, layer, texName, rendType);
+	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType);
 }
 
-Rigidbody * Object::getRigidbody(void)
+Rigidbody * Object2D::getRigidbody(void)
 {
 	return this->rigidbody.get();
 }
 
-void Object::setRigidbody(void)
+void Object2D::setRigidbody(void)
 {
 	this->rigidbody.reset();
 	this->rigidbody = std::make_unique<Rigidbody>(this);
@@ -159,15 +167,15 @@ void Object::setRigidbody(void)
 	Physics::GetInstance()->addRigidbody(this->rigidbody.get());
 }
 
-Collider * Object::getCollider(void)
+Collider2D * Object2D::getCollider(void)
 {
 	return this->collider.get();
 }
 
-void Object::setCollider(void)
+void Object2D::setCollider(void)
 {
 	this->collider.reset();
-	this->collider = std::make_shared<Collider>(this);
+	this->collider = std::make_shared<Collider2D>(this);
 	Physics::GetInstance()->addCollider(this->collider);
 }
 

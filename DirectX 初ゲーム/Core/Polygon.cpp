@@ -1,9 +1,10 @@
 #include "Polygon.h"
 #include "Object.h"
 #include "Renderer.h"
+#include "Lerp.h"
 
 
-RectPolygon::RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType)
+RectPolygon2D::RectPolygon2D(Object* object, Layer layer, TextureName texName, RendererType rendType)
 {
 
 	this->object	= object;
@@ -42,27 +43,35 @@ RectPolygon::RectPolygon(Object* object, Layer layer, TextureName texName, Rende
 	Renderer::GetInstance()->addList(this);
 }
 
-RectPolygon::~RectPolygon(void)
+RectPolygon2D::~RectPolygon2D(void)
 {
 	Renderer::GetInstance()->removeList(this);
 }
 
-Layer RectPolygon::getLayer(void)
+void RectPolygon2D::draw(void)
 {
-	return this->layer;
+	// 頂点座標の更新
+	transformVertex();
+
+	// 頂点フォーマットの設定
+	Direct3D::GetDevice()->SetFVF(FVF_VERTEX_2D);
+
+	// テクスチャの設定
+	Direct3D::GetDevice()->SetTexture(0, this->pTexture->pDXTex);
+
+	// ポリゴンの描画
+	Direct3D::GetDevice()->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, RECT_NUM_POLYGON, this->vertex, sizeof(Vertex2D));
+
 }
 
-Vector2 RectPolygon::getSize(void)
+
+Vector2 RectPolygon2D::getSize(void)
 {
 	return this->size;
 }
 
-Color RectPolygon::getColor(void)
-{
-	return this->color;
-}
 
-void RectPolygon::setSize(float x, float y)
+void RectPolygon2D::setSize(float x, float y)
 {
 	this->size = Vector2(x, y);
 	this->radius = this->size.length()/2;
@@ -70,32 +79,21 @@ void RectPolygon::setSize(float x, float y)
 }
 
 
-void RectPolygon::setColor(Color color)
+void RectPolygon2D::setColor(Color color)
 {
 	for (int i = 0; i < RECT_NUM_VERTEX; i++)
 		this->vertex[i].diffuse = color;
 	this->color = color;
 }
 
-void RectPolygon::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void RectPolygon2D::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	for (int i = 0; i < RECT_NUM_VERTEX; i++)
 		this->vertex[i].diffuse.setRGBA(r, g, b, a);
 	this->color.setRGBA(r, g, b, a);
 }
 
-void RectPolygon::setOpacity(float opacity)
-{
-	this->color.a = (unsigned char)(opacity * 0xff);
-	this->setColor(this->color);
-}
-
-float RectPolygon::getOpacity()
-{
-	return (float)(this->color.a)/0xff;
-}
-
-void RectPolygon::setPattern(unsigned int pattern)
+void RectPolygon2D::setPattern(unsigned int pattern)
 {
 	this->pattern = pattern;
 
@@ -107,4 +105,114 @@ void RectPolygon::setPattern(unsigned int pattern)
 	this->vertex[1].uv = Vector2(x*size.x + size.x, y*size.y);
 	this->vertex[2].uv = Vector2(x*size.x, y*size.y + size.y);
 	this->vertex[3].uv = Vector2(x*size.x + size.x, y*size.y + size.y);
+}
+
+//=============================================================================
+// 頂点の座標変換
+//=============================================================================
+void RectPolygon2D::transformVertex(void)
+{
+	// ワールド変換
+	Vector3 pos = this->object->getTransform()->position;
+	Vector3 rot = this->object->getTransform()->getRotation();
+	Vector3 radius = this->radius * this->object->getTransform()->scale;
+
+	this->vertex[0].vtx.x = pos.x - cosf(this->baseAngle - rot.z) * radius.x;
+	this->vertex[0].vtx.y = pos.y + sinf(this->baseAngle - rot.z) * radius.y;
+	this->vertex[0].vtx.z = pos.z;
+
+	this->vertex[1].vtx.x = pos.x + cosf(this->baseAngle + rot.z) * radius.x;
+	this->vertex[1].vtx.y = pos.y + sinf(this->baseAngle + rot.z) * radius.y;
+	this->vertex[1].vtx.z = pos.z;
+
+	this->vertex[2].vtx.x = pos.x - cosf(this->baseAngle + rot.z) * radius.x;
+	this->vertex[2].vtx.y = pos.y - sinf(this->baseAngle + rot.z) * radius.y;
+	this->vertex[2].vtx.z = pos.z;
+
+	this->vertex[3].vtx.x = pos.x + cosf(this->baseAngle - rot.z) * radius.x;
+	this->vertex[3].vtx.y = pos.y - sinf(this->baseAngle - rot.z) * radius.y;
+	this->vertex[3].vtx.z = pos.z;
+
+	if (this->rendType == RendererType::Classic2D)
+	{
+		Camera *camera = Renderer::GetInstance()->getCamera();
+
+		// カメラ変換
+		this->vertex[0].vtx -= camera->getTransform()->position;
+		this->vertex[1].vtx -= camera->getTransform()->position;
+		this->vertex[2].vtx -= camera->getTransform()->position;
+		this->vertex[3].vtx -= camera->getTransform()->position;
+
+		// 投影変換
+		float fov = Lerpf(this->vertex[0].vtx.z, 1.0f, camera->fov);
+		this->vertex[0].vtx.x /= this->vertex[0].vtx.z / fov;
+		this->vertex[0].vtx.y /= this->vertex[0].vtx.z / fov;
+		this->vertex[0].vtx.z = (this->vertex[0].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+
+		this->vertex[1].vtx.x /= this->vertex[1].vtx.z / fov;
+		this->vertex[1].vtx.y /= this->vertex[1].vtx.z / fov;
+		this->vertex[1].vtx.z = (this->vertex[1].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+
+		this->vertex[2].vtx.x /= this->vertex[2].vtx.z / fov;
+		this->vertex[2].vtx.y /= this->vertex[2].vtx.z / fov;
+		this->vertex[2].vtx.z = (this->vertex[2].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+
+		this->vertex[3].vtx.x /= this->vertex[3].vtx.z / fov;
+		this->vertex[3].vtx.y /= this->vertex[3].vtx.z / fov;
+		this->vertex[3].vtx.z = (this->vertex[3].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+
+	}
+
+	// スクリーン変換
+	this->vertex[0].vtx.y = -this->vertex[0].vtx.y;
+	this->vertex[1].vtx.y = -this->vertex[1].vtx.y;
+	this->vertex[2].vtx.y = -this->vertex[2].vtx.y;
+	this->vertex[3].vtx.y = -this->vertex[3].vtx.y;
+
+	this->vertex[0].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[1].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[2].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[3].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+
+}
+
+RectPolygon::RectPolygon(Object * object, Layer layer, TextureName texName, RendererType rendType)
+{
+
+}
+
+void RectPolygon::draw(void)
+{
+	D3DXMATRIX mtxWorld, mtxScl, mtxRot, mtxTranslate, mtxView;
+	LPDIRECT3DDEVICE9 pDevice = Direct3D::GetDevice();
+
+	// ワールドマトリクスの初期化
+	D3DXMatrixIdentity(&mtxWorld);
+	// スケールを反映
+	D3DXMatrixScaling(&mtxScl, this->object->getTransform()->scale.x, this->object->getTransform()->scale.y, this->object->getTransform()->scale.z);
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScl);
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, this->object->getTransform()->getRotation().y, this->object->getTransform()->getRotation().x, this->object->getTransform()->getRotation().z);
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRot);
+		
+	// 平行移動を反映(地形を配置している)
+	D3DXMatrixTranslation(&mtxTranslate, this->object->getTransform()->position.x, this->object->getTransform()->position.y, this->object->getTransform()->position.z);
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
+
+	// ワールドマトリクスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+	// ビューマトリクスの設定
+	pDevice->SetTransform(D3DTS_VIEW, &Renderer::GetInstance()->getCamera()->getViewMatrix(false));
+	// プロジェクションマトリクスの設定
+	pDevice->SetTransform(D3DTS_PROJECTION, &Renderer::GetInstance()->getCamera()->getProjectionMatrix(false));
+
+	// 頂点バッファをデバイスのデータストリームにバインド
+	pDevice->SetStreamSource(0, this->pVtxBuff, 0, sizeof(Vertex3D));
+	// 頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
+	// テクスチャの設定
+	pDevice->SetTexture(0, this->pTexture->pDXTex);
+	// ポリゴンの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, RECT_NUM_POLYGON);
+
 }

@@ -10,7 +10,7 @@ enum FadeType
 	FADE_OUT,
 };
 
-class FadeScreen : public Object, public Singleton<FadeScreen>
+class FadeScreen : public Object2D, public Singleton<FadeScreen>
 {
 public:
 	FadeScreen(void);

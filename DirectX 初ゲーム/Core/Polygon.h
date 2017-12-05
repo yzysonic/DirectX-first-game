@@ -2,9 +2,7 @@
 
 #include "Common.h"
 #include "Texture.h"
-#include "Layer.h"
-#include "RendererType.h"
-#include "Color.h"
+#include "Drawable.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -14,6 +12,10 @@
 
 // 頂点フォーマット( 頂点座標[2D] / 反射光 / テクスチャ座標 )
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+
+// 3Dポリゴン頂点フォーマット( 頂点座標 / 法線 / 反射光 / テクスチャ座標 )
+#define	FVF_VERTEX_3D	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+
 
 //*****************************************************************************
 // 構造体定義
@@ -28,63 +30,50 @@ struct Vertex2D
 	Vector2 uv;			// テクスチャ座標
 };
 
-class RectPolygon
+struct Vertex3D
+{
+	Vector3 vtx;
+	Vector3 nor;
+	Color diffuse;
+	Vector2 uv;
+};
+
+class RectPolygon2D : public Drawable
 {
 public:
-	Object *object;							// 所有するオブジェクトへの参照
-	RendererType rendType;					// 描画方法指定
 	Vertex2D vertex[RECT_NUM_VERTEX];		// 頂点情報格納ワーク
 	Texture *pTexture;						// テクスチャーへのポインタ
-	int listIndex;							// 識別番号
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
 	
-	RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType);
-	~RectPolygon(void);
-	Layer getLayer(void);
+	RectPolygon2D(Object* object, Layer layer, TextureName texName, RendererType rendType);
+	~RectPolygon2D(void);
+	void draw(void) override;
+	void setColor(Color color) override;
+	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 	Vector2 getSize(void);
 	void setSize(float x, float y);
-	Color getColor(void);
-	void setColor(Color color);
-	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
-	float getOpacity(void);
-	void setOpacity(float value);
 	void setPattern(unsigned int pattern);
-	// void 
-	/*
-	void changeRendering();
-	void changeRendering{
-		switch( rendType )
-		{
-	case Default:
-				// 頂点座標の更新
-				m_pInstance->transformVertex(poly);
-
-				// 頂点フォーマットの設定
-				Direct3D::GetDevice()->SetFVF(FVF_VERTEX_2D);
-
-				// テクスチャの設定
-				Direct3D::GetDevice()->SetTexture(0, poly->pTexture->pDXTex);
-	case Add:
-				// 頂点座標の更新
-				m_pInstance->transformVertex(poly);
-
-				// 頂点フォーマットの設定
-				Direct3D::GetDevice()->SetFVF(FVF_VERTEX_2D);
-
-				// テクスチャの設定
-				Direct3D::GetDevice()->setBlendState(AddState);
-
-
-		}
-	}
-	*/
 protected:
-	Layer layer;							// 描画のレイヤー
-	Vector2 size;							// 表示するサイズ
-	Color color;							// 色
-	int pattern;							// 表示するパターン
+	Vector2 size;	// 表示するサイズ
+	int pattern;	// 表示するパターン
 
-	friend class Renderer;
+private:
+	void transformVertex(void);
 };
 
+class RectPolygon : public Drawable
+{
+public:
+	Vertex3D vertex[RECT_NUM_VERTEX];
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
+	Texture *pTexture;
+
+	RectPolygon(Object* object, Layer layer, TextureName texName, RendererType rendType);
+	~RectPolygon(void);
+	void draw(void) override;
+	void setColor(Color color) override;
+	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
+
+
+};

@@ -154,6 +154,9 @@
     <ClCompile Include="Core\Script.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Drawable.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -290,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="Core\Script.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Drawable.h">
+      <Filter>Core\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@
 void SceneGame::init(void)
 {
 	// 口径食効果
-	this->vignetting = new Object;
+	this->vignetting = new Object2D;
 	this->vignetting->setPolygon(Layer::MASK, TEX_VIGNETTING, RendererType::UI);
 
 	// スコアUI
@@ -24,7 +24,7 @@ void SceneGame::init(void)
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
-	this->liveUI = new Object;
+	this->liveUI = new Object2D;
 	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
 	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 

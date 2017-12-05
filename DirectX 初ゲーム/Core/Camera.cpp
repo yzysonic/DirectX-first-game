@@ -7,6 +7,8 @@ Camera::Camera(Vector3 pos)
 	this->transform->position = pos;
 	this->setBackColor(Color(255, 255, 255, 255));
 	this->fov = 0.0f;
+	this->view_near_z = 0.1f;
+	this->view_far_z = 100.0f;
 }
 
 Camera::~Camera(void)
@@ -14,6 +16,37 @@ Camera::~Camera(void)
 	Renderer * renderer = Renderer::GetInstance();
 	if (renderer->getCamera() == this)
 		renderer->setCamera(nullptr);
+}
+
+D3DXMATRIX Camera::getViewMatrix(bool update)
+{
+	if (update)
+	{
+		// ビューマトリクスの初期化
+		D3DXMatrixIdentity(&view);
+
+		// ビューマトリクスの作成
+		D3DXVECTOR3 eye = D3DXVECTOR3(transform->position.x, transform->position.y, transform->position.z);
+		D3DXVECTOR3 at = D3DXVECTOR3(at.x, at.y, at.z);
+		D3DXVECTOR3 up = D3DXVECTOR3(up.x, up.y, up.z);
+		D3DXMatrixLookAtLH(&view, &eye, &at, &up);
+	}
+
+	return view;
+}
+
+D3DXMATRIX Camera::getProjectionMatrix(bool update)
+{
+	if (update)
+	{
+		// プロジェクションマトリクスの初期化
+		D3DXMatrixIdentity(&projection);
+
+		// プロジェクションマトリクスの作成
+		D3DXMatrixPerspectiveFovLH(&projection, view_angle, view_aspect, view_near_z, view_far_z);
+	}
+
+	return projection;
 }
 
 void Camera::setBackColor(Color color)

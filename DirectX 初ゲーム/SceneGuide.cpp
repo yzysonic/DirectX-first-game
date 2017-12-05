@@ -4,7 +4,7 @@
 
 void SceneGuide::init(void)
 {
-	this->bk = new Object;
+	this->bk = new Object2D;
 	this->bk->setPolygon(Layer::BG_00, TEX_GUIDE, RendererType::UI);
 	this->state = 0;
 	this->timer = 0;

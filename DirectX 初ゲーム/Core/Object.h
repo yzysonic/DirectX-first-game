@@ -16,9 +16,9 @@
 // ƒNƒ‰ƒX’è‹`
 //*****************************************************************************
 class Object;
-class RectPolygon;
+class RectPolygon2D;
 class Rigidbody;
-class Collider;
+class Collider2D;
 class Script;
 
 class Transform
@@ -63,12 +63,6 @@ public:
 	virtual void onCollision(Object* other) {};
 
 	Transform*		getTransform(void);
-	RectPolygon*	getPolygon(void);
-	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Default);
-	Rigidbody*		getRigidbody(void);
-	void			setRigidbody(void);
-	Collider*		getCollider(void);
-	void			setCollider(void);
 	template<class T>
 	Script*			getScript(void);
 	template<class T>
@@ -79,11 +73,28 @@ public:
 
 protected:
 	std::unique_ptr<Transform> transform;
-	std::unique_ptr<RectPolygon> polygon;
-	std::unique_ptr<Rigidbody> rigidbody;
-	std::shared_ptr<Collider> collider;
 	std::unordered_map<size_t, std::unique_ptr<Script>> script;
 
 private:
 	bool isActive;
+};
+
+class Object2D : public Object
+{
+public:
+	Object2D(void);
+	Object2D(Vector3 position, Vector3 rotation);
+	~Object2D(void);
+
+	RectPolygon2D*	getPolygon(void);
+	void			setPolygon(Layer layer = Layer::DEFAULT, TextureName texName = TEX_NONE, RendererType rendType = RendererType::Classic2D);
+	Rigidbody*		getRigidbody(void);
+	void			setRigidbody(void);
+	Collider2D*		getCollider(void);
+	void			setCollider(void);
+
+protected:
+	std::unique_ptr<RectPolygon2D> polygon;
+	std::unique_ptr<Rigidbody> rigidbody;
+	std::shared_ptr<Collider2D> collider;
 };

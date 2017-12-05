@@ -28,13 +28,13 @@ void Physics::Update()
 	m_pInstance->testCollisions();
 }
 
-void Physics::addCollider(shared_ptr<Collider> collider)
+void Physics::addCollider(shared_ptr<Collider2D> collider)
 {
 	this->colliderList.push_back(collider);
 	collider->listIndex = this->colliderList.size() - 1;
 }
 
-void Physics::removeCollider(Collider * collider)
+void Physics::removeCollider(Collider2D * collider)
 {
 	size_t index = collider->listIndex;
 
@@ -128,7 +128,7 @@ void Physics::testCollisions()
 	{
 		for (size_t j = i + 1; j < this->colliderList.size(); j++)
 		{
-			shared_ptr<Collider> a, b;
+			shared_ptr<Collider2D> a, b;
 
 			a = this->colliderList[i].lock();
 			b = this->colliderList[j].lock();

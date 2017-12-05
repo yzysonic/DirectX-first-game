@@ -10,7 +10,7 @@ public:
 	void uninit(void) override;
 
 private:
-	Object *bk;
+	Object2D *bk;
 	float timer;
 	void(SceneGameOver::*pUpdate)(void);
 

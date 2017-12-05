@@ -4,7 +4,7 @@
 
 void SceneGameOver::init(void)
 {
-	this->bk = new Object;
+	this->bk = new Object2D;
 	this->bk->setPolygon(Layer::BG_00, TEX_GAME_OVER, RendererType::UI);
 	this->timer = 0;
 

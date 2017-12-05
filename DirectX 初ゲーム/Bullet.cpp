@@ -3,7 +3,7 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()->position, owner->getTransform()->getRotation())
+Bullet::Bullet(Object * owner, Vector3 velocity) : Object2D(owner->getTransform()->position, owner->getTransform()->getRotation())
 {
 	this->setCollider();
 

@@ -6,7 +6,7 @@
 
 void SceneClear::init(void)
 {
-	this->bk = new Object;
+	this->bk = new Object2D;
 	this->bk->setPolygon(Layer::BG_00, TEX_CLEAR, RendererType::UI);
 
 	this->score = new NumberUI(5, -120, 0, TEX_NUMBER, TEX_GAME_SCORE);

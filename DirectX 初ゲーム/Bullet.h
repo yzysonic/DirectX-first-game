@@ -4,7 +4,7 @@
 
 #define BULLET_MAX (100)
 
-class Bullet : public Object
+class Bullet : public Object2D
 {
 public:
 	Bullet(Object* owner, Vector3 velocity);

@@ -3,7 +3,7 @@
 
 #define ENEMY_SPEED (50)
 
-class Enemy : public Object
+class Enemy : public Object2D
 {
 public:
 	Transform *target = NULL;

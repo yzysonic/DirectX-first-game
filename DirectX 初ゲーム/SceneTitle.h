@@ -34,13 +34,13 @@ private:
 	};
 
 	// ‰æ‘œ
-	Object *vignetting = nullptr;
-	Object *logo = nullptr;
-	Object *presskey = nullptr;
-	Object *info = nullptr;
-	Object *cursor = nullptr;
-	Object *start = nullptr;
-	Object *exit = nullptr;
+	Object2D *vignetting = nullptr;
+	Object2D *logo = nullptr;
+	Object2D *presskey = nullptr;
+	Object2D *info = nullptr;
+	Object2D *cursor = nullptr;
+	Object2D *start = nullptr;
+	Object2D *exit = nullptr;
 
 	// ”wŒiƒ|ƒŠƒSƒ“
 	PolygonElement* polyList[TitlePolyMax];

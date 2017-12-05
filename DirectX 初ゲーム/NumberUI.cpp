@@ -16,7 +16,7 @@ NumberUI::NumberUI(int digits, int x, int y, TextureName texture_digit, TextureN
 	this->digitList.reserve(digits);
 	for (int i = 0; i < digits; i++)
 	{
-		Object* digit = new Object;
+		Object2D* digit = new Object2D;
 		
 		digit->setPolygon(Layer::UI_00, texture_digit, RendererType::UI);
 		digit->getTransform()->position.x;

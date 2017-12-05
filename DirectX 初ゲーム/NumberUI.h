@@ -2,7 +2,7 @@
 
 #include "Core/Core.h"
 
-class NumberUI : public Object
+class NumberUI : public Object2D
 {
 public:
 	NumberUI(int digits, int x, int y, TextureName texture_digit, TextureName texture_title = TEX_NONE);
@@ -13,6 +13,6 @@ public:
 private:
 	int digitNum;
 	int value;
-	std::vector<Object*> digitList;
+	std::vector<Object2D*> digitList;
 
 };
