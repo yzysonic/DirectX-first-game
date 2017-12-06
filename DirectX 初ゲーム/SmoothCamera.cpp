@@ -18,6 +18,7 @@ SmoothCamera::SmoothCamera(Transform * target, Vector3 pos) : Camera(pos)
 void SmoothCamera::update()
 {
 	this->transform->position = Vector3::Lerp(this->transform->position, this->target->position + Vector3(0, 0, -1.0f), speed*Time::DeltaTime());
+	this->at = this->transform->position + Vector3(0.0f, 0.0f, 1.0f);
 }
 
 void SmoothCamera::Shake(void)

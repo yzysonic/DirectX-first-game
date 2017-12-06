@@ -4,7 +4,7 @@
 #include "Lerp.h"
 
 
-RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, RendererType rendType)
+RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, RendererType rendType) : Drawable(layer)
 {
 
 	this->object	= object;
@@ -15,7 +15,10 @@ RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, 
 
 	this->radius = this->size.length()/2;
 	this->baseAngle = atan2f(this->size.y, this->size.x);
-	this->color.setRGBA(255, 255, 255, 255);
+	if (this->pTexture != Texture::none && this->pTexture->pDXTex == nullptr)
+		this->color.setRGBA(255, 0, 255, 255);
+	else
+		this->color.setRGBA(255, 255, 255, 255);
 
 	// rhwの設定
 	this->vertex[0].rhw =
@@ -37,7 +40,6 @@ RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, 
 
 	this->pattern = 0;
 
-	Renderer::GetInstance()->addList(this);
 }
 
 void RectPolygon2D::draw(void)
@@ -109,81 +111,83 @@ void RectPolygon2D::transformVertex(void)
 	Vector3 rot = this->object->getTransform()->getRotation();
 	Vector3 radius = this->radius * this->object->getTransform()->scale;
 
-	this->vertex[0].vtx.x = pos.x - cosf(this->baseAngle - rot.z) * radius.x;
-	this->vertex[0].vtx.y = pos.y + sinf(this->baseAngle - rot.z) * radius.y;
-	this->vertex[0].vtx.z = pos.z;
+	this->vertex[0].pos.x = pos.x - cosf(this->baseAngle - rot.z) * radius.x;
+	this->vertex[0].pos.y = pos.y + sinf(this->baseAngle - rot.z) * radius.y;
+	this->vertex[0].pos.z = pos.z;
 
-	this->vertex[1].vtx.x = pos.x + cosf(this->baseAngle + rot.z) * radius.x;
-	this->vertex[1].vtx.y = pos.y + sinf(this->baseAngle + rot.z) * radius.y;
-	this->vertex[1].vtx.z = pos.z;
+	this->vertex[1].pos.x = pos.x + cosf(this->baseAngle + rot.z) * radius.x;
+	this->vertex[1].pos.y = pos.y + sinf(this->baseAngle + rot.z) * radius.y;
+	this->vertex[1].pos.z = pos.z;
 
-	this->vertex[2].vtx.x = pos.x - cosf(this->baseAngle + rot.z) * radius.x;
-	this->vertex[2].vtx.y = pos.y - sinf(this->baseAngle + rot.z) * radius.y;
-	this->vertex[2].vtx.z = pos.z;
+	this->vertex[2].pos.x = pos.x - cosf(this->baseAngle + rot.z) * radius.x;
+	this->vertex[2].pos.y = pos.y - sinf(this->baseAngle + rot.z) * radius.y;
+	this->vertex[2].pos.z = pos.z;
 
-	this->vertex[3].vtx.x = pos.x + cosf(this->baseAngle - rot.z) * radius.x;
-	this->vertex[3].vtx.y = pos.y - sinf(this->baseAngle - rot.z) * radius.y;
-	this->vertex[3].vtx.z = pos.z;
+	this->vertex[3].pos.x = pos.x + cosf(this->baseAngle - rot.z) * radius.x;
+	this->vertex[3].pos.y = pos.y - sinf(this->baseAngle - rot.z) * radius.y;
+	this->vertex[3].pos.z = pos.z;
 
 	if (this->rendType == RendererType::Classic2D)
 	{
 		Camera *camera = Renderer::GetInstance()->getCamera();
 
 		// カメラ変換
-		this->vertex[0].vtx -= camera->getTransform()->position;
-		this->vertex[1].vtx -= camera->getTransform()->position;
-		this->vertex[2].vtx -= camera->getTransform()->position;
-		this->vertex[3].vtx -= camera->getTransform()->position;
+		this->vertex[0].pos -= camera->getTransform()->position;
+		this->vertex[1].pos -= camera->getTransform()->position;
+		this->vertex[2].pos -= camera->getTransform()->position;
+		this->vertex[3].pos -= camera->getTransform()->position;
 
 		// 投影変換
-		float fov = Lerpf(this->vertex[0].vtx.z, 1.0f, camera->fov);
-		this->vertex[0].vtx.x /= this->vertex[0].vtx.z / fov;
-		this->vertex[0].vtx.y /= this->vertex[0].vtx.z / fov;
-		this->vertex[0].vtx.z = (this->vertex[0].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+		float fov = Lerpf(this->vertex[0].pos.z, 1.0f, camera->fov);
+		this->vertex[0].pos.x /= this->vertex[0].pos.z / fov;
+		this->vertex[0].pos.y /= this->vertex[0].pos.z / fov;
+		this->vertex[0].pos.z = (this->vertex[0].pos.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
 
-		this->vertex[1].vtx.x /= this->vertex[1].vtx.z / fov;
-		this->vertex[1].vtx.y /= this->vertex[1].vtx.z / fov;
-		this->vertex[1].vtx.z = (this->vertex[1].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+		this->vertex[1].pos.x /= this->vertex[1].pos.z / fov;
+		this->vertex[1].pos.y /= this->vertex[1].pos.z / fov;
+		this->vertex[1].pos.z = (this->vertex[1].pos.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
 
-		this->vertex[2].vtx.x /= this->vertex[2].vtx.z / fov;
-		this->vertex[2].vtx.y /= this->vertex[2].vtx.z / fov;
-		this->vertex[2].vtx.z = (this->vertex[2].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+		this->vertex[2].pos.x /= this->vertex[2].pos.z / fov;
+		this->vertex[2].pos.y /= this->vertex[2].pos.z / fov;
+		this->vertex[2].pos.z = (this->vertex[2].pos.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
 
-		this->vertex[3].vtx.x /= this->vertex[3].vtx.z / fov;
-		this->vertex[3].vtx.y /= this->vertex[3].vtx.z / fov;
-		this->vertex[3].vtx.z = (this->vertex[3].vtx.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
+		this->vertex[3].pos.x /= this->vertex[3].pos.z / fov;
+		this->vertex[3].pos.y /= this->vertex[3].pos.z / fov;
+		this->vertex[3].pos.z = (this->vertex[3].pos.z - camera->view_near_z) / (camera->view_far_z - camera->view_near_z);
 
 	}
 
 	// スクリーン変換
-	this->vertex[0].vtx.y = -this->vertex[0].vtx.y;
-	this->vertex[1].vtx.y = -this->vertex[1].vtx.y;
-	this->vertex[2].vtx.y = -this->vertex[2].vtx.y;
-	this->vertex[3].vtx.y = -this->vertex[3].vtx.y;
+	this->vertex[0].pos.y = -this->vertex[0].pos.y;
+	this->vertex[1].pos.y = -this->vertex[1].pos.y;
+	this->vertex[2].pos.y = -this->vertex[2].pos.y;
+	this->vertex[3].pos.y = -this->vertex[3].pos.y;
 
-	this->vertex[0].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[1].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[2].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[3].vtx += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[0].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[1].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[2].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[3].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
 
 }
 
-RectPolygon::RectPolygon(ObjectBase * object, Layer layer, Texture* texture, RendererType rendType)
+RectPolygon::RectPolygon(ObjectBase * object, Layer layer, Texture* texture, RendererType rendType) :  Drawable(layer)
 {
 	this->object = object;
 	this->layer = layer;
 	this->rendType = rendType;
 	this->pTexture = texture;
-	if (this->pTexture->pDXTex)
-		this->size = this->pTexture->size;
+	this->size = this->pTexture->size;
+	if (this->pTexture != Texture::none && this->pTexture->pDXTex == nullptr)
+		this->color.setRGBA(255, 0, 255, 255);
 	else
-		this->size = Vector2(100.f, 100.f);
+		this->color.setRGBA(255, 255, 255, 255);
+
 
 	// 頂点座標の設定(ローカル座標)
-	vertex[0].vtx = Vector3(-0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
-	vertex[1].vtx = Vector3(0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
-	vertex[2].vtx = Vector3(-0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
-	vertex[3].vtx = Vector3(0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
+	vertex[0].pos = Vector3(-0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
+	vertex[1].pos = Vector3(0.5f*this->size.x, 0.5f*this->size.y, 0.0f);
+	vertex[2].pos = Vector3(-0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
+	vertex[3].pos = Vector3(0.5f*this->size.x, -0.5f*this->size.y, 0.0f);
 
 	// 法線ベクトルの設定
 	vertex[0].nor =
@@ -195,7 +199,7 @@ RectPolygon::RectPolygon(ObjectBase * object, Layer layer, Texture* texture, Ren
 	vertex[0].diffuse = 
 	vertex[1].diffuse = 
 	vertex[2].diffuse = 
-	vertex[3].diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex[3].diffuse = this->color;
 
 	// テクスチャ座標の設定
 	vertex[0].uv = Vector2(0.0f, 0.0f);

@@ -15,7 +15,7 @@ void SceneGlobal::init(void)
 	Texture::LoadTexture("vignetting");
 	Texture::LoadTexture("title_logo");
 	Texture::LoadTexture("title_presskey", "title_presskey_v3.png");
-	Texture::LoadTexture("title_info");
+	Texture::LoadTexture("title_info", "title_copyright.png");
 	Texture::LoadTexture("title_cursor", "title_cursor_v2.png");
 	Texture::LoadTexture("title_start");
 	Texture::LoadTexture("title_exit");

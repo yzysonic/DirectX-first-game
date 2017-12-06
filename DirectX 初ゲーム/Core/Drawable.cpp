@@ -3,6 +3,12 @@
 #include "Polygon.h"
 #include "Renderer.h"
 
+Drawable::Drawable(Layer layer)
+{
+	this->layer = layer;
+	Renderer::GetInstance()->addList(this);
+}
+
 Drawable::~Drawable(void)
 {
 	Renderer::GetInstance()->removeList(this);

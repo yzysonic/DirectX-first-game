@@ -8,14 +8,16 @@
 void SceneTest::init(void)
 {
 	this->player = new Player;
-	this->enemy = new Enemy;
-	enemy->target = this->player->getTransform();
-	enemy->getTransform()->position = Vector3(30, 30, 0);
+	//this->enemy = new Enemy;
+	//enemy->target = this->player->getTransform();
+	//enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
 	this->player->camera = this->camera;
 
 	this->test = new Object;
 	this->test->setPolygon();
+	this->test->getTransform()->position.z = 90.0f;
+	this->test->getTransform()->scale = Vector3::one*0.1f;
 
 	this->testCount = 0;
 
@@ -50,6 +52,8 @@ void SceneTest::update(void)
 		project = !project;
 	}
 
+	this->test->getTransform()->rotate(0.0f, 0.1f, 0.0f);
+
 
 	int line = 0;
 	sprintf(GetDebugText(line++), "ObjectCount: %d", i);
@@ -72,6 +76,7 @@ void SceneTest::uninit(void)
 	delete(this->camera);
 	delete(this->player);
 	delete(this->enemy);
+	delete(this->test);
 
 	Bullet::Clear();
 

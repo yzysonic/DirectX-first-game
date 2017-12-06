@@ -17,6 +17,7 @@ public:
 	RendererType rendType;	// •`‰æ•û–@w’è
 	int list_index;			// ¯•Ê”Ô†
 
+	Drawable(Layer layer);
 	~Drawable(void);
 
 	virtual void draw(void) = 0;

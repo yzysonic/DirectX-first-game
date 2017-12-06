@@ -24,7 +24,7 @@ class ObjectBase;
 
 struct Vertex2D
 {
-	Vector3 vtx;		// 頂点座標
+	Vector3 pos;		// 頂点座標
 	float rhw;			// テクスチャのパースペクティブコレクト用
 	Color diffuse;		// 反射光
 	Vector2 uv;			// テクスチャ座標
@@ -32,7 +32,7 @@ struct Vertex2D
 
 struct Vertex3D
 {
-	Vector3 vtx;
+	Vector3 pos;
 	Vector3 nor;
 	Color diffuse;
 	Vector2 uv;
