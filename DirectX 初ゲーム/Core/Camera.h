@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "Object.h"
 #include "Color.h"
+#include "RenderTarget.h"
 #include <D3d9types.h>
 
 class Camera : public ObjectBase
@@ -14,8 +15,9 @@ public:
 	float view_aspect;
 	float view_near_z;
 	float view_far_z;
+	RenderTarget* render_target;
 
-	Camera(Vector3 pos = Vector3(0, 0, -1.0f));
+	Camera(Vector3 pos = Vector3(0, 0, -1.0f), RenderTarget* render_target = nullptr);
 	~Camera(void);
 
 	D3DXMATRIX getViewMatrix(bool update);

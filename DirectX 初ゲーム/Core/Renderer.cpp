@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Direct3D.h"
+#include "RenderSpace.h"
 
 
 //=============================================================================
@@ -42,13 +43,15 @@ void Renderer::Create(void)
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
 
 	// 初期カメラ
-	m_pInstance->camera = &m_pInstance->fixedCamera;
+	//m_pInstance->camera = &m_pInstance->fixedCamera;
 
 
-	for (int i = 0; i < (int)Layer::MAX; i++)
-	{
-		m_pInstance->list[i].reserve(g_PoolSize[i]);
-	}
+	//for (int i = 0; i < (int)Layer::MAX; i++)
+	//{
+	//	m_pInstance->list[i].reserve(g_PoolSize[i]);
+	//}
+
+	RenderSpace::Add("default");
 
 }
 
@@ -62,8 +65,11 @@ void Renderer::Destroy(void)
 
 	for (int i = 0; i < (int)Layer::MAX; i++)
 	{
-		m_pInstance->list[i].clear();
+		//m_pInstance->list[i].clear();
 	}
+
+	for (int i = RenderSpace::RenderSpaceCount(); i >=0; i--)
+		RenderSpace::Delete(i);
 
 	Singleton::Destroy();
 }
@@ -73,47 +79,32 @@ void Renderer::Destroy(void)
 //=============================================================================
 void Renderer::DrawFrame()
 {
-	std::vector<Drawable*>	list;
-	Drawable*	poly;
-
-	// バックバッファ＆Ｚバッファのクリア
-	Direct3D::GetDevice()->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_pInstance->camera->getD3DBackColor(), 1.0f, 0);
+	auto pDevice = Direct3D::GetDevice();
 
 	// Direct3Dによる描画の開始
-	if (SUCCEEDED(Direct3D::GetDevice()->BeginScene()))
+	if (SUCCEEDED(pDevice->BeginScene()))
 	{
-
-		Camera* camera = m_pInstance->camera;
-		camera->getViewMatrix(true);
-		camera->getProjectionMatrix(true);
-
-		for (int i = 0; i < (int)Layer::MAX; i++)
-		{
-			list = m_pInstance->list[i];
-
-			for (size_t j = 0; j < list.size(); j++)
-			{
-				poly = list[j];
-				poly->draw();
-			}
-		}
+		RenderSpace::Draw();
 
 		// デバッグ
 		DrawDebug();
 
 		// Direct3Dによる描画の終了
-		Direct3D::GetDevice()->EndScene();
+		pDevice->EndScene();
 	}
+
+	pDevice->SetRenderTarget(0, RenderTarget::BackBuffer()->pSurface);
+	pDevice->SetDepthStencilSurface(RenderTarget::BackBuffer()->pDepthSurface);
 
 	// バックバッファとフロントバッファの入れ替え
 	static HRESULT hr;
-	hr = Direct3D::GetDevice()->Present(NULL, NULL, NULL, NULL);
+	hr = pDevice->Present(NULL, NULL, NULL, NULL);
 
 	// デバイスロストの検知
 	if (hr == D3DERR_DEVICELOST) {
 
 		// 復帰可能の場合
-		if (Direct3D::GetDevice()->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) {
+		if (pDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) {
 			Direct3D::ResetDevice();
 		}
 	}
@@ -122,29 +113,29 @@ void Renderer::DrawFrame()
 //=============================================================================
 // 描画リストに追加
 //=============================================================================
-void Renderer::addList(Drawable* poly)
-{
-	poly->list_index = this->list[(int)poly->layer].size();
-	this->list[(int)poly->layer].push_back(poly);
-}
+//void Renderer::addList(Drawable* poly)
+//{
+//	poly->list_index = this->list[(int)poly->layer].size();
+//	this->list[(int)poly->layer].push_back(poly);
+//}
 
 //=============================================================================
 // 描画リストから削除
 //=============================================================================
-void Renderer::removeList(Drawable * poly)
-{
-	int index = poly->list_index;
-	std::vector<Drawable*>& list = this->list[(int)poly->layer];
-
-	list[index] = list.back();
-	list[index]->list_index = index;
-	list.pop_back();
-
-}
+//void Renderer::removeList(Drawable * poly)
+//{
+//	int index = poly->list_index;
+//	std::vector<Drawable*>& list = this->list[(int)poly->layer];
+//
+//	list[index] = list.back();
+//	list[index]->list_index = index;
+//	list.pop_back();
+//
+//}
 
 Camera * Renderer::getCamera(void)
 {
-	return this->camera;
+	return RenderSpace::Get(0)->GetCamera(0);
 }
 
 //=============================================================================
@@ -152,10 +143,14 @@ Camera * Renderer::getCamera(void)
 //=============================================================================
 void Renderer::setCamera(Camera * camera)
 {
+	RenderSpace::Get(0)->RemoveCamera(RenderSpace::Get(0)->GetCamera(0));
+
 	if (camera != nullptr)
-		this->camera = camera;
+	{
+		RenderSpace::Get(0)->AddCamera(camera);
+	}
 	else
-		this->camera = &this->fixedCamera;
+		RenderSpace::Get(0)->AddCamera(&fixedCamera);
 }
 
 

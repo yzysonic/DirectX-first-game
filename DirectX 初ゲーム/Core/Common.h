@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include <string.h>
+#include <string>
 #include <stdio.h>
 
 //システムのパラメータ

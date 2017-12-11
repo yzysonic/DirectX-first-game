@@ -1,8 +1,10 @@
 #include "Camera.h"
 #include "Renderer.h"
 
-Camera::Camera(Vector3 pos)
+Camera::Camera(Vector3 pos, RenderTarget* render_target)
 {
+	if (render_target == nullptr)
+		this->render_target = RenderTarget::BackBuffer();
 	this->type = ObjectType::Camera;
 	this->transform->position = pos;
 	this->setBackColor(Color(255, 255, 255, 255));
@@ -17,9 +19,9 @@ Camera::Camera(Vector3 pos)
 
 Camera::~Camera(void)
 {
-	Renderer * renderer = Renderer::GetInstance();
-	if (renderer->getCamera() == this)
-		renderer->setCamera(nullptr);
+	//Renderer * renderer = Renderer::GetInstance();
+	//if (renderer->getCamera() == this)
+	//	renderer->setCamera(nullptr);
 }
 
 D3DXMATRIX Camera::getViewMatrix(bool update)

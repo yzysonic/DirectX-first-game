@@ -168,6 +168,8 @@
     <ClCompile Include="Core\Polygon.cpp" />
     <ClCompile Include="Core\Random.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
+    <ClCompile Include="Core\RenderSpace.cpp" />
+    <ClCompile Include="Core\RenderTarget.cpp" />
     <ClCompile Include="Core\Rigidbody.cpp" />
     <ClCompile Include="Core\Script.cpp" />
     <ClCompile Include="Core\Sound.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="Core\Random.h" />
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="Core\RendererType.h" />
+    <ClInclude Include="Core\RenderSpace.h" />
     <ClInclude Include="Core\Rigidbody.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\Script.h" />
@@ -232,6 +235,7 @@
     <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />
+    <ClInclude Include="Core\RenderTarget.h" />
     <ClInclude Include="SceneClear.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="SceneGameOver.h" />

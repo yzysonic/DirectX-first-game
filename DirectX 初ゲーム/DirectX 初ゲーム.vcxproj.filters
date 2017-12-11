@@ -157,6 +157,12 @@
     <ClCompile Include="Core\Drawable.cpp">
       <Filter>Core\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="Core\RenderSpace.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RenderTarget.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -295,6 +301,12 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Drawable.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RenderTarget.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RenderSpace.h">
       <Filter>Core\Graphic</Filter>
     </ClInclude>
   </ItemGroup>

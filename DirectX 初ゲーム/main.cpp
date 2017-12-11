@@ -35,7 +35,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// マウスを隠す
 	//ShowCursor(false);
-	
+
 	// ゲーム初期化
 	InitGame();
 	SceneGlobal::Create();

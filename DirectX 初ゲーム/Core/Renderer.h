@@ -30,15 +30,15 @@ public:
 	static void Create(void);
 	static void Destroy(void);
 	static void DrawFrame(void);
-	void addList(Drawable* poly);
-	void removeList(Drawable* poly);
+	//void addList(Drawable* poly);
+	//void removeList(Drawable* poly);
 	Camera* getCamera(void);
 	void setCamera(Camera* camera);
 
 private:
-	std::vector<Drawable*> list[(int)Layer::MAX];
+	//std::vector<Drawable*> list[(int)Layer::MAX];
 	Camera fixedCamera;
-	Camera* camera;
+	//Camera* camera;
 };
 
 char *GetDebugText(int line);

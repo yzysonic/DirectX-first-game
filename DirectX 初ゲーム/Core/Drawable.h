@@ -17,7 +17,7 @@ public:
 	RendererType rendType;	// 描画方法指定
 	int list_index;			// 識別番号
 
-	Drawable(Layer layer);
+	Drawable(Layer layer, std::string render_space = "default");
 	~Drawable(void);
 
 	virtual void draw(void) = 0;
@@ -31,7 +31,8 @@ public:
 protected:
 	Layer layer;	// 描画のレイヤー
 	Color color;	// 色
+	std::string render_space;
 
-	friend class Renderer;
+	friend class RenderSpace;
 
 };

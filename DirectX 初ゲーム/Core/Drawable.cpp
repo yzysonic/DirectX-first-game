@@ -2,16 +2,19 @@
 #include "Object.h"
 #include "Polygon.h"
 #include "Renderer.h"
+#include "RenderSpace.h"
 
-Drawable::Drawable(Layer layer)
+
+Drawable::Drawable(Layer layer, std::string render_space)
 {
 	this->layer = layer;
-	Renderer::GetInstance()->addList(this);
+	this->render_space = render_space;
+	RenderSpace::Get(render_space)->AddDraw(this);
 }
 
 Drawable::~Drawable(void)
 {
-	Renderer::GetInstance()->removeList(this);
+	RenderSpace::Get(render_space)->RemoveDraw(this);
 }
 
 Layer Drawable::getLayer(void)
