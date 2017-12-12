@@ -44,7 +44,7 @@ void RenderSpace::Add(std::string name)
 
 void RenderSpace::Delete(int index)
 {
-	if(index < render_space_list.size())
+	if(index < (int)render_space_list.size())
 	{
 		name_map.erase(render_space_list[index]->name);
 		delete render_space_list[index];
@@ -78,21 +78,26 @@ void RenderSpace::Draw(void)
 {
 	auto pDevice = Direct3D::GetDevice();
 
+	// 描画空間ごとに
 	for (RenderSpace *render_space:render_space_list)
 	{
+		// カメラごとに
 		for (Camera* camera: render_space->camera_list)
 		{
 			pDevice->SetRenderTarget(0, camera->render_target->pSurface);
 			pDevice->SetDepthStencilSurface(camera->render_target->pDepthSurface);
 
 			// バックバッファ＆Ｚバッファのクリア
-			pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), camera->getD3DBackColor(), 1.0f, 0);
+			pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), camera->backColor, 1.0f, 0);
 
+			// ヴューマトリクス、プロジェクションマトリクスの計算
 			camera->getViewMatrix(true);
 			camera->getProjectionMatrix(true);
 
+			// レイヤーごとに
 			for (int i = 0; i < (int)Layer::MAX; i++)
 			{
+				// 描画リストの取得
 				auto list = render_space->draw_list[i];
 
 				for (Drawable* drawable : list)
@@ -104,25 +109,35 @@ void RenderSpace::Draw(void)
 
 }
 
+//=============================================================================
+// 描画リストに追加
+//=============================================================================
 void RenderSpace::AddDraw(Drawable * drawable)
 {
 	drawable->list_index = this->draw_list[(int)drawable->layer].size();
 	this->draw_list[(int)drawable->layer].push_back(drawable);
 }
 
+//=============================================================================
+// 描画リストから削除
+//=============================================================================
 void RenderSpace::RemoveDraw(Drawable * drawable)
 {
-	int index = drawable->list_index;
-	std::vector<Drawable*>& list = this->draw_list[(int)drawable->layer];
+	int &index = drawable->list_index;
+	if (index < 0)
+		return;
+
+	auto& list = this->draw_list[(int)drawable->layer];
 
 	list[index] = list.back();
 	list[index]->list_index = index;
 	list.pop_back();
+	index = -1;
 }
 
 Camera * RenderSpace::GetCamera(int no)
 {
-	if (no < camera_list.size())
+	if (no < (int)camera_list.size())
 		return camera_list[no];
 	else
 		return nullptr;
@@ -133,9 +148,14 @@ void RenderSpace::AddCamera(Camera * camera)
 	camera_list.push_back(camera);
 }
 
+void RenderSpace::SetCamera(int no, Camera * camera)
+{
+	camera_list[no] = camera;
+}
+
 void RenderSpace::RemoveCamera(Camera * camera)
 {
-	for (int i = 0; i < camera_list.size(); i++)
+	for (int i = 0; i < (int)camera_list.size(); i++)
 	{
 		if (camera_list[i] == camera)
 		{
@@ -148,4 +168,9 @@ void RenderSpace::RemoveCamera(Camera * camera)
 int RenderSpace::CameraCount(void)
 {
 	return camera_list.size();
+}
+
+int RenderSpace::GetIndex(void)
+{
+	return name_map[this->name];
 }

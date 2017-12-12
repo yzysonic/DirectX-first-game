@@ -42,17 +42,8 @@ void Renderer::Create(void)
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);	// ２番目のアルファ引数
 
-	// 初期カメラ
-	//m_pInstance->camera = &m_pInstance->fixedCamera;
-
-
-	//for (int i = 0; i < (int)Layer::MAX; i++)
-	//{
-	//	m_pInstance->list[i].reserve(g_PoolSize[i]);
-	//}
-
+	// 初期描画空間
 	RenderSpace::Add("default");
-
 }
 
 //=============================================================================
@@ -62,11 +53,6 @@ void Renderer::Destroy(void)
 {
 	if (m_pInstance == nullptr)
 		return;
-
-	for (int i = 0; i < (int)Layer::MAX; i++)
-	{
-		//m_pInstance->list[i].clear();
-	}
 
 	for (int i = RenderSpace::RenderSpaceCount(); i >=0; i--)
 		RenderSpace::Delete(i);
@@ -84,6 +70,7 @@ void Renderer::DrawFrame()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(pDevice->BeginScene()))
 	{
+		// メイン描画処理
 		RenderSpace::Draw();
 
 		// デバッグ
@@ -93,11 +80,8 @@ void Renderer::DrawFrame()
 		pDevice->EndScene();
 	}
 
-	pDevice->SetRenderTarget(0, RenderTarget::BackBuffer()->pSurface);
-	pDevice->SetDepthStencilSurface(RenderTarget::BackBuffer()->pDepthSurface);
-
 	// バックバッファとフロントバッファの入れ替え
-	static HRESULT hr;
+	HRESULT hr;
 	hr = pDevice->Present(NULL, NULL, NULL, NULL);
 
 	// デバイスロストの検知
@@ -111,47 +95,40 @@ void Renderer::DrawFrame()
 }
 
 //=============================================================================
-// 描画リストに追加
+// カメラ取得
 //=============================================================================
-//void Renderer::addList(Drawable* poly)
-//{
-//	poly->list_index = this->list[(int)poly->layer].size();
-//	this->list[(int)poly->layer].push_back(poly);
-//}
-
-//=============================================================================
-// 描画リストから削除
-//=============================================================================
-//void Renderer::removeList(Drawable * poly)
-//{
-//	int index = poly->list_index;
-//	std::vector<Drawable*>& list = this->list[(int)poly->layer];
-//
-//	list[index] = list.back();
-//	list[index]->list_index = index;
-//	list.pop_back();
-//
-//}
-
-Camera * Renderer::getCamera(void)
+Camera * Renderer::getCamera(std::string render_space_name, int no)
 {
-	return RenderSpace::Get(0)->GetCamera(0);
+	return RenderSpace::Get(render_space_name)->GetCamera(no);
 }
+Camera * Renderer::getCamera(int render_space_no, int no)
+{
+	return RenderSpace::Get(render_space_no)->GetCamera(no);
+}
+
 
 //=============================================================================
 // カメラ設置
 //=============================================================================
-void Renderer::setCamera(Camera * camera)
+void Renderer::setCamera(Camera * camera, std::string render_space)
 {
-	RenderSpace::Get(0)->RemoveCamera(RenderSpace::Get(0)->GetCamera(0));
+	RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
 
 	if (camera != nullptr)
-	{
-		RenderSpace::Get(0)->AddCamera(camera);
-	}
+		RenderSpace::Get(render_space)->AddCamera(camera);
 	else
-		RenderSpace::Get(0)->AddCamera(&fixedCamera);
+		RenderSpace::Get(render_space)->AddCamera(&fixedCamera);
 }
+void Renderer::setCamera(Camera * camera, int render_space)
+{
+	RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
+
+	if (camera != nullptr)
+		RenderSpace::Get(render_space)->AddCamera(camera);
+	else
+		RenderSpace::Get(render_space)->AddCamera(&fixedCamera);
+}
+
 
 
 //=============================================================================
@@ -168,6 +145,10 @@ char *GetDebugText(int line)
 void DrawDebug()
 {
 	RECT rect;
+	auto pDevice = Direct3D::GetDevice();
+	pDevice->SetRenderTarget(0, RenderTarget::BackBuffer()->pSurface);
+	pDevice->SetDepthStencilSurface(RenderTarget::BackBuffer()->pDepthSurface);
+
 	for (int i = 0; i < 40; i++)
 	{
 		rect = { 0,i * 20,SystemParameters::ResolutionX,SystemParameters::ResolutionY };

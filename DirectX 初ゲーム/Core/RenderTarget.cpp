@@ -1,20 +1,38 @@
 #include "RenderTarget.h"
 #include "Common.h"
 
-RenderTarget RenderTarget::back_buffer;
+RenderTarget RenderTarget::back_buffer = RenderTarget(SystemParameters::ResolutionX, SystemParameters::ResolutionY, false);
+std::vector<RenderTarget*> RenderTarget::render_target_list;
 
-RenderTarget::RenderTarget(int width, int height)
+RenderTarget::RenderTarget(int width, int height, bool create)
 {
-	this->width = width;
-	this->height = height;
-	this->pTexture = nullptr;
+	this->name = "RenderTarget";
+	this->size.x = (float)width;
+	this->size.y = (float)height;
+	this->divideX = 1.0f;
+	this->divideY = 1.0f;
+	this->pDXTex = nullptr;
 	this->pSurface = nullptr;
 	this->pDepthSurface = nullptr;
+	this->index = -1;
+
+	if (create)
+	{
+		Create();
+		this->index = render_target_list.size();
+		render_target_list.push_back(this);
+	}
+
 }
 
 RenderTarget::~RenderTarget(void)
 {
-	SafeRelease(pTexture);
+	if (this->index >= 0)
+	{
+		render_target_list.erase(render_target_list.begin() + this->index);
+		render_target_list.shrink_to_fit();
+	}
+	SafeRelease(pDXTex);
 	SafeRelease(pSurface);
 	SafeRelease(pDepthSurface);
 }
@@ -25,12 +43,12 @@ HRESULT RenderTarget::Create(void)
 
 	// テクスチャの作成
 	if (FAILED(pDevice->CreateTexture(
-		width, height,
+		(UINT)size.x, (UINT)size.y,
 		1,
 		D3DUSAGE_RENDERTARGET,
 		D3DFMT_A8R8G8B8,
 		D3DPOOL_DEFAULT,
-		&pTexture,
+		&pDXTex,
 		NULL
 	)))
 	{
@@ -38,12 +56,12 @@ HRESULT RenderTarget::Create(void)
 	}
 
 	// テクスチャサーフェースの取得
-	if (FAILED(pTexture->GetSurfaceLevel(0, &pSurface)))
+	if (FAILED(pDXTex->GetSurfaceLevel(0, &pSurface)))
 		return E_FAIL;
 
 	// 深度バッファの作成
 	if (FAILED(pDevice->CreateDepthStencilSurface(
-		width, height,
+		(UINT)size.x, (UINT)size.y,
 		D3DFMT_D16,
 		D3DMULTISAMPLE_NONE,
 		0,
@@ -69,7 +87,6 @@ RenderTarget* RenderTarget::BackBuffer(void)
 
 		if (FAILED(pDevice->GetRenderTarget(0, &pSurface)))
 			return nullptr;
-
 		if (FAILED(pDevice->GetDepthStencilSurface(&pDepthSurface)))
 			return nullptr;
 
@@ -79,4 +96,25 @@ RenderTarget* RenderTarget::BackBuffer(void)
 	}
 	
 	return &back_buffer;
+}
+
+void RenderTarget::OnLostDevice(void)
+{
+	for (auto render_target : render_target_list)
+	{
+		SafeRelease(render_target->pDXTex);
+		SafeRelease(render_target->pSurface);
+		SafeRelease(render_target->pDepthSurface);
+	}
+
+	SafeRelease(back_buffer.pSurface);
+	SafeRelease(back_buffer.pDepthSurface);
+}
+
+void RenderTarget::OnResetDevice(void)
+{
+	for (auto render_target : render_target_list)
+		render_target->Create();
+
+	BackBuffer();
 }

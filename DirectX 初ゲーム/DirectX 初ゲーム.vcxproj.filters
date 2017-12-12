@@ -163,6 +163,9 @@
     <ClCompile Include="Core\RenderTarget.cpp">
       <Filter>Core\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="MiniMap.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -308,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="Core\RenderSpace.h">
       <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniMap.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

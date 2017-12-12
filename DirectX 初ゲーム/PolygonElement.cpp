@@ -6,8 +6,8 @@ PolygonElement::PolygonElement()
 	this->setPolygon();
 	this->transform->scale = Vector3(0.01f, 0.01f, 1.0f);
 
-	this->transform->position.x = Random(-SystemParameters::ResolutionX/2 - 100, SystemParameters::ResolutionX/2 + 100);
-	this->transform->position.y = Random(-SystemParameters::ResolutionY/2 - 100, SystemParameters::ResolutionY/2 + 100);
+	this->transform->position.x = (float)Random(-SystemParameters::ResolutionX/2 - 100, SystemParameters::ResolutionX/2 + 100);
+	this->transform->position.y = (float)Random(-SystemParameters::ResolutionY/2 - 100, SystemParameters::ResolutionY/2 + 100);
 	this->transform->position.z = Randomf(0.01f, 5);
 
 	this->timer = 0;

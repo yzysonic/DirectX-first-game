@@ -1,12 +1,13 @@
 #include "Camera.h"
 #include "Renderer.h"
 
-Camera::Camera(Vector3 pos, RenderTarget* render_target)
+Camera::Camera(RenderTarget* render_target)
 {
 	if (render_target == nullptr)
 		this->render_target = RenderTarget::BackBuffer();
+	else this->render_target = render_target;
 	this->type = ObjectType::Camera;
-	this->transform->position = pos;
+	this->transform->position = Vector3(0.0f, 0.0f, -1.0f);
 	this->setBackColor(Color(255, 255, 255, 255));
 	this->fov = 0.0f;
 	this->at = Vector3(0.0f, 0.0f, 1.0f);
@@ -63,9 +64,4 @@ void Camera::setBackColor(Color color)
 void Camera::setBackColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	backColor = ColorRGBA(r, g, b, a);
-}
-
-D3DCOLOR Camera::getD3DBackColor(void)
-{
-	return backColor;
 }

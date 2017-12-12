@@ -1,24 +1,27 @@
 #pragma once
 #include "Direct3D.h"
+#include "Texture.h"
 #include "Common.h"
+#include <vector>
 
-class RenderTarget
+class RenderTarget : public Texture
 {
 public:
 	static RenderTarget* BackBuffer(void);
+	static void OnLostDevice(void);
+	static void OnResetDevice(void);
+
+private:
+	static RenderTarget back_buffer;
+	static std::vector<RenderTarget*> render_target_list;
 
 public:
 	LPDIRECT3DSURFACE9 pSurface;
 	LPDIRECT3DSURFACE9 pDepthSurface;
-	LPDIRECT3DTEXTURE9 pTexture;
-
-	RenderTarget(int width = SystemParameters::ResolutionX, int height = SystemParameters::ResolutionY);
+	RenderTarget(int width = SystemParameters::ResolutionX, int height = SystemParameters::ResolutionY, bool create = true);
 	~RenderTarget(void);
-	HRESULT Create(void);
 
 private:
-	int width;
-	int height;
-	static RenderTarget back_buffer;
-
+	HRESULT Create(void);
+	int index;
 };

@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "PolygonElement.h"
+#include "MiniMap.h"
 
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
@@ -32,6 +33,7 @@ private:
 	PolygonElement *polyList[GAME_POLY_MAX] = {};
 	Player* player = nullptr;
 	Enemy* enemy[ENEMY_MAX] = {};
+	MiniMap* minimap = nullptr;
 
 	int score;
 	float timer;

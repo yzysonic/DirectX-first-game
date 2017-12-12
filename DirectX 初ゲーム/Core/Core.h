@@ -4,6 +4,8 @@
 #include "GameManager.h"
 #include "Input.h"
 #include "Sound.h"
+#include "RenderTarget.h"
+#include "RenderSpace.h"
 #include "Renderer.h"
 #include "Time.h"
 #include "Random.h"

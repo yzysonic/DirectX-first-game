@@ -9,6 +9,9 @@
 #include "Core/GameManager.h"
 #include "SceneGlobal.h"
 #include "SceneTitle.h"
+#ifdef _DEBUG
+#include "SceneGame.h"
+#endif
 
 // メモリリークの自動検出
 #ifdef _DEBUG
@@ -40,7 +43,12 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	InitGame();
 	SceneGlobal::Create();
 	GameManager::GetInstance()->SetGlobalScene(SceneGlobal::GetInstance());
+#ifndef _DEBUG
 	GameManager::GetInstance()->SetScene(new SceneTitle);
+#else
+	GameManager::GetInstance()->SetScene(new SceneGame);
+#endif
+	
 
 	// ゲームループ
 	RunGame();

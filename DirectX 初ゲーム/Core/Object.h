@@ -20,7 +20,7 @@ class RectPolygon;
 class RectPolygon2D;
 class Rigidbody2D;
 class Collider2D;
-class Script;
+//class Script;
 
 class Transform
 {
@@ -30,7 +30,7 @@ public:
 	Vector3 scale;
 
 	Transform(ObjectBase* object);
-	Vector3 getRotation(void);
+	Vector3 getRotation(void) const;
 	void setRotation(Vector3 rotation);
 	void setRotation(float x, float y, float z);
 	Vector3 getUp(void);
@@ -62,18 +62,19 @@ public:
 	
 	virtual void update(void) {};
 
-	Transform*		getTransform(void);
-	template<class T>
-	Script*			getScript(void);
-	template<class T>
-	void			setScript(void);
+	Transform *	getTransform(void) const;
+	//template<class T>
+	//Script*			getScript(void);
+	//template<class T>
+	//void			setScript(void);
 
-	void setActive(bool value);
+	void setActive(bool active);
 	bool getActive(void);
+	virtual void setVisibility(bool visible);
 
 protected:
 	std::unique_ptr<Transform> transform;
-	std::unordered_map<size_t, std::unique_ptr<Script>> script;
+	//std::unordered_map<size_t, std::unique_ptr<Script>> script;
 
 private:
 	bool isActive;
@@ -103,11 +104,12 @@ public:
 	virtual void onCollision(Object2D* other) {};
 
 	RectPolygon2D*	getPolygon(void);
-	void			setPolygon(Layer layer = Layer::DEFAULT, Texture* texName = Texture::none, RendererType rendType = RendererType::Classic2D);
+	void			setPolygon(Layer layer = Layer::DEFAULT, Texture* texName = Texture::none, RendererType rendType = RendererType::Classic2D, std::string render_space = "default");
 	Rigidbody2D*	getRigidbody(void);
 	void			setRigidbody(void);
 	Collider2D*		getCollider(void);
 	void			setCollider(void);
+	void			setVisibility(bool visible) override;
 
 protected:
 	std::unique_ptr<RectPolygon2D> polygon;

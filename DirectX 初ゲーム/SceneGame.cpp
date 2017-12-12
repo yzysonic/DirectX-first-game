@@ -33,12 +33,19 @@ void SceneGame::init(void)
 	this->player->setActive(false);
 
 	// カメラ設定
-	this->camera = new SmoothCamera(this->player->getTransform(), Vector3(0, -50, -5));
+	this->camera = new SmoothCamera(this->player->getTransform());
+	this->camera->getTransform()->position = Vector3(0, -50, -5);
 	this->camera->setActive(false);
 	this->camera->setBackColor(210, 210, 210, 255);
 	this->camera->fov = 1;
 	Renderer::GetInstance()->setCamera(this->camera);
 	this->player->camera = this->camera;
+
+	// ミニマップ
+	this->minimap = new MiniMap(200, 200);
+	this->minimap->getTransform()->position = Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f);
+	this->minimap->SetPlayer(this->player);
+	this->minimap->zoom = 0.3f;
 
 	// ゲームで使う変数
 	this->score = 0;
@@ -84,23 +91,27 @@ void SceneGame::uninit(void)
 
 	StopSound(BGM_GAME);
 
+	delete this->minimap;
+
+	for (auto &enemy : this->enemy)
+	{
+		SafeDelete<Enemy>(enemy);
+	}
+	delete this->player;
 	delete this->vignetting;
 	delete this->liveUI;
 	delete this->scoreUI;
 	delete this->timeUI[0];
 	delete this->timeUI[1];
 	delete this->camera;
-	delete this->player;
+	
 
 	for (int i = 0; i < this->polyCount; i++)
 		delete (this->polyList[i]);
 
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		if(this->enemy[i] != nullptr)
-			delete this->enemy[i];
-	}
+	
 
+	Renderer::GetInstance()->setCamera(nullptr);
 	Bullet::Clear();
 }
 
@@ -139,16 +150,16 @@ void SceneGame::update_main(void)
 	// 敵の生成
 	swapEnemy();
 
-	for (int i = 0; i < ENEMY_MAX; i++)
+	for (auto &enemy : this->enemy)
 	{
-		if (this->enemy[i] == nullptr)
+		if (enemy == nullptr)
 			continue;
 
-		if (this->enemy[i]->hp == 0)
+		if (enemy->hp == 0)
 		{
 			this->addGameScore(300);
-			delete this->enemy[i];
-			this->enemy[i] = nullptr;
+			this->minimap->RemoveEnemy(enemy);
+			SafeDelete<Enemy>(enemy);
 		}
 	}
 	
@@ -204,15 +215,15 @@ void SceneGame::swapEnemy(void)
 
 	if (timer > 3.0f)
 	{
-		for (int i = 0; i < ENEMY_MAX; i++)
+		for (auto &enemy : this->enemy)
 		{
-			if (this->enemy[i] == NULL)
+			if (enemy == nullptr)
 			{
-				Enemy* enemy = 
-				this->enemy[i] = new Enemy;
+				enemy = new Enemy;
 
 				enemy->target = this->player->getTransform();
-				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_Y-500), 0.0f);
+				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X + 500, FIELD_RANG_X - 500), Randomf(-FIELD_RANG_Y + 500, FIELD_RANG_Y - 500), 0.0f);
+				this->minimap->SetEnemy(enemy);
 
 				break;
 			}

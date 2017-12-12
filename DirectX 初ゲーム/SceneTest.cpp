@@ -1,18 +1,24 @@
 #include "SceneTest.h"
 #include "Time.h"
 #include "Core/Renderer.h"
+#include "Core\RenderSpace.h"
 
 #define testMax 2000
 #define ProjectMode 0
 
 void SceneTest::init(void)
 {
+
 	this->player = new Player;
 	//this->enemy = new Enemy;
 	//enemy->target = this->player->getTransform();
 	//enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
 	this->player->camera = this->camera;
+
+	this->mini_map = new MiniMap(200, 200);
+	this->mini_map->getTransform()->position = Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f);
+	this->mini_map->getPolygon()->setOpacity(0.5f);
 
 	this->test = new Object;
 	this->test->setPolygon();
@@ -24,6 +30,8 @@ void SceneTest::init(void)
 	Renderer::GetInstance()->setCamera(this->camera);
 	this->camera->setBackColor(210,210,210,255);
 	this->camera->fov = ProjectMode;
+
+	
 
 
 	SetVolume(BGM_GAME, -1800);
@@ -77,11 +85,14 @@ void SceneTest::uninit(void)
 	delete(this->player);
 	delete(this->enemy);
 	delete(this->test);
+	delete(this->mini_map);
 
 	Bullet::Clear();
 
 	for (int i = 0; i < 40; i++)
 		strcpy(GetDebugText(i), "");
+
+	RenderSpace::Delete("mini_map");
 
 	ShowCursor(true);
 

@@ -30,6 +30,8 @@ void SceneGlobal::init(void)
 	Texture::LoadTexture("bullet");
 	Texture::LoadTexture("bullet_e");
 	Texture::LoadTexture("guide");
+	Texture::LoadTexture("player_mark");
+	Texture::LoadTexture("enemy_mark");
 
 }
 

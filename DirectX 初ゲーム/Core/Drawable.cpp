@@ -9,6 +9,8 @@ Drawable::Drawable(Layer layer, std::string render_space)
 {
 	this->layer = layer;
 	this->render_space = render_space;
+	this->render_space_index = RenderSpace::Get(render_space)->GetIndex();
+	this->visible = true;
 	RenderSpace::Get(render_space)->AddDraw(this);
 }
 
@@ -46,4 +48,17 @@ void Drawable::setOpacity(float opacity)
 {
 	this->color.a = (unsigned char)(opacity * 0xff);
 	this->setColor(this->color);
+}
+
+void Drawable::setVisibility(bool visible)
+{
+	if (visible == this->visible)
+		return;
+
+	if(visible)
+		RenderSpace::Get(this->render_space)->AddDraw(this);
+	else
+		RenderSpace::Get(render_space)->RemoveDraw(this);
+
+	this->visible = visible;
 }

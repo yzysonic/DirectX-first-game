@@ -10,7 +10,7 @@ public:
 	Transform *target;
 	float speed;
 
-	SmoothCamera(Transform* target, Vector3 pos = Vector3(0, 0, -1.0f));
+	SmoothCamera(Transform* target, RenderTarget* render_target = nullptr);
 	void update(void) override;
 	void Shake(void);
 

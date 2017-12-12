@@ -3,7 +3,7 @@
 #include "Polygon.h"
 #include "Collider.h"
 #include "Rigidbody.h"
-#include "Script.h"
+//#include "Script.h"
 #include "Physics.h"
 #include "Lerp.h"
 #include "Time.h"
@@ -28,7 +28,7 @@ Transform::Transform(ObjectBase* object)
 
 }
 
-Vector3 Transform::getRotation(void)
+Vector3 Transform::getRotation(void) const
 {
 	return this->rotation;
 }
@@ -126,47 +126,44 @@ ObjectBase::~ObjectBase()
 }
 
 
-Transform * ObjectBase::getTransform(void)
+Transform * ObjectBase::getTransform(void) const
 {
 	return this->transform.get();
 }
 
-template<class T>
-Script * ObjectBase::getScript(void)
+//template<class T>
+//Script * ObjectBase::getScript(void)
+//{
+//	return this->script[typeid(T).hash_code()].get();
+//}
+//
+//template<class T>
+//void ObjectBase::setScript(void)
+//{
+//	this->script[typeid(T).hash_code()].reset(new T);
+//}
+
+
+void ObjectBase::setActive(bool active)
 {
-	return this->script[typeid(T).hash_code()].get();
-}
+	if (this->isActive == active)
+		return;
 
-template<class T>
-void ObjectBase::setScript(void)
-{
-	this->script[typeid(T).hash_code()].reset(new T);
-}
+	if (active)
+		ObjectManager::GetInstance()->addUpdate(this);
+	else
+		ObjectManager::GetInstance()->removeUpdate(this);
 
-
-void ObjectBase::setActive(bool value)
-{
-	ObjectManager* manager = ObjectManager::GetInstance();
-
-	if (this->isActive != value)
-	{
-		if (value)
-		{
-			manager->addUpdate(this);
-			this->isActive = true;
-		}
-		else
-		{
-			manager->removeUpdate(this);
-			this->isActive = false;
-		}
-	}
+	this->isActive = active;
+	setVisibility(active);
 }
 
 bool ObjectBase::getActive(void)
 {
 	return this->isActive;
 }
+
+void ObjectBase::setVisibility(bool visible){}
 
 Object::Object(void) : ObjectBase() {}
 
@@ -204,10 +201,10 @@ RectPolygon2D * Object2D::getPolygon(void)
 	return this->polygon.get();
 }
 
-void Object2D::setPolygon(Layer layer, Texture* texName, RendererType rendType)
+void Object2D::setPolygon(Layer layer, Texture* texName, RendererType rendType, std::string render_space)
 {
 	this->polygon.reset();
-	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType);
+	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType, render_space);
 }
 
 Rigidbody2D * Object2D::getRigidbody(void)
@@ -234,5 +231,10 @@ void Object2D::setCollider(void)
 	this->collider.reset();
 	this->collider = std::make_shared<Collider2D>(this);
 	Physics::GetInstance()->addCollider(this->collider);
+}
+
+void Object2D::setVisibility(bool visible)
+{
+	this->polygon->setVisibility(visible);
 }
 

@@ -8,37 +8,19 @@
 #include "Camera.h"
 #include <vector>
 
-// レイヤーごとのプールサイズ
-const int g_PoolSize[(int)Layer::MAX] =
-{
-	10,			// BG00
-	10,			// BG01
-	10,			// BG02
-	SystemParameters::ObjectMax,	// DEFAULT
-	10,			// PLAYER
-	 1,			// MASK
-	30,			// UI00
-	10,			// UI01
-	10,			// UI02
-	10,			// TOP
-};
-
 class Renderer : public Singleton<Renderer>
 {
 public:
-	Renderer(void) {};
 	static void Create(void);
 	static void Destroy(void);
 	static void DrawFrame(void);
-	//void addList(Drawable* poly);
-	//void removeList(Drawable* poly);
-	Camera* getCamera(void);
-	void setCamera(Camera* camera);
+	Camera* getCamera(std::string render_space_name , int no = 0);
+	Camera* getCamera(int render_space_no = 0, int no = 0);
+	void setCamera(Camera* camera, std::string render_space);
+	void setCamera(Camera* camera, int render_space = 0);
 
 private:
-	//std::vector<Drawable*> list[(int)Layer::MAX];
 	Camera fixedCamera;
-	//Camera* camera;
 };
 
 char *GetDebugText(int line);

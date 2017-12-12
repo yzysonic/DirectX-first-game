@@ -46,13 +46,15 @@ public:
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
 	
-	RectPolygon2D(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType);
+	RectPolygon2D(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType, std::string render_space);
 	void draw(void) override;
 	void setColor(Color color) override;
 	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 	Vector2 getSize(void);
 	void setSize(float x, float y);
 	void setPattern(unsigned int pattern);
+	void setTexture(Texture* texture);
+
 protected:
 	Vector2 size;	// 表示するサイズ
 	int pattern;	// 表示するパターン

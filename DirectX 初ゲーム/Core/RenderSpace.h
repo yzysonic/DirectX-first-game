@@ -10,6 +10,7 @@
 class RenderSpace
 {
 public:
+	static void Draw(void);
 	static RenderSpace* Get(int index);
 	static RenderSpace* Get(std::string name);
 	static void Add(std::string name);
@@ -25,13 +26,14 @@ private:
 public:
 	RenderSpace(std::string name);
 
-	static void Draw(void);
 	void AddDraw(Drawable* drawable);
 	void RemoveDraw(Drawable* drawable);
 	Camera* GetCamera(int no);
 	void AddCamera(Camera* camera);
+	void SetCamera(int no, Camera* camera);
 	void RemoveCamera(Camera* camera);
 	int CameraCount(void);
+	int GetIndex(void);
 
 private:
 	std::string name;

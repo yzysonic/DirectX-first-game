@@ -27,12 +27,16 @@ public:
 	virtual void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	float getOpacity(void);
 	void setOpacity(float opacity);
+	void setVisibility(bool visible);
 
 protected:
 	Layer layer;	// •`‰æ‚ÌƒŒƒCƒ„[
 	Color color;	// F
 	std::string render_space;
+	int render_space_index;
 
 	friend class RenderSpace;
 
+private:
+	bool visible;
 };

@@ -6,6 +6,7 @@
 //=============================================================================
 #include "Direct3D.h"
 #include "Common.h"
+#include "RenderTarget.h"
 #include <DxErr.h>
 
 #pragma comment (lib, "d3d9.lib")
@@ -117,10 +118,12 @@ bool Direct3D::ResetDevice()
 {
 
 	s_pFont->OnLostDevice();
+	RenderTarget::OnLostDevice();
 
 	HRESULT hr = s_pDevice->Reset(&s_d3dpp);
 
 	s_pFont->OnResetDevice();
+	RenderTarget::OnResetDevice();
 
 	if (FAILED(hr))
 	{

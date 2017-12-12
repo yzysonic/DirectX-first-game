@@ -1,6 +1,6 @@
 #include "SmoothCamera.h"
 
-SmoothCamera::SmoothCamera(Transform * target, Vector3 pos) : Camera(pos)
+SmoothCamera::SmoothCamera(Transform * target, RenderTarget* render_target) : Camera(render_target)
 {
 
 	this->target = target;

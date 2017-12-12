@@ -181,6 +181,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Core\Drawable.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="Core\Drawable.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />

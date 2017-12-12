@@ -4,21 +4,13 @@
 #include "Lerp.h"
 
 
-RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, RendererType rendType) : Drawable(layer)
+RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, RendererType rendType, std::string render_space) : Drawable(layer, render_space)
 {
 
 	this->object	= object;
 	this->layer		= layer;
 	this->rendType	= rendType;
-	this->pTexture	= texture;
-	this->size	= this->pTexture->size;
-
-	this->radius = this->size.length()/2;
-	this->baseAngle = atan2f(this->size.y, this->size.x);
-	if (this->pTexture != Texture::none && this->pTexture->pDXTex == nullptr)
-		this->color.setRGBA(255, 0, 255, 255);
-	else
-		this->color.setRGBA(255, 255, 255, 255);
+	this->pattern = 0;
 
 	// rhwの設定
 	this->vertex[0].rhw =
@@ -26,19 +18,7 @@ RectPolygon2D::RectPolygon2D(ObjectBase* object, Layer layer, Texture *texture, 
 	this->vertex[2].rhw =
 	this->vertex[3].rhw = 1.0f;
 
-	// 反射光の設定
-	this->vertex[0].diffuse =
-	this->vertex[1].diffuse =
-	this->vertex[2].diffuse =
-	this->vertex[3].diffuse = this->color;
-
-	// テクスチャ座標の設定
-	this->vertex[0].uv = Vector2(0.0f,								0.0f);
-	this->vertex[1].uv = Vector2(1.0f / this->pTexture->divideX,	0.0f);
-	this->vertex[2].uv = Vector2(0.0f,								1.0f / this->pTexture->divideY);
-	this->vertex[3].uv = Vector2(1.0f / this->pTexture->divideX,	1.0f / this->pTexture->divideY);
-
-	this->pattern = 0;
+	setTexture(texture);
 
 }
 
@@ -101,6 +81,32 @@ void RectPolygon2D::setPattern(unsigned int pattern)
 	this->vertex[3].uv = Vector2(x*size.x + size.x, y*size.y + size.y);
 }
 
+void RectPolygon2D::setTexture(Texture * texture)
+{
+	this->pTexture	= texture;
+	this->size	= this->pTexture->size;
+
+	this->radius = this->size.length()/2;
+	this->baseAngle = atan2f(this->size.y, this->size.x);
+	if (this->pTexture != Texture::none && this->pTexture->pDXTex == nullptr)
+		this->color.setRGBA(255, 0, 255, 255);
+	else
+		this->color.setRGBA(255, 255, 255, 255);
+
+	// 反射光の設定
+	this->vertex[0].diffuse =
+	this->vertex[1].diffuse =
+	this->vertex[2].diffuse =
+	this->vertex[3].diffuse = this->color;
+
+	// テクスチャ座標の設定
+	this->vertex[0].uv = Vector2(0.0f,								0.0f);
+	this->vertex[1].uv = Vector2(1.0f / this->pTexture->divideX,	0.0f);
+	this->vertex[2].uv = Vector2(0.0f,								1.0f / this->pTexture->divideY);
+	this->vertex[3].uv = Vector2(1.0f / this->pTexture->divideX,	1.0f / this->pTexture->divideY);
+
+}
+
 //=============================================================================
 // 頂点の座標変換
 //=============================================================================
@@ -127,9 +133,10 @@ void RectPolygon2D::transformVertex(void)
 	this->vertex[3].pos.y = pos.y - sinf(this->baseAngle - rot.z) * radius.y;
 	this->vertex[3].pos.z = pos.z;
 
+	Camera *camera = Renderer::GetInstance()->getCamera(this->render_space_index);
+
 	if (this->rendType == RendererType::Classic2D)
 	{
-		Camera *camera = Renderer::GetInstance()->getCamera();
 
 		// カメラ変換
 		this->vertex[0].pos -= camera->getTransform()->position;
@@ -163,10 +170,10 @@ void RectPolygon2D::transformVertex(void)
 	this->vertex[2].pos.y = -this->vertex[2].pos.y;
 	this->vertex[3].pos.y = -this->vertex[3].pos.y;
 
-	this->vertex[0].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[1].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[2].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
-	this->vertex[3].pos += Vector3(SystemParameters::ResolutionX / 2.f, SystemParameters::ResolutionY / 2.f, 0.0f);
+	this->vertex[0].pos += Vector3(camera->render_target->size.x / 2.f, camera->render_target->size.y / 2.f, 0.0f);
+	this->vertex[1].pos += Vector3(camera->render_target->size.x / 2.f, camera->render_target->size.y / 2.f, 0.0f);
+	this->vertex[2].pos += Vector3(camera->render_target->size.x / 2.f, camera->render_target->size.y / 2.f, 0.0f);
+	this->vertex[3].pos += Vector3(camera->render_target->size.x / 2.f, camera->render_target->size.y / 2.f, 0.0f);
 
 }
 
