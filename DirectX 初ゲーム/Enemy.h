@@ -1,10 +1,12 @@
 #pragma once
 #include "Core/Core.h"
 
-#define ENEMY_SPEED (50)
-
 class Enemy : public Object2D
 {
+private:
+	static constexpr float InitTime = 1.5f;
+	static constexpr float Speed = 50.0f;
+
 public:
 	Transform *target = NULL;
 	int hp;

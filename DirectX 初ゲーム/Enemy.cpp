@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "SceneGame.h"
 
+
 Enemy::Enemy()
 {
 	this->type = ObjectType::Enemy;
@@ -11,11 +12,13 @@ Enemy::Enemy()
 
 	this->hp = 3;
 	this->timer = 0;
+
+	Enemy::pUpdate = &Enemy::update_init;
 }
 
 void Enemy::update()
 {
-	//(this->*pUpdate)();
+	(this->*pUpdate)();
 
 	// タイマーの更新
 	this->timer += Time::DeltaTime();
@@ -36,12 +39,18 @@ void Enemy::onCollision(Object2D * other)
 
 void Enemy::update_init(void)
 {
-	this->transform->rotate(0.0f, 0.0f, Time::DeltaTime()*3.0f*PI);
-	if (this->timer > 1.0f)
+	float progress = (this->timer / InitTime);
+
+	if (this->timer > InitTime)
 	{
 		Enemy::pUpdate = &Enemy::update_main;
 		this->timer = 0.0f;
+		progress = 1.0f;
 	}
+
+	this->transform->rotate(0.0f, 0.0f, Time::DeltaTime()*3.0f*PI);
+	this->transform->scale = progress*Vector3::one;
+	this->polygon->setOpacity(progress);
 }
 
 void Enemy::update_main(void)
@@ -56,7 +65,7 @@ void Enemy::update_main(void)
 		this->transform->rotate(0, 0, 0.02f * ((cross > 0) ? 1 : -1));
 
 		// 自分の前方へ進む
-		this->transform->position += this->transform->getUp() * ENEMY_SPEED * Time::DeltaTime();
+		this->transform->position += this->transform->getUp() * Speed * Time::DeltaTime();
 
 		// 一定の時間に弾発射
 		if (this->timer > 0.5f)

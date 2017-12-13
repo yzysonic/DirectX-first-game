@@ -9,8 +9,8 @@ RenderTarget::RenderTarget(int width, int height, bool create)
 	this->name = "RenderTarget";
 	this->size.x = (float)width;
 	this->size.y = (float)height;
-	this->divideX = 1.0f;
-	this->divideY = 1.0f;
+	this->divideX = 1;
+	this->divideY = 1;
 	this->pDXTex = nullptr;
 	this->pSurface = nullptr;
 	this->pDepthSurface = nullptr;
