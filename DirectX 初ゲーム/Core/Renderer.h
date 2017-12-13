@@ -10,17 +10,20 @@
 
 class Renderer : public Singleton<Renderer>
 {
+	friend class RenderSpace;
 public:
 	static void Create(void);
 	static void Destroy(void);
 	static void DrawFrame(void);
+	Camera* getCamera(void);
 	Camera* getCamera(std::string render_space_name , int no = 0);
-	Camera* getCamera(int render_space_no = 0, int no = 0);
+	Camera* getCamera(int render_space_no, int no = 0);
 	void setCamera(Camera* camera, std::string render_space);
 	void setCamera(Camera* camera, int render_space = 0);
 
 private:
 	Camera fixedCamera;
+	Camera *drawing_camera;
 };
 
 char *GetDebugText(int line);

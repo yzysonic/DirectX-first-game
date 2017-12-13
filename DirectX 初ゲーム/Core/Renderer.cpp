@@ -44,6 +44,9 @@ void Renderer::Create(void)
 
 	// ‰Šú•`‰æ‹óŠÔ
 	RenderSpace::Add("default");
+
+	// •`‰æ’†ƒJƒƒ‰‚ÌÝ’è
+	m_pInstance->drawing_camera = &m_pInstance->fixedCamera;
 }
 
 //=============================================================================
@@ -97,6 +100,10 @@ void Renderer::DrawFrame()
 //=============================================================================
 // ƒJƒƒ‰Žæ“¾
 //=============================================================================
+Camera * Renderer::getCamera(void)
+{
+	return m_pInstance->drawing_camera;
+}
 Camera * Renderer::getCamera(std::string render_space_name, int no)
 {
 	return RenderSpace::Get(render_space_name)->GetCamera(no);

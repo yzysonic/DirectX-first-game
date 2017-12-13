@@ -13,4 +13,8 @@ public:
 	Enemy(void);
 	void update(void) override;
 	void onCollision(Object2D* other) override;
+private:
+	void (Enemy::*pUpdate)(void);
+	void update_init(void);
+	void update_main(void);
 };

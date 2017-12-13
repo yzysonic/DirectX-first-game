@@ -133,7 +133,7 @@ void RectPolygon2D::transformVertex(void)
 	this->vertex[3].pos.y = pos.y - sinf(this->baseAngle - rot.z) * radius.y;
 	this->vertex[3].pos.z = pos.z;
 
-	Camera *camera = Renderer::GetInstance()->getCamera(this->render_space_index);
+	Camera *camera = Renderer::GetInstance()->getCamera();
 
 	if (this->rendType == RendererType::Classic2D)
 	{

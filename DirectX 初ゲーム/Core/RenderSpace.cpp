@@ -1,4 +1,5 @@
 #include "RenderSpace.h"
+#include "Renderer.h"
 
 std::vector<RenderSpace*> RenderSpace::render_space_list;
 std::unordered_map<std::string, int> RenderSpace::name_map;
@@ -84,6 +85,8 @@ void RenderSpace::Draw(void)
 		// ƒJƒƒ‰‚²‚Æ‚É
 		for (Camera* camera: render_space->camera_list)
 		{
+			Renderer::GetInstance()->drawing_camera = camera;
+
 			pDevice->SetRenderTarget(0, camera->render_target->pSurface);
 			pDevice->SetDepthStencilSurface(camera->render_target->pDepthSurface);
 
