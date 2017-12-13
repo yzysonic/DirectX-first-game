@@ -14,11 +14,10 @@ void SceneTest::init(void)
 	enemy->target = this->player->getTransform();
 	enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
-	this->player->camera = this->camera;
 
-	this->mini_map = new MiniMap(200, 200);
-	this->mini_map->getTransform()->position = Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f);
-	this->mini_map->getPolygon()->setOpacity(0.5f);
+	this->mini_map = new MiniMap(200, 200, 11);
+	this->mini_map->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
+	//this->mini_map->getPolygon()->setOpacity(0.5f);
 	this->mini_map->SetPlayer(this->player);
 	this->mini_map->SetEnemy(this->enemy);
 
@@ -45,9 +44,6 @@ void SceneTest::init(void)
 		this->polyCount++;
 	}
 
-
-
-
 	SetVolume(BGM_GAME, -1800);
 	//PlayBGM(BGM_GAME);
 }
@@ -55,18 +51,12 @@ void SceneTest::init(void)
 void SceneTest::update(void)
 {
 	static float timer = 0;
-	static bool bReset = false;
 	static float fov = this->camera->fov;
 	static int project = ProjectMode;
 
 	timer += Time::DeltaTime();
 
 	this->camera->fov = Lerpf(this->camera->fov, (float)project, Time::DeltaTime()*5);
-
-	if (GetKeyboardPress(DIK_RETURN))
-	{
-		bReset = true;
-	}
 
 	if (GetKeyboardTrigger(DIK_TAB))
 	{
@@ -81,6 +71,16 @@ void SceneTest::update(void)
 		this->camera->distance -= 5.0f;
 	if (GetKeyboardPress(DIK_NUMPAD2))
 		this->camera->distance += 5.0f;
+
+	if (GetKeyboardTrigger(DIK_RETURN))
+		this->mini_map->Shake();
+
+	if (player->shake_flag)
+	{
+		camera->Shake();
+		mini_map->Shake();
+		player->shake_flag = false;
+	}
 
 	this->test->getTransform()->rotate(0.0f, 0.1f, 0.0f);
 

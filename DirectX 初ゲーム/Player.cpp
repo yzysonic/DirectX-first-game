@@ -16,8 +16,7 @@ Player::Player()
 	this->timer = 0;
 	this->muteki = false;
 	this->autoAim = false;
-
-	this->camera = nullptr;
+	this->shake_flag = false;
 
 }
 
@@ -48,8 +47,7 @@ void Player::onCollision(Object2D * other)
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		if (this->camera)
-			camera->Shake();
+		this->shake_flag = true;
 	}
 }
 

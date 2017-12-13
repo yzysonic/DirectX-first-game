@@ -24,17 +24,25 @@ public:
 	RenderTarget* render_target = nullptr;
 	float zoom;
 
-	MiniMap(int size_x, int size_y);
+	MiniMap(int size_x, int size_y, int division_level);
 	~MiniMap(void);
 	void SetPlayer(Player const* player);
 	void SetEnemy(Enemy const* enemy);
 	void RemoveEnemy(Enemy const* enemy);
+	void SetPosition(Vector3 pos);
+	void Shake(void);
 
 	void update(void) override;
 
 private:
+	int division_level;
+	bool is_shaking;
+	float timer;
 	std::string render_space;
 	Mark* player = nullptr;
 	std::vector<Mark*> enemy_list;
+	std::vector<Object2D*> element_list;
+
+	void SetElement(void);
 
 };

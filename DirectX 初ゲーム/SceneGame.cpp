@@ -37,13 +37,13 @@ void SceneGame::init(void)
 	this->camera->getTransform()->position = Vector3(0, -50, -5);
 	this->camera->setActive(false);
 	this->camera->setBackColor(210, 210, 210, 255);
-	this->camera->fov = 1;
+	this->camera->fov = 1.0f;
+	this->camera->distance = 1.0f;
 	Renderer::GetInstance()->setCamera(this->camera);
-	this->player->camera = this->camera;
 
 	// ミニマップ
-	this->minimap = new MiniMap(200, 200);
-	this->minimap->getTransform()->position = Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f);
+	this->minimap = new MiniMap(200, 200, 11);
+	this->minimap->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
 	this->minimap->SetPlayer(this->player);
 	this->minimap->zoom = 0.3f;
 
@@ -162,7 +162,14 @@ void SceneGame::update_main(void)
 			SafeDelete<Enemy>(enemy);
 		}
 	}
-	
+
+	// 揺れ処理
+	if (player->shake_flag)
+	{
+		camera->Shake();
+		minimap->Shake();;
+		player->shake_flag = false;
+	}
 
 	// プレイヤーの移動制限
 	Vector3 &playerPos = this->player->getTransform()->position;
