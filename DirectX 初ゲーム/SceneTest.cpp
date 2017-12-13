@@ -10,15 +10,16 @@ void SceneTest::init(void)
 {
 
 	this->player = new Player;
-	//this->enemy = new Enemy;
-	//enemy->target = this->player->getTransform();
-	//enemy->getTransform()->position = Vector3(30, 30, 0);
+	this->enemy = new Enemy;
+	enemy->target = this->player->getTransform();
+	enemy->getTransform()->position = Vector3(30, 30, 0);
 	this->camera = new SmoothCamera(this->player->getTransform());
 	this->player->camera = this->camera;
 
 	this->mini_map = new MiniMap(200, 200);
 	this->mini_map->getTransform()->position = Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f);
 	this->mini_map->getPolygon()->setOpacity(0.5f);
+	this->mini_map->SetPlayer(this->player);
 
 	this->test = new Object;
 	this->test->setPolygon();

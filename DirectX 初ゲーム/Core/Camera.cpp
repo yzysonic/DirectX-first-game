@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Renderer.h"
+#include "Math.h"
 
 Camera::Camera(RenderTarget* render_target)
 {

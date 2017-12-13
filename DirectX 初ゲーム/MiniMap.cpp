@@ -87,6 +87,9 @@ void MiniMap::RemoveEnemy(Enemy const * enemy)
 
 void MiniMap::update(void)
 {
+	if (!this->player)
+		return;
+
 	this->camera->getTransform()->position.x = this->player->getTransform()->position.x;
 	this->camera->getTransform()->position.y = this->player->getTransform()->position.y;
 }

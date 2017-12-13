@@ -32,5 +32,3 @@ void SafeDelete(T *&ptr)
 
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
-
-#define PI ((FLOAT)  3.141592654f)

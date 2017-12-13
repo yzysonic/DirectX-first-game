@@ -46,11 +46,20 @@ void Enemy::update_init(void)
 		Enemy::pUpdate = &Enemy::update_main;
 		this->timer = 0.0f;
 		progress = 1.0f;
+		this->transform->scale = Vector3::one;
 	}
 
-	this->transform->rotate(0.0f, 0.0f, Time::DeltaTime()*3.0f*PI);
-	this->transform->scale = progress*Vector3::one;
-	this->polygon->setOpacity(progress);
+
+	this->transform->scale = Ease::QuadIn(0.2f, 1.0f, progress)*Vector3::one;
+	this->transform->rotate(0.0f, 0.0f, Ease::QuadIn(Time::DeltaTime()*10.0f*PI, 0.0f, progress));
+	this->polygon->setOpacity(Lerpf(0.3f, 1.0f, progress));
+
+	if (progress > 0.8f)
+	{
+		this->transform->scale += 0.6f*sinf((progress - 0.8f)/0.2f*PI)*Vector3::one;
+
+	}
+	
 }
 
 void Enemy::update_main(void)

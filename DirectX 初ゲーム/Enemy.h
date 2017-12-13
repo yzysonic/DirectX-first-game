@@ -4,7 +4,7 @@
 class Enemy : public Object2D
 {
 private:
-	static constexpr float InitTime = 1.5f;
+	static constexpr float InitTime = 1.0f;
 	static constexpr float Speed = 50.0f;
 
 public:

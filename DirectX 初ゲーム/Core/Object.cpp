@@ -5,7 +5,7 @@
 #include "Rigidbody.h"
 //#include "Script.h"
 #include "Physics.h"
-#include "Lerp.h"
+#include "Math.h"
 #include "Time.h"
 
 //*****************************************************************************
