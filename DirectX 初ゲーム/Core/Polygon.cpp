@@ -266,12 +266,16 @@ void RectPolygon::draw(void)
 
 void RectPolygon::setColor(Color color)
 {
-
+	for (int i = 0; i < RECT_NUM_VERTEX; i++)
+		this->vertex[i].diffuse = color;
+	this->color = color;
 }
 
 void RectPolygon::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-
+	for (int i = 0; i < RECT_NUM_VERTEX; i++)
+		this->vertex[i].diffuse.setRGBA(r, g, b, a);
+	this->color.setRGBA(r, g, b, a);
 }
 
 void RectPolygon::setVtxBuff(void)

@@ -5,6 +5,7 @@ SmoothCamera::SmoothCamera(Transform * target, RenderTarget* render_target) : Ca
 
 	this->target = target;
 	this->speed = kCameraSpeed;
+	this->distance = 100.0f;
 	this->transform->position.z = -5.0f;
 
 	this->camera_shake.SetCamera(this);
@@ -17,7 +18,7 @@ SmoothCamera::SmoothCamera(Transform * target, RenderTarget* render_target) : Ca
 
 void SmoothCamera::update()
 {
-	this->transform->position = Vector3::Lerp(this->transform->position, this->target->position + Vector3(0, 0, -1.0f), speed*Time::DeltaTime());
+	this->transform->position = Vector3::Lerp(this->transform->position, this->target->position + Vector3(0, 0, -this->distance), speed*Time::DeltaTime());
 	this->at = this->transform->position + Vector3(0.0f, 0.0f, 1.0f);
 }
 

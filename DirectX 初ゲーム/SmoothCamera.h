@@ -9,6 +9,7 @@ class SmoothCamera : public Camera
 public:
 	Transform *target;
 	float speed;
+	float distance;
 
 	SmoothCamera(Transform* target, RenderTarget* render_target = nullptr);
 	void update(void) override;

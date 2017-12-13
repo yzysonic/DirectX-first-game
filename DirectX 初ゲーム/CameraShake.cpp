@@ -26,6 +26,7 @@ void CameraShake::update(void)
 		shake_offset *= exp2f(-decay*progress) * strength;
 
 		camera->getTransform()->position += shake_offset;
+		camera->at += shake_offset;
 
 		shake_timer += Time::DeltaTime();
 	}

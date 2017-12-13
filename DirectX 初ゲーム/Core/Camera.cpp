@@ -13,10 +13,10 @@ Camera::Camera(RenderTarget* render_target)
 	this->fov = 0.0f;
 	this->at = Vector3(0.0f, 0.0f, 1.0f);
 	this->up = Vector3(0.0f, 1.0f, 0.0f);
-	this->view_angle = 90.0f * PI / 180.0f;
+	this->view_angle = Deg2Rad(150.0f);
 	this->view_aspect = (float)SystemParameters::ResolutionX / (float)SystemParameters::ResolutionY;
 	this->view_near_z = 0.1f;
-	this->view_far_z = 100.0f;
+	this->view_far_z = 1000.0f;
 }
 
 Camera::~Camera(void)

@@ -11,6 +11,7 @@
 #include "SceneTitle.h"
 #ifdef _DEBUG
 #include "SceneGame.h"
+#include "SceneTest.h"
 #endif
 
 // ƒƒ‚ƒŠƒŠ[ƒN‚ÌŽ©“®ŒŸo
@@ -46,7 +47,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifndef _DEBUG
 	GameManager::GetInstance()->SetScene(new SceneTitle);
 #else
-	GameManager::GetInstance()->SetScene(new SceneGame);
+	GameManager::GetInstance()->SetScene(new SceneTest);
 #endif
 	
 

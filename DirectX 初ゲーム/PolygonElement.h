@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 
-class PolygonElement : public Object2D
+class PolygonElement : public Object
 {
 public:
 	float targetOpacity;
