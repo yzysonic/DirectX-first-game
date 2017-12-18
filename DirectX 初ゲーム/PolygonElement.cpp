@@ -3,7 +3,7 @@
 PolygonElement::PolygonElement()
 {
 	this->type = ObjectType::PolygonElement;
-	this->setPolygon();
+	this->setPolygon(Layer::BG_02);
 	this->transform->scale = Vector3(0.01f, 0.01f, 1.0f);
 
 	this->transform->position.x = (float)Random(-SystemParameters::ResolutionX/2 - 100, SystemParameters::ResolutionX/2 + 100);
