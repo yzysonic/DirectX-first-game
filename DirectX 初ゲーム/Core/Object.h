@@ -78,11 +78,11 @@ public:
 	static void operator delete(void*, int _BlockUse, char const* _FileName, int _LineNumber) noexcept;
 
 protected:
+	bool isActive;
 	std::unique_ptr<Transform> transform;
 	//std::unordered_map<size_t, std::unique_ptr<Script>> script;
 
 private:
-	bool isActive;
 	bool kill_flag;
 
 };

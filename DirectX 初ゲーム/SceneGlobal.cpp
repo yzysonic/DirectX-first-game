@@ -6,7 +6,6 @@
 #include "SceneTest.h"
 #include "FadeScreen.h"
 
-
 void SceneGlobal::init(void)
 {
 	FadeScreen::Create();
