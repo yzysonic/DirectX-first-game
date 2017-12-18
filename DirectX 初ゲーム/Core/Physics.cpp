@@ -147,8 +147,7 @@ void Physics::testCollisions()
 				)
 			{
 				a->object->onCollision(b->object);
-				if(b.use_count() > 1)
-					b->object->onCollision(a->object);
+				b->object->onCollision(a->object);
 			}
 		}
 	}

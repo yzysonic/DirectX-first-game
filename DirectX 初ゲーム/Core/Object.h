@@ -53,13 +53,13 @@ class ObjectBase
 
 public:
 	ObjectType type;
-	int updateIndex;
+	int objectIndex;
 	std::string name;
 
 	ObjectBase(void);
 	ObjectBase(Vector3 position, Vector3 rotation);
 	~ObjectBase(void);
-	
+
 	virtual void update(void) {};
 
 	Transform *	getTransform(void) const;
@@ -72,12 +72,17 @@ public:
 	bool getActive(void);
 	virtual void setVisibility(bool visible);
 
+	void* operator new(std::size_t);
+	void operator delete(void*) noexcept;
+
 protected:
 	std::unique_ptr<Transform> transform;
 	//std::unordered_map<size_t, std::unique_ptr<Script>> script;
 
 private:
 	bool isActive;
+	bool kill_flag;
+
 };
 
 class Object : public ObjectBase

@@ -6,7 +6,7 @@ void ObjectManager::Create(void)
 {
 	Singleton::Create();
 
-	m_pInstance->updateList.reserve(SystemParameters::ObjectMax);
+	m_pInstance->objectList.reserve(SystemParameters::ObjectMax);
 
 }
 
@@ -15,7 +15,14 @@ void ObjectManager::Destroy(void)
 	if (m_pInstance == nullptr)
 		return;
 
-	m_pInstance->updateList.clear();
+	m_pInstance->objectList.clear();
+
+	if (m_pInstance->killList.size() > 0)
+	{
+		for (auto object : m_pInstance->killList)
+			m_pInstance->deleteObject(object);
+		m_pInstance->killList.clear();
+	}
 
 	Singleton::Destroy();
 
@@ -24,26 +31,48 @@ void ObjectManager::Destroy(void)
 void ObjectManager::Update(void)
 {
 
-	for (size_t i = 0; i < m_pInstance->updateList.size(); i++)
+	for (int i = 0; i < (int)m_pInstance->objectList.size(); i++)
 	{
-		m_pInstance->updateList[i]->update();
+		auto object = m_pInstance->objectList[i].get();
+
+		if (object->isActive)
+			object->update();
+
+		if (object->kill_flag)
+			m_pInstance->killList.emplace_back(object);
 	}
 
+	for (auto object : m_pInstance->killList)
+		m_pInstance->deleteObject(object);
+
+	m_pInstance->killList.clear();
+
 }
 
-void ObjectManager::addUpdate(ObjectBase * obj)
+void * ObjectManager::newObject(std::size_t size)
 {
-	obj->updateIndex = this->updateList.size();
-	this->updateList.push_back(obj);
+	void *pvTemp = malloc(size);
+	if (pvTemp == 0)
+		return nullptr;
+
+	this->objectList.emplace_back();
+	this->objectList.back().reset((ObjectBase*)pvTemp);
+	this->objectList.back()->objectIndex = this->objectList.size()-1;
+	
+	return pvTemp;
 }
 
-void ObjectManager::removeUpdate(ObjectBase * obj)
+void ObjectManager::deleteObject(ObjectBase * obj)
 {
-	int index = obj->updateIndex;
+	if (obj == nullptr)
+		return;
 
-	this->updateList[index] = this->updateList.back();
-	this->updateList[index]->updateIndex = index;
-	this->updateList.pop_back();
+	int index = obj->objectIndex;
 
-	obj->updateIndex = -1;
+	this->objectList[index].swap(this->objectList.back());
+	this->objectList[index]->objectIndex = index;
+	this->objectList.back().release();
+	this->objectList.pop_back();
+	
+	free(obj);
 }

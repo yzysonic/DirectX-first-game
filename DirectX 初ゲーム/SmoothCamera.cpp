@@ -8,11 +8,13 @@ SmoothCamera::SmoothCamera(Transform * target, RenderTarget* render_target) : Ca
 	this->distance = 100.0f;
 	this->transform->position.z = -5.0f;
 
-	this->camera_shake.SetCamera(this);
-	this->camera_shake.duration = 0.8f;
-	this->camera_shake.strength = 20.f;
-	this->camera_shake.speed = 70.0f;
-	this->camera_shake.decay = 7.0f;
+	this->camera_shake.reset(new CameraShake);
+
+	this->camera_shake->SetCamera(this);
+	this->camera_shake->duration = 0.8f;
+	this->camera_shake->strength = 20.f;
+	this->camera_shake->speed = 70.0f;
+	this->camera_shake->decay = 7.0f;
 
 }
 
@@ -24,5 +26,5 @@ void SmoothCamera::update()
 
 void SmoothCamera::Shake(void)
 {
-	this->camera_shake.Activate();
+	this->camera_shake->Activate();
 }

@@ -16,5 +16,5 @@ public:
 	void Shake(void);
 
 private:
-	CameraShake camera_shake;
+	smart_ptr<CameraShake> camera_shake;
 };

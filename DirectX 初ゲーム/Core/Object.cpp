@@ -106,8 +106,8 @@ ObjectBase::ObjectBase()
 	this->transform		= std::make_unique<Transform>(this);
 	this->type			= ObjectType::Object;
 	this->isActive		= false;
-	this->updateIndex	= -1;
 	this->name			= "Object";
+	this->kill_flag		= false;
 	this->setActive(true);
 }
 
@@ -149,11 +149,6 @@ void ObjectBase::setActive(bool active)
 	if (this->isActive == active)
 		return;
 
-	if (active)
-		ObjectManager::GetInstance()->addUpdate(this);
-	else
-		ObjectManager::GetInstance()->removeUpdate(this);
-
 	this->isActive = active;
 	setVisibility(active);
 }
@@ -164,6 +159,17 @@ bool ObjectBase::getActive(void)
 }
 
 void ObjectBase::setVisibility(bool visible){}
+
+
+void * ObjectBase::operator new(std::size_t size)
+{
+	return ObjectManager::GetInstance()->newObject(size);
+}
+
+void ObjectBase::operator delete(void * ptr) noexcept
+{
+	static_cast<ObjectBase*>(ptr)->kill_flag = true;
+}
 
 Object::Object(void) : ObjectBase() {}
 
