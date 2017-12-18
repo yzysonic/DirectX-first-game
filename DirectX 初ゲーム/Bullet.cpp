@@ -3,8 +3,11 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(ObjectBase * owner, Vector3 velocity) : Object2D(owner->getTransform()->position, owner->getTransform()->getRotation())
+Bullet::Bullet(ObjectBase * owner, Vector3 velocity)
 {
+	this->transform->position = owner->getTransform()->position;
+	this->transform->setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
+
 	this->setCollider();
 
 	this->setRigidbody();
@@ -15,6 +18,7 @@ Bullet::Bullet(ObjectBase * owner, Vector3 velocity) : Object2D(owner->getTransf
 	{
 		this->type = ObjectType::Bullet;
 		this->setPolygon(Layer::DEFAULT, Texture::Get("bullet"));
+		this->collider->size *= 0.7f;
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
 	}
