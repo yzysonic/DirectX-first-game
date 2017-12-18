@@ -10,8 +10,9 @@ Enemy::Enemy()
 	this->collider->size.x -= 50;
 	this->collider->size.y -= 50;
 
-	this->hp = 3;
+	this->hp = MaxHP;
 	this->timer = 0;
+	this->effect_timer = EffectTime+1.0f;
 
 	Enemy::pUpdate = &Enemy::update_init;
 }
@@ -30,6 +31,9 @@ void Enemy::onCollision(Object2D * other)
 	if (other->type == ObjectType::Bullet)
 	{
 		this->hp--;
+		float x = 1.0f - 0.5f*((float)(hp) / MaxHP);
+		this->polygon->setColor(255, (UCHAR)(255 * x), (UCHAR)(255 * x), 255);
+		this->effect_timer = 0.0f;
 	}
 	//if (other->type == ObjectType::Enemy)
 	//{
@@ -84,4 +88,19 @@ void Enemy::update_main(void)
 		}
 	}
 
+	if (this->effect_timer <= EffectTime+0.3f)
+	{
+		float p = (1.0f* (float)(this->hp) / MaxHP - 0.3f*sinf(this->effect_timer / EffectTime*PI));
+		
+		if (this->effect_timer < EffectTime)
+		{
+			this->polygon->setColor(255, (UCHAR)(255 * p), (UCHAR)(255 * p), 255);
+		}
+		else
+		{
+			float x = 1.0f*((float)(hp) / MaxHP);
+			this->polygon->setColor(255, (UCHAR)(255 * x), (UCHAR)(255 * x), 255);
+		}
+		this->effect_timer += Time::DeltaTime();
+	}
 }
