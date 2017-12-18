@@ -93,13 +93,14 @@ void MiniMap::RemoveEnemy(Enemy const * enemy)
 void MiniMap::SetPosition(Vector3 pos)
 {
 	this->transform->position = pos;
-	Vector2 size = this->render_target->size / division_level;
+	Vector2 size = this->render_target->size / (float)division_level;
 	
 	for (int i = 0; i < (int)element_list.size(); i++)
 	{
 		auto &element = element_list[i];
 		element->getTransform()->position.x = pos.x -0.5f*this->render_target->size.x + (i%division_level+0.5f)*size.x;
 		element->getTransform()->position.y = pos.y +0.5f*this->render_target->size.y - (i / division_level+0.5f)*size.y;
+		element->default_pos = element->getTransform()->position;
 	}
 
 }
@@ -128,10 +129,10 @@ void MiniMap::update(void)
 
 			// ƒp[ƒŠƒ“ƒmƒCƒY‚Å‹[Ž—U“®
 			shake_offset.x = PerlinNoise(80.0f * (progress)+i*10);
-			shake_offset.y = PerlinNoise(80.f * (progress)+i*10 + 1);
+			shake_offset.y = PerlinNoise(80.0f * (progress)+i*10 + 1);
 
 			// ‹­“xŒ¸Š‚ÌŒvŽZ
-			shake_offset *= exp2f(-7.f*progress) * 1.5f;
+			shake_offset *= exp2f(-7.f*progress) * 5.0f;
 
 			element->getTransform()->position += shake_offset;
 
@@ -155,13 +156,13 @@ void MiniMap::SetElement(void)
 	this->element_list.reserve(element_count);
 
 	Texture backup = *this->render_target;
-	this->render_target->size /= division_level;
+	this->render_target->size /= (float)division_level;
 	this->render_target->divideX =
 	this->render_target->divideY = division_level;
 
 	for (int i = 0; i < element_count; i++)
 	{
-		Object2D *element = new Object2D;
+		Element *element = new Element;
 		element->setPolygon(Layer::UI_00, this->render_target, RendererType::UI);
 		element->getPolygon()->setPattern(i);
 		if (i % 2 == 0)
@@ -173,3 +174,7 @@ void MiniMap::SetElement(void)
 
 }
 
+void MiniMap::Element::update(void)
+{
+	this->transform->position = Vector3::Lerp(this->transform->position, this->default_pos, Time::DeltaTime()*10.0f);
+}

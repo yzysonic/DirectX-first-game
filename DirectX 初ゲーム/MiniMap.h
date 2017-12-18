@@ -8,7 +8,7 @@
 
 class MiniMap : public Object2D
 {
-public:
+private:
 	class Mark : public Object2D
 	{
 	public:
@@ -16,6 +16,12 @@ public:
 		MiniMap const * parent = nullptr;
 
 		Mark(MiniMap const * parent);
+		void update(void) override;
+	};
+	class Element : public Object2D
+	{
+	public:
+		Vector3 default_pos;
 		void update(void) override;
 	};
 
@@ -41,7 +47,7 @@ private:
 	std::string render_space;
 	Mark* player = nullptr;
 	std::vector<Mark*> enemy_list;
-	std::vector<Object2D*> element_list;
+	std::vector<Element*> element_list;
 
 	void SetElement(void);
 

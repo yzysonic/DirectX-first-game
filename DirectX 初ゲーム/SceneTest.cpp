@@ -17,7 +17,6 @@ void SceneTest::init(void)
 
 	this->mini_map = new MiniMap(200, 200, 11);
 	this->mini_map->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
-	//this->mini_map->getPolygon()->setOpacity(0.5f);
 	this->mini_map->SetPlayer(this->player);
 	this->mini_map->SetEnemy(this->enemy);
 
@@ -31,6 +30,7 @@ void SceneTest::init(void)
 	Renderer::GetInstance()->setCamera(this->camera);
 	this->camera->setBackColor(210,210,210,255);
 	this->camera->fov = ProjectMode;
+	this->camera->distance = 100.0f;
 
 	// ”wŒiƒ|ƒŠƒSƒ“¶¬
 	for (int i = 0; i < PolyMax; i++)
