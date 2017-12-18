@@ -16,4 +16,5 @@ public:
 	virtual void init(void) {};
 	virtual void update(void) = 0;
 	virtual void uninit(void) {};
+	virtual ~Scene(void) {};
 };

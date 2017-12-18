@@ -18,7 +18,7 @@ public:
 	int list_index;			// ¯•Ê”Ô†
 
 	Drawable(Layer layer, std::string render_space = "default");
-	~Drawable(void);
+	virtual ~Drawable(void);
 
 	virtual void draw(void) = 0;
 	Layer getLayer(void);

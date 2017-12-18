@@ -1,7 +1,7 @@
 #include "RenderSpace.h"
 #include "Renderer.h"
 
-std::vector<RenderSpace*> RenderSpace::render_space_list;
+std::vector<smart_ptr<RenderSpace>> RenderSpace::render_space_list;
 std::unordered_map<std::string, int> RenderSpace::name_map;
 
 
@@ -9,7 +9,7 @@ RenderSpace * RenderSpace::Get(int index)
 {
 	try
 	{
-		return render_space_list.at(index);
+		return render_space_list.at(index).get();
 	}
 	catch (std::out_of_range)
 	{
@@ -22,7 +22,7 @@ RenderSpace * RenderSpace::Get(std::string name)
 {
 	try
 	{
-		return render_space_list[name_map.at(name)];
+		return render_space_list[name_map.at(name)].get();
 	}
 	catch (std::out_of_range&)
 	{
@@ -39,7 +39,7 @@ void RenderSpace::Add(std::string name)
 	catch (std::out_of_range&)
 	{
 		name_map.insert({name, render_space_list.size()});
-		render_space_list.push_back(new RenderSpace(name));
+		render_space_list.push_back(std::make_unique<RenderSpace>(name));
 	}
 }
 
@@ -48,7 +48,7 @@ void RenderSpace::Delete(int index)
 	if(index < (int)render_space_list.size())
 	{
 		name_map.erase(render_space_list[index]->name);
-		delete render_space_list[index];
+		render_space_list[index].reset();
 		render_space_list.erase(render_space_list.begin() + index);
 	}
 }
@@ -57,7 +57,7 @@ void RenderSpace::Delete(std::string name)
 {
 	try
 	{
-		delete render_space_list[name_map.at(name)];
+		render_space_list[name_map.at(name)].reset();
 		render_space_list.erase(render_space_list.begin() + name_map.at(name));
 		name_map.erase(name);
 	}
@@ -80,7 +80,7 @@ void RenderSpace::Draw(void)
 	auto pDevice = Direct3D::GetDevice();
 
 	// •`‰æ‹óŠÔ‚²‚Æ‚É
-	for (RenderSpace *render_space:render_space_list)
+	for (auto &render_space:render_space_list)
 	{
 		// ƒJƒƒ‰‚²‚Æ‚É
 		for (Camera* camera: render_space->camera_list)

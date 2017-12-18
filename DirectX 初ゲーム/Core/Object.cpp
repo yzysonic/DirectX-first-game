@@ -161,14 +161,34 @@ bool ObjectBase::getActive(void)
 void ObjectBase::setVisibility(bool visible){}
 
 
+void * ObjectBase::operator new(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber)
+{
+	return ObjectManager::GetInstance()->newObject(size, _BlockUse, _FileName, _LineNumber);
+}
+
 void * ObjectBase::operator new(std::size_t size)
 {
-	return ObjectManager::GetInstance()->newObject(size);
+	return ObjectManager::GetInstance()->newObject(size, _NORMAL_BLOCK, __FILE__, __LINE__);
 }
 
 void ObjectBase::operator delete(void * ptr) noexcept
 {
-	static_cast<ObjectBase*>(ptr)->kill_flag = true;
+
+	if (ptr == nullptr)
+		return;
+
+	auto obj = static_cast<ObjectBase*>(ptr);
+
+	if (obj->kill_flag == false)
+	{
+		ObjectManager::GetInstance()->addKill(obj);
+		obj->kill_flag = true;
+	}
+}
+
+void ObjectBase::operator delete(void * ptr, int _BlockUse, char const * _FileName, int _LineNumber) noexcept
+{
+	delete (ObjectBase*)ptr;
 }
 
 Object::Object(void) : ObjectBase() {}

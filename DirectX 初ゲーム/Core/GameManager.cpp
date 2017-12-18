@@ -18,11 +18,11 @@ void GameManager::Update(void)
 
 void GameManager::Destroy(void)
 {
-	if (m_pInstance->scene[1] != nullptr)
-		m_pInstance->scene[1]->uninit();
-
-	if (m_pInstance->scene[0] != nullptr)
-		m_pInstance->scene[0]->uninit();
+	for (auto& scene : m_pInstance->scene)
+	{
+		if (scene != nullptr)
+			scene->uninit();
+	}
 
 	Singleton<GameManager>::Destroy();
 }

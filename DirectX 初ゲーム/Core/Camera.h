@@ -19,7 +19,7 @@ public:
 	RenderTarget* render_target;
 
 	Camera(RenderTarget* render_target = nullptr);
-	~Camera(void);
+	virtual ~Camera(void) {};
 
 	D3DXMATRIX getViewMatrix(bool update);
 	D3DXMATRIX getProjectionMatrix(bool update);

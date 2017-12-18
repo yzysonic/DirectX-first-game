@@ -18,9 +18,9 @@ void(*g_pGlobalUpdate)(void) = [](void) {};
 void InitGame()
 {
 	Time::Init();
-	ObjectManager::Create();
 	Renderer::Create();
 	Physics::Create();
+	ObjectManager::Create();
 	GameManager::Create();
 	InitRandom();
 	Texture::Init();
@@ -47,9 +47,9 @@ void UninitGame(void)
 {
 	Texture::Uninit();
 	GameManager::Destroy();
+	ObjectManager::Destroy();
 	Physics::Destroy();
 	Renderer::Destroy();
-	ObjectManager::Destroy();
 	Time::Uninit();
 }
 

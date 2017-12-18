@@ -58,7 +58,7 @@ public:
 
 	ObjectBase(void);
 	ObjectBase(Vector3 position, Vector3 rotation);
-	~ObjectBase(void);
+	virtual ~ObjectBase(void);
 
 	virtual void update(void) {};
 
@@ -72,8 +72,10 @@ public:
 	bool getActive(void);
 	virtual void setVisibility(bool visible);
 
-	void* operator new(std::size_t);
-	void operator delete(void*) noexcept;
+	static void* operator new(std::size_t, int _BlockUse, char const* _FileName, int _LineNumber);
+	static void* operator new(std::size_t);
+	static void operator delete(void*) noexcept;
+	static void operator delete(void*, int _BlockUse, char const* _FileName, int _LineNumber) noexcept;
 
 protected:
 	std::unique_ptr<Transform> transform;
@@ -90,7 +92,7 @@ class Object : public ObjectBase
 public:
 	Object(void);
 	Object(Vector3 position, Vector3 rotation);
-	~Object(void);
+	virtual ~Object(void);
 	virtual void onCollision(Object* other) {};
 
 	RectPolygon*	getPolygon(void);
@@ -105,7 +107,7 @@ class Object2D : public ObjectBase
 public:
 	Object2D(void);
 	Object2D(Vector3 position, Vector3 rotation);
-	~Object2D(void);
+	virtual ~Object2D(void);
 	virtual void onCollision(Object2D* other) {};
 
 	RectPolygon2D*	getPolygon(void);

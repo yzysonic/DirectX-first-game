@@ -13,7 +13,8 @@ public:
 	static void Update(void);
 
 public:
-	void* newObject(std::size_t size);
+	void* newObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber);
+	void addKill(ObjectBase* obj);
 	void deleteObject(ObjectBase* obj);
 
 private:

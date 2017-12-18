@@ -33,14 +33,15 @@ void SceneTest::init(void)
 	this->camera->distance = 100.0f;
 
 	// ”wŒiƒ|ƒŠƒSƒ“¶¬
-	for (int i = 0; i < PolyMax; i++)
+	this->polyList.resize(PolyMax);
+	for (auto& poly : this->polyList)
 	{
-		this->polyList[i] = new PolygonElement;
-		this->polyList[i]->getTransform()->position.x = Randomf(-FieldRangeX, FieldRangeX);
-		this->polyList[i]->getTransform()->position.y = Randomf(-FieldRangeY, FieldRangeY);
-		this->polyList[i]->getTransform()->position.z = Randomf(0.01f, 3.0f);
-		this->polyList[i]->targetOpacity = 0.7f;
-		this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
+		poly = new PolygonElement;
+		poly->getTransform()->position.x = Randomf(-FieldRangeX, FieldRangeX);
+		poly->getTransform()->position.y = Randomf(-FieldRangeY, FieldRangeY);
+		poly->getTransform()->position.z = Randomf(0.01f, 3.0f);
+		poly->targetOpacity = 0.7f;
+		poly->targetScale = Vector3(0.1f, 0.1f, 1.0f);
 		this->polyCount++;
 	}
 
@@ -111,8 +112,8 @@ void SceneTest::uninit(void)
 	delete(this->test);
 	delete(this->mini_map);
 
-	for (int i = 0; i < this->polyCount; i++)
-		delete (this->polyList[i]);
+	for (auto poly : this->polyList)
+		delete poly;
 
 	Bullet::Clear();
 

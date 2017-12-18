@@ -15,14 +15,11 @@ void ObjectManager::Destroy(void)
 	if (m_pInstance == nullptr)
 		return;
 
-	m_pInstance->objectList.clear();
+	for (auto& object : m_pInstance->objectList)
+		delete(object.release());
 
-	if (m_pInstance->killList.size() > 0)
-	{
-		for (auto object : m_pInstance->killList)
-			m_pInstance->deleteObject(object);
-		m_pInstance->killList.clear();
-	}
+	for (auto object : m_pInstance->killList)
+		free(object);
 
 	Singleton::Destroy();
 
@@ -38,8 +35,8 @@ void ObjectManager::Update(void)
 		if (object->isActive)
 			object->update();
 
-		if (object->kill_flag)
-			m_pInstance->killList.emplace_back(object);
+		//if (object->kill_flag)
+		//	m_pInstance->killList.emplace_back(object);
 	}
 
 	for (auto object : m_pInstance->killList)
@@ -49,9 +46,9 @@ void ObjectManager::Update(void)
 
 }
 
-void * ObjectManager::newObject(std::size_t size)
+void * ObjectManager::newObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber)
 {
-	void *pvTemp = malloc(size);
+	void *pvTemp = _malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
 	if (pvTemp == 0)
 		return nullptr;
 
@@ -60,6 +57,11 @@ void * ObjectManager::newObject(std::size_t size)
 	this->objectList.back()->objectIndex = this->objectList.size()-1;
 	
 	return pvTemp;
+}
+
+void ObjectManager::addKill(ObjectBase * obj)
+{
+	this->killList.emplace_back(obj);
 }
 
 void ObjectManager::deleteObject(ObjectBase * obj)

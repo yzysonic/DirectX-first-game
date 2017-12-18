@@ -22,7 +22,7 @@ public:
 
 	SmoothCamera* camera = nullptr;
 	MiniMap* mini_map = nullptr;
-	PolygonElement *polyList[PolyMax] = {};
+	std::vector<PolygonElement*> polyList;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
 	Object* test = nullptr;

@@ -19,13 +19,6 @@ Camera::Camera(RenderTarget* render_target)
 	this->view_far_z = 1000.0f;
 }
 
-Camera::~Camera(void)
-{
-	//Renderer * renderer = Renderer::GetInstance();
-	//if (renderer->getCamera() == this)
-	//	renderer->setCamera(nullptr);
-}
-
 D3DXMATRIX Camera::getViewMatrix(bool update)
 {
 	if (update)

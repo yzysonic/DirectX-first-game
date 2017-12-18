@@ -16,7 +16,6 @@
 
 // メモリリークの自動検出
 #ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
@@ -42,14 +41,12 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// ゲーム初期化
 	InitGame();
-	SceneGlobal::Create();
-	GameManager::GetInstance()->SetGlobalScene(SceneGlobal::GetInstance());
+	GameManager::GetInstance()->SetGlobalScene(new SceneGlobal);
 #ifndef _DEBUG
 	GameManager::GetInstance()->SetScene(new SceneTitle);
 #else
 	GameManager::GetInstance()->SetScene(new SceneTest);
 #endif
-	
 
 	// ゲームループ
 	RunGame();

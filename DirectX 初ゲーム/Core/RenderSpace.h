@@ -19,7 +19,7 @@ public:
 	static int RenderSpaceCount(void);
 
 private:
-	static std::vector<RenderSpace*> render_space_list;
+	static std::vector<smart_ptr<RenderSpace>> render_space_list;
 	static std::unordered_map<std::string, int> name_map;
 
 

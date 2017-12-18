@@ -16,7 +16,8 @@ Drawable::Drawable(Layer layer, std::string render_space)
 
 Drawable::~Drawable(void)
 {
-	RenderSpace::Get(render_space)->RemoveDraw(this);
+	auto rs = RenderSpace::Get(render_space);
+	if (rs) rs->RemoveDraw(this);
 }
 
 Layer Drawable::getLayer(void)
