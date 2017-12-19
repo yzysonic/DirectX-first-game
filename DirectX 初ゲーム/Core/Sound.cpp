@@ -11,7 +11,8 @@ const TCHAR* c_soundFilename[] = {
 	_T(SOUND_DIR"BGM/Ganache_2.wav"),
 	_T(SOUND_DIR"BGM/gameover.wav"),
 	_T(SOUND_DIR"BGM/Like_A_Star.wav"),
-	_T(SOUND_DIR"SE/bullet.wav")
+	_T(SOUND_DIR"SE/bullet.wav"),
+	_T(SOUND_DIR"SE/low_hp.wav")
 };
 
 // ÉOÉçÅ[ÉoÉãïœêî

@@ -17,7 +17,7 @@ Bullet::Bullet(ObjectBase * owner, Vector3 velocity)
 	if (owner->type == ObjectType::Player)
 	{
 		this->type = ObjectType::Bullet;
-		this->setPolygon(Layer::DEFAULT, Texture::Get("bullet"));
+		this->setPolygon(Layer::BULLET, Texture::Get("bullet"));
 		this->collider->size *= 0.7f;
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
@@ -25,7 +25,7 @@ Bullet::Bullet(ObjectBase * owner, Vector3 velocity)
 	else
 	{
 		this->type = ObjectType::Bullet_E;
-		this->setPolygon(Layer::DEFAULT, Texture::Get("bullet_e"));
+		this->setPolygon(Layer::BULLET, Texture::Get("bullet_e"));
 		this->collider->size *= 0.5f;
 	}
 

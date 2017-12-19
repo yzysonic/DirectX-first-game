@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "PolygonElement.h"
 #include "MiniMap.h"
+#include "LiveUI.h"
 
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
@@ -26,7 +27,7 @@ public:
 
 private:
 	Object2D* vignetting = nullptr;
-	Object2D* liveUI = nullptr;
+	LiveUI* liveUI = nullptr;
 	NumberUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
 	SmoothCamera* camera = nullptr;

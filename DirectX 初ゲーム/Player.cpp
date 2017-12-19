@@ -20,6 +20,11 @@ Player::Player()
 
 }
 
+Player::~Player(void)
+{
+	StopSound(SE_LOW_HP);
+}
+
 void Player::update()
 {
 	this->control = Vector3::zero;
@@ -48,6 +53,12 @@ void Player::onCollision(Object2D * other)
 		this->timer_flash =
 		this->timer_muteki = 0;
 		this->shake_flag = true;
+		if (this->hp == 1)
+		{
+			PlayBGM(SE_LOW_HP);
+			SetVolume(SE_LOW_HP, -1800);
+		}
+			
 	}
 }
 

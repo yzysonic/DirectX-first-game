@@ -24,8 +24,7 @@ void SceneGame::init(void)
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
-	this->liveUI = new Object2D;
-	this->liveUI->setPolygon(Layer::UI_00, Texture::Get("lives"), RendererType::UI);
+	this->liveUI = new LiveUI;
 	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + Texture::Get("lives")->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
 	// プレイヤー
@@ -184,6 +183,8 @@ void SceneGame::update_main(void)
 
 	// 残機表示の更新
 	this->liveUI->getPolygon()->setPattern(this->player->hp-1);
+	if (this->player->hp == 1)
+		this->liveUI->SetLowLive(true);
 
 	// カウントダウン更新
 	this->timer -= Time::DeltaTime();

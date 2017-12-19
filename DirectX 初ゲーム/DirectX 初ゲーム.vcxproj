@@ -182,6 +182,7 @@
     <ClCompile Include="Core\Drawable.cpp" />
     <ClCompile Include="Core\Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="LiveUI.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeScreen.h" />
     <ClInclude Include="Core\Math.h" />
+    <ClInclude Include="LiveUI.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Player.h" />

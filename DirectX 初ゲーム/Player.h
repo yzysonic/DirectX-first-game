@@ -11,6 +11,7 @@ public:
 	int hp;
 	bool shake_flag;
 	Player(void);
+	~Player(void);
 	void update(void) override;
 	void onCollision(Object2D* other) override;
 

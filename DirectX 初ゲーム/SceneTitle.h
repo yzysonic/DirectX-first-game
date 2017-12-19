@@ -60,6 +60,7 @@ private:
 	int cursorPos;
 
 	Command com;
+	bool playBack;
 
 	// ó‘Ôƒ|ƒCƒ“ƒ^
 	void(SceneTitle::*pUpdate)(void);
