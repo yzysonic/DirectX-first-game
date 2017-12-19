@@ -13,7 +13,7 @@
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
 #define ENEMY_MAX (5)
-#define GAME_POLY_MAX (1500)
+#define GAME_POLY_MAX (1000)
 
 class SceneGame : public Scene
 {
