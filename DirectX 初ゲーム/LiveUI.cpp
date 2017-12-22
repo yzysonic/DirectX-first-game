@@ -3,6 +3,7 @@
 LiveUI::LiveUI(void)
 {
 	this->setPolygon(Layer::UI_00, Texture::Get("lives"), RendererType::UI);
+	this->getPolygon()->setPattern(2);
 	this->low_live = false;
 	this->timer = 0.0f;
 }
