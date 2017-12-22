@@ -14,7 +14,7 @@ void SceneGame::init(void)
 	this->vignetting->setPolygon(Layer::MASK, Texture::Get("vignetting"), RendererType::UI);
 
 	// スコアUI
-	this->scoreUI = new NumberUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_score"));
+	this->scoreUI = new ScoreUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_score"));
 	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
@@ -46,9 +46,22 @@ void SceneGame::init(void)
 	this->minimap->SetPlayer(this->player);
 	this->minimap->zoom = 0.3f;
 
+	// イベントバインド
+	this->player->injury += [&]
+	{
+		// 揺れエフェクト
+		this->camera->Shake();
+		this->minimap->Shake();
+
+		// 残機表示の更新
+		this->liveUI->getPolygon()->setPattern(this->player->hp - 1);
+		if (this->player->hp == 1)
+			this->liveUI->SetLowLive(true);
+	};
+
 	// ゲームで使う変数
 	this->score = 0;
-	this->timer = 60.0f;
+	this->timer = GameTime;
 	this->polyCount = 0;
 
 	for (int i = 0; i < ENEMY_MAX; i++)
@@ -156,18 +169,12 @@ void SceneGame::update_main(void)
 
 		if (enemy->hp == 0)
 		{
+			// スコア更新
 			this->addGameScore(300);
+			this->scoreUI->SetScore(this->score);
 			this->minimap->RemoveEnemy(enemy);
 			SafeDelete<Enemy>(enemy);
 		}
-	}
-
-	// 揺れ処理
-	if (player->shake_flag)
-	{
-		camera->Shake();
-		minimap->Shake();;
-		player->shake_flag = false;
 	}
 
 	// プレイヤーの移動制限
@@ -181,20 +188,21 @@ void SceneGame::update_main(void)
 	if (playerPos.y > FIELD_RANG_Y)
 		playerPos.y = FIELD_RANG_Y;
 
-	// 残機表示の更新
-	this->liveUI->getPolygon()->setPattern(this->player->hp-1);
-	if (this->player->hp == 1)
-		this->liveUI->SetLowLive(true);
 
 	// カウントダウン更新
 	this->timer -= Time::DeltaTime();
 
 	// カウントダウン表示更新
 	this->timeUI[0]->setNumber((int)(this->timer*100)%100);
-	this->timeUI[0]->setNumber((int)this->timer);
-
-	// スコア表示更新
-	this->scoreUI->setNumber(this->score);
+	this->timeUI[1]->setNumber((int)this->timer);
+	if (this->timer < 10)
+	{
+		UCHAR p = (UCHAR)(255 * fabsf(sinf(this->timer*PI / 0.7f)));
+		Color c;
+		c.setRGBA(255, p, p, 255);
+		this->timeUI[0]->setColor(c);
+		this->timeUI[1]->setColor(c);
+	}
 
 	// シーン遷移→クリアシーン
 	if (this->timer < 0)

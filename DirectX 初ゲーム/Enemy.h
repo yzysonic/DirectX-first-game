@@ -11,6 +11,7 @@ private:
 
 public:
 	Transform *target = NULL;
+	Event injury;
 	int hp;
 	float timer;
 	float effect_timer;

@@ -13,7 +13,19 @@ void SceneTest::init(void)
 	this->enemy = new Enemy;
 	enemy->target = this->player->getTransform();
 	enemy->getTransform()->position = Vector3(30, 30, 0);
+
 	this->camera = new SmoothCamera(this->player->getTransform());
+	Renderer::GetInstance()->setCamera(this->camera);
+	this->camera->setBackColor(210, 210, 210, 255);
+	this->camera->fov = ProjectMode;
+	this->camera->distance = 100.0f;
+
+	// イベントバインド
+	this->player->injury += [&]
+	{
+		this->camera->Shake();
+		this->mini_map->Shake();
+	};
 
 	this->mini_map = new MiniMap(200, 200, 11);
 	this->mini_map->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
@@ -27,10 +39,6 @@ void SceneTest::init(void)
 
 	this->polyCount = 0;
 
-	Renderer::GetInstance()->setCamera(this->camera);
-	this->camera->setBackColor(210,210,210,255);
-	this->camera->fov = ProjectMode;
-	this->camera->distance = 100.0f;
 
 	// 背景ポリゴン生成
 	this->polyList.resize(PolyMax);
@@ -75,13 +83,6 @@ void SceneTest::update(void)
 
 	if (GetKeyboardTrigger(DIK_RETURN))
 		this->mini_map->Shake();
-
-	if (player->shake_flag)
-	{
-		camera->Shake();
-		mini_map->Shake();
-		player->shake_flag = false;
-	}
 
 	this->test->getTransform()->rotate(0.0f, 0.1f, 0.0f);
 

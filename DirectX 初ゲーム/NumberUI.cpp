@@ -53,3 +53,11 @@ void NumberUI::setOffset(int x, int y)
 		this->digitList[i]->getTransform()->position.x += (this->digitNum - i - 0.5f)*this->digitList[i]->getPolygon()->getSize().x - this->polygon->getSize().x/2;
 	}
 }
+
+void NumberUI::setColor(Color color)
+{
+	if(this->polygon)
+		this->polygon->setColor(color);
+	for (auto digit : digitList)
+		digit->getPolygon()->setColor(color);
+}

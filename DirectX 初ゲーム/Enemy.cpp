@@ -34,6 +34,7 @@ void Enemy::onCollision(Object2D * other)
 		float x = 1.0f - 0.5f*((float)(hp) / MaxHP);
 		this->polygon->setColor(255, (UCHAR)(255 * x), (UCHAR)(255 * x), 255);
 		this->effect_timer = 0.0f;
+		this->injury();
 	}
 	//if (other->type == ObjectType::Enemy)
 	//{

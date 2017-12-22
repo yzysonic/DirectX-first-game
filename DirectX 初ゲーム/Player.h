@@ -9,7 +9,7 @@ class Player : public Object2D
 {
 public:
 	int hp;
-	bool shake_flag;
+	Event injury;
 	Player(void);
 	~Player(void);
 	void update(void) override;

@@ -9,6 +9,7 @@
 #include "PolygonElement.h"
 #include "MiniMap.h"
 #include "LiveUI.h"
+#include "ScoreUI.h"
 
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
@@ -17,6 +18,9 @@
 
 class SceneGame : public Scene
 {
+public:
+	static constexpr float GameTime = 60.0f;
+
 public:
 	void init(void) override;
 	void update(void) override;
@@ -28,7 +32,7 @@ public:
 private:
 	Object2D* vignetting = nullptr;
 	LiveUI* liveUI = nullptr;
-	NumberUI* scoreUI = nullptr;
+	ScoreUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
 	SmoothCamera* camera = nullptr;
 	PolygonElement *polyList[GAME_POLY_MAX] = {};

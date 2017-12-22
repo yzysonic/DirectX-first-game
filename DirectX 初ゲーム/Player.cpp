@@ -16,8 +16,6 @@ Player::Player()
 	this->timer = 0;
 	this->muteki = false;
 	this->autoAim = false;
-	this->shake_flag = false;
-
 }
 
 Player::~Player(void)
@@ -52,13 +50,13 @@ void Player::onCollision(Object2D * other)
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		this->shake_flag = true;
 		if (this->hp == 1)
 		{
 			PlayBGM(SE_LOW_HP);
 			SetVolume(SE_LOW_HP, -1800);
 		}
-			
+		
+		this->injury();
 	}
 }
 

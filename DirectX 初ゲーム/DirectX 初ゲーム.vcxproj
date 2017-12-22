@@ -182,6 +182,7 @@
     <ClCompile Include="Core\Drawable.cpp" />
     <ClCompile Include="Core\Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Core\Event.cpp" />
     <ClCompile Include="LiveUI.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NumberUI.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="SceneGuide.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="ScoreUI.cpp" />
     <ClCompile Include="SmoothCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +237,7 @@
     <ClInclude Include="Core\Drawable.h" />
     <ClInclude Include="Core\Easing.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Core\Event.h" />
     <ClInclude Include="FadeScreen.h" />
     <ClInclude Include="Core\Math.h" />
     <ClInclude Include="LiveUI.h" />
@@ -250,6 +253,7 @@
     <ClInclude Include="SceneGuide.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="ScoreUI.h" />
     <ClInclude Include="SmoothCamera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -172,6 +172,12 @@
     <ClCompile Include="LiveUI.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Event.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -329,6 +335,12 @@
     </ClInclude>
     <ClInclude Include="LiveUI.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreUI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Event.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
