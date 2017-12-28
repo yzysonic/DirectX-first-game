@@ -7,14 +7,20 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "PolygonElement.h"
+#include "MiniMap.h"
+#include "LiveUI.h"
+#include "ScoreUI.h"
 
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
 #define ENEMY_MAX (5)
-#define GAME_POLY_MAX (1500)
+#define GAME_POLY_MAX (1000)
 
 class SceneGame : public Scene
 {
+public:
+	static constexpr float GameTime = 60.0f;
+
 public:
 	void init(void) override;
 	void update(void) override;
@@ -24,14 +30,15 @@ public:
 	void addGameScore(int score);
 
 private:
-	Object* vignetting = nullptr;
-	Object* liveUI = nullptr;
-	NumberUI* scoreUI = nullptr;
+	Object2D* vignetting = nullptr;
+	LiveUI* liveUI = nullptr;
+	ScoreUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
 	SmoothCamera* camera = nullptr;
 	PolygonElement *polyList[GAME_POLY_MAX] = {};
 	Player* player = nullptr;
 	Enemy* enemy[ENEMY_MAX] = {};
+	MiniMap* minimap = nullptr;
 
 	int score;
 	float timer;

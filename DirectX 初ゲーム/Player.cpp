@@ -1,11 +1,10 @@
 #include "Player.h"
 #include "SceneGlobal.h"
-#include "SceneGame.h"
 
 Player::Player()
 {
 	this->type = ObjectType::Player;
-	this->setPolygon(Layer::PLAYER, TEX_PLAYER);
+	this->setPolygon(Layer::PLAYER, Texture::Get("player"));
 	this->setCollider();
 	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);
 	this->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
@@ -17,7 +16,11 @@ Player::Player()
 	this->timer = 0;
 	this->muteki = false;
 	this->autoAim = false;
+}
 
+Player::~Player(void)
+{
+	StopSound(SE_LOW_HP);
 }
 
 void Player::update()
@@ -38,7 +41,7 @@ void Player::update()
 	this->update_muteki();
 }
 
-void Player::onCollision(Object * other)
+void Player::onCollision(Object2D * other)
 {
 	if ((other->type == ObjectType::Enemy || other->type == ObjectType::Bullet_E) && !this->muteki)
 	{
@@ -47,7 +50,13 @@ void Player::onCollision(Object * other)
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		((SceneGame*)GameManager::GetScene())->getCamera()->Shake();
+		if (this->hp == 1)
+		{
+			PlayBGM(SE_LOW_HP);
+			SetVolume(SE_LOW_HP, -1800);
+		}
+		
+		this->injury();
 	}
 }
 

@@ -1,17 +1,18 @@
 #pragma once
 #include "Vector.h"
 
-class Object;
+class Object2D;
 
-class Collider
+class Collider2D
 {
 public:
-	Object* object;
+	Object2D* object;
 	bool isTrigger;
 	Vector3 offset;
 	Vector3 size;
 	int listIndex;
 
-	Collider(Object* object);
-	~Collider(void);
+	Collider2D(Object2D* object);
+	~Collider2D(void);
 };
+

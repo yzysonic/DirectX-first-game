@@ -3,9 +3,9 @@
 #include "Polygon.h"
 #include "Collider.h"
 #include "Rigidbody.h"
-#include "Script.h"
+//#include "Script.h"
 #include "Physics.h"
-#include "Lerp.h"
+#include "Math.h"
 #include "Time.h"
 
 //*****************************************************************************
@@ -17,7 +17,7 @@
 //*****************************************************************************
 
 
-Transform::Transform(Object* object)
+Transform::Transform(ObjectBase* object)
 {
 
 	this->object		= object;
@@ -28,7 +28,7 @@ Transform::Transform(Object* object)
 
 }
 
-Vector3 Transform::getRotation(void)
+Vector3 Transform::getRotation(void) const
 {
 	return this->rotation;
 }
@@ -100,110 +100,167 @@ void Transform::updateVector(void)
 
 
 
-Object::Object()
+ObjectBase::ObjectBase()
 {
 
 	this->transform		= std::make_unique<Transform>(this);
 	this->type			= ObjectType::Object;
 	this->isActive		= false;
-	this->updateIndex	= -1;
 	this->name			= "Object";
+	this->kill_flag		= false;
 	this->setActive(true);
 }
 
-Object::Object(Vector3 position, Vector3 rotation) : Object()
+ObjectBase::ObjectBase(Vector3 position, Vector3 rotation) : ObjectBase()
 {
 	this->transform->position = position;
 	this->transform->setRotation(rotation);
 }
 
-Object::~Object()
+ObjectBase::~ObjectBase()
 {
 
 	this->setActive(false);
 	this->transform.reset();
-	this->polygon.reset();
-	this->rigidbody.reset();
-	this->collider.reset();
 
 }
 
 
-Transform * Object::getTransform(void)
+Transform * ObjectBase::getTransform(void) const
 {
 	return this->transform.get();
 }
 
-RectPolygon * Object::getPolygon(void)
+//template<class T>
+//Script * ObjectBase::getScript(void)
+//{
+//	return this->script[typeid(T).hash_code()].get();
+//}
+//
+//template<class T>
+//void ObjectBase::setScript(void)
+//{
+//	this->script[typeid(T).hash_code()].reset(new T);
+//}
+
+
+void ObjectBase::setActive(bool active)
+{
+	if (this->isActive == active)
+		return;
+
+	this->isActive = active;
+	setVisibility(active);
+}
+
+bool ObjectBase::getActive(void)
+{
+	return this->isActive;
+}
+
+void ObjectBase::setVisibility(bool visible){}
+
+
+void * ObjectBase::operator new(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber)
+{
+	return ObjectManager::GetInstance()->newObject(size, _BlockUse, _FileName, _LineNumber);
+}
+
+void * ObjectBase::operator new(std::size_t size)
+{
+	return ObjectManager::GetInstance()->newObject(size, _NORMAL_BLOCK, __FILE__, __LINE__);
+}
+
+void ObjectBase::operator delete(void * ptr) noexcept
+{
+
+	if (ptr == nullptr)
+		return;
+
+	auto obj = static_cast<ObjectBase*>(ptr);
+
+	if (obj->kill_flag == false)
+	{
+		ObjectManager::GetInstance()->addKill(obj);
+		obj->kill_flag = true;
+	}
+}
+
+void ObjectBase::operator delete(void * ptr, int _BlockUse, char const * _FileName, int _LineNumber) noexcept
+{
+	delete (ObjectBase*)ptr;
+}
+
+Object::Object(void) : ObjectBase() {}
+
+Object::Object(Vector3 position, Vector3 rotation) : ObjectBase(position, rotation) {}
+
+Object::~Object(void)
+{
+	this->polygon.reset();
+}
+
+RectPolygon* Object::getPolygon(void)
 {
 	return this->polygon.get();
 }
 
-void Object::setPolygon(Layer layer, TextureName texName, RendererType rendType)
+void Object::setPolygon(Layer layer, Texture* texName, RendererType rendType)
 {
 	this->polygon.reset();
 	this->polygon = std::make_unique<RectPolygon>(this, layer, texName, rendType);
 }
 
-Rigidbody * Object::getRigidbody(void)
+Object2D::Object2D(void) : ObjectBase() {}
+
+Object2D::Object2D(Vector3 position, Vector3 rotation) : ObjectBase(position, rotation) {}
+
+Object2D::~Object2D(void)
+{
+	this->polygon.reset();
+	this->rigidbody.reset();
+	this->collider.reset();
+}
+
+RectPolygon2D * Object2D::getPolygon(void)
+{
+	return this->polygon.get();
+}
+
+void Object2D::setPolygon(Layer layer, Texture* texName, RendererType rendType, std::string render_space)
+{
+	this->polygon.reset();
+	this->polygon = std::make_unique<RectPolygon2D>(this, layer, texName, rendType, render_space);
+}
+
+Rigidbody2D * Object2D::getRigidbody(void)
 {
 	return this->rigidbody.get();
 }
 
-void Object::setRigidbody(void)
+void Object2D::setRigidbody(void)
 {
 	this->rigidbody.reset();
-	this->rigidbody = std::make_unique<Rigidbody>(this);
+	this->rigidbody = std::make_unique<Rigidbody2D>(this);
 	this->rigidbody->position = this->transform->position;
 	this->rigidbody->rotation = this->transform->getRotation();
 	Physics::GetInstance()->addRigidbody(this->rigidbody.get());
 }
 
-Collider * Object::getCollider(void)
+Collider2D * Object2D::getCollider(void)
 {
 	return this->collider.get();
 }
 
-void Object::setCollider(void)
+void Object2D::setCollider(void)
 {
 	this->collider.reset();
-	this->collider = std::make_shared<Collider>(this);
+	this->collider = std::make_shared<Collider2D>(this);
 	Physics::GetInstance()->addCollider(this->collider);
 }
 
-template<class T>
-Script * Object::getScript(void)
+void Object2D::setVisibility(bool visible)
 {
-	return this->script[typeid(T).hash_code()].get();
+	this->polygon->setVisibility(visible);
 }
 
-template<class T>
-void Object::setScript(void)
-{
-	this->script[typeid(T).hash_code()].reset(new T);
-}
-
-
-void Object::setActive(bool value)
-{
-	ObjectManager* manager = ObjectManager::GetInstance();
-
-	if (this->isActive != value)
-	{
-		if (value)
-		{
-			manager->addUpdate(this);
-			this->isActive = true;
-		}
-		else
-		{
-			manager->removeUpdate(this);
-			this->isActive = false;
-		}
-	}
-}
-
-bool Object::getActive(void)
-{
-	return this->isActive;
-}

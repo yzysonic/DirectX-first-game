@@ -18,6 +18,7 @@ enum SoundName
 	BGM_GAMEOVER,
 	BGM_CLEAR,
 	SE_BULLET,
+	SE_LOW_HP,
 	SOUND_MAX
 };
 

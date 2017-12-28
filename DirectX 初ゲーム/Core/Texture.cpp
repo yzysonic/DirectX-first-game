@@ -2,65 +2,68 @@
 #include "Common.h"
 #include "Window.h"
 
+Texture* const Texture::none = new Texture;
+std::unordered_map<std::string, std::unique_ptr<Texture>> Texture::texture_list;
 
-Texture g_textureList[TEX_MAX];
-
-void LoadTexture(TextureName texName, LPSTR fileName, int divX = 1, int divY = 1);
-
-void InitTexture()
+void Texture::Init(void)
 {
-	g_textureList[TEX_NONE].pDXTex = NULL;
-	g_textureList[TEX_NONE].divideX = 1;
-	g_textureList[TEX_NONE].divideY = 1;
-	g_textureList[TEX_NONE].size = Vector2(100, 100);
 
-	LoadTexture(TEX_VIGNETTING,		"vignetting.png");
-	LoadTexture(TEX_TITLE_LOGO,		"title_logo.png");
-	LoadTexture(TEX_TITLE_PRESSKEY, "title_press_enter.png");
-	LoadTexture(TEX_TITLE_INFO,		"title_copyright.png");
-	LoadTexture(TEX_TITLE_CURSOR,	"title_cursor_v2.png");
-	LoadTexture(TEX_TITLE_START,	"title_start.png");
-	LoadTexture(TEX_TITLE_EXIT,		"title_exit.png");
-	LoadTexture(TEX_NUMBER,			"number.png", 10);
-	LoadTexture(TEX_GAME_SCORE,		"game_score.png");
-	LoadTexture(TEX_GAME_TIME,		"game_time.png");
-	LoadTexture(TEX_GAME_OVER,		"game_over.png");
-	LoadTexture(TEX_CLEAR,			"clear.png");
-	LoadTexture(TEX_LIFES,			"lives.png", 3);
-	LoadTexture(TEX_PLAYER,			"player.png");
-	LoadTexture(TEX_ENEMY,			"enemy.png");
-	LoadTexture(TEX_BULLET,			"bullet.png");
-	LoadTexture(TEX_BULLET_E,		"bullet_e.png");
-	LoadTexture(TEX_GUIDE,			"guide.png");
+	none->pDXTex = nullptr;
+	none->name = "none";
+	none->divideX = 1;
+	none->divideY = 1;
+	none->size = Vector2(100.0f, 100.0f);
+
+	texture_list["none"].reset(none);
 }
 
-void UninitTexture()
+void Texture::Uninit(void)
 {
-	for (int i = 0; i < TEX_MAX; i++)
-		SafeRelease(g_textureList[i].pDXTex);
+	texture_list["none"].reset(nullptr);
+	texture_list.erase("none");
+
+	for (auto &tex : texture_list)
+	{
+		tex.second->pDXTex->Release();
+		tex.second.reset(nullptr);
+	}
+	texture_list.clear();
 }
 
-Texture * GetTexture(TextureName texName)
+Texture * Texture::Get(std::string name)
 {
-	return &g_textureList[texName];
+	try
+	{
+		return texture_list.at(name).get();
+	}
+	catch (std::out_of_range&)
+	{
+		return none;
+	}
 }
 
-
-void LoadTexture(TextureName texName, LPSTR fileName, int divX, int divY)
+void Texture::LoadTexture(std::string name, std::string file_name, int divX, int divY)
 {
-	Texture &texture = g_textureList[texName];
 
-	char fileDir[256];
-	strcat(strcpy(fileDir, TEX_DIR), fileName);
+	if (texture_list[name])
+		return;
+
+	char file_dir[256];
+
+	if (file_name == "")
+		file_name = name + ".png";
+	strcat(strcpy(file_dir, TextureDir), file_name.c_str());
+
+	Texture *texture = new Texture;
 
 	//テクスチャ詳細情報取得
 	D3DXIMAGE_INFO info;
-	if (D3DXGetImageInfoFromFile(fileDir, &info) == D3D_OK)
+	if (D3DXGetImageInfoFromFile(file_dir, &info) == D3D_OK)
 	{
 		//テクスチャ読込
 		D3DXCreateTextureFromFileEx(
 			Direct3D::GetDevice(),
-			fileDir,
+			file_dir,
 			info.Width, info.Height,
 			1, 0,
 			D3DFMT_A8R8G8B8,
@@ -69,22 +72,27 @@ void LoadTexture(TextureName texName, LPSTR fileName, int divX, int divY)
 			D3DX_FILTER_NONE,
 			0xFF000000,
 			NULL, NULL,
-			&texture.pDXTex);
+			&texture->pDXTex);
 	}
 	else
 	{
 		TCHAR s[128];
-		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), fileName);
+		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), file_name);
 		MessageBox(Window::GetHWnd(), s, _T("エラー"), MB_OK | MB_ICONWARNING);
+
+		delete texture;
+
 		return;
 
 	}
 
-	texture.size.x = (float)info.Width / divX;
-	texture.size.y = (float)info.Height / divY;
-	texture.divideX = divX;
-	texture.divideY = divY;
+	texture->name = name;
+	texture->file_name = file_name;
+	texture->size.x = (float)info.Width / divX;
+	texture->size.y = (float)info.Height / divY;
+	texture->divideX = divX;
+	texture->divideY = divY;
 
-	
+	texture_list[name].reset(texture);
+
 }
-

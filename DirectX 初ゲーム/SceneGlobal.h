@@ -1,9 +1,8 @@
 #pragma once
 #include "Core/Scene.h"
 #include "Core\Core.h"
-#include "Core\Singleton.h"
 
-class SceneGlobal : public Scene, public Singleton<SceneGlobal>
+class SceneGlobal : public Scene
 {
 public:
 	int control_type;

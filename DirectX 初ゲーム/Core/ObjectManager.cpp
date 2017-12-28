@@ -6,7 +6,7 @@ void ObjectManager::Create(void)
 {
 	Singleton::Create();
 
-	m_pInstance->updateList.reserve(SystemParameters::ObjectMax);
+	m_pInstance->objectList.reserve(SystemParameters::ObjectMax);
 
 }
 
@@ -15,7 +15,11 @@ void ObjectManager::Destroy(void)
 	if (m_pInstance == nullptr)
 		return;
 
-	m_pInstance->updateList.clear();
+	for (auto& object : m_pInstance->objectList)
+		delete(object.release());
+
+	for (auto object : m_pInstance->killList)
+		free(object);
 
 	Singleton::Destroy();
 
@@ -24,26 +28,53 @@ void ObjectManager::Destroy(void)
 void ObjectManager::Update(void)
 {
 
-	for (size_t i = 0; i < m_pInstance->updateList.size(); i++)
+	for (int i = 0; i < (int)m_pInstance->objectList.size(); i++)
 	{
-		m_pInstance->updateList[i]->update();
+		auto object = m_pInstance->objectList[i].get();
+
+		if (object->isActive)
+			object->update();
+
+		//if (object->kill_flag)
+		//	m_pInstance->killList.emplace_back(object);
 	}
 
+	for (auto object : m_pInstance->killList)
+		m_pInstance->deleteObject(object);
+
+	m_pInstance->killList.clear();
+
 }
 
-void ObjectManager::addUpdate(Object * obj)
+void * ObjectManager::newObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber)
 {
-	obj->updateIndex = this->updateList.size();
-	this->updateList.push_back(obj);
+	void *pvTemp = _malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
+	if (pvTemp == 0)
+		return nullptr;
+
+	this->objectList.emplace_back();
+	this->objectList.back().reset((ObjectBase*)pvTemp);
+	this->objectList.back()->objectIndex = this->objectList.size()-1;
+	
+	return pvTemp;
 }
 
-void ObjectManager::removeUpdate(Object * obj)
+void ObjectManager::addKill(ObjectBase * obj)
 {
-	int index = obj->updateIndex;
+	this->killList.emplace_back(obj);
+}
 
-	this->updateList[index] = this->updateList.back();
-	this->updateList[index]->updateIndex = index;
-	this->updateList.pop_back();
+void ObjectManager::deleteObject(ObjectBase * obj)
+{
+	if (obj == nullptr)
+		return;
 
-	obj->updateIndex = -1;
+	int index = obj->objectIndex;
+
+	this->objectList[index].swap(this->objectList.back());
+	this->objectList[index]->objectIndex = index;
+	this->objectList.back().release();
+	this->objectList.pop_back();
+	
+	free(obj);
 }

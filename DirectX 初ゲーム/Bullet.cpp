@@ -3,8 +3,11 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()->position, owner->getTransform()->getRotation())
+Bullet::Bullet(ObjectBase * owner, Vector3 velocity)
 {
+	this->transform->position = owner->getTransform()->position;
+	this->transform->setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
+
 	this->setCollider();
 
 	this->setRigidbody();
@@ -14,14 +17,15 @@ Bullet::Bullet(Object * owner, Vector3 velocity) : Object(owner->getTransform()-
 	if (owner->type == ObjectType::Player)
 	{
 		this->type = ObjectType::Bullet;
-		this->setPolygon(Layer::DEFAULT, TEX_BULLET);
+		this->setPolygon(Layer::BULLET, Texture::Get("bullet"));
+		this->collider->size *= 0.7f;
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
 	}
 	else
 	{
 		this->type = ObjectType::Bullet_E;
-		this->setPolygon(Layer::DEFAULT, TEX_BULLET_E);
+		this->setPolygon(Layer::BULLET, Texture::Get("bullet_e"));
 		this->collider->size *= 0.5f;
 	}
 
@@ -48,7 +52,7 @@ void Bullet::update()
 		delete this;
 }
 
-void Bullet::onCollision(Object * other)
+void Bullet::onCollision(Object2D * other)
 {
 
 	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))

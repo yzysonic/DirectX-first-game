@@ -93,7 +93,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -168,6 +168,8 @@
     <ClCompile Include="Core\Polygon.cpp" />
     <ClCompile Include="Core\Random.cpp" />
     <ClCompile Include="Core\Renderer.cpp" />
+    <ClCompile Include="Core\RenderSpace.cpp" />
+    <ClCompile Include="Core\RenderTarget.cpp" />
     <ClCompile Include="Core\Rigidbody.cpp" />
     <ClCompile Include="Core\Script.cpp" />
     <ClCompile Include="Core\Sound.cpp" />
@@ -177,7 +179,12 @@
     <ClCompile Include="Core\Vector.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Core\Drawable.cpp" />
+    <ClCompile Include="Core\Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Core\Event.cpp" />
+    <ClCompile Include="LiveUI.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -190,6 +197,7 @@
     <ClCompile Include="SceneGuide.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="ScoreUI.cpp" />
     <ClCompile Include="SmoothCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +222,7 @@
     <ClInclude Include="Core\Random.h" />
     <ClInclude Include="Core\Renderer.h" />
     <ClInclude Include="Core\RendererType.h" />
+    <ClInclude Include="Core\RenderSpace.h" />
     <ClInclude Include="Core\Rigidbody.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\Script.h" />
@@ -225,11 +234,18 @@
     <ClInclude Include="Core\Vector.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Core\Drawable.h" />
+    <ClInclude Include="Core\Easing.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Core\Event.h" />
     <ClInclude Include="FadeScreen.h" />
+    <ClInclude Include="Core\Math.h" />
+    <ClInclude Include="LiveUI.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />
+    <ClInclude Include="Core\RenderTarget.h" />
     <ClInclude Include="SceneClear.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="SceneGameOver.h" />
@@ -237,6 +253,7 @@
     <ClInclude Include="SceneGuide.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="ScoreUI.h" />
     <ClInclude Include="SmoothCamera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

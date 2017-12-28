@@ -12,16 +12,53 @@ void SceneTitle::init(void)
 	this->beatCount = 0;
 	this->timer = 0;
 	this->com = COM_WAIT;
+	this->playBack = false;
+	this->cursorPos = 0;
 
-	this->vignetting = new Object;
-	this->vignetting->setPolygon(Layer::UI_02, TEX_VIGNETTING, RendererType::UI);
+
+	this->vignetting = new Object2D;
+	this->vignetting->setPolygon(Layer::UI_02, Texture::Get("vignetting"), RendererType::UI);
+	this->vignetting->setActive(false);
+
+	this->logo = new Object2D;
+	this->logo->setPolygon(Layer::UI_00, Texture::Get("title_logo"), RendererType::UI);
+	this->logo->getTransform()->position = Vector3(0, SystemParameters::ResolutionY / 2.f - 200, 0);
+	this->logo->setActive(false);
+
+	this->presskey = new Object2D;
+	this->presskey->setPolygon(Layer::UI_00, Texture::Get("title_presskey"), RendererType::UI);
+	this->presskey->getTransform()->position = Vector3(0, SystemParameters::ResolutionY / 2.f - 475, 0);
+	this->presskey->setActive(false);
+
+	this->info = new Object2D;
+	this->info->setPolygon(Layer::UI_02, Texture::Get("title_info"), RendererType::UI);
+	this->info->getTransform()->position.x = SystemParameters::ResolutionX / 2 - this->info->getPolygon()->pTexture->size.x / 2 - 30;
+	this->info->getTransform()->position.y = -SystemParameters::ResolutionY / 2 + this->info->getPolygon()->pTexture->size.y + 10;
+	this->info->getTransform()->position.z = 0;
+	this->info->setActive(false);
+
+	this->cursor = new Object2D;
+	this->cursor->setPolygon(Layer::UI_00, Texture::Get("title_cursor"), RendererType::UI);
+	this->cursor->getTransform()->position = Vector3(-80, SystemParameters::ResolutionY / 2.f - 415, 0);
+	this->cursor->getPolygon()->setOpacity(0);
+	this->cursor->setActive(false);
+
+	this->start = new Object2D;
+	this->start->setPolygon(Layer::UI_00, Texture::Get("title_start"), RendererType::UI);
+	this->start->getTransform()->position = Vector3(40, SystemParameters::ResolutionY / 2.f - 415, 0);
+	this->start->getPolygon()->setOpacity(0);
+	this->start->setActive(false);
+	
+	this->exit = new Object2D;
+	this->exit->setPolygon(Layer::UI_00, Texture::Get("title_exit"), RendererType::UI);
+	this->exit->getTransform()->position = Vector3(40, SystemParameters::ResolutionY / 2.f - 500, 0);
+	this->exit->getPolygon()->setOpacity(0);
+	this->exit->setActive(false);
 
 	// アニメーション状態初期化
 	this->logoState =
 	this->keyState =
 	this->polyState = Wait;
-
-
 
 	// カメラの初期化
 	Renderer::GetInstance()->setCamera(NULL);
@@ -135,9 +172,10 @@ void SceneTitle::update_createPoly(void)
 	// アニメーションスキップ
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{
-		for (int i = 0; this->polyCount<TitlePolyMax; i++)
+		while (this->polyCount<TitlePolyMax)
 		{
 			PolygonElement *poly = new PolygonElement;
+			poly->targetScale = Vector3(0.5f, 0.5f, 1.0f);
 			this->polyList[this->polyCount++] = poly;
 		}
 
@@ -160,9 +198,7 @@ void SceneTitle::update_createPoly(void)
 	else 
 	{
 		// ロゴ表示
-		this->logo = new Object;
-		this->logo->setPolygon(Layer::UI_00, TEX_TITLE_LOGO, RendererType::UI);
-		this->logo->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f -200, 0);
+		this->logo->setActive(true);
 		this->timer = 0;
 		this->logo->getPolygon()->setOpacity(0);
 
@@ -190,16 +226,10 @@ void SceneTitle::update_showLogo(void)
 		this->logo->getTransform()->scale = Vector3(1.0f, 1.0f, 1.0f);
 
 		// PRESS KEY 表示
-		this->presskey = new Object;
-		this->presskey->setPolygon(Layer::UI_00, TEX_TITLE_PRESSKEY, RendererType::UI);
-		this->presskey->getTransform()->position = Vector3(0, SystemParameters::ResolutionY/2.f - 475, 0);
+		this->presskey->setActive(true);
 
 		// 作者情報表示
-		this->info = new Object;
-		this->info->setPolygon(Layer::UI_02, TEX_TITLE_INFO, RendererType::UI);
-		this->info->getTransform()->position.x = SystemParameters::ResolutionX/2 - this->info->getPolygon()->pTexture->size.x / 2 - 30;
-		this->info->getTransform()->position.y = -SystemParameters::ResolutionY/2 + this->info->getPolygon()->pTexture->size.y + 10;
-		this->info->getTransform()->position.z = 0;
+		this->info->setActive(true);
 
 		this->logoState = Wait;
 		this->keyState = Wait;
@@ -232,11 +262,17 @@ void SceneTitle::update_pressWait(void)
 void SceneTitle::update_showMenu_A(void)
 {
 	syncAnimation();
-	Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 1.0f, Time::DeltaTime() * 10);
+	if(this->playBack)
+		Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 0.0f, Time::DeltaTime() * 10);
+	else
+		Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 1.0f, Time::DeltaTime() * 10);
 
 	const float interval = 0.1f;
 
 	float progress = this->timer / interval;
+	if (this->playBack)
+		progress = 1.0f - progress;
+
 	if (this->timer <= interval+0.1f)
 	{
 		this->presskey->getTransform()->scale = Vector3::Lerp(Vector3(1, 1, 0), Vector3(1.3f, 0.8f, 0), progress);
@@ -245,25 +281,19 @@ void SceneTitle::update_showMenu_A(void)
 	else
 	{
 		// メニュー表示
-		this->cursor = new Object;
-		this->cursor->setPolygon(Layer::UI_00, TEX_TITLE_CURSOR, RendererType::UI);
-		this->cursor->getTransform()->position = Vector3(-80, SystemParameters::ResolutionY/2.f - 415, 0);
-		this->cursor->getPolygon()->setOpacity(0);
-
-		this->start = new Object;
-		this->start->setPolygon(Layer::UI_00, TEX_TITLE_START, RendererType::UI);
-		this->start->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 415, 0);
-		this->start->getPolygon()->setOpacity(0);
-
-		this->exit = new Object;
-		this->exit->setPolygon(Layer::UI_00, TEX_TITLE_EXIT, RendererType::UI);
-		this->exit->getTransform()->position = Vector3(40, SystemParameters::ResolutionY/2.f - 500, 0);
-		this->exit->getPolygon()->setOpacity(0);
-
-		this->cursorPos = 0;
+		this->cursor->setActive(!this->playBack);
+		this->start->setActive(!this->playBack);
+		this->exit->setActive(!this->playBack);
 
 		// 状態遷移
-		SceneTitle::pUpdate = &SceneTitle::update_showMenu_B;
+		if (!this->playBack)
+			SceneTitle::pUpdate = &SceneTitle::update_showMenu_B;
+		else
+		{
+			this->playBack = false;
+			SceneTitle::pUpdate = &SceneTitle::update_pressWait;
+		}
+		
 	}
 }
 
@@ -329,6 +359,15 @@ void SceneTitle::update_menu(void)
 		// 状態遷移
 		SceneTitle::pUpdate = &SceneTitle::update_fadeWait;
 	}
+
+	// １つ前に戻る
+	if (GetKeyboardTrigger(DIK_BACKSPACE) || IsButtonPressed(0, BUTTON_CR))
+	{
+		this->timer = 0;
+		this->playBack = true;
+		SceneTitle::pUpdate = &SceneTitle::update_showMenu_A;
+	}
+
 
 }
 

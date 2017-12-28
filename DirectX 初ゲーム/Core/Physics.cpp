@@ -28,13 +28,13 @@ void Physics::Update()
 	m_pInstance->testCollisions();
 }
 
-void Physics::addCollider(shared_ptr<Collider> collider)
+void Physics::addCollider(shared_ptr<Collider2D> collider)
 {
 	this->colliderList.push_back(collider);
 	collider->listIndex = this->colliderList.size() - 1;
 }
 
-void Physics::removeCollider(Collider * collider)
+void Physics::removeCollider(Collider2D * collider)
 {
 	size_t index = collider->listIndex;
 
@@ -50,13 +50,13 @@ void Physics::removeCollider(Collider * collider)
 
 }
 
-void Physics::addRigidbody(Rigidbody* rigidbody)
+void Physics::addRigidbody(Rigidbody2D* rigidbody)
 {
 	this->rigidbodyList.push_back(rigidbody);
 	rigidbody->listIndex = this->rigidbodyList.size() - 1;
 }
 
-void Physics::removeRigidbody(Rigidbody * rigidbody)
+void Physics::removeRigidbody(Rigidbody2D * rigidbody)
 {
 
 	size_t index = rigidbody->listIndex;
@@ -128,7 +128,7 @@ void Physics::testCollisions()
 	{
 		for (size_t j = i + 1; j < this->colliderList.size(); j++)
 		{
-			shared_ptr<Collider> a, b;
+			shared_ptr<Collider2D> a, b;
 
 			a = this->colliderList[i].lock();
 			b = this->colliderList[j].lock();
@@ -147,8 +147,7 @@ void Physics::testCollisions()
 				)
 			{
 				a->object->onCollision(b->object);
-				if(b.use_count() > 1)
-					b->object->onCollision(a->object);
+				b->object->onCollision(a->object);
 			}
 		}
 	}

@@ -14,8 +14,8 @@ float PerlinNoise(float x)
 
 	for (int i = 0; i < kOctaversNum; i++)
 	{
-		float frequency = powf(2.0f,i);
-		float amplitude = powf(kPersistence,i);
+		float frequency = powf(2.0f,(float)i);
+		float amplitude = powf(kPersistence,(float)i);
 		total = total + InterpolatedNoise(x * frequency) * amplitude;
 	}
 

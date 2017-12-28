@@ -9,7 +9,9 @@
 #include <windows.h>
 #include <tchar.h>
 #include <string.h>
+#include <string>
 #include <stdio.h>
+#include <memory>
 
 //システムのパラメータ
 //数値の変更に反映するのはシステム初期化するときのみ。
@@ -32,4 +34,5 @@ void SafeDelete(T *&ptr)
 #define SafeRelease(ptr)	if(ptr != NULL) {ptr->Release(); ptr = NULL; }
 #define ColorRGBA(r,g,b,a)		D3DCOLOR_RGBA(r,g,b,a)
 
-#define PI ((FLOAT)  3.141592654f)
+template<class T>
+using smart_ptr = std::unique_ptr<T>;

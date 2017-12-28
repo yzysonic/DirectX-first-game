@@ -10,38 +10,58 @@
 void SceneGame::init(void)
 {
 	// 口径食効果
-	this->vignetting = new Object;
-	this->vignetting->setPolygon(Layer::MASK, TEX_VIGNETTING, RendererType::UI);
+	this->vignetting = new Object2D;
+	this->vignetting->setPolygon(Layer::MASK, Texture::Get("vignetting"), RendererType::UI);
 
 	// スコアUI
-	this->scoreUI = new NumberUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER, TEX_GAME_SCORE);
+	this->scoreUI = new ScoreUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_score"));
 	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
 	const int x_offset = 35;
-	this->timeUI[0] = new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER, TEX_GAME_TIME);
-	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, TEX_NUMBER);
+	this->timeUI[0] = new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"), Texture::Get("game_time"));
+	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, Texture::Get("number"));
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
-	this->liveUI = new Object;
-	this->liveUI->setPolygon(Layer::UI_00, TEX_LIFES, RendererType::UI);
-	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + GetTexture(TEX_LIFES)->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
+	this->liveUI = new LiveUI;
+	this->liveUI->getTransform()->position = Vector3(x_offset + 3 + Texture::Get("lives")->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
 	// プレイヤー
 	this->player = new Player;
 	this->player->setActive(false);
 
 	// カメラ設定
-	this->camera = new SmoothCamera(this->player->getTransform(), Vector3(0, -50, -5));
+	this->camera = new SmoothCamera(this->player->getTransform());
+	this->camera->getTransform()->position = Vector3(0, -50, -5);
 	this->camera->setActive(false);
 	this->camera->setBackColor(210, 210, 210, 255);
-	this->camera->fov = 1;
+	this->camera->fov = 1.0f;
+	this->camera->distance = 1.0f;
 	Renderer::GetInstance()->setCamera(this->camera);
+
+	// ミニマップ
+	this->minimap = new MiniMap(200, 200, 11);
+	this->minimap->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
+	this->minimap->SetPlayer(this->player);
+	this->minimap->zoom = 0.3f;
+
+	// イベントバインド
+	this->player->injury += [&]
+	{
+		// 揺れエフェクト
+		this->camera->Shake();
+		this->minimap->Shake();
+
+		// 残機表示の更新
+		this->liveUI->getPolygon()->setPattern(this->player->hp - 1);
+		if (this->player->hp == 1)
+			this->liveUI->SetLowLive(true);
+	};
 
 	// ゲームで使う変数
 	this->score = 0;
-	this->timer = 60.0f;
+	this->timer = GameTime;
 	this->polyCount = 0;
 
 	for (int i = 0; i < ENEMY_MAX; i++)
@@ -83,23 +103,27 @@ void SceneGame::uninit(void)
 
 	StopSound(BGM_GAME);
 
+	delete this->minimap;
+
+	for (auto &enemy : this->enemy)
+	{
+		SafeDelete<Enemy>(enemy);
+	}
+	delete this->player;
 	delete this->vignetting;
 	delete this->liveUI;
 	delete this->scoreUI;
 	delete this->timeUI[0];
 	delete this->timeUI[1];
 	delete this->camera;
-	delete this->player;
+	
 
 	for (int i = 0; i < this->polyCount; i++)
 		delete (this->polyList[i]);
 
-	for (int i = 0; i < ENEMY_MAX; i++)
-	{
-		if(this->enemy[i] != nullptr)
-			delete this->enemy[i];
-	}
+	
 
+	Renderer::GetInstance()->setCamera(nullptr);
 	Bullet::Clear();
 }
 
@@ -138,19 +162,20 @@ void SceneGame::update_main(void)
 	// 敵の生成
 	swapEnemy();
 
-	for (int i = 0; i < ENEMY_MAX; i++)
+	for (auto &enemy : this->enemy)
 	{
-		if (this->enemy[i] == nullptr)
+		if (enemy == nullptr)
 			continue;
 
-		if (this->enemy[i]->hp == 0)
+		if (enemy->hp == 0)
 		{
+			// スコア更新
 			this->addGameScore(300);
-			delete this->enemy[i];
-			this->enemy[i] = nullptr;
+			this->scoreUI->SetScore(this->score);
+			this->minimap->RemoveEnemy(enemy);
+			SafeDelete<Enemy>(enemy);
 		}
 	}
-	
 
 	// プレイヤーの移動制限
 	Vector3 &playerPos = this->player->getTransform()->position;
@@ -163,18 +188,21 @@ void SceneGame::update_main(void)
 	if (playerPos.y > FIELD_RANG_Y)
 		playerPos.y = FIELD_RANG_Y;
 
-	// 残機表示の更新
-	this->liveUI->getPolygon()->setPattern(this->player->hp-1);
 
 	// カウントダウン更新
 	this->timer -= Time::DeltaTime();
 
 	// カウントダウン表示更新
 	this->timeUI[0]->setNumber((int)(this->timer*100)%100);
-	this->timeUI[0]->setNumber((int)this->timer);
-
-	// スコア表示更新
-	this->scoreUI->setNumber(this->score);
+	this->timeUI[1]->setNumber((int)this->timer);
+	if (this->timer < 10)
+	{
+		UCHAR p = (UCHAR)(255 * fabsf(sinf(this->timer*PI / 0.7f)));
+		Color c;
+		c.setRGBA(255, p, p, 255);
+		this->timeUI[0]->setColor(c);
+		this->timeUI[1]->setColor(c);
+	}
 
 	// シーン遷移→クリアシーン
 	if (this->timer < 0)
@@ -203,15 +231,15 @@ void SceneGame::swapEnemy(void)
 
 	if (timer > 3.0f)
 	{
-		for (int i = 0; i < ENEMY_MAX; i++)
+		for (auto &enemy : this->enemy)
 		{
-			if (this->enemy[i] == NULL)
+			if (enemy == nullptr)
 			{
-				Enemy* enemy = 
-				this->enemy[i] = new Enemy;
+				enemy = new Enemy;
 
 				enemy->target = this->player->getTransform();
-				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X+500, FIELD_RANG_X-500), Randomf(-FIELD_RANG_Y+500, FIELD_RANG_Y-500), 0.0f);
+				enemy->getTransform()->position = Vector3(Randomf(-FIELD_RANG_X + 500, FIELD_RANG_X - 500), Randomf(-FIELD_RANG_Y + 500, FIELD_RANG_Y - 500), 0.0f);
+				this->minimap->SetEnemy(enemy);
 
 				break;
 			}

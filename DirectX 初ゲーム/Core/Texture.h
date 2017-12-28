@@ -1,41 +1,30 @@
 #pragma once
 #include "Direct3D.h"
 #include "Vector.h"
+#include <unordered_map>
+#include <memory>
+#include <string>
 
-#define TEX_DIR "Data/Texture/"
+constexpr const char* TextureDir = "Data/Texture/";
 
-enum TextureName
+class Texture
 {
-	TEX_NONE,
-	TEX_VIGNETTING,
-	TEX_TITLE_LOGO,
-	TEX_TITLE_PRESSKEY,
-	TEX_TITLE_INFO,
-	TEX_TITLE_CURSOR,
-	TEX_TITLE_START,
-	TEX_TITLE_EXIT,
-	TEX_NUMBER,
-	TEX_GAME_SCORE,
-	TEX_GAME_TIME,
-	TEX_GAME_OVER,
-	TEX_CLEAR,
-	TEX_LIFES,
-	TEX_PLAYER,
-	TEX_ENEMY,
-	TEX_BULLET,
-	TEX_BULLET_E,
-	TEX_GUIDE,
-	TEX_MAX
-};
+public:
+	static void Init(void);
+	static void Uninit(void);
+	static Texture* Get(std::string name);
+	static void LoadTexture(std::string name, std::string file_name = "", int divX = 1, int divY = 1);
 
-typedef struct _Texture
-{
+	static Texture* const none;
+
+public:
+	std::string name;
+	std::string file_name;
 	LPDIRECT3DTEXTURE9 pDXTex;	// テクスチャポインタ
 	Vector2 size;				// テクスチャサイズ
 	int divideX;				// テクスチャ内X分割数
 	int divideY;				// テクスチャ内Y分割数
-}Texture;
 
-void InitTexture();
-void UninitTexture();
-Texture *GetTexture(TextureName texName);
+private:
+	static std::unordered_map<std::string, std::unique_ptr<Texture>> texture_list;
+};

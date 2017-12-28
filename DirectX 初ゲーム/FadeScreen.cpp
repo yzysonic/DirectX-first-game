@@ -2,14 +2,14 @@
 
 FadeScreen::FadeScreen(void)
 {
-	this->setPolygon(Layer::TOP, TEX_NONE, RendererType::UI);
+	this->setPolygon(Layer::TOP, Texture::none, RendererType::UI);
 
-	this->polygon->setSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
+	this->polygon->setSize((float)SystemParameters::ResolutionX, (float)SystemParameters::ResolutionY);
 	this->polygon->setOpacity(0.0f);
 
 	state = Stop;
 
-	this->setActive(false);
+	this->isActive = false;
 }
 
 void FadeScreen::update()
@@ -34,7 +34,7 @@ void FadeScreen::update()
 		timer += Time::DeltaTime();
 		break;
 	case Stop:
-		this->setActive(false);
+		this->isActive = false;
 		break;
 	}
 
@@ -65,7 +65,7 @@ void FadeScreen::Fade(FadeType type, Color color, float interval)
 
 	m_pInstance->timer = 0;
 	m_pInstance->oldOpacity = m_pInstance->polygon->getOpacity();
-	m_pInstance->setActive(true);
+	m_pInstance->isActive = true;
 }
 
 void FadeScreen::FadeIn(Color color, float interval)

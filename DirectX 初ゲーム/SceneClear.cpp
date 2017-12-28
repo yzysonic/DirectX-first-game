@@ -6,10 +6,10 @@
 
 void SceneClear::init(void)
 {
-	this->bk = new Object;
-	this->bk->setPolygon(Layer::BG_00, TEX_CLEAR, RendererType::UI);
+	this->bk = new Object2D;
+	this->bk->setPolygon(Layer::BG_00, Texture::Get("clear"), RendererType::UI);
 
-	this->score = new NumberUI(5, -120, 0, TEX_NUMBER, TEX_GAME_SCORE);
+	this->score = new NumberUI(5, -120, 0, Texture::Get("number"), Texture::Get("game_score"));
 	this->score->setOffset(130, 0);
 	this->score->setNumber(GameManager::Var<int>("score"));
 

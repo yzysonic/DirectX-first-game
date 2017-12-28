@@ -9,11 +9,12 @@ class SmoothCamera : public Camera
 public:
 	Transform *target;
 	float speed;
+	float distance;
 
-	SmoothCamera(Transform* target, Vector3 pos = Vector3(0, 0, -1.0f));
+	SmoothCamera(Transform* target, RenderTarget* render_target = nullptr);
 	void update(void) override;
 	void Shake(void);
 
 private:
-	CameraShake camera_shake;
+	smart_ptr<CameraShake> camera_shake;
 };

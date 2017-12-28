@@ -3,7 +3,7 @@
 #include "Polygon.h"
 #include "Physics.h"
 
-Collider::Collider(Object * object)
+Collider2D::Collider2D(Object2D * object)
 {
 	
 	this->object = object;
@@ -17,7 +17,7 @@ Collider::Collider(Object * object)
 
 }
 
-Collider::~Collider()
+Collider2D::~Collider2D()
 {
 	Physics::GetInstance()->removeCollider(this);
 }
