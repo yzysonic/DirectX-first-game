@@ -2,10 +2,11 @@
 #include "Core\Game.h"
 #include "SceneGuide.h"
 #include "FadeScreen.h"
+#include "CameraFov.h"
 
 
 // 初期化
-void SceneTitle::init(void)
+void SceneTitle::Init(void)
 {
 	this->polyCount = 0;
 	this->beat = new Timer();
@@ -15,45 +16,43 @@ void SceneTitle::init(void)
 	this->playBack = false;
 	this->cursorPos = 0;
 
+	this->vignetting = new Object;
+	this->vignetting->AddComponent<RectPolygon2D>("vignetting", Layer::UI_02);
 
-	this->vignetting = new Object2D;
-	this->vignetting->setPolygon(Layer::UI_02, Texture::Get("vignetting"), RendererType::UI);
-	this->vignetting->setActive(false);
+	this->logo = new Object;
+	this->logo->AddComponent<RectPolygon2D>("title_logo", Layer::UI_00);
+	this->logo->transform.position = Vector3(0, SystemParameters::ResolutionY / 2.f - 200, 0);
+	this->logo->SetActive(false);
 
-	this->logo = new Object2D;
-	this->logo->setPolygon(Layer::UI_00, Texture::Get("title_logo"), RendererType::UI);
-	this->logo->getTransform()->position = Vector3(0, SystemParameters::ResolutionY / 2.f - 200, 0);
-	this->logo->setActive(false);
+	this->presskey = new Object;
+	this->presskey->AddComponent<RectPolygon2D>("title_presskey", Layer::UI_00);
+	this->presskey->transform.position = Vector3(0, SystemParameters::ResolutionY / 2.f - 475, 0);
+	this->presskey->SetActive(false);
 
-	this->presskey = new Object2D;
-	this->presskey->setPolygon(Layer::UI_00, Texture::Get("title_presskey"), RendererType::UI);
-	this->presskey->getTransform()->position = Vector3(0, SystemParameters::ResolutionY / 2.f - 475, 0);
-	this->presskey->setActive(false);
+	this->info = new Object;
+	this->info->AddComponent<RectPolygon2D>("title_info", Layer::UI_02);
+	this->info->transform.position.x = SystemParameters::ResolutionX / 2 - this->info->GetComponent<RectPolygon2D>()->pTexture->size.x / 2 - 30;
+	this->info->transform.position.y = -SystemParameters::ResolutionY / 2 + this->info->GetComponent<RectPolygon2D>()->pTexture->size.y + 10;
+	this->info->transform.position.z = 0;
+	this->info->SetActive(false);
 
-	this->info = new Object2D;
-	this->info->setPolygon(Layer::UI_02, Texture::Get("title_info"), RendererType::UI);
-	this->info->getTransform()->position.x = SystemParameters::ResolutionX / 2 - this->info->getPolygon()->pTexture->size.x / 2 - 30;
-	this->info->getTransform()->position.y = -SystemParameters::ResolutionY / 2 + this->info->getPolygon()->pTexture->size.y + 10;
-	this->info->getTransform()->position.z = 0;
-	this->info->setActive(false);
+	this->cursor = new Object;
+	this->cursor->AddComponent<RectPolygon2D>("title_cursor", Layer::UI_00);
+	this->cursor->GetComponent<RectPolygon2D>()->SetOpacity(0);
+	this->cursor->transform.position = Vector3(-80, SystemParameters::ResolutionY / 2.f - 415, 0);
+	this->cursor->SetActive(false);
 
-	this->cursor = new Object2D;
-	this->cursor->setPolygon(Layer::UI_00, Texture::Get("title_cursor"), RendererType::UI);
-	this->cursor->getTransform()->position = Vector3(-80, SystemParameters::ResolutionY / 2.f - 415, 0);
-	this->cursor->getPolygon()->setOpacity(0);
-	this->cursor->setActive(false);
-
-	this->start = new Object2D;
-	this->start->setPolygon(Layer::UI_00, Texture::Get("title_start"), RendererType::UI);
-	this->start->getTransform()->position = Vector3(40, SystemParameters::ResolutionY / 2.f - 415, 0);
-	this->start->getPolygon()->setOpacity(0);
-	this->start->setActive(false);
+	this->start = new Object;
+	this->start->AddComponent<RectPolygon2D>("title_start", Layer::UI_00);
+	this->start->GetComponent<RectPolygon2D>()->SetOpacity(0);
+	this->start->transform.position = Vector3(40, SystemParameters::ResolutionY / 2.f - 415, 0);
+	this->start->SetActive(false);
 	
-	this->exit = new Object2D;
-	this->exit->setPolygon(Layer::UI_00, Texture::Get("title_exit"), RendererType::UI);
-	this->exit->getTransform()->position = Vector3(40, SystemParameters::ResolutionY / 2.f - 500, 0);
-	this->exit->getPolygon()->setOpacity(0);
-	this->exit->setActive(false);
+	this->exit = new Object;
+	this->exit->AddComponent<RectPolygon2D>("title_exit", Layer::UI_00);
+	this->exit->GetComponent<RectPolygon2D>()->SetOpacity(0);
+	this->exit->transform.position = Vector3(40, SystemParameters::ResolutionY / 2.f - 500, 0);
+	this->exit->SetActive(false);
 
 	// アニメーション状態初期化
 	this->logoState =
@@ -61,9 +60,12 @@ void SceneTitle::init(void)
 	this->polyState = Wait;
 
 	// カメラの初期化
-	Renderer::GetInstance()->setCamera(NULL);
-	Renderer::GetInstance()->getCamera()->setBackColor(243, 242, 238, 255);
-	Renderer::GetInstance()->getCamera()->fov = 0.0f;
+	this->camera.reset(new Camera);
+	this->camera->fov = Deg2Rad(1.0f);
+	this->camera->transform.position.z = -0.5f*SystemParameters::ResolutionY / tanf(0.5f*Deg2Rad(1.0f));
+	this->camera->setBackColor(243, 242, 238, 255);
+	this->camera->AddComponent<CameraFov>()->SetActive(false);
+	Renderer::GetInstance()->setCamera(this->camera.get());
 
 	// フェイトアウト
 	FadeScreen::FadeOut(Color::black, 0);
@@ -73,7 +75,7 @@ void SceneTitle::init(void)
 }
 
 // グローバル更新処理
-void SceneTitle::update(void)
+void SceneTitle::Update(void)
 {
 	// 各アニメーション処理
 	update_anime_poly();
@@ -86,7 +88,7 @@ void SceneTitle::update(void)
 }
 
 // 終了処理
-void SceneTitle::uninit(void)
+void SceneTitle::Uninit(void)
 {
 	SafeDelete(this->cursor);
 	SafeDelete(this->start);
@@ -99,6 +101,8 @@ void SceneTitle::uninit(void)
 
 	for(int i=0;i<this->polyCount;i++)
 		SafeDelete(this->polyList[i]);
+
+	Renderer::GetInstance()->setCamera(nullptr);
 
 	StopSound(BGM_TITLE);
 }
@@ -198,9 +202,9 @@ void SceneTitle::update_createPoly(void)
 	else 
 	{
 		// ロゴ表示
-		this->logo->setActive(true);
+		this->logo->SetActive(true);
 		this->timer = 0;
-		this->logo->getPolygon()->setOpacity(0);
+		this->logo->GetComponent<RectPolygon2D>()->SetOpacity(0);
 
 		// 状態遷移
 		SceneTitle::pUpdate = &SceneTitle::update_showLogo;
@@ -215,21 +219,21 @@ void SceneTitle::update_showLogo(void)
 	if (this->timer <= interval)
 	{
 		float progress = this->timer / interval;
-		this->logo->getTransform()->scale.x = Lerpf(3, 1, progress);
-		this->logo->getTransform()->scale.y = Lerpf(3, 1, progress);
-		this->logo->getPolygon()->setOpacity(progress);
+		this->logo->transform.scale.x = Lerpf(3, 1, progress);
+		this->logo->transform.scale.y = Lerpf(3, 1, progress);
+		this->logo->GetComponent<RectPolygon2D>()->SetOpacity(progress);
 	}
 
 	// 処理完了
 	else
 	{
-		this->logo->getTransform()->scale = Vector3(1.0f, 1.0f, 1.0f);
+		this->logo->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
 
 		// PRESS KEY 表示
-		this->presskey->setActive(true);
+		this->presskey->SetActive(true);
 
 		// 作者情報表示
-		this->info->setActive(true);
+		this->info->SetActive(true);
 
 		this->logoState = Wait;
 		this->keyState = Wait;
@@ -262,10 +266,10 @@ void SceneTitle::update_pressWait(void)
 void SceneTitle::update_showMenu_A(void)
 {
 	syncAnimation();
-	if(this->playBack)
-		Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 0.0f, Time::DeltaTime() * 10);
+	if (this->playBack)
+		this->camera->GetComponent<CameraFov>()->SetFov(Lerpf(this->camera->fov, Deg2Rad(1.0f), Time::DeltaTime() * 10));
 	else
-		Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 1.0f, Time::DeltaTime() * 10);
+		this->camera->GetComponent<CameraFov>()->SetFov(Lerpf(this->camera->fov, Deg2Rad(120.0f), Time::DeltaTime() * 10));
 
 	const float interval = 0.1f;
 
@@ -275,15 +279,15 @@ void SceneTitle::update_showMenu_A(void)
 
 	if (this->timer <= interval+0.1f)
 	{
-		this->presskey->getTransform()->scale = Vector3::Lerp(Vector3(1, 1, 0), Vector3(1.3f, 0.8f, 0), progress);
-		this->presskey->getPolygon()->setOpacity(Lerpf(1, 0.0f, progress));
+		this->presskey->transform.scale = Vector3::Lerp(Vector3(1, 1, 0), Vector3(1.3f, 0.8f, 0), progress);
+		this->presskey->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(1, 0.0f, progress));
 	}
 	else
 	{
 		// メニュー表示
-		this->cursor->setActive(!this->playBack);
-		this->start->setActive(!this->playBack);
-		this->exit->setActive(!this->playBack);
+		this->cursor->SetActive(!this->playBack);
+		this->start->SetActive(!this->playBack);
+		this->exit->SetActive(!this->playBack);
 
 		// 状態遷移
 		if (!this->playBack)
@@ -301,7 +305,7 @@ void SceneTitle::update_showMenu_A(void)
 void SceneTitle::update_showMenu_B(void)
 {
 	syncAnimation();
-	Renderer::GetInstance()->getCamera()->fov = Lerpf(Renderer::GetInstance()->getCamera()->fov, 1.0f, Time::DeltaTime() * 10);
+	this->camera->GetComponent<CameraFov>()->SetFov(Lerpf(this->camera->fov, Deg2Rad(120.0f), Time::DeltaTime() * 10));
 
 
 	const float interval = 0.5f;
@@ -309,9 +313,9 @@ void SceneTitle::update_showMenu_B(void)
 	float progress = this->timer / interval;
 	if (this->timer <= interval + 0.1f)
 	{
-		this->cursor->getPolygon()->setOpacity(Lerpf(0, 1, progress));
-		this->start->getPolygon()->setOpacity(Lerpf(0, 1, progress));
-		this->exit->getPolygon()->setOpacity(Lerpf(0, 1, progress));
+		this->cursor->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(0, 1, progress));
+		this->start->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(0, 1, progress));
+		this->exit->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(0, 1, progress));
 	}
 	else
 	{
@@ -330,7 +334,7 @@ void SceneTitle::update_menu(void)
 	{
 		if (this->cursorPos > 0)
 		{
-			this->cursor->getTransform()->position.y += 85;
+			this->cursor->transform.position.y += 85;
 			this->cursorPos--;
 		}
 	}
@@ -338,7 +342,7 @@ void SceneTitle::update_menu(void)
 	{
 		if (this->cursorPos < 1)
 		{
-			this->cursor->getTransform()->position.y -= 85;
+			this->cursor->transform.position.y -= 85;
 			this->cursorPos++;
 		}
 	}
@@ -385,48 +389,28 @@ void SceneTitle::update_anime_poly(void)
 	case Hit:
 		for (int i = 0; i < this->polyCount; i++)
 		{
-			this->polyList[i]->prePos = this->polyList[i]->getTransform()->position;
+			this->polyList[i]->prePos = this->polyList[i]->transform.position;
 			this->polyList[i]->nextColor.setRGBA(Random(0, 255), Random(0, 255), Random(0, 255), 200);
 		}
 		this->polyState = Phase1;
 		timer = 0;
 		break;
 	case Phase1:
-	{
 		float interval = 2.0f;
 		if (timer <= interval)
 		{
 			float progress = timer / interval;
 			for (int i = 0; i < this->polyCount; i++)
-			{
-				//Vector3 dir;
-				//D3DXVec3Normalize(&dir, &this->polyList[i]->prePos);
-				//this->polyList[i]->base->transform->position += dir*10.0f*Time::DeltaTime() / interval;
-
-				//this->polyList[i]->base->transform->scale = Vector3(1, 1, 0)*Lerpf(0.4f, 0.6f, progress);
-
-				this->polyList[i]->getPolygon()->setColor(LerpC(this->polyList[i]->getPolygon()->getColor(), this->polyList[i]->nextColor, progress));
-			}
+				this->polyList[i]->GetComponent<RectPolygon>()->SetColor(LerpC(this->polyList[i]->GetComponent<RectPolygon>()->GetColor(), this->polyList[i]->nextColor, progress));
 		}
 		else
 		{
 			this->polyState = Wait;
-			//this->polyState = Phase2;
 		}
 		timer += Time::DeltaTime();
 		break;
-	}
-	case Phase2:
-
-		for (int i = 0; i < this->polyCount; i++)
-		{
-			//this->polyList[i]->base->transform->position = LerpV3(this->polyList[i]->base->transform->position, this->polyList[i]->prePos, Time::DeltaTime()*10.0f);
-
-			this->polyList[i]->getTransform()->scale = Vector3(1, 1, 0)*Lerpf(this->polyList[i]->getTransform()->scale.x, 0.4f, Time::DeltaTime()*3.0f);
-		}
 
 
-		break;
 	}
 
 }
@@ -447,7 +431,7 @@ void SceneTitle::update_anime_logo(void)
 		if (timer <= interval)
 		{
 			float porgress = timer / interval;
-			this->logo->getTransform()->scale = Vector3(1, 1, 0)*Lerpf(1.0f, 1.13f, porgress);
+			this->logo->transform.scale = Vector3(1, 1, 0)*Lerpf(1.0f, 1.13f, porgress);
 		}
 		else
 		{
@@ -458,7 +442,7 @@ void SceneTitle::update_anime_logo(void)
 		break;
 	}
 	case Phase2:
-		this->logo->getTransform()->scale = Vector3(1, 1, 0)*Lerpf(this->logo->getTransform()->scale.x, 1.0f, Time::DeltaTime()*3.0f);
+		this->logo->transform.scale = Vector3(1, 1, 0)*Lerpf(this->logo->transform.scale.x, 1.0f, Time::DeltaTime()*3.0f);
 		break;
 	}
 
@@ -480,7 +464,7 @@ void SceneTitle::update_anime_presskey(void)
 		if (timer <= interval)
 		{
 			float porgress = timer / interval;
-			this->presskey->getPolygon()->setOpacity(Lerpf(0.95f, 0.5f, porgress));
+			this->presskey->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(0.95f, 0.5f, porgress));
 		}
 		else
 		{
@@ -491,7 +475,7 @@ void SceneTitle::update_anime_presskey(void)
 		break;
 	}
 	case Phase2:
-		this->presskey->getPolygon()->setOpacity(Lerpf(this->presskey->getPolygon()->getOpacity(), 0.95f, Time::DeltaTime()*3.0f));
+		this->presskey->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(this->presskey->GetComponent<RectPolygon2D>()->GetOpacity(), 0.95f, Time::DeltaTime()*3.0f));
 		break;
 	}
 

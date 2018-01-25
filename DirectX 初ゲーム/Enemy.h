@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 
-class Enemy : public Object2D
+class Enemy : public Object
 {
 private:
 	static constexpr int MaxHP = 7;
@@ -17,8 +17,8 @@ public:
 	float effect_timer;
 
 	Enemy(void);
-	void update(void) override;
-	void onCollision(Object2D* other) override;
+	void Update(void) override;
+	void OnCollision(Object* other) override;
 private:
 	void (Enemy::*pUpdate)(void);
 	void update_init(void);

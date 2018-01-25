@@ -1,13 +1,12 @@
 #pragma once
 
-class ObjectBase;
-class Transform;
+#include "Component.h"
 
-class Script
+class Script : public Component
 {
 public:
-	ObjectBase& object;
-	Transform& transform;
-	Script(ObjectBase& object);
+	Script(void);
+	virtual void Init(void) {};
 	virtual void Update(void) {};
+	bool SetActive(bool value) override;
 };

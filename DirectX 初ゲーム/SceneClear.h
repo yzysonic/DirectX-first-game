@@ -5,12 +5,12 @@
 class SceneClear : public Scene
 {
 public:
-	void init(void) override;
-	void update(void) override;
-	void uninit(void) override;
+	void Init(void) override;
+	void Update(void) override;
+	void Uninit(void) override;
 
 private:
-	Object2D *bk;
+	Object *bk;
 	NumberUI *score;
 	float timer;
 	void(SceneClear::*pUpdate)(void);

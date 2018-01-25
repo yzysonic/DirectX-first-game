@@ -55,6 +55,7 @@ HRESULT Direct3D::Init(HWND hWnd, bool bWindowMode)
 	d3dpp.EnableAutoDepthStencil = TRUE;				// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
 	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;			// デプスバッファとして16bitを使う
 	d3dpp.BackBufferFormat = d3ddm.Format;				// カラーモードの指定
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	// デバイスの生成
 	// ディスプレイアダプタを表すためのデバイスを作成

@@ -8,10 +8,10 @@ void GameManager::Create(void)
 void GameManager::Update(void)
 {
 	if(m_pInstance->scene[0] != nullptr)
-		m_pInstance->scene[0]->update();
+		m_pInstance->scene[0]->Update();
 
 	if(m_pInstance->scene[1] != nullptr)
-		m_pInstance->scene[1]->update();
+		m_pInstance->scene[1]->Update();
 }
 
 
@@ -21,7 +21,7 @@ void GameManager::Destroy(void)
 	for (auto& scene : m_pInstance->scene)
 	{
 		if (scene != nullptr)
-			scene->uninit();
+			scene->Uninit();
 	}
 
 	Singleton<GameManager>::Destroy();
@@ -45,10 +45,10 @@ Scene * GameManager::GetScene(void)
 void GameManager::SetScene(Scene * scene, int no)
 {
 	if(m_pInstance->scene[no] != nullptr)
-		m_pInstance->scene[no]->uninit();
+		m_pInstance->scene[no]->Uninit();
 
 	m_pInstance->scene[no].reset(scene);
 
 	if (scene != nullptr)
-		m_pInstance->scene[no]->init();
+		m_pInstance->scene[no]->Init();
 }

@@ -13,8 +13,8 @@ enum struct SceneName
 class Scene 
 {
 public:
-	virtual void init(void) {};
-	virtual void update(void) = 0;
-	virtual void uninit(void) {};
+	virtual void Init(void) {};
+	virtual void Update(void) = 0;
+	virtual void Uninit(void) {};
 	virtual ~Scene(void) {};
 };

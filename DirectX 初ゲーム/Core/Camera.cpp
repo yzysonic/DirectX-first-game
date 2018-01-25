@@ -8,15 +8,14 @@ Camera::Camera(RenderTarget* render_target)
 		this->render_target = RenderTarget::BackBuffer();
 	else this->render_target = render_target;
 	this->type = ObjectType::Camera;
-	this->transform->position = Vector3(0.0f, 0.0f, -1.0f);
+	this->transform.position = Vector3(0.0f, 0.0f, -250.0f);
 	this->setBackColor(Color(255, 255, 255, 255));
-	this->fov = 0.0f;
 	this->at = Vector3(0.0f, 0.0f, 1.0f);
 	this->up = Vector3(0.0f, 1.0f, 0.0f);
-	this->view_angle = Deg2Rad(150.0f);
-	this->view_aspect = (float)SystemParameters::ResolutionX / (float)SystemParameters::ResolutionY;
-	this->view_near_z = 0.1f;
-	this->view_far_z = 1000.0f;
+	this->aspect = (float)SystemParameters::ResolutionX / (float)SystemParameters::ResolutionY;
+	this->near_z = 0.0f;
+	this->far_z = 1000.0f;
+	this->fov = 2.0f*atan2f(0.5f*SystemParameters::ResolutionY, this->transform.position.length());
 }
 
 D3DXMATRIX Camera::getViewMatrix(bool update)
@@ -27,9 +26,9 @@ D3DXMATRIX Camera::getViewMatrix(bool update)
 		D3DXMatrixIdentity(&view);
 
 		// ビューマトリクスの作成
-		D3DXVECTOR3 eye = D3DXVECTOR3(transform->position.x, transform->position.y, transform->position.z);
-		D3DXVECTOR3 at = D3DXVECTOR3(this->at.x, this->at.y, this->at.z);
-		D3DXVECTOR3 up = D3DXVECTOR3(this->up.x, this->up.y, this->up.z);
+		D3DXVECTOR3 eye = this->transform.position;
+		D3DXVECTOR3 at = this->at;
+		D3DXVECTOR3 up = this->up;
 		D3DXMatrixLookAtLH(&view, &eye, &at, &up);
 	}
 
@@ -44,7 +43,7 @@ D3DXMATRIX Camera::getProjectionMatrix(bool update)
 		D3DXMatrixIdentity(&projection);
 
 		// プロジェクションマトリクスの作成
-		D3DXMatrixPerspectiveFovLH(&projection, view_angle, view_aspect, view_near_z, view_far_z);
+		D3DXMatrixPerspectiveFovLH(&projection, fov, aspect, near_z, far_z);
 	}
 
 	return projection;

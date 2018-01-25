@@ -7,17 +7,21 @@
 
 class ObjectManager : public Singleton<ObjectManager>
 {
+	friend class Object;
 public:
 	static void Create(void);
 	static void Destroy(void);
 	static void Update(void);
 
-public:
-	void* newObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber);
-	void addKill(ObjectBase* obj);
-	void deleteObject(ObjectBase* obj);
-
 private:
-	std::vector<std::unique_ptr<ObjectBase>> objectList;
-	std::vector<ObjectBase*> killList;
+	std::vector<std::unique_ptr<Object>> objectList;
+	std::vector<Object*> killList;
+
+	void* NewObject(std::size_t size);
+#ifdef _DEBUG
+	void* NewObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber);
+#endif
+	void AddKill(Object* obj);
+	void DeleteObject(Object* obj);
+
 };

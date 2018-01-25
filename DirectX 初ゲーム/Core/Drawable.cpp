@@ -5,13 +5,11 @@
 #include "RenderSpace.h"
 
 
-Drawable::Drawable(Layer layer, std::string render_space)
+Drawable::Drawable(Layer layer = Layer::DEFAULT, std::string render_space_name = "default")
 {
 	this->layer = layer;
-	this->render_space = render_space;
-	this->render_space_index = RenderSpace::Get(render_space)->GetIndex();
-	this->visible = true;
-	RenderSpace::Get(render_space)->AddDraw(this);
+	this->render_space = render_space_name;
+	this->render_space_index = -1;
 }
 
 Drawable::~Drawable(void)
@@ -20,46 +18,57 @@ Drawable::~Drawable(void)
 	if (rs) rs->RemoveDraw(this);
 }
 
-Layer Drawable::getLayer(void)
+bool Drawable::SetActive(bool value)
+{
+	if (Component::SetActive(value) == false)
+		return false;
+
+	auto rs = RenderSpace::Get(this->render_space);
+
+	if (value)
+		rs->AddDraw(this);
+	else
+		rs->RemoveDraw(this);
+
+	return true;
+}
+
+void Drawable::SetRenderSpace(std::string render_space)
+{
+	SetActive(false);
+	this->render_space = render_space;
+	SetActive(true);
+}
+
+Layer Drawable::GetLayer(void)
 {
 	return this->layer;
 }
 
-Color Drawable::getColor(void)
+void Drawable::SetLayer(Layer layer)
+{
+	SetActive(false);
+	this->layer = layer;
+	SetActive(true);
+}
+
+Color Drawable::GetColor(void)
 {
 	return this->color;
 }
 
-void Drawable::setColor(Color color)
+void Drawable::SetColor(Color color)
 {
 	this->color = color;
 }
 
-void Drawable::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
-{
-	this->color.setRGBA(r, g, b, a);
-}
-
-float Drawable::getOpacity(void)
+float Drawable::GetOpacity(void)
 {
 	return (float)(this->color.a) / 0xff;
 }
 
-void Drawable::setOpacity(float opacity)
+void Drawable::SetOpacity(float opacity)
 {
 	this->color.a = (unsigned char)(opacity * 0xff);
-	this->setColor(this->color);
-}
-
-void Drawable::setVisibility(bool visible)
-{
-	if (visible == this->visible)
-		return;
-
-	if(visible)
-		RenderSpace::Get(this->render_space)->AddDraw(this);
-	else
-		RenderSpace::Get(render_space)->RemoveDraw(this);
-
-	this->visible = visible;
+	this->SetColor(this->color);
 }

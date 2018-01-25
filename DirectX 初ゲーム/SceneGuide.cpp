@@ -2,17 +2,17 @@
 #include "SceneGame.h"
 #include "FadeScreen.h"
 
-void SceneGuide::init(void)
+void SceneGuide::Init(void)
 {
-	this->bk = new Object2D;
-	this->bk->setPolygon(Layer::BG_00, Texture::Get("guide"), RendererType::UI);
+	this->bk = new Object;
+	this->bk->AddComponent<RectPolygon2D>("guide", Layer::BG_00);
 	this->state = 0;
 	this->timer = 0;
 	
 	FadeScreen::FadeIn(Color::white);
 }
 
-void SceneGuide::update(void)
+void SceneGuide::Update(void)
 {
 	switch (this->state)
 	{
@@ -32,7 +32,7 @@ void SceneGuide::update(void)
 	}
 }
 
-void SceneGuide::uninit(void)
+void SceneGuide::Uninit(void)
 {
 	delete this->bk;
 }

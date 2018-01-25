@@ -5,16 +5,15 @@
 #include "RenderTarget.h"
 #include <D3d9types.h>
 
-class Camera : public ObjectBase
+class Camera : public Object
 {
 public:
 	Vector3 at;
 	Vector3 up;
 	float fov;
-	float view_angle;
-	float view_aspect;
-	float view_near_z;
-	float view_far_z;
+	float aspect;
+	float near_z;
+	float far_z;
 	D3DCOLOR backColor;
 	RenderTarget* render_target;
 

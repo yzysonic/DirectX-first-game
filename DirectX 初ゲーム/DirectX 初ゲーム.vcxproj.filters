@@ -66,9 +66,6 @@
     <ClCompile Include="SceneClear.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SmoothCamera.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="SceneGuide.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -178,6 +175,21 @@
     <ClCompile Include="Core\Event.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Collision.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Transform.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraSmooth.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraFov.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -209,9 +221,6 @@
     </ClInclude>
     <ClInclude Include="SceneClear.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SmoothCamera.h">
-      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="SceneGuide.h">
       <Filter>Scene</Filter>
@@ -341,6 +350,21 @@
     </ClInclude>
     <ClInclude Include="Core\Event.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Collision.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Transform.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraSmooth.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraFov.h">
+      <Filter>Script</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

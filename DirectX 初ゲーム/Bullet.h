@@ -4,13 +4,13 @@
 
 #define BULLET_MAX (100)
 
-class Bullet : public Object2D
+class Bullet : public Object
 {
 public:
-	Bullet(ObjectBase* owner, Vector3 velocity);
+	Bullet(Object* owner, Vector3 velocity);
 	~Bullet(void);
-	void update(void) override;
-	void onCollision(Object2D* other) override;
+	void Update(void) override;
+	void OnCollision(Object* other) override;
 	static void Clear();
 private:
 	static std::list<Bullet*> list;

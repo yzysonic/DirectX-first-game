@@ -2,7 +2,6 @@
 #include "Core/Scene.h"
 #include "Core/Core.h"
 #include "NumberUI.h"
-#include "SmoothCamera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
@@ -22,19 +21,18 @@ public:
 	static constexpr float GameTime = 60.0f;
 
 public:
-	void init(void) override;
-	void update(void) override;
-	void uninit(void) override;
-	SmoothCamera* getCamera(void);
+	void Init(void) override;
+	void Update(void) override;
+	void Uninit(void) override;
 	int getGameScore(void);
 	void addGameScore(int score);
 
 private:
-	Object2D* vignetting = nullptr;
+	Object* vignetting = nullptr;
 	LiveUI* liveUI = nullptr;
 	ScoreUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
-	SmoothCamera* camera = nullptr;
+	smart_ptr<Camera> camera;
 	PolygonElement *polyList[GAME_POLY_MAX] = {};
 	Player* player = nullptr;
 	Enemy* enemy[ENEMY_MAX] = {};

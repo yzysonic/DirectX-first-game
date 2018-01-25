@@ -6,23 +6,23 @@
 #include <string>
 
 
-class MiniMap : public Object2D
+class MiniMap : public Object
 {
 private:
-	class Mark : public Object2D
+	class Mark : public Object
 	{
 	public:
-		ObjectBase const *reference = nullptr;
+		Object const *reference = nullptr;
 		MiniMap const * parent = nullptr;
 
 		Mark(MiniMap const * parent);
-		void update(void) override;
+		void Update(void) override;
 	};
-	class Element : public Object2D
+	class Element : public Object
 	{
 	public:
 		Vector3 default_pos;
-		void update(void) override;
+		void Update(void) override;
 	};
 
 public:
@@ -38,7 +38,7 @@ public:
 	void SetPosition(Vector3 pos);
 	void Shake(void);
 
-	void update(void) override;
+	void Update(void) override;
 
 private:
 	int division_level;

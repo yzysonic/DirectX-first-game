@@ -3,6 +3,8 @@
 #include "Common.h"
 #include "Texture.h"
 #include "Drawable.h"
+#include "Object.h"
+#include "Component.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -20,7 +22,6 @@
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-class ObjectBase;
 
 struct Vertex2D
 {
@@ -46,14 +47,14 @@ public:
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
 	
-	RectPolygon2D(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType, std::string render_space);
-	void draw(void) override;
-	void setColor(Color color) override;
-	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
+	RectPolygon2D(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
+	void Draw(void) override;
+	void SetColor(Color color) override;
 	Vector2 getSize(void);
 	void setSize(float x, float y);
 	void setPattern(unsigned int pattern);
-	void setTexture(Texture* texture);
+	void SetTexture(std::string texture_name);
+	void SetTexture(Texture* texture);
 
 protected:
 	Vector2 size;	// 表示するサイズ
@@ -66,19 +67,18 @@ private:
 class RectPolygon : public Drawable
 {
 public:
-	Vertex3D vertex[RECT_NUM_VERTEX];
 	Texture *pTexture;
 
-	RectPolygon(ObjectBase* object, Layer layer, Texture* texture, RendererType rendType);
-	void draw(void) override;
-	void setColor(Color color) override;
-	void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
+	RectPolygon(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
+	void Draw(void) override;
+	void SetColor(Color color) override;
+	Vector2 GetSize(void);
+	void SetSize(Vector2 size);
+	void SetTexture(std::string texture_name);
+	void SetTexture(Texture* texture);
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	Vector2 size;
-
-private:
-	void setVtxBuff(void);
 
 };

@@ -74,6 +74,15 @@ void Time::FramerateControl()
 		s_fps = (int)(s_FrameCount / s_pFPSTimer->elapsedTime());
 		s_FrameCount = 0;
 		s_pFPSTimer->reset();
+
+#ifdef _DEBUG
+		char s[256];
+		sprintf_s(s, "%s FPS:%d", SystemParameters::windowTitle, s_fps);
+		SetWindowText(Window::GetHWnd(), s);
+		//sprintf_s(s, "%d\n", elapsed);
+		//OutputDebugString(s);
+#endif
+
 	}
 
 	// fps‡‚í‚¹
@@ -95,13 +104,6 @@ void Time::FramerateControl()
 
 	s_pFrameTimer->reset();
 
-#ifdef _DEBUG
-	char s[256];
-	sprintf_s(s, "%s FPS:%d", SystemParameters::windowTitle, s_fps);
-	SetWindowText(Window::GetHWnd(), s);
-	//sprintf_s(s, "%d\n", elapsed);
-	//OutputDebugString(s);
-#endif
 }
 
 
@@ -133,3 +135,39 @@ void Time::FramerateControl()
 //	Timer_Reset(g_pFrameTimer);
 //}
 
+FrameTimer::FrameTimer(float interval)
+{
+	this->elapsed = 0.0f;
+	this->interval = interval;
+}
+
+void FrameTimer::Step(void)
+{
+	this->elapsed += Time::DeltaTime();
+}
+
+void FrameTimer::Reset(void)
+{
+	this->elapsed = 0.0f;
+}
+
+void FrameTimer::Reset(float interval)
+{
+	this->interval = interval;
+	Reset();
+}
+
+float FrameTimer::Progress(void)
+{
+	return this->elapsed / this->interval;
+}
+
+bool FrameTimer::TimeUp(void)
+{
+	return this->elapsed >= this->interval;
+}
+
+void FrameTimer::operator++(int)
+{
+	Step();
+}

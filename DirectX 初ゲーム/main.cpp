@@ -32,6 +32,10 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	SystemParameters::windowTitle = "ヒットポリゴン";
 
+#ifdef _DEBUG
+	SystemParameters::FPS = 70;
+#endif
+
 	// 初期化
 	if (FAILED(InitSystem()))
 		return 1;
@@ -45,7 +49,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifndef _DEBUG
 	GameManager::GetInstance()->SetScene(new SceneTitle);
 #else
-	GameManager::GetInstance()->SetScene(new SceneGame);
+	GameManager::GetInstance()->SetScene(new SceneTest);
 #endif
 
 	// ゲームループ

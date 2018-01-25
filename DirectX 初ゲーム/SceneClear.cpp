@@ -4,12 +4,12 @@
 #include "FadeScreen.h"
 
 
-void SceneClear::init(void)
+void SceneClear::Init(void)
 {
-	this->bk = new Object2D;
-	this->bk->setPolygon(Layer::BG_00, Texture::Get("clear"), RendererType::UI);
+	this->bk = new Object;
+	this->bk->AddComponent<RectPolygon2D>("clear", Layer::BG_00);
 
-	this->score = new NumberUI(5, -120, 0, Texture::Get("number"), Texture::Get("game_score"));
+	this->score = new NumberUI(5, -120, 0, "number", "game_score");
 	this->score->setOffset(130, 0);
 	this->score->setNumber(GameManager::Var<int>("score"));
 
@@ -25,13 +25,13 @@ void SceneClear::init(void)
 	SceneClear::pUpdate = &SceneClear::update_clear_fadeWait;
 }
 
-void SceneClear::update(void)
+void SceneClear::Update(void)
 {
 	(this->*pUpdate)();
 	this->timer += Time::DeltaTime();
 }
 
-void SceneClear::uninit(void)
+void SceneClear::Uninit(void)
 {
 	StopSound(BGM_CLEAR);
 	delete this->score;

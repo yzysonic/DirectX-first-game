@@ -1,11 +1,10 @@
 #include "Rigidbody.h"
-#include "Object.h"
 #include "Physics.h"
 
-Rigidbody2D::Rigidbody2D(ObjectBase * object)
+Rigidbody::Rigidbody(void)
 {
+	this->Component::type = ComponentType::Rigidbody;
 
-	this->object = object;
 	this->force = Vector3(0, 0, 0);
 	this->position = Vector3(0, 0, 0);
 	this->velocity = Vector3(0, 0, 0);
@@ -19,7 +18,27 @@ Rigidbody2D::Rigidbody2D(ObjectBase * object)
 
 }
 
-Rigidbody2D::~Rigidbody2D()
+Rigidbody::~Rigidbody()
 {
-	Physics::GetInstance()->removeRigidbody(this);
+	SetActive(false);
+}
+
+void Rigidbody::BindObject(Object * object)
+{
+	Component::BindObject(object);
+	this->position = this->object->transform.position;
+	this->rotation = this->object->transform.getRotation();
+}
+
+bool Rigidbody::SetActive(bool value)
+{
+	if(this->Component::SetActive(value) == false)
+		return false;
+
+	if (value)
+		Physics::GetInstance()->addRigidbody(this);
+	else
+		Physics::GetInstance()->removeRigidbody(this);
+
+	return true;
 }

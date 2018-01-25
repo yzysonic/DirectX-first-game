@@ -6,9 +6,10 @@
 #include "SceneTest.h"
 #include "FadeScreen.h"
 
-void SceneGlobal::init(void)
+void SceneGlobal::Init(void)
 {
 	FadeScreen::Create();
+	FadeScreen::FadeOut(Color::black, 0.0f);
 	this->control_type = kKeyboard | kMouse;
 
 	Texture::LoadTexture("vignetting");
@@ -34,7 +35,7 @@ void SceneGlobal::init(void)
 
 }
 
-void SceneGlobal::update(void)
+void SceneGlobal::Update(void)
 {
 #ifdef _DEBUG
 	GameManager* gm = GameManager::GetInstance();
@@ -52,7 +53,8 @@ void SceneGlobal::update(void)
 #endif
 }
 
-void SceneGlobal::uninit(void)
+void SceneGlobal::Uninit(void)
 {
-	FadeScreen::Destroy();
+	FadeScreen::Singleton<FadeScreen>::Destroy();
+
 }

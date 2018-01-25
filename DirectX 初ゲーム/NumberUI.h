@@ -2,18 +2,18 @@
 
 #include "Core/Core.h"
 
-class NumberUI : public Object2D
+class NumberUI : public Object
 {
 public:
-	NumberUI(int digits, int x, int y, Texture* texture_digit, Texture* texture_title = Texture::none);
+	NumberUI(int digits, int x, int y, std::string texture_digit, std::string texture_title = "none");
 	~NumberUI(void);
 	void setNumber(unsigned int value);
 	void setOffset(int x, int y);
-	void setColor(Color color);
+	void SetColor(Color color);
 
 protected:
 	int digitNum;
 	int value;
-	std::vector<Object2D*> digitList;
+	std::vector<Object*> digitList;
 
 };

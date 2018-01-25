@@ -1,24 +1,60 @@
 #include "Collider.h"
-#include "Object.h"
 #include "Polygon.h"
 #include "Physics.h"
 
-Collider2D::Collider2D(Object2D * object)
+Collider::Collider(void)
 {
-	
-	this->object = object;
+	this->Component::type = ComponentType::Collider;
 	this->isTrigger = false;
-	this->offset = Vector3(0, 0, 0);
-	if (object->getPolygon() != NULL)
-		this->size = Vector3(object->getPolygon()->getSize().x, object->getPolygon()->getSize().y, 0.0f);
-	else
-		this->size = Vector3(100, 100, 100);
-	this->listIndex = -1;
-
+	Physics::GetInstance()->addCollider(this);
 }
 
-Collider2D::~Collider2D()
+
+Collider::~Collider(void)
 {
 	Physics::GetInstance()->removeCollider(this);
 }
 
+ColliderType Collider::GetType(void)
+{
+	return this->type;
+}
+
+
+BoxCollider2D::BoxCollider2D(void)
+{
+	
+	this->object = nullptr;
+	this->type = ColliderType::BoxCollider2D;
+	this->offset = Vector2::zero;
+	this->size = 100.0f * Vector2::one;
+
+}
+
+
+void BoxCollider2D::BindObject(Object * object)
+{
+	this->object = object;
+	this->offset = Vector2::zero;
+
+	auto poly = object->GetComponent<RectPolygon2D>();
+	if (poly != nullptr)
+		this->size = poly->getSize();
+	else
+		this->size = 100.0f * Vector2::one;
+}
+
+
+SphereCollider::SphereCollider(void)
+{
+	this->type = ColliderType::SphereCollider;
+	this->radius = 0.5f;
+}
+
+CapsuleCollider::CapsuleCollider(void)
+{
+	this->type = ColliderType::CapsuleCollider;
+	this->radius = 0.5f;
+	this->height = 1.0f;
+	this->top = Vector3(0.0f, 1.0f, 0.0f);
+}

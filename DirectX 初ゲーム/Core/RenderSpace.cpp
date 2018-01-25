@@ -104,7 +104,7 @@ void RenderSpace::Draw(void)
 				auto list = render_space->draw_list[i];
 
 				for (Drawable* drawable : list)
-					drawable->draw();
+					drawable->Draw();
 			}
 
 		}
@@ -118,6 +118,7 @@ void RenderSpace::Draw(void)
 void RenderSpace::AddDraw(Drawable * drawable)
 {
 	drawable->list_index = this->draw_list[(int)drawable->layer].size();
+	drawable->render_space_index = this->GetIndex();
 	this->draw_list[(int)drawable->layer].push_back(drawable);
 }
 
@@ -136,6 +137,7 @@ void RenderSpace::RemoveDraw(Drawable * drawable)
 	list[index]->list_index = index;
 	list.pop_back();
 	index = -1;
+	drawable->render_space_index = -1;
 }
 
 Camera * RenderSpace::GetCamera(int no)

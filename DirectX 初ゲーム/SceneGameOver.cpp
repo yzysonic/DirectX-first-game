@@ -2,10 +2,10 @@
 #include "SceneTitle.h"
 #include "FadeScreen.h"
 
-void SceneGameOver::init(void)
+void SceneGameOver::Init(void)
 {
-	this->bk = new Object2D;
-	this->bk->setPolygon(Layer::BG_00, Texture::Get("game_over"), RendererType::UI);
+	this->bk = new Object;
+	this->bk->AddComponent<RectPolygon2D>("game_over", Layer::BG_00);
 	this->timer = 0;
 
 	// BGM‚ðÄ¶
@@ -18,13 +18,13 @@ void SceneGameOver::init(void)
 	SceneGameOver::pUpdate = &SceneGameOver::update_fadeWait;
 }
 
-void SceneGameOver::update(void)
+void SceneGameOver::Update(void)
 {
 	(this->*pUpdate)();
 	this->timer += Time::DeltaTime();
 }
 
-void SceneGameOver::uninit(void)
+void SceneGameOver::Uninit(void)
 {
 	StopSound(BGM_GAMEOVER);
 	delete this->bk;

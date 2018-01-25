@@ -1,7 +1,6 @@
 #pragma once
+#include "Component.h"
 #include "Vector.h"
-
-class ObjectBase;
 
 struct RigidbodyConstraints
 {
@@ -10,19 +9,24 @@ struct RigidbodyConstraints
 	bool pos_z;
 };
 
-class Rigidbody2D
+class Rigidbody : public Component
 {
 public:
-	ObjectBase *object;
-	Vector3 position;
-	Vector3 rotation;
-	Vector3 velocity;
-	Vector3 force;
-	float mass;
+	Vector3		position;
+	Vector3		rotation;
+	Vector3		velocity;
+	Vector3		acceleration;	// â¡ë¨ìx
+	Vector3		force;			// óÕ
+	Vector3		net_force;		// çáóÕ
+	float		mass;			// éøó 
+	float		bounciness;		// íeê´åWêî
 	bool useGravity;
 	int listIndex;
 	RigidbodyConstraints constraints;
 
-	Rigidbody2D(ObjectBase* object);
-	~Rigidbody2D(void);
+	Rigidbody(void);
+	~Rigidbody(void);
+	void BindObject(Object* object) override;
+	bool SetActive(bool value) override;
+
 };

@@ -73,8 +73,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\yang.tzui\Source\Repos\GameCore\Release\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\yang.tzui\Source\Repos\GameCore\Release\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -153,11 +153,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraFov.cpp" />
     <ClCompile Include="CameraShake.cpp" />
+    <ClCompile Include="CameraSmooth.cpp" />
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Collider.cpp" />
+    <ClCompile Include="Core\Collision.cpp" />
     <ClCompile Include="Core\Color.cpp" />
     <ClCompile Include="Core\Common.cpp" />
+    <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\Direct3D.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
@@ -175,6 +179,7 @@
     <ClCompile Include="Core\Rigidbody.cpp" />
     <ClCompile Include="Core\Script.cpp" />
     <ClCompile Include="Core\Sound.cpp" />
+    <ClCompile Include="Core\Transform.cpp" />
     <ClCompile Include="Core\System.cpp" />
     <ClCompile Include="Core\Texture.cpp" />
     <ClCompile Include="Core\Time.cpp" />
@@ -200,12 +205,15 @@
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="ScoreUI.cpp" />
-    <ClCompile Include="SmoothCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraFov.h" />
     <ClInclude Include="CameraShake.h" />
+    <ClInclude Include="CameraSmooth.h" />
+    <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Collider.h" />
+    <ClInclude Include="Core\Collision.h" />
     <ClInclude Include="Core\Color.h" />
     <ClInclude Include="Core\Common.h" />
     <ClInclude Include="Core\Core.h" />
@@ -256,7 +264,7 @@
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="ScoreUI.h" />
-    <ClInclude Include="SmoothCamera.h" />
+    <ClInclude Include="Core\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

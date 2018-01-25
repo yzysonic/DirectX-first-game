@@ -1,4 +1,5 @@
 #pragma once
+#include <d3dx9math.h>
 
 class Vector2
 {
@@ -18,6 +19,9 @@ public:
 	Vector2& operator *= (const float f);
 	Vector2& operator /= (const float f);
 
+	Vector2 operator + (void) const;
+	Vector2 operator - (void) const;
+
 	Vector2 operator + (const Vector2 v) const;
 	Vector2 operator - (const Vector2 v) const;
 	Vector2 operator * (const float f) const;
@@ -27,6 +31,8 @@ public:
 
 	bool operator == (const Vector2 v) const;
 	bool operator != (const Vector2 v) const;
+
+	operator D3DXVECTOR2() const;
 
 	Vector2();
 	Vector2(const Vector2&);
@@ -56,6 +62,9 @@ public:
 	Vector3& operator *= (const float f);
 	Vector3& operator /= (const float f);
 
+	Vector3 operator + (void) const;
+	Vector3 operator - (void) const;
+
 	Vector3 operator + (const Vector3 v) const;
 	Vector3 operator - (const Vector3 v) const;
 	Vector3 operator * (const float f) const;
@@ -65,6 +74,8 @@ public:
 
 	bool operator == (const Vector3 v) const;
 	bool operator != (const Vector3 v) const;
+
+	operator D3DXVECTOR3() const;
 
 	Vector3();
 	Vector3(const Vector3&);

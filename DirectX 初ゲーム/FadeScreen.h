@@ -8,14 +8,15 @@ enum FadeType
 	FADE_OUT,
 };
 
-class FadeScreen : public Object2D, public Singleton<FadeScreen>
+class FadeScreen : public Object, public Singleton<FadeScreen>
 {
 public:
 	static constexpr float DefaultFadeTime = 0.3f;
 
 public:
 	FadeScreen(void);
-	void update(void) override;
+	void Update(void) override;
+	void SetActive(bool value) override;
 	static void Fade(FadeType type, Color color = Color::none, float interval = DefaultFadeTime);
 	static void FadeIn(Color color, float interval = DefaultFadeTime);
 	static void FadeOut(Color color, float interval = DefaultFadeTime);

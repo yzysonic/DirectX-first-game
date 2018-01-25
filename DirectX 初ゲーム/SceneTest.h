@@ -2,7 +2,6 @@
 
 #include "Core\Core.h"
 #include "Core/Scene.h"
-#include "SmoothCamera.h"
 #include "PolygonElement.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -16,16 +15,16 @@ private:
 	constexpr static float FieldRangeY = 720.0f/2.0f+500.0f;
 
 public:
-	void init(void) override;
-	void update(void) override;
-	void uninit(void) override;
+	void Init(void) override;
+	void Update(void) override;
+	void Uninit(void) override;
 
-	SmoothCamera* camera = nullptr;
+	Camera* camera = nullptr;
 	MiniMap* mini_map = nullptr;
 	std::vector<PolygonElement*> polyList;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
-	Object* test = nullptr;
+	smart_ptr<Object> test = nullptr;
 
 	int polyCount;
 

@@ -21,6 +21,8 @@ public:
 		return m_pInstance;
 	}
 
+	virtual ~Singleton(void) {};
+
 protected:
 	static T* m_pInstance;
 };

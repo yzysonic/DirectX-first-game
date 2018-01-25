@@ -16,10 +16,7 @@ void ObjectManager::Destroy(void)
 		return;
 
 	for (auto& object : m_pInstance->objectList)
-		delete(object.release());
-
-	for (auto object : m_pInstance->killList)
-		free(object);
+		::delete object.release();
 
 	Singleton::Destroy();
 
@@ -30,47 +27,70 @@ void ObjectManager::Update(void)
 
 	for (int i = 0; i < (int)m_pInstance->objectList.size(); i++)
 	{
-		auto object = m_pInstance->objectList[i].get();
-
+		auto &object = m_pInstance->objectList[i];
 		if (object->isActive)
-			object->update();
+		{
+			// オブジェクトの更新処理
+			object->Update();
 
-		//if (object->kill_flag)
-		//	m_pInstance->killList.emplace_back(object);
+			// オブジェクト所属のスクリプトの更新処理
+			for (auto &script : object->scripts)
+			{
+				if (script->GetActive())
+					script->Update();
+			}
+		}
 	}
 
 	for (auto object : m_pInstance->killList)
-		m_pInstance->deleteObject(object);
+		delete object;
 
 	m_pInstance->killList.clear();
 
 }
 
-void * ObjectManager::newObject(std::size_t size, int _BlockUse, char const* _FileName, int _LineNumber)
+void * ObjectManager::NewObject(std::size_t size)
 {
-	void *pvTemp = _malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
+	void *pvTemp = malloc(size);
 	if (pvTemp == 0)
 		return nullptr;
 
 	this->objectList.emplace_back();
-	this->objectList.back().reset((ObjectBase*)pvTemp);
+	this->objectList.back().reset((Object*)pvTemp);
 	this->objectList.back()->objectIndex = this->objectList.size()-1;
 	
 	return pvTemp;
 }
 
-void ObjectManager::addKill(ObjectBase * obj)
+#ifdef _DEBUG
+void * ObjectManager::NewObject(std::size_t size, int _BlockUse, char const * _FileName, int _LineNumber)
+{
+	void *pvTemp = _malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
+
+	if (pvTemp == 0)
+		return nullptr;
+
+	this->objectList.emplace_back();
+	this->objectList.back().reset((Object*)pvTemp);
+	this->objectList.back()->objectIndex = this->objectList.size() - 1;
+
+	return pvTemp;
+}
+#endif
+
+void ObjectManager::AddKill(Object * obj)
 {
 	this->killList.emplace_back(obj);
+	obj->kill_flag = true;
 }
 
-void ObjectManager::deleteObject(ObjectBase * obj)
+void ObjectManager::DeleteObject(Object * obj)
 {
 	if (obj == nullptr)
 		return;
 
+	// オブジェクトリストの最後尾と交換し、削除する
 	int index = obj->objectIndex;
-
 	this->objectList[index].swap(this->objectList.back());
 	this->objectList[index]->objectIndex = index;
 	this->objectList.back().release();

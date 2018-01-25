@@ -2,18 +2,17 @@
 
 #include "Core/Core.h"
 #include "Bullet.h"
-#include "SmoothCamera.h"
 
 
-class Player : public Object2D
+class Player : public Object
 {
 public:
 	int hp;
 	Event injury;
 	Player(void);
 	~Player(void);
-	void update(void) override;
-	void onCollision(Object2D* other) override;
+	void Update(void) override;
+	void OnCollision(Object* other) override;
 
 private:
 	Vector3 control;

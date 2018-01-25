@@ -3,30 +3,30 @@
 
 std::list<Bullet*> Bullet::list;
 
-Bullet::Bullet(ObjectBase * owner, Vector3 velocity)
+Bullet::Bullet(Object * owner, Vector3 velocity)
 {
-	this->transform->position = owner->getTransform()->position;
-	this->transform->setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
+	this->transform.position = owner->transform.position;
+	this->transform.setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
 
-	this->setCollider();
-
-	this->setRigidbody();
-	this->rigidbody->useGravity = false;
-	this->rigidbody->velocity = velocity;
+	this->AddComponent<Rigidbody>();
+	this->GetComponent<Rigidbody>()->useGravity = false;
+	this->GetComponent<Rigidbody>()->velocity = velocity;
 
 	if (owner->type == ObjectType::Player)
 	{
 		this->type = ObjectType::Bullet;
-		this->setPolygon(Layer::BULLET, Texture::Get("bullet"));
-		this->collider->size *= 0.7f;
+		this->AddComponent<RectPolygon>("bullet", Layer::BULLET);
+		this->AddComponent<SphereCollider>();
+		this->GetComponent<SphereCollider>()->radius = 10.0f;
 		SetVolume(SE_BULLET, -1000);
 		PlaySE(SE_BULLET);
 	}
 	else
 	{
 		this->type = ObjectType::Bullet_E;
-		this->setPolygon(Layer::BULLET, Texture::Get("bullet_e"));
-		this->collider->size *= 0.5f;
+		this->AddComponent<RectPolygon>("bullet_e", Layer::BULLET);
+		this->AddComponent<SphereCollider>();
+		this->GetComponent<SphereCollider>()->radius = 15.0f;
 	}
 
 	this->timer = 0;
@@ -44,24 +44,24 @@ Bullet::~Bullet(void)
 }
 
 
-void Bullet::update()
+void Bullet::Update()
 {
 	this->timer += Time::DeltaTime();
 
 	if (this->timer > 3.0f)
-		delete this;
+		this->Destroy();
 }
 
-void Bullet::onCollision(Object2D * other)
+void Bullet::OnCollision(Object * other)
 {
 
 	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))
 	{
-		delete this;
+		this->Destroy();
 	}
 	else if (this->type == ObjectType::Bullet_E && (other->type == ObjectType::Player /*|| other->type == ObjectType::Bullet*/))
 	{
-		delete this;
+		this->Destroy();
 	}
 
 }

@@ -3,13 +3,13 @@
 
 Player::Player()
 {
-	this->type = ObjectType::Player;
-	this->setPolygon(Layer::PLAYER, Texture::Get("player"));
-	this->setCollider();
-	this->transform->position = Vector3(0.0f, 0.0f, 0.0f);
-	this->transform->scale = Vector3(0.5f, 0.5f, 0.0f);
-	this->collider->size *= 0.3f;
+	AddComponent<RectPolygon>("player", Layer::PLAYER);
+	AddComponent<SphereCollider>()
+		->radius = 25.0f;
 
+	this->type = ObjectType::Player;
+	this->transform.position = Vector3(0.0f, 0.0f, 0.0f);
+	this->transform.scale = Vector3(0.5f, 0.5f, 0.0f);
 	this->hp = 3;
 	this->speed = 700.0f;
 	this->boost = 1.0f;
@@ -23,7 +23,7 @@ Player::~Player(void)
 	StopSound(SE_LOW_HP);
 }
 
-void Player::update()
+void Player::Update()
 {
 	this->control = Vector3::zero;
 
@@ -35,27 +35,21 @@ void Player::update()
 
 	// Œü‚«‚ÌÝ’è
 	if ((control.x != 0.0f) || control.y != 0.0f)
-		this->transform->setUp(control);
+		this->transform.setUp(control);
 
 	// –³“Gó‘Ô‚ÌXV
 	this->update_muteki();
 }
 
-void Player::onCollision(Object2D * other)
+void Player::OnCollision(Object * other)
 {
 	if ((other->type == ObjectType::Enemy || other->type == ObjectType::Bullet_E) && !this->muteki)
 	{
-		this->polygon->setOpacity(0.5f);
+		GetComponent<RectPolygon>()->SetOpacity(0.5f);
 		this->hp--;
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		if (this->hp == 1)
-		{
-			PlayBGM(SE_LOW_HP);
-			SetVolume(SE_LOW_HP, -1800);
-		}
-		
 		this->injury();
 	}
 }
@@ -70,16 +64,16 @@ void Player::update_muteki()
 	if (this->timer_flash > (0.07f - 0.04f*(this->timer_muteki/1.5f)) )
 	{
 		if(sw)
-			this->polygon->setOpacity(1.0f);
+			GetComponent<RectPolygon>()->SetOpacity(1.0f);
 		else
-			this->polygon->setOpacity(0.3f);
+			GetComponent<RectPolygon>()->SetOpacity(0.3f);
 		sw = !sw;
 		this->timer_flash = 0.0f;
 	}
 
 	if (this->timer_muteki > 1.5f)
 	{
-		this->polygon->setOpacity(1.0f);
+		GetComponent<RectPolygon>()->SetOpacity(1.0f);
 		this->muteki = false;
 		return;
 	}
@@ -110,7 +104,8 @@ void Player::move(void)
 	//	boost = 2.0f;
 
 	// ˆÚ“®ˆ—
-	this->transform->position += control * this->speed * this->boost * Time::DeltaTime();
+	if(control.sqrLength() > 0.0f)
+		this->transform.position += control.normalized() * this->speed * this->boost * Time::DeltaTime();
 
 }
 

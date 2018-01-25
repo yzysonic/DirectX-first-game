@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 
-class PolygonElement : public Object2D
+class PolygonElement : public Object
 {
 public:
 	float targetOpacity;
@@ -10,7 +10,7 @@ public:
 	Color nextColor;
 
 	PolygonElement(void);
-	void update(void) override;
+	void Update(void) override;
 
 private:
 	float timer;

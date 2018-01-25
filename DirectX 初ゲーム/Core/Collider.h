@@ -1,18 +1,56 @@
 #pragma once
+#include "Object.h"
+#include "Component.h"
 #include "Vector.h"
 
-class Object2D;
-
-class Collider2D
+enum class ColliderType
 {
-public:
-	Object2D* object;
-	bool isTrigger;
-	Vector3 offset;
-	Vector3 size;
-	int listIndex;
-
-	Collider2D(Object2D* object);
-	~Collider2D(void);
+	BoxCollider2D,
+	SphereCollider,
+	CapsuleCollider,
+	Max
 };
 
+class Collider : public Component
+{
+public:
+	bool isTrigger;
+	int listIndex;
+
+	Collider(void);
+	~Collider(void);
+
+	ColliderType GetType(void);
+
+protected:
+	ColliderType type;
+
+};
+
+class SphereCollider : public Collider
+{
+public:
+	float radius;
+
+	SphereCollider(void);
+};
+
+class CapsuleCollider : public Collider
+{
+public:
+	float radius;
+	float height;
+	Vector3 top;
+
+	CapsuleCollider(void);
+};
+
+class BoxCollider2D : public Collider
+{
+public:
+	Vector2 offset;
+	Vector2 size;
+
+	BoxCollider2D(void);
+	void BindObject(Object* object) override;
+};

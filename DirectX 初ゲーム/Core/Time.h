@@ -15,6 +15,22 @@ public:
 	bool timeUp(void);
 };
 
+class FrameTimer
+{
+public:
+	float elapsed;
+	float interval;
+
+	FrameTimer(float interval = 0.0f);
+	void Step(void);
+	void Reset(void);
+	void Reset(float interval);
+	float Progress(void);
+	bool TimeUp(void);
+
+	void operator ++(int);
+};
+
 class Time
 {
 public:

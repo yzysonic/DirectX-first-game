@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Component.h"
 #include "Layer.h"
 #include "RendererType.h"
 #include "Color.h"
@@ -8,35 +9,33 @@
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-class ObjectBase;
 
-class Drawable
+class Drawable : public Component
 {
+	friend class RenderSpace;
+
 public:
-	ObjectBase *object;			// 所有するオブジェクトへの参照
 	RendererType rendType;	// 描画方法指定
-	int list_index;			// 識別番号
 
-	Drawable(Layer layer, std::string render_space = "default");
+	Drawable(Layer layer, std::string render_space_name);
 	virtual ~Drawable(void);
+	virtual void Draw(void) = 0;
+	virtual void SetColor(Color color);
 
-	virtual void draw(void) = 0;
-	Layer getLayer(void);
-	Color getColor(void);
-	virtual void setColor(Color color);
-	virtual void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
-	float getOpacity(void);
-	void setOpacity(float opacity);
-	void setVisibility(bool visible);
+	bool SetActive(bool value) override;
+	void SetRenderSpace(std::string render_space);
+	Layer GetLayer(void);
+	void SetLayer(Layer layer);
+	Color GetColor(void);
+	float GetOpacity(void);
+	void SetOpacity(float opacity);
 
 protected:
 	Layer layer;	// 描画のレイヤー
 	Color color;	// 色
 	std::string render_space;
+	int list_index;
 	int render_space_index;
 
-	friend class RenderSpace;
 
-private:
-	bool visible;
 };
