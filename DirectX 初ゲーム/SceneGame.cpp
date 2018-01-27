@@ -81,7 +81,7 @@ void SceneGame::Init(void)
 		this->polyList[i]->transform.position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
 		this->polyList[i]->targetOpacity = 0.7f;
 		this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
-		int min = (int)(200 * powf((this->polyList[i]->transform.position.z + 100) / 400, 2.0f));
+		int min = (int)(200 * powf((this->polyList[i]->transform.position.z + 100) / 1000, 2.0f));
 		this->polyList[i]->GetComponent<RectPolygon>()->SetColor(Color(Random(min, 255), Random(min, 255), Random(min, 255), 0));
 
 		this->polyCount++;
@@ -124,11 +124,8 @@ void SceneGame::Uninit(void)
 	delete this->timeUI[0];
 	delete this->timeUI[1];
 	
-
 	for (int i = 0; i < this->polyCount; i++)
 		delete (this->polyList[i]);
-
-	
 
 	Renderer::GetInstance()->setCamera(nullptr);
 	Bullet::Clear();

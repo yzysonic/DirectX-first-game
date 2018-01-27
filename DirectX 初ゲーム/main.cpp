@@ -5,6 +5,7 @@
 //
 //=============================================================================
 #include "Core/System.h"
+#include "Core/Window.h"
 #include "Core/Game.h"
 #include "Core/GameManager.h"
 #include "SceneGlobal.h"
@@ -28,20 +29,21 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // メモリリーク自動検出
+	SystemParameters::FPS = 70;
 #endif
 
 	SystemParameters::windowTitle = "ヒットポリゴン";
-
-#ifdef _DEBUG
-	SystemParameters::FPS = 70;
-#endif
 
 	// 初期化
 	if (FAILED(InitSystem()))
 		return 1;
 
 	// マウスを隠す
-	//ShowCursor(false);
+	ShowCursor(false);
+
+#ifndef _DEBUG
+	Window::SetWindowMode(false);
+#endif
 
 	// ゲーム初期化
 	InitGame();

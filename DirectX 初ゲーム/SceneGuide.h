@@ -7,10 +7,9 @@ class SceneGuide : public Scene
 public:
 	void Init(void) override;
 	void Update(void)override;
-	void Uninit(void)override;
 
 private:
-	Object *bk;
+	smart_ptr<Object> bk;
 	int state;
 	float timer;
 };

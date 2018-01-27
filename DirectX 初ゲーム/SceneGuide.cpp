@@ -4,7 +4,7 @@
 
 void SceneGuide::Init(void)
 {
-	this->bk = new Object;
+	this->bk.reset(new Object);
 	this->bk->AddComponent<RectPolygon2D>("guide", Layer::BG_00);
 	this->state = 0;
 	this->timer = 0;
@@ -30,9 +30,4 @@ void SceneGuide::Update(void)
 		}
 		break;
 	}
-}
-
-void SceneGuide::Uninit(void)
-{
-	delete this->bk;
 }
