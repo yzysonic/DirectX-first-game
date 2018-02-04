@@ -9,6 +9,7 @@
 void SceneGlobal::Init(void)
 {
 	FadeScreen::Create();
+	/*AddObject*/(FadeScreen::GetInstance());
 	FadeScreen::FadeOut(Color::black, 0.0f);
 	this->control_type = kKeyboard | kMouse;
 
@@ -32,6 +33,9 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("guide");
 	Texture::LoadTexture("player_mark");
 	Texture::LoadTexture("enemy_mark");
+	Texture::LoadTexture("pause", "pause.jpg");
+
+	VertexShader::Load("InstancingVS.hlsl");
 
 }
 
@@ -40,13 +44,13 @@ void SceneGlobal::Update(void)
 #ifdef _DEBUG
 	GameManager* gm = GameManager::GetInstance();
 
-	if (GetKeyboardTrigger(DIK_1))
+	if (GetKeyboardTrigger(DIK_F1))
 		gm->SetScene(new SceneTitle);
-	if (GetKeyboardTrigger(DIK_2))
+	if (GetKeyboardTrigger(DIK_F2))
 		gm->SetScene(new SceneGame);
-	if (GetKeyboardTrigger(DIK_3))
+	if (GetKeyboardTrigger(DIK_F3))
 		gm->SetScene(new SceneGameOver);
-	if (GetKeyboardTrigger(DIK_4))
+	if (GetKeyboardTrigger(DIK_F4))
 		gm->SetScene(new SceneClear);
 	if (GetKeyboardTrigger(DIK_0))
 		gm->SetScene(new SceneTest);

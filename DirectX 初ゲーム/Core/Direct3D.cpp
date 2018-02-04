@@ -6,20 +6,25 @@
 //=============================================================================
 #include "Direct3D.h"
 #include "Common.h"
-#include "RenderTarget.h"
+
+#ifdef _DEBUG
 #include <DxErr.h>
+#endif
 
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
+
+#ifdef _DEBUG
 #pragma comment (lib, "dxerr.lib")
 #pragma comment (lib, "legacy_stdio_definitions.lib")
-
+#endif
 
 LPDIRECT3D9				Direct3D::s_pD3D = NULL;
 LPDIRECT3DDEVICE9		Direct3D::s_pDevice = NULL;
 LPD3DXFONT				Direct3D::s_pFont = NULL;
 D3DPRESENT_PARAMETERS	Direct3D::s_d3dpp = {};
 HWND					Direct3D::s_hWnd = NULL;
+std::vector<ILostAndReset*> Direct3D::s_reset_list;
 
 
 //=============================================================================
@@ -119,18 +124,22 @@ bool Direct3D::ResetDevice()
 {
 
 	s_pFont->OnLostDevice();
-	RenderTarget::OnLostDevice();
+	for (auto reset : s_reset_list)
+		reset->OnLostDevice();
 
 	HRESULT hr = s_pDevice->Reset(&s_d3dpp);
 
 	s_pFont->OnResetDevice();
-	RenderTarget::OnResetDevice();
+	for (auto reset : s_reset_list)
+		reset->OnResetDevice();
 
 	if (FAILED(hr))
 	{
-		MessageBox(s_hWnd, DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+#ifdef _DEBUG
+		ShowErrorMesg(hr);
 		hr = s_pDevice->TestCooperativeLevel();
-		MessageBox(s_hWnd, DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+		ShowErrorMesg(hr);
+#endif
 		return false;
 	}
 
@@ -183,4 +192,30 @@ bool Direct3D::SetWindowMode(bool windowMode)
 	}
 
 	return ResetDevice();
+}
+
+#ifdef _DEBUG
+void Direct3D::ShowErrorMesg(const HRESULT &hr)
+{
+	MessageBox(s_hWnd, DXGetErrorDescription(hr), DXGetErrorString(hr), MB_OK | MB_ICONWARNING);
+}
+#endif
+
+ILostAndReset::ILostAndReset(void)
+{
+	Direct3D::s_reset_list.push_back(this);
+}
+
+ILostAndReset::~ILostAndReset(void)
+{
+	auto& list = Direct3D::s_reset_list;
+	for (auto it = list.begin(); it != list.end(); it++)
+	{
+		if (*it == this)
+		{
+			list.erase(it);
+			return;
+		}
+	}
+		
 }

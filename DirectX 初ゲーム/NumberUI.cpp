@@ -30,7 +30,7 @@ NumberUI::NumberUI(int digits, int x, int y, std::string texture_digit, std::str
 NumberUI::~NumberUI()
 {
 	for (size_t i = 0; i < this->digitList.size(); i++)
-		delete this->digitList[i];
+		this->digitList[i]->Destroy();
 	this->digitList.clear();
 
 }

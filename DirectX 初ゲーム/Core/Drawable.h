@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "RendererType.h"
 #include "Color.h"
+#include "Shader.h"
 
 //*****************************************************************************
 // 構造体定義
@@ -31,6 +32,8 @@ public:
 	void SetOpacity(float opacity);
 
 protected:
+	VertexShader* vshader;
+	PixelShader* pshader;
 	Layer layer;	// 描画のレイヤー
 	Color color;	// 色
 	std::string render_space;

@@ -6,11 +6,11 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "MiniMap.h"
+#include "FieldPolygon.h"
 
 class SceneTest : public Scene
 {
 private:
-	constexpr static int PolyMax = 1500;
 	constexpr static float FieldRangeX = 1280.0f/2.0f+500.0f;
 	constexpr static float FieldRangeY = 720.0f/2.0f+500.0f;
 
@@ -24,8 +24,10 @@ public:
 	std::vector<PolygonElement*> polyList;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
-	smart_ptr<Object> test = nullptr;
+	Object* test = nullptr;
+	FieldPolygon* field_bk = nullptr;
 
+	int PolyMax;
 	int polyCount;
 
 };

@@ -162,9 +162,17 @@ float FrameTimer::Progress(void)
 	return this->elapsed / this->interval;
 }
 
+float FrameTimer::Elapsed(void)
+{
+	return this->elapsed;
+}
+
 bool FrameTimer::TimeUp(void)
 {
-	return this->elapsed >= this->interval;
+	if (this->interval < 0.0f)
+		return false;
+	else
+		return this->elapsed >= this->interval;
 }
 
 void FrameTimer::operator++(int)

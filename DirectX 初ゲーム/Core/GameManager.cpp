@@ -3,15 +3,23 @@
 void GameManager::Create(void)
 {
 	Singleton<GameManager>::Create();
+	m_pInstance->scene_stack_num = 0;
 }
 
 void GameManager::Update(void)
 {
-	if(m_pInstance->scene[0] != nullptr)
+	if (m_pInstance->scene[0] != nullptr)
+	{
 		m_pInstance->scene[0]->Update();
+		m_pInstance->scene[0]->UpdateObjects();
+	}
 
-	if(m_pInstance->scene[1] != nullptr)
-		m_pInstance->scene[1]->Update();
+	UINT top = m_pInstance->scene_stack_num + 1;
+	if (m_pInstance->scene[top] != nullptr)
+	{
+		m_pInstance->scene[top]->Update();
+		m_pInstance->scene[top]->UpdateObjects();
+	}
 }
 
 
@@ -34,12 +42,41 @@ void GameManager::SetGlobalScene(Scene * scene)
 
 void GameManager::SetScene(Scene* scene)
 {
+	ClearSceneStack();
 	SetScene(scene, 1);
+}
+
+void GameManager::PushScene(Scene * scene)
+{
+	UINT top = m_pInstance->scene_stack_num + 1;
+	if (top > SceneStackMax)
+		return;
+
+	m_pInstance->scene[top]->OnPause();
+	m_pInstance->scene[top + 1].reset(scene);
+	scene->Init();
+	m_pInstance->scene_stack_num++;
+}
+
+void GameManager::PopScene(void)
+{
+	if (m_pInstance->scene_stack_num == 0)
+		return;
+
+	m_pInstance->scene[m_pInstance->scene_stack_num + 1]->Uninit();
+	m_pInstance->scene[m_pInstance->scene_stack_num + 1].reset();
+	m_pInstance->scene[m_pInstance->scene_stack_num]->OnResume();
+	m_pInstance->scene_stack_num--;
 }
 
 Scene * GameManager::GetScene(void)
 {
-	return m_pInstance->scene[1].get();
+	return m_pInstance->scene[m_pInstance->scene_stack_num + 1].get();
+}
+
+Scene * GameManager::GetGlobalScene(void)
+{
+	return m_pInstance->scene[0].get();
 }
 
 void GameManager::SetScene(Scene * scene, int no)
@@ -51,4 +88,10 @@ void GameManager::SetScene(Scene * scene, int no)
 
 	if (scene != nullptr)
 		m_pInstance->scene[no]->Init();
+}
+
+void GameManager::ClearSceneStack(void)
+{
+	for (UINT i = 0; i < m_pInstance->scene_stack_num; i++)
+		PopScene();
 }

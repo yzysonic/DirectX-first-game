@@ -18,6 +18,8 @@
 #include "Rigidbody.h"
 #include "Camera.h"
 #include "Event.h"
+#include "Shader.h"
+#include "ParticleSystem.h"
 
 #include <vector>
 #include <list>

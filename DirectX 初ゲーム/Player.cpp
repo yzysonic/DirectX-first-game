@@ -146,7 +146,7 @@ void Player::shoot(void)
 
 		if (this->timer >= 0.13f)
 		{
-			new Bullet(this, 1.7f * this->speed * shoot_control);
+			/*this->scene->AddObject*/(new Bullet(this, 1.7f * this->speed * shoot_control));
 			this->timer = 0;
 		}
 		this->control = shoot_control;

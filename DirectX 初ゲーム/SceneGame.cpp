@@ -1,6 +1,8 @@
 #include "SceneGame.h"
 #include "SceneClear.h"
+#include "SceneTitle.h"
 #include "SceneGameOver.h"
+#include "ScenePause.h"
 #include "FadeScreen.h"
 #include "CameraSmooth.h"
 #include "CameraShake.h"
@@ -11,37 +13,37 @@
 void SceneGame::Init(void)
 {
 	// 口径食効果
-	this->vignetting = new Object;
+	this->vignetting = /*AddObject*/(new Object);
 	this->vignetting->AddComponent<RectPolygon2D>("vignetting", Layer::MASK);
 
 	// スコアUI
-	this->scoreUI = new ScoreUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, "number", "game_score");
+	this->scoreUI = /*AddObject*/(new ScoreUI(5, SystemParameters::ResolutionX/2 - 300, SystemParameters::ResolutionY/2 - 30, "number", "game_score"));
 	this->scoreUI->setOffset(130, 0);
 
 	// タイムUI
 	const int x_offset = 35;
-	this->timeUI[0] = new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, "number", "game_time");
-	this->timeUI[1] = new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, "number");
+	this->timeUI[0] = /*AddObject*/(new NumberUI(2, x_offset - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, "number", "game_time"));
+	this->timeUI[1] = /*AddObject*/(new NumberUI(2, x_offset + 116 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 30, "number"));
 	this->timeUI[0]->setOffset(180, 0);
 
 	// 残機UI 
-	this->liveUI = new LiveUI;
+	this->liveUI = /*AddObject*/(new LiveUI);
 	this->liveUI->transform.position = Vector3(x_offset + 3 + Texture::Get("lives")->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
 	// プレイヤー
-	this->player = new Player;
+	this->player = /*AddObject*/(new Player);
 	this->player->SetActive(false);
 
 	// カメラ設定
-	this->camera.reset(new Camera());
+	this->camera = /*AddObject*/(new Camera());
 	this->camera->AddComponent<CameraSmooth>(this->player);
 	this->camera->AddComponent<CameraShake>();
 	this->camera->SetActive(false);
 	this->camera->setBackColor(210, 210, 210, 255);
-	Renderer::GetInstance()->setCamera(this->camera.get());
+	Renderer::GetInstance()->setCamera(this->camera);
 
 	// ミニマップ
-	this->minimap = new MiniMap(200, 200, 11);
+	this->minimap = /*AddObject*/(new MiniMap(200, 200, 1));
 	this->minimap->SetPosition(Vector3(SystemParameters::ResolutionX / 2.0f - 150.0f, -SystemParameters::ResolutionY / 2.0f + 150.0f, 0.0f));
 	this->minimap->SetPlayer(this->player);
 	this->minimap->zoom = 0.3f;
@@ -74,18 +76,18 @@ void SceneGame::Init(void)
 		this->enemy[i] = NULL;
 
 	// 背景ポリゴン生成
-	for (int i = 0; i < GAME_POLY_MAX; i++)
-	{
-		this->polyList[i] = new PolygonElement;
-		this->polyList[i]->transform.position.x = Randomf(-FIELD_RANG_X, FIELD_RANG_X);
-		this->polyList[i]->transform.position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
-		this->polyList[i]->targetOpacity = 0.7f;
-		this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
-		int min = (int)(200 * powf((this->polyList[i]->transform.position.z + 100) / 1000, 2.0f));
-		this->polyList[i]->GetComponent<RectPolygon>()->SetColor(Color(Random(min, 255), Random(min, 255), Random(min, 255), 0));
+	//for (int i = 0; i < GAME_POLY_MAX; i++)
+	//{
+	//	this->polyList[i] = /*AddObject*/(new PolygonElement);
+	//	this->polyList[i]->transform.position.x = Randomf(-FIELD_RANG_X, FIELD_RANG_X);
+	//	this->polyList[i]->transform.position.y = Randomf(-FIELD_RANG_Y, FIELD_RANG_Y);
+	//	this->polyList[i]->targetOpacity = 0.7f;
+	//	this->polyList[i]->targetScale = Vector3(0.1f, 0.1f, 1.0f);
+	//	int min = (int)(200 * powf((this->polyList[i]->transform.position.z + 100) / 1000, 2.0f));
+	//	this->polyList[i]->GetComponent<RectPolygon>()->SetColor(Color(Random(min, 255), Random(min, 255), Random(min, 255), 0));
 
-		this->polyCount++;
-	}
+	//	this->polyCount++;
+	//}
 
 	// フェイトイン効果
 	FadeScreen::FadeIn(Color::white, 0.7f);
@@ -111,24 +113,34 @@ void SceneGame::Uninit(void)
 
 	StopSound(BGM_GAME);
 
-	delete this->minimap;
+	//delete this->minimap;
 
-	for (auto &enemy : this->enemy)
-	{
-		SafeDelete<Enemy>(enemy);
-	}
-	delete this->player;
-	delete this->vignetting;
-	delete this->liveUI;
-	delete this->scoreUI;
-	delete this->timeUI[0];
-	delete this->timeUI[1];
-	
-	for (int i = 0; i < this->polyCount; i++)
-		delete (this->polyList[i]);
+	//for (auto &enemy : this->enemy)
+	//{
+	//	SafeDelete<Enemy>(enemy);
+	//}
+	//delete this->player;
+	//delete this->vignetting;
+	//delete this->liveUI;
+	//delete this->scoreUI;
+	//delete this->timeUI[0];
+	//delete this->timeUI[1];
+	//
+	//for (int i = 0; i < this->polyCount; i++)
+	//	delete (this->polyList[i]);
 
 	Renderer::GetInstance()->setCamera(nullptr);
 	Bullet::Clear();
+}
+
+void SceneGame::OnPause(void)
+{
+	SetVolume(BGM_GAME, -2500);
+}
+
+void SceneGame::OnResume(void)
+{
+	SetVolume(BGM_GAME, -1800);
 }
 
 // スコアの取得
@@ -217,6 +229,11 @@ void SceneGame::update_main(void)
 		return;
 	}
 
+	if (GetKeyboardTrigger(DIK_PAUSE))
+	{
+		GameManager::PushScene(new ScenePause);
+	}
+
 }
 
 void SceneGame::swapEnemy(void)
@@ -234,7 +251,7 @@ void SceneGame::swapEnemy(void)
 		{
 			if (enemy == nullptr)
 			{
-				enemy = new Enemy;
+				enemy = /*AddObject*/(new Enemy);
 
 				enemy->target = &this->player->transform;
 				enemy->transform.position = Vector3(Randomf(-FIELD_RANG_X + 500, FIELD_RANG_X - 500), Randomf(-FIELD_RANG_Y + 500, FIELD_RANG_Y - 500), 0.0f);

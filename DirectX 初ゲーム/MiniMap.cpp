@@ -37,13 +37,13 @@ MiniMap::MiniMap(int size_x, int size_y, int division_level)
 MiniMap::~MiniMap(void)
 {
 	for (auto &mark : enemy_list)
-		delete mark;
+		mark->Destroy();
 	for (auto &element : element_list)
-		delete element;
+		element->Destroy();
 
-	SafeDelete<Mark>(this->player);
+	this->player->Destroy();
 
-	delete this->camera;
+	this->camera->Destroy();
 	delete this->render_target;
 	RenderSpace::Delete("mini_map");
 }

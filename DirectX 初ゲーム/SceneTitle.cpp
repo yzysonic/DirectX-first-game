@@ -16,39 +16,39 @@ void SceneTitle::Init(void)
 	this->playBack = false;
 	this->cursorPos = 0;
 
-	this->vignetting = new Object;
+	this->vignetting = /*AddObject*/(new Object);
 	this->vignetting->AddComponent<RectPolygon2D>("vignetting", Layer::UI_02);
 
-	this->logo = new Object;
+	this->logo = /*AddObject*/(new Object);
 	this->logo->AddComponent<RectPolygon2D>("title_logo", Layer::UI_00);
 	this->logo->transform.position = Vector3(0, SystemParameters::ResolutionY / 2.f - 200, 0);
 	this->logo->SetActive(false);
 
-	this->presskey = new Object;
+	this->presskey = /*AddObject*/(new Object);
 	this->presskey->AddComponent<RectPolygon2D>("title_presskey", Layer::UI_00);
 	this->presskey->transform.position = Vector3(0, SystemParameters::ResolutionY / 2.f - 475, 0);
 	this->presskey->SetActive(false);
 
-	this->info = new Object;
+	this->info = /*AddObject*/(new Object);
 	this->info->AddComponent<RectPolygon2D>("title_info", Layer::UI_02);
 	this->info->transform.position.x = SystemParameters::ResolutionX / 2 - this->info->GetComponent<RectPolygon2D>()->pTexture->size.x / 2 - 30;
 	this->info->transform.position.y = -SystemParameters::ResolutionY / 2 + this->info->GetComponent<RectPolygon2D>()->pTexture->size.y + 10;
 	this->info->transform.position.z = 0;
 	this->info->SetActive(false);
 
-	this->cursor = new Object;
+	this->cursor = /*AddObject*/(new Object);
 	this->cursor->AddComponent<RectPolygon2D>("title_cursor", Layer::UI_00);
 	this->cursor->GetComponent<RectPolygon2D>()->SetOpacity(0);
 	this->cursor->transform.position = Vector3(-80, SystemParameters::ResolutionY / 2.f - 415, 0);
 	this->cursor->SetActive(false);
 
-	this->start = new Object;
+	this->start = /*AddObject*/(new Object);
 	this->start->AddComponent<RectPolygon2D>("title_start", Layer::UI_00);
 	this->start->GetComponent<RectPolygon2D>()->SetOpacity(0);
 	this->start->transform.position = Vector3(40, SystemParameters::ResolutionY / 2.f - 415, 0);
 	this->start->SetActive(false);
 	
-	this->exit = new Object;
+	this->exit = /*AddObject*/(new Object);
 	this->exit->AddComponent<RectPolygon2D>("title_exit", Layer::UI_00);
 	this->exit->GetComponent<RectPolygon2D>()->SetOpacity(0);
 	this->exit->transform.position = Vector3(40, SystemParameters::ResolutionY / 2.f - 500, 0);
@@ -178,7 +178,7 @@ void SceneTitle::update_createPoly(void)
 	{
 		while (this->polyCount<TitlePolyMax)
 		{
-			PolygonElement *poly = new PolygonElement;
+			PolygonElement *poly = /*AddObject*/(new PolygonElement);
 			poly->targetScale = Vector3(0.5f, 0.5f, 1.0f);
 			this->polyList[this->polyCount++] = poly;
 		}
@@ -190,7 +190,7 @@ void SceneTitle::update_createPoly(void)
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			PolygonElement *poly = new PolygonElement;
+			PolygonElement *poly = /*AddObject*/(new PolygonElement);
 			poly->targetScale = Vector3(0.5f, 0.5f, 1.0f);
 			this->polyList[this->polyCount++] = poly;
 			if (this->polyCount == TitlePolyMax)

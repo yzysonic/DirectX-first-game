@@ -1,6 +1,8 @@
 #include "ObjectManager.h"
+#include "GameManager.h"
 #include "Common.h"
 #include "Script.h"
+
 
 void ObjectManager::Create(void)
 {
@@ -25,58 +27,100 @@ void ObjectManager::Destroy(void)
 void ObjectManager::Update(void)
 {
 
-	for (int i = 0; i < (int)m_pInstance->objectList.size(); i++)
-	{
-		auto &object = m_pInstance->objectList[i];
-		if (object->isActive)
-		{
-			// オブジェクトの更新処理
-			object->Update();
+	//for (UINT i = 0; i < m_pInstance->objectList.size(); i++)
+	//{
+	//	auto &object = m_pInstance->objectList[i];
+	//	if (object->isActive)
+	//	{
+	//		// オブジェクトの更新処理
+	//		object->Update();
 
-			// オブジェクト所属のスクリプトの更新処理
-			for (auto &script : object->scripts)
-			{
-				if (script->GetActive())
-					script->Update();
-			}
-		}
-	}
+	//		// オブジェクト所属のスクリプトの更新処理
+	//		for (UINT j = 0; j < object->scripts.size(); j++)
+	//		{
+	//			auto &script = object->scripts[j];
+	//			if (script->GetActive())
+	//				script->Update();
+	//		}
+	//	}
+	//}
 
+	KillObject();
+
+}
+
+void ObjectManager::KillObject(void)
+{
 	for (auto object : m_pInstance->killList)
 		delete object;
 
 	m_pInstance->killList.clear();
-
 }
 
 void * ObjectManager::NewObject(std::size_t size)
 {
-	void *pvTemp = malloc(size);
-	if (pvTemp == 0)
+	Object* new_obj = (Object*)malloc(size);
+	if (new_obj == 0)
 		return nullptr;
 
-	this->objectList.emplace_back();
-	this->objectList.back().reset((Object*)pvTemp);
-	this->objectList.back()->objectIndex = this->objectList.size()-1;
-	
-	return pvTemp;
+	//InitObject(new_obj);
+
+	return new_obj;
+}
+
+void * ObjectManager::NewObjectArray(std::size_t size)
+{
+	Object* new_obj = (Object*)malloc(size);
+
+	if (new_obj == 0)
+		return nullptr;
+
+	//UINT obj_num = size / sizeof(Object);
+	//for (UINT i = 0; i < obj_num; i++)
+	//	InitObject(new_obj + i);
+
+	return new_obj;
 }
 
 #ifdef _DEBUG
 void * ObjectManager::NewObject(std::size_t size, int _BlockUse, char const * _FileName, int _LineNumber)
 {
-	void *pvTemp = _malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
+	Object *new_obj = (Object*)_malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
 
-	if (pvTemp == 0)
+	if (new_obj == 0)
 		return nullptr;
 
-	this->objectList.emplace_back();
-	this->objectList.back().reset((Object*)pvTemp);
-	this->objectList.back()->objectIndex = this->objectList.size() - 1;
+	//InitObject(new_obj);
 
-	return pvTemp;
+	return new_obj;
+}
+void * ObjectManager::NewObjectArray(std::size_t size, int _BlockUse, char const * _FileName, int _LineNumber)
+{
+	Object *new_obj = (Object*)_malloc_dbg(size, _BlockUse, _FileName, _LineNumber);
+
+	if (new_obj == 0)
+		return nullptr;
+
+	//UINT obj_num = size / sizeof(Object);
+	//for (UINT i = 0; i < obj_num; i++)
+	//	InitObject(new_obj + i);
+
+	return new_obj;
 }
 #endif
+
+void ObjectManager::InitObject(Object * object)
+{
+	this->objectList.emplace_back();
+	this->objectList.back().reset(object);
+	this->objectList.back()->objectIndex = this->objectList.size() - 1;
+
+	Scene* scene = GameManager::GetInstance()->GetScene();
+	if (scene == nullptr)
+		scene = GameManager::GetInstance()->GetGlobalScene();
+	if(scene != nullptr)
+		scene->AddObject(object);
+}
 
 void ObjectManager::AddKill(Object * obj)
 {

@@ -98,23 +98,23 @@ RenderTarget* RenderTarget::BackBuffer(void)
 	return &back_buffer;
 }
 
-void RenderTarget::OnLostDevice(void)
+HRESULT RenderTarget::OnLostDevice(void)
 {
-	for (auto render_target : render_target_list)
-	{
-		SafeRelease(render_target->pDXTex);
-		SafeRelease(render_target->pSurface);
-		SafeRelease(render_target->pDepthSurface);
-	}
 
-	SafeRelease(back_buffer.pSurface);
-	SafeRelease(back_buffer.pDepthSurface);
+	SafeRelease(this->pDXTex);
+	SafeRelease(this->pSurface);
+	SafeRelease(this->pDepthSurface);
+
+	return S_OK;
 }
 
-void RenderTarget::OnResetDevice(void)
+HRESULT RenderTarget::OnResetDevice(void)
 {
-	for (auto render_target : render_target_list)
-		render_target->Create();
+	if (this == &this->back_buffer)
+	{
+		BackBuffer();
+		return S_OK;
+	}
 
-	BackBuffer();
+	return this->Create();
 }

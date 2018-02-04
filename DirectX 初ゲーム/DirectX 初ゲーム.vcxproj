@@ -95,7 +95,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_CRTDBG_MAP_ALLOC;D3D_DEBUG_INFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -103,6 +103,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <Profile>true</Profile>
     </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(SolutionDir)Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -156,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraFov.cpp" />
+    <ClCompile Include="CameraPlay.cpp" />
     <ClCompile Include="CameraShake.cpp" />
     <ClCompile Include="CameraSmooth.cpp" />
     <ClCompile Include="Core\Camera.cpp" />
@@ -179,7 +183,9 @@
     <ClCompile Include="Core\RenderSpace.cpp" />
     <ClCompile Include="Core\RenderTarget.cpp" />
     <ClCompile Include="Core\Rigidbody.cpp" />
+    <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\Script.cpp" />
+    <ClCompile Include="Core\Shader.cpp" />
     <ClCompile Include="Core\Sound.cpp" />
     <ClCompile Include="Core\Transform.cpp" />
     <ClCompile Include="Core\System.cpp" />
@@ -192,11 +198,13 @@
     <ClCompile Include="Core\Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Core\Event.cpp" />
+    <ClCompile Include="FieldPolygon.cpp" />
     <ClCompile Include="LiveUI.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Core\ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PolygonElement.cpp" />
     <ClCompile Include="SceneClear.cpp" />
@@ -204,12 +212,14 @@
     <ClCompile Include="SceneGameOver.cpp" />
     <ClCompile Include="SceneGlobal.cpp" />
     <ClCompile Include="SceneGuide.cpp" />
+    <ClCompile Include="ScenePause.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="ScoreUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraFov.h" />
+    <ClInclude Include="CameraPlay.h" />
     <ClInclude Include="CameraShake.h" />
     <ClInclude Include="CameraSmooth.h" />
     <ClInclude Include="Core\Component.h" />
@@ -237,6 +247,8 @@
     <ClInclude Include="Core\RenderSpace.h" />
     <ClInclude Include="Core\Rigidbody.h" />
     <ClInclude Include="Core\Scene.h" />
+    <ClInclude Include="FieldPolygon.h" />
+    <ClInclude Include="ScenePause.h" />
     <ClInclude Include="Core\Script.h" />
     <ClInclude Include="Core\Singleton.h" />
     <ClInclude Include="Core\Sound.h" />
@@ -255,6 +267,7 @@
     <ClInclude Include="LiveUI.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NumberUI.h" />
+    <ClInclude Include="Core\ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />
     <ClInclude Include="Core\RenderTarget.h" />
@@ -267,6 +280,20 @@
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="ScoreUI.h" />
     <ClInclude Include="Core\Transform.h" />
+    <ClInclude Include="Core\Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\InstancingVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">InstancingVS</EntryPointName>
+      <FileType>HLSL</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">InstancingVS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">2.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

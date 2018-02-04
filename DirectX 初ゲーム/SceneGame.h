@@ -24,6 +24,8 @@ public:
 	void Init(void) override;
 	void Update(void) override;
 	void Uninit(void) override;
+	void OnPause(void) override;
+	void OnResume(void) override;
 	int getGameScore(void);
 	void addGameScore(int score);
 
@@ -32,7 +34,7 @@ private:
 	LiveUI* liveUI = nullptr;
 	ScoreUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
-	smart_ptr<Camera> camera;
+	Camera* camera;
 	PolygonElement *polyList[GAME_POLY_MAX] = {};
 	Player* player = nullptr;
 	Enemy* enemy[ENEMY_MAX] = {};

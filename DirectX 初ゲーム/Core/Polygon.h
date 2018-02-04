@@ -49,7 +49,7 @@ public:
 	
 	RectPolygon2D(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
 	void Draw(void) override;
-	void SetColor(Color color) override;
+	void SetColor(Color color);
 	Vector2 getSize(void);
 	void setSize(float x, float y);
 	void setPattern(unsigned int pattern);
@@ -71,7 +71,7 @@ public:
 
 	RectPolygon(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
 	void Draw(void) override;
-	void SetColor(Color color) override;
+	void SetColor(Color color);
 	Vector2 GetSize(void);
 	void SetSize(Vector2 size);
 	void SetTexture(std::string texture_name);

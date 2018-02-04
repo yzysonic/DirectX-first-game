@@ -13,6 +13,7 @@
 
 class GameManager : public Singleton<GameManager>
 {
+	static constexpr UINT SceneStackMax = 3;
 public:
 	template<typename T>
 	static T& Var(std::string key);
@@ -22,12 +23,17 @@ public:
 	static void Update(void);
 	static void SetGlobalScene(Scene* scene);
 	static void SetScene(Scene* scene);
+	static void PushScene(Scene* scene);
+	static void PopScene(void);
 	static Scene* GetScene(void);
+	static Scene* GetGlobalScene(void);
 
 private:
-	std::unique_ptr<Scene> scene[2];
+	std::unique_ptr<Scene> scene[SceneStackMax+2];
+	UINT scene_stack_num;
 
 	static void SetScene(Scene* scene, int no);
+	static void ClearSceneStack(void);
 };
 
 template<typename T>

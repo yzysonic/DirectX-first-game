@@ -18,7 +18,6 @@ public:
 class FrameTimer
 {
 public:
-	float elapsed;
 	float interval;
 
 	FrameTimer(float interval = 0.0f);
@@ -26,9 +25,12 @@ public:
 	void Reset(void);
 	void Reset(float interval);
 	float Progress(void);
+	float Elapsed(void);
 	bool TimeUp(void);
 
 	void operator ++(int);
+private:
+	float elapsed;
 };
 
 class Time

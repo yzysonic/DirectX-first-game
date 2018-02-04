@@ -46,7 +46,8 @@ void Renderer::Create(void)
 	RenderSpace::Add("default");
 
 	// •`‰æ’†ƒJƒƒ‰‚ÌÝ’è
-	m_pInstance->drawing_camera = &m_pInstance->fixedCamera;
+	m_pInstance->fixedCamera = new Camera;
+	m_pInstance->drawing_camera = m_pInstance->fixedCamera;
 }
 
 //=============================================================================
@@ -124,7 +125,7 @@ void Renderer::setCamera(Camera * camera, std::string render_space)
 	if (camera != nullptr)
 		RenderSpace::Get(render_space)->AddCamera(camera);
 	else
-		RenderSpace::Get(render_space)->AddCamera(&fixedCamera);
+		RenderSpace::Get(render_space)->AddCamera(fixedCamera);
 }
 void Renderer::setCamera(Camera * camera, int render_space)
 {
@@ -133,7 +134,7 @@ void Renderer::setCamera(Camera * camera, int render_space)
 	if (camera != nullptr)
 		RenderSpace::Get(render_space)->AddCamera(camera);
 	else
-		RenderSpace::Get(render_space)->AddCamera(&fixedCamera);
+		RenderSpace::Get(render_space)->AddCamera(fixedCamera);
 }
 
 

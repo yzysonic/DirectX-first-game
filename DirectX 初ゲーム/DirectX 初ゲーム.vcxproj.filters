@@ -34,6 +34,9 @@
     <Filter Include="Script">
       <UniqueIdentifier>{c8c10d88-219c-45af-a0dc-5c3d9a43f399}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{455a4483-fab4-48fe-a4c8-30e3bc201637}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneGame.cpp">
@@ -189,6 +192,24 @@
     </ClCompile>
     <ClCompile Include="CameraFov.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Scene.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenePause.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPlay.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Shader.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ParticleSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldPolygon.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -366,5 +387,25 @@
     <ClInclude Include="CameraFov.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Shader.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePause.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPlay.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ParticleSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldPolygon.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\InstancingVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

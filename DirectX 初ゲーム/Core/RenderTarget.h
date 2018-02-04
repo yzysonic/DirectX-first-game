@@ -4,12 +4,10 @@
 #include "Common.h"
 #include <vector>
 
-class RenderTarget : public Texture
+class RenderTarget : public Texture, public ILostAndReset
 {
 public:
 	static RenderTarget* BackBuffer(void);
-	static void OnLostDevice(void);
-	static void OnResetDevice(void);
 
 private:
 	static RenderTarget back_buffer;
@@ -18,6 +16,10 @@ private:
 public:
 	LPDIRECT3DSURFACE9 pSurface;
 	LPDIRECT3DSURFACE9 pDepthSurface;
+
+	HRESULT OnLostDevice(void) override;
+	HRESULT OnResetDevice(void) override;
+
 	RenderTarget(int width = SystemParameters::ResolutionX, int height = SystemParameters::ResolutionY, bool create = true);
 	~RenderTarget(void);
 

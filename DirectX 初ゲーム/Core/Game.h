@@ -5,4 +5,3 @@ void RunGame(void);
 void UninitGame(void);
 bool EndGame(void);
 void StopGame(void);
-void SetGlobalUpdate(void(*update)(void));

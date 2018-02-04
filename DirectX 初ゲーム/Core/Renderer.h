@@ -22,8 +22,8 @@ public:
 	void setCamera(Camera* camera, int render_space = 0);
 
 private:
-	Camera fixedCamera;
-	Camera *drawing_camera;
+	Camera* fixedCamera;
+	Camera* drawing_camera;
 };
 
 char *GetDebugText(int line);

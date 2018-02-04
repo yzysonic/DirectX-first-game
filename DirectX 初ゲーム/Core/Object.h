@@ -14,10 +14,12 @@
 // ƒNƒ‰ƒX’è‹`
 //*****************************************************************************
 class Transform;
+class Scene;
 
 class Object
 {
 	friend class ObjectManager;
+	friend class Scene;
 
 public:
 	template<class T>
@@ -25,11 +27,12 @@ public:
 	template<class T>
 	static void Destroy(std::unique_ptr<T> &object);
 
-
 public:
 	Transform transform;
 	ObjectType type;
+	Scene* scene;
 	int objectIndex;
+	int sceneIndex;
 	std::string name;
 	int group;
 
@@ -50,10 +53,15 @@ public:
 	void Destroy(void);
 
 	static void* operator new(std::size_t);
+	static void* operator new[](std::size_t);
 	static void operator delete(void*) noexcept;
+	static void operator delete[](void*) noexcept;
 #ifdef _DEBUG
 	static void* operator new(std::size_t, int _BlockUse, char const* _FileName, int _LineNumber);
+	static void* operator new[](std::size_t, int _BlockUse, char const* _FileName, int _LineNumber);
 	static void operator delete(void*, int _BlockUse, char const* _FileName, int _LineNumber) noexcept;
+	static void operator delete[](void*, int _BlockUse, char const* _FileName, int _LineNumber) noexcept;
+
 #endif
 
 protected:

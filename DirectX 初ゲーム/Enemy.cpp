@@ -86,7 +86,7 @@ void Enemy::update_main(void)
 		// 一定の時間に弾発射
 		if (this->timer > 0.5f)
 		{
-			new Bullet(this, 300 * this->transform.getUp());
+			/*this->scene->AddObject*/(new Bullet(this, 300 * this->transform.getUp()));
 			this->timer = 0; // タイマーのリセット
 		}
 	}

@@ -39,7 +39,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		return 1;
 
 	// ƒ}ƒEƒX‚ð‰B‚·
-	ShowCursor(false);
+	//ShowCursor(false);
 
 #ifndef _DEBUG
 	Window::SetWindowMode(false);

@@ -10,6 +10,8 @@ Drawable::Drawable(Layer layer = Layer::DEFAULT, std::string render_space_name =
 	this->layer = layer;
 	this->render_space = render_space_name;
 	this->render_space_index = -1;
+	this->vshader = &VertexShader::default_shader;
+	this->pshader = &PixelShader::default_shader;
 }
 
 Drawable::~Drawable(void)
@@ -25,10 +27,13 @@ bool Drawable::SetActive(bool value)
 
 	auto rs = RenderSpace::Get(this->render_space);
 
-	if (value)
-		rs->AddDraw(this);
-	else
-		rs->RemoveDraw(this);
+	if (rs)
+	{
+		if (value)
+			rs->AddDraw(this);
+		else
+			rs->RemoveDraw(this);
+	}
 
 	return true;
 }
@@ -52,14 +57,14 @@ void Drawable::SetLayer(Layer layer)
 	SetActive(true);
 }
 
-Color Drawable::GetColor(void)
-{
-	return this->color;
-}
-
 void Drawable::SetColor(Color color)
 {
 	this->color = color;
+}
+
+Color Drawable::GetColor(void)
+{
+	return this->color;
 }
 
 float Drawable::GetOpacity(void)

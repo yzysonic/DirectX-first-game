@@ -68,10 +68,10 @@ void Bullet::OnCollision(Object * other)
 
 void Bullet::Clear()
 {
-	std::list<Bullet*> tList;
-	for (auto bullet : Bullet::list)
-		tList.push_back(bullet);
+	//std::list<Bullet*> tList;
+	//for (auto bullet : Bullet::list)
+	//	tList.push_back(bullet);
 
-	for (auto bullet : tList)
-		delete bullet;
+	//for (auto bullet : tList)
+	//	delete bullet;
 }

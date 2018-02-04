@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "ObjectManager.h"
+#include "Scene.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -17,6 +18,12 @@ Object::Object()
 	this->name			= "Object";
 	this->group			= 0;
 	this->kill_flag		= false;
+	this->scene			= nullptr;
+	this->sceneIndex	= -1;
+	this->objectIndex	= -1;
+
+	ObjectManager::GetInstance()->InitObject(this);
+
 	this->SetActive(true);
 }
 
@@ -35,6 +42,9 @@ Object::~Object()
 		for (auto &component : this->components)
 			component.second.reset();
 	}
+
+	if (this->scene)
+		this->scene->RemoveObject(this);
 
 }
 
@@ -80,13 +90,22 @@ void * Object::operator new(std::size_t size)
 	return ObjectManager::GetInstance()->NewObject(size);
 }
 
+void * Object::operator new[](std::size_t size)
+{
+	return nullptr;
+}
+
 void Object::operator delete(void * ptr) noexcept
 {
 
 	if (ptr == nullptr)
 		return;
+	
+	ObjectManager::GetInstance()->DeleteObject((Object*)ptr);
+}
 
-	ObjectManager::GetInstance()->DeleteObject((Object*)(ptr));
+void Object::operator delete[](void * ptr) noexcept
+{
 }
 
 #ifdef _DEBUG
@@ -96,7 +115,17 @@ void * Object::operator new(std::size_t size, int _BlockUse, char const* _FileNa
 	return ObjectManager::GetInstance()->NewObject(size, _BlockUse, _FileName, _LineNumber);
 }
 
+void * Object::operator new[](std::size_t size, int _BlockUse, char const * _FileName, int _LineNumber)
+{
+	return ObjectManager::GetInstance()->NewObjectArray(size, _BlockUse, _FileName, _LineNumber);
+}
+
 void Object::operator delete(void * ptr, int _BlockUse, char const * _FileName, int _LineNumber) noexcept
+{
+	delete (Object*)ptr;
+}
+
+void Object::operator delete[](void * ptr, int _BlockUse, char const * _FileName, int _LineNumber) noexcept
 {
 	delete (Object*)ptr;
 }
