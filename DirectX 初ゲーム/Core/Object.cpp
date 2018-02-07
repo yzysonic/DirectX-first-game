@@ -36,12 +36,12 @@ Object::Object(Vector3 position, Vector3 rotation) : Object()
 Object::~Object()
 {
 
-	this->SetActive(false);
-	if (this->components.size() > 0)
-	{
-		for (auto &component : this->components)
-			component.second.reset();
-	}
+	//this->SetActive(false);
+	//if (this->components.size() > 0)
+	//{
+	//	for (auto &component : this->components)
+	//		component.second.reset();
+	//}
 
 	if (this->scene)
 		this->scene->RemoveObject(this);

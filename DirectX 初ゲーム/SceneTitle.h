@@ -4,12 +4,11 @@
 #include "Core/Core.h"
 #include "PolygonElement.h"
 
-// É}ÉNÉçíËã`
-#define TitlePolyMax (700)
-#define TitleBGMBPS (130)
-
 class SceneTitle : public Scene
 {
+	static constexpr UINT TitlePolyMax = 12000;
+	static constexpr UINT TitleBGMBPS = 130;
+
 public:
 	void Init(void) override;
 	void Update(void) override;

@@ -7,9 +7,11 @@ public:
 	CameraPlay(void);
 	void Init(void) override;
 	void Update(void) override;
+	void Uninit(void) override;
 
 private:
 	Camera* camera;
+	Transform last_transform;
 	float phi;				// ’‹“_‚Æ‚ÌƒÓ‰ñ“]ŠpiŒ»İj
 	float theta;			// ’‹“_‚Æ‚ÌƒÆ‰ñ“]ŠpiŒ»İj
 	float move_phi;			// ƒÓ‰ñ“]Šp‚ÌˆÚ“®—Ê

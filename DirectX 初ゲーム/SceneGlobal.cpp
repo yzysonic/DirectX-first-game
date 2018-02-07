@@ -34,6 +34,8 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("player_mark");
 	Texture::LoadTexture("enemy_mark");
 	Texture::LoadTexture("pause", "pause.jpg");
+	Texture::LoadTexture("title_mask");
+
 
 	VertexShader::Load("InstancingVS.hlsl");
 

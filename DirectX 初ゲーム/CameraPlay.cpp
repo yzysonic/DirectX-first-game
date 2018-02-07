@@ -16,7 +16,7 @@ void CameraPlay::Init(void)
 	move_phi = 0.0f;
 	dis = camera->transform.position.length();
 	target_dis = dis;
-
+	last_transform = camera->transform;
 }
 
 void CameraPlay::Update(void)
@@ -29,6 +29,11 @@ void CameraPlay::Update(void)
 	camera->transform.position.z = dis * sinf(theta) * sinf(phi);
 	camera->transform.position += camera->at;
 
+}
+
+void CameraPlay::Uninit(void)
+{
+	camera->transform = last_transform;
 }
 
 

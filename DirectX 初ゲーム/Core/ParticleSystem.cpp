@@ -3,16 +3,16 @@
 ParticleDefaultBehavior ParticleSystem::default_behavior;
 
 
-ParticleSystem::ParticleSystem(UINT particle_max) : Drawable(Layer::DEFAULT, "default")
+ParticleSystem::ParticleSystem(UINT particle_max, IParticleBehavior* behavior) : Drawable(Layer::DEFAULT, "default")
 {
-	this->elements = new ParticleElement[particle_max];
-	this->behavior = &default_behavior;
+	this->behavior = behavior;
 	this->duration = 5.0f;
 	this->emission_rate = 10.0f;
 	this->particle_max = particle_max;
 	this->particle_num = 0;
 	this->loop = false;
 
+	this->behavior->MakeElement(&this->elements, &this->pitch, particle_max);
 	InitDraw();
 }
 
@@ -24,6 +24,8 @@ ParticleSystem::~ParticleSystem(void)
 
 void ParticleSystem::Update(void)
 {
+	ParticleElement* element = nullptr;
+
 	// パーティクルシステムのループ処理
 	if (this->timer_duration.TimeUp())
 	{
@@ -38,12 +40,15 @@ void ParticleSystem::Update(void)
 		{
 			float emission_deltatime = 1.0f / this->emission_rate;
 			int emission_num = (int)(this->timer_emission.Elapsed() / emission_deltatime);
-			for (UINT i = 0; (i < this->particle_max) && (this->particle_num < this->particle_max) && (emission_num > 0); i++)
+
+			element = this->elements;
+			for (UINT i = 0; (i < this->particle_max) && (this->particle_num < this->particle_max) && (emission_num > 0); i++, element = (ParticleElement*)((BYTE*)this->elements + i*this->pitch))
 			{
-				if (this->elements[i].active == false)
+				if (element->active == false)
 				{
-					this->elements[i].transform.position = this->object->transform.position;
-					this->behavior->Init(this->elements[i]);
+					element->transform.position = this->object->transform.position;
+					this->behavior->Init(*element);
+					element->active = true;
 					this->particle_num++;
 					emission_num--;
 				}
@@ -53,12 +58,13 @@ void ParticleSystem::Update(void)
 	}
 
 	// パーティクル更新処理
-	for (UINT i = 0; i < this->particle_max; i++)
+	element = this->elements;
+	for (UINT i = 0; i < this->particle_max; i++, element = (ParticleElement*)((BYTE*)this->elements + i*this->pitch))
 	{
-		if (this->elements[i].active)
+		if (element->active)
 		{
-			this->behavior->Update(this->elements[i]);
-			if (this->elements[i].active == false)
+			this->behavior->Update(*element);
+			if (element->active == false)
 				this->particle_num--;
 		}
 	}
@@ -89,13 +95,8 @@ void ParticleSystem::Draw(void)
 
 	for (UINT i = 0; i<this->particle_max; i++)
 	{
-		auto element = this->elements + i;
+		auto element = (ParticleElement*)((BYTE*)this->elements + i*this->pitch);
 		
-		/*if (element->active == false)
-		{
-			continue;
-		}*/
-
 		D3DXMATRIX mtxScl, mtxRot, mtxTranslate;
 
 		D3DXMatrixScaling(&mtxScl, element->transform.scale.x, element->transform.scale.y, element->transform.scale.z);
@@ -276,7 +277,6 @@ void ParticleDefaultBehavior::Init(ParticleElement & element)
 	element.timer.Reset(this->lifetime);
 	element.color = this->start_color;
 	element.transform.scale = this->start_size*Vector3::one;
-	element.active = true;
 
 	// 補間関数の初期化
 	this->timing_func["size"] = Lerpf;
@@ -313,4 +313,10 @@ void ParticleDefaultBehavior::Update(ParticleElement & element)
 void ParticleDefaultBehavior::SetTimingFunc(std::string attr, std::function<float(float, float, float)> func)
 {
 	this->timing_func[attr] = func;
+}
+
+void IParticleBehavior::MakeElement(ParticleElement ** elements, UINT* pitch, UINT number)
+{
+	*elements = new ParticleElement[number];
+	*pitch = sizeof(ParticleElement);
 }

@@ -1,17 +1,11 @@
 #pragma once
 #include "Core\Core.h"
 
-class FieldPolygonBehavior : public IParticleBehavior
+class FieldPolygon : public Object, public IParticleBehavior
 {
 public:
-	void Init(ParticleElement& element);
-	void Update(ParticleElement& element);
-};
+	void Init(ParticleElement & element) override;
+	void Update(ParticleElement & element) override;
 
-class FieldPolygon : public Object
-{
-public:
 	FieldPolygon(int max);
-private:
-	static FieldPolygonBehavior behavior;
 };

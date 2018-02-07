@@ -27,8 +27,9 @@ struct ParticleElement
 class IParticleBehavior
 {
 public:
-	virtual void Init(ParticleElement& element) = 0;
-	virtual void Update(ParticleElement& element) = 0;
+	virtual void MakeElement(ParticleElement** elements, UINT* pitch, UINT number);
+	virtual void Init(ParticleElement & element) = 0;
+	virtual void Update(ParticleElement & element) = 0;
 };
 
 class ParticleDefaultBehavior : public IParticleBehavior
@@ -46,8 +47,8 @@ public:
 	Color end_color;
 
 	ParticleDefaultBehavior(void);
-	void Init(ParticleElement& element) override;
-	void Update(ParticleElement& element) override;
+	void Init(ParticleElement & element) override;
+	void Update(ParticleElement & element) override;
 	void SetTimingFunc(std::string attr, std::function<float(float, float, float)> func);
 
 private:
@@ -57,7 +58,7 @@ private:
 class ParticleSystem : public Drawable, public ILostAndReset
 {
 public:
-	ParticleSystem(UINT particle_max = 100);
+	ParticleSystem(UINT particle_max = 100, IParticleBehavior* behavior = &default_behavior);
 	~ParticleSystem(void);
 
 	void Draw(void) override;
@@ -89,6 +90,7 @@ private:
 	FrameTimer timer_emission;
 	UINT particle_max;
 	UINT particle_num;
+	UINT pitch;
 	float duration;
 
 	void Update(void);

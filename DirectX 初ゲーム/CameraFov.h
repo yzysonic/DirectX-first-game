@@ -1,6 +1,5 @@
 #pragma once
 #include "Core\Core.h"
-#include "CameraSmooth.h"
 
 class CameraFov : public Script
 {
@@ -9,15 +8,17 @@ public:
 	float speed = 3.0f;
 
 	CameraFov(void);
-	void Init(void) override;
-	void Update(void) override;
-	void BindObject(Object* object) override;
-	void SetFov(float fov);
+	void SetFov(float fov, float speed = 0.0f);
 
 private:
 	Camera* camera;
-	CameraSmooth* smooth;
 	FrameTimer timer;
 	float last_fov;
-	float last_z;
+	float near_z_offset;
+	float far_z_offset;
+
+	void Init(void) override;
+	void Update(void) override;
+	void BindObject(Object* object) override;
+
 };

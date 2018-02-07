@@ -8,6 +8,11 @@ void CameraSmooth::Init(void)
 
 void CameraSmooth::Update(void)
 {
+	if (target == nullptr)
+		return;
+
 	camera->transform.position = Vector3::Lerp(camera->transform.position, target->position - Vector3(0.0f, 0.0f, distance), speed*Time::DeltaTime());
-	camera->at = camera->transform.position + Vector3(0.0f, 0.0f, distance);
+	camera->at.x = camera->transform.position.x;
+	camera->at.y = camera->transform.position.y;
+	camera->at.z = target->position.z;
 }

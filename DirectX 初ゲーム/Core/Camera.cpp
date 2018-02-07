@@ -13,7 +13,7 @@ Camera::Camera(RenderTarget* render_target)
 	this->at = Vector3(0.0f, 0.0f, 1.0f);
 	this->up = Vector3(0.0f, 1.0f, 0.0f);
 	this->aspect = (float)SystemParameters::ResolutionX / (float)SystemParameters::ResolutionY;
-	this->near_z = 0.0f;
+	this->near_z = 10.0f;
 	this->far_z = 1000.0f;
 	this->fov = 2.0f*atan2f(0.5f*SystemParameters::ResolutionY, this->transform.position.length());
 }

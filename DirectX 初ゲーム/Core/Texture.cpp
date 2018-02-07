@@ -70,14 +70,14 @@ void Texture::LoadTexture(std::string name, std::string file_name, int divX, int
 			D3DPOOL_MANAGED,
 			D3DX_FILTER_NONE,
 			D3DX_FILTER_NONE,
-			0xFF000000,
+			0x00000000,
 			NULL, NULL,
 			&texture->pDXTex);
 	}
 	else
 	{
 		TCHAR s[128];
-		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), file_name);
+		wsprintf(s, _T("テクスチャー「%s」の読込に失敗しました。"), file_name.c_str());
 		MessageBox(Window::GetHWnd(), s, _T("エラー"), MB_OK | MB_ICONWARNING);
 
 		delete texture;

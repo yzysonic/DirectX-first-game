@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{effbbba1-fd5e-4c1c-b0a3-ebf572acb3c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{43191d23-f096-4291-8655-4f8b427463d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{0843975f-2017-43dd-86eb-7243efd49cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Game">
+      <UniqueIdentifier>{d242d1ee-21da-4821-b94f-dacc761003bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphic">
+      <UniqueIdentifier>{4bfde71f-0b16-4954-b061-ab2e64c8be37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{49b16bfe-7728-4bd8-bf08-60fcc4cd4026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Object">
+      <UniqueIdentifier>{072aa2d8-c39a-4198-af7f-14b83d18cf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Physics">
+      <UniqueIdentifier>{d478084f-81ab-49d7-b367-092210469ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Struct">
+      <UniqueIdentifier>{51c2a88b-5f61-4254-88fc-977fc34a8c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System">
+      <UniqueIdentifier>{6e8da5e6-e492-4d22-8961-7c17d28e732e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{c8c10d88-219c-45af-a0dc-5c3d9a43f399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{455a4483-fab4-48fe-a4c8-30e3bc201637}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SceneGame.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTest.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonElement.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGameOver.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneClear.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGuide.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneGlobal.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeScreen.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Common.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Game.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameManager.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Camera.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Direct3D.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Polygon.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Renderer.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Texture.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Lerp.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Random.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Object.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ObjectManager.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Collider.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Physics.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rigidbody.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Color.cpp">
+      <Filter>Core\Struct</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Vector.cpp">
+      <Filter>Core\Struct</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Sound.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Time.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Window.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\PerlinNoise.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraShake.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Script.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Drawable.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RenderSpace.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RenderTarget.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniMap.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Easing.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Event.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Collision.cpp">
+      <Filter>Core\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Transform.cpp">
+      <Filter>Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraSmooth.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraFov.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Scene.cpp">
+      <Filter>Core\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenePause.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPlay.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Shader.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ParticleSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldPolygon.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TitlePoly.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EaseMove.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCamera.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SceneGame.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTest.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonElement.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberUI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGameOver.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneClear.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGuide.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGlobal.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeScreen.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Common.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Core.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Singleton.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Game.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameManager.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Scene.h">
+      <Filter>Core\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Camera.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Direct3D.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Layer.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Polygon.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Renderer.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Texture.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Lerp.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Random.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Object.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ObjectManager.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ObjectType.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Collider.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Physics.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rigidbody.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Color.h">
+      <Filter>Core\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Vector.h">
+      <Filter>Core\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Sound.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Time.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Window.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RendererType.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\PerlinNoise.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraShake.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Script.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Drawable.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RenderTarget.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RenderSpace.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniMap.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Easing.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="LiveUI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreUI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Event.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Collision.h">
+      <Filter>Core\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Transform.h">
+      <Filter>Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraSmooth.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraFov.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Shader.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePause.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPlay.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ParticleSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldPolygon.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TitlePoly.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EaseMove.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCamera.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\InstancingVS.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -7,6 +7,8 @@
 #include "Enemy.h"
 #include "MiniMap.h"
 #include "FieldPolygon.h"
+#include "TitlePoly.h"
+#include "TitleCamera.h"
 
 class SceneTest : public Scene
 {
@@ -19,13 +21,15 @@ public:
 	void Update(void) override;
 	void Uninit(void) override;
 
-	Camera* camera = nullptr;
+	TitleCamera* camera = nullptr;
 	MiniMap* mini_map = nullptr;
 	std::vector<PolygonElement*> polyList;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
 	Object* test = nullptr;
 	FieldPolygon* field_bk = nullptr;
+	TitlePoly* title_poly = nullptr;
+	Object* logo = nullptr;
 
 	int PolyMax;
 	int polyCount;

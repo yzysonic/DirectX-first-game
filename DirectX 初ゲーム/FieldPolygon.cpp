@@ -1,32 +1,27 @@
 #include "FieldPolygon.h"
 
-FieldPolygonBehavior FieldPolygon::behavior;
-
 FieldPolygon::FieldPolygon(int max)
 {
 	auto particle =
-	this->AddComponent<ParticleSystem>(max);
+	this->AddComponent<ParticleSystem>(max, this);
 
 	particle->SetDuration(-1.0f);
 	particle->emission_rate = 1000.0f;
-	particle->SetBehavior(&behavior);
 }
 
 
-void FieldPolygonBehavior::Init(ParticleElement & element)
+void FieldPolygon::Init(ParticleElement & element)
 {
 	element.transform.scale = Vector3(15.0f, 15.0f, 1.0f);
 
-	element.transform.position.x = (float)Random(-SystemParameters::ResolutionX / 2 - 500, SystemParameters::ResolutionX / 2 + 500);
-	element.transform.position.y = (float)Random(-SystemParameters::ResolutionY / 2 - 500, SystemParameters::ResolutionY / 2 + 500);
+	element.transform.position.x = (float)Random(-SystemParameters::ResolutionX / 2 - 50, SystemParameters::ResolutionX / 2 + 50);
+	element.transform.position.y = (float)Random(-SystemParameters::ResolutionY / 2 - 50, SystemParameters::ResolutionY / 2 + 50);
 	element.transform.position.z = Randomf(-200.0f, 1000.0f);
 
 	element.color = Color(Random(0, 255), Random(0, 255), Random(0, 255), 179);
-
-	element.active = true;
 }
 
-void FieldPolygonBehavior::Update(ParticleElement & element)
+void FieldPolygon::Update(ParticleElement & element)
 {
 	if (element.timer.TimeUp())
 	{
