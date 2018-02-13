@@ -6,12 +6,15 @@
 
 void SceneClear::Init(void)
 {
-	this->bk = new Object;
-	this->bk->AddComponent<RectPolygon2D>("clear", Layer::BG_00);
+	this->title = new Object;
+	this->title->transform.position.y = 0.3f*SystemParameters::ResolutionY;
+	this->title->AddComponent<RectPolygon2D>("result_title", Layer::DEFAULT);
 
 	this->score = new NumberUI(5, -120, 0, "number", "game_score");
 	this->score->setOffset(130, 0);
 	this->score->setNumber(GameManager::Var<int>("score"));
+
+	Renderer::GetInstance()->getCamera("default")->setBackColor(230, 230, 230, 255);
 
 	this->timer = 0;
 
@@ -34,8 +37,6 @@ void SceneClear::Update(void)
 void SceneClear::Uninit(void)
 {
 	StopSound(BGM_CLEAR);
-	delete this->score;
-	delete this->bk;
 }
 
 void SceneClear::update_clear_fadeWait(void)

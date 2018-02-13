@@ -21,7 +21,7 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("vignetting");
 	Texture::LoadTexture("title_logo");
 	Texture::LoadTexture("title_presskey", "title_presskey_v3.png");
-	Texture::LoadTexture("title_info", "title_copyright.png");
+	Texture::LoadTexture("title_info");
 	Texture::LoadTexture("title_cursor", "title_cursor_v2.png");
 	Texture::LoadTexture("title_start");
 	Texture::LoadTexture("title_exit");
@@ -29,7 +29,7 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("game_score");
 	Texture::LoadTexture("game_time");
 	Texture::LoadTexture("game_over");
-	Texture::LoadTexture("clear");
+	Texture::LoadTexture("result_title");
 	Texture::LoadTexture("lives", "lives.png", 3);
 	Texture::LoadTexture("player");
 	Texture::LoadTexture("enemy");
@@ -42,6 +42,7 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("title_mask");
 	Texture::LoadTexture("cursor");
 	Texture::LoadTexture("field_boundary");
+	Texture::LoadTexture("timesup");
 
 	// シェーダーの初期化
 	VertexShader::Load("InstancingVS.hlsl");

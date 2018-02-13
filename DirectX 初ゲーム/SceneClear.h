@@ -10,7 +10,7 @@ public:
 	void Uninit(void) override;
 
 private:
-	Object *bk;
+	Object *title;
 	NumberUI *score;
 	float timer;
 	void(SceneClear::*pUpdate)(void);

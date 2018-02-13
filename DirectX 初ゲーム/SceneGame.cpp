@@ -37,16 +37,20 @@ void SceneGame::Init(void)
 	this->liveUI = (new LiveUI);
 	this->liveUI->transform.position = Vector3(x_offset + 3 + Texture::Get("lives")->size.x/2 - SystemParameters::ResolutionX/2, SystemParameters::ResolutionY/2 - 70.f, 0.0f);
 
+	// 時間切れ
+	this->timesup = new Object;
+	this->timesup->transform.position.y += 100.0f;
+	this->timesup->AddComponent<RectPolygon2D>("timesup", Layer::UI_00)->SetOpacity(0.0f);
+	this->timesup->GetComponent<RectPolygon2D>()->SetActive(false);
+
 	// プレイヤー
 	this->player = (new Player);
-	//this->player->SetActive(false);
 
 	// カメラ設定
 	this->camera = new Camera(GameManager::Var<PostEffect*>("post_effect")->GetInputRT());
 	this->camera->AddComponent<CameraSmooth>(this->player);
 	this->camera->AddComponent<CameraShake>();
 	this->camera->transform.position.z = -1500.0f;
-	//this->camera->SetActive(false);
 	this->camera->setBackColor(210, 210, 210, 255);
 	Renderer::GetInstance()->setCamera(this->camera);
 
@@ -80,6 +84,7 @@ void SceneGame::Init(void)
 	// ゲームで使う変数
 	this->score = 0;
 	this->timer = GameTime;
+	this->enemy_timer.Reset(3.0f);
 	this->polyCount = 0;
 
 	for (int i = 0; i < ENEMY_MAX; i++)
@@ -96,6 +101,7 @@ void SceneGame::Init(void)
 	PlayBGM(BGM_GAME);
 
 	// ゲーム状態→フェイト処理完了待ち
+	this->next_state = NextState::Start;
 	SceneGame::pUpdate = &SceneGame::update_fadeWait;
 }
 
@@ -149,19 +155,40 @@ void SceneGame::addGameScore(int score)
 // ファイト処理完了待ち
 void SceneGame::update_fadeWait(void)
 {
-	if (FadeScreen::Finished())
+	if (!FadeScreen::Finished())
+		return;
+
+	switch (this->next_state)
 	{
-		//this->player->SetActive(true);
-		//this->camera->SetActive(true);
+	case NextState::Start:
 		SceneGame::pUpdate = &SceneGame::update_main;
+		return;
+
+	case NextState::GameOver:
+		GameManager::SetScene(new SceneGameOver);
+		return;
+
+	case NextState::GameClear:
+		GameManager::SetScene(new SceneClear);
+		return;
 	}
 }
 
 void SceneGame::update_main(void)
 {
 	// 敵の生成
-	swapEnemy();
-
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_E))
+		swapEnemy();
+#endif
+	if (this->enemy_timer.TimeUp())
+	{
+		swapEnemy();
+		this->enemy_timer.Reset();
+	}
+	this->enemy_timer++;
+	
+	// 敵の死亡判定
 	for (auto &enemy : this->enemy)
 	{
 		if (enemy == nullptr)
@@ -203,7 +230,7 @@ void SceneGame::update_main(void)
 
 
 	// カウントダウン更新
-	this->timer -= Time::DeltaTime();
+	this->timer = fmaxf(this->timer-Time::DeltaTime(), 0.0f);
 
 	// カウントダウン表示更新
 	this->timeUI[0]->setNumber((int)(this->timer*100)%100);
@@ -216,14 +243,18 @@ void SceneGame::update_main(void)
 		this->timeUI[1]->SetColor(c);
 	}
 
-	// シーン遷移→クリアシーン
-	if (this->timer < 0)
+	// 時間切れ
+	if (this->timer <= 0.0f)
 	{
-		GameManager::SetScene(new SceneClear);
+		this->player->SetActive(false);
+		this->player->GetComponent<RectPolygon>()->SetActive(true);
+		this->timer = 0.0f;
+		this->timesup->GetComponent<RectPolygon2D>()->SetActive(true);
+		SceneGame::pUpdate = &SceneGame::update_timeup;
 		return;
 	}
 
-	 //シーン遷移→ゲームオーバー
+	 // 死亡
 	if (this->player->hp == 0)
 	{
 		this->player->SetDeath();
@@ -236,43 +267,48 @@ void SceneGame::update_main(void)
 	{
 		GameManager::PushScene(new ScenePause);
 	}
-
 }
 
 void SceneGame::update_death(void)
 {
-	if(this->player->state == Player::State::Vanish)
-		GameManager::SetScene(new SceneGameOver);
+	if (this->player->state == Player::State::Vanish)
+	{
+		this->next_state = NextState::GameOver;
+		SceneGame::pUpdate = &SceneGame::update_fadeWait;
+		FadeScreen::FadeOut(Color::black);
+	}
+}
+
+void SceneGame::update_timeup(void)
+{
+	if (this->timer >= 3.0f)
+	{
+		this->next_state = NextState::GameClear;
+		SceneGame::pUpdate = &SceneGame::update_fadeWait;
+		FadeScreen::FadeOut(Color::white);
+		return;
+	}
+	else if (this->timer <= 0.3f)
+		this->timesup->GetComponent<RectPolygon2D>()->SetOpacity(Lerpf(0.0f, 1.0f, this->timer / 0.3f));
+
+	this->timer += Time::DeltaTime();
 }
 
 void SceneGame::swapEnemy(void)
 {
-	static float timer = 0;
-
-#ifdef _DEBUG
-	if (GetKeyboardTrigger(DIK_E))
-		timer = 10;
-#endif
-
-	if (timer > 3.0f)
+	for (auto &enemy : this->enemy)
 	{
-		for (auto &enemy : this->enemy)
+		if (enemy == nullptr)
 		{
-			if (enemy == nullptr)
-			{
-				enemy = (new Enemy);
+			enemy = (new Enemy);
 
-				enemy->target = &this->player->transform;
-				do {
-					enemy->transform.position = Vector3(Randomf(-FIELD_RANG_X, FIELD_RANG_X), Randomf(-FIELD_RANG_Y, FIELD_RANG_Y), 0.0f);
-				} while ((enemy->transform.position - this->player->transform.position).length() < 200.0f);
-				this->minimap->SetEnemy(enemy);
+			enemy->target = &this->player->transform;
+			do {
+				enemy->transform.position = Vector3(Randomf(-FIELD_RANG_X, FIELD_RANG_X), Randomf(-FIELD_RANG_Y, FIELD_RANG_Y), 0.0f);
+			} while ((enemy->transform.position - this->player->transform.position).length() < 200.0f);
+			this->minimap->SetEnemy(enemy);
 
-				break;
-			}
+			break;
 		}
-		timer = 0;
 	}
-
-	timer += Time::DeltaTime();
 }

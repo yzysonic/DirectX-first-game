@@ -38,7 +38,7 @@ void SceneTitle::Init(void)
 	this->cursor = (new Object);
 	this->cursor->AddComponent<RectPolygon>("title_cursor", Layer::UI_00);
 	this->cursor->GetComponent<RectPolygon>()->SetOpacity(0);
-	this->cursor->transform.position = Vector3(-80, SystemParameters::ResolutionY / 2.f - 415, 0);
+	this->cursor->transform.position = Vector3(-90, SystemParameters::ResolutionY / 2.f - 415, 0);
 	this->cursor->SetActive(false);
 
 	this->start = (new Object);
@@ -199,7 +199,7 @@ void SceneTitle::update_showLogo(void)
 		this->presskey->SetActive(true);
 
 		// ìŽÒî•ñ•\Ž¦
-		//this->info->SetActive(true);
+		this->info->SetActive(true);
 
 		this->logoState = Wait;
 		this->keyState = Wait;

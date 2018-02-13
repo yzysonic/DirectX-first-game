@@ -31,6 +31,12 @@ public:
 	void addGameScore(int score);
 
 private:
+	enum NextState 
+	{
+		Start,
+		GameOver,
+		GameClear
+	} next_state;
 	Object* vignetting = nullptr;
 	LiveUI* liveUI = nullptr;
 	ScoreUI* scoreUI = nullptr;
@@ -41,14 +47,17 @@ private:
 	Enemy* enemy[ENEMY_MAX] = {};
 	MiniMap* minimap = nullptr;
 	FieldBoundary* boundary = nullptr;
+	Object* timesup = nullptr;
 
 	int score;
 	float timer;
+	FrameTimer enemy_timer;
 	int polyCount;
 
 	void(SceneGame::*pUpdate)(void);
 	void update_fadeWait(void);
 	void update_main(void);
 	void update_death(void);
+	void update_timeup(void);
 	void swapEnemy(void);
 };
