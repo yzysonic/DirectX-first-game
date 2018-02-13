@@ -10,6 +10,8 @@ Enemy::Enemy()
 	// コライダーの初期化
 	AddComponent<SphereCollider>();
 	GetComponent<SphereCollider>()->radius = 35.0f;
+	GetComponent<SphereCollider>()->SetActive(false);
+
 
 	this->type = ObjectType::Enemy;
 	this->hp = MaxHP;
@@ -44,16 +46,38 @@ void Enemy::OnCollision(Object * other)
 	//}
 }
 
+void Enemy::SetDeath(void)
+{
+	this->GetComponent<RectPolygon>()->SetActive(false);
+	this->GetComponent<SphereCollider>()->SetActive(false);
+
+	auto particle =
+	this->AddComponent<ParticleSystem>(200);
+	particle->SetDuration(0.3f);
+	particle->emission_rate = 1000.0f;
+
+	auto behavior = particle->GetBehavior<ParticleDefaultBehavior>();
+	behavior->start_color = Color(243, 124, 125, 255);
+	behavior->start_size = 6.0f;
+	behavior->end_size = 1.0f;
+	behavior->start_speed = 10.0f;
+
+	this->timer = 0.0f;
+	
+	Enemy::pUpdate = &Enemy::update_death;
+}
+
 void Enemy::update_init(void)
 {
 	float progress = (this->timer / InitTime);
 
 	if (this->timer > InitTime)
 	{
-		Enemy::pUpdate = &Enemy::update_main;
 		this->timer = 0.0f;
 		progress = 1.0f;
 		this->transform.scale = Vector3::one;
+		GetComponent<SphereCollider>()->SetActive(true);
+		Enemy::pUpdate = &Enemy::update_main;
 	}
 
 
@@ -106,4 +130,10 @@ void Enemy::update_main(void)
 		}
 		this->effect_timer += Time::DeltaTime();
 	}
+}
+
+void Enemy::update_death(void)
+{
+	if (this->timer >= 1.0f)
+		this->Destroy();
 }

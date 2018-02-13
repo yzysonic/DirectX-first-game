@@ -7,15 +7,17 @@
 TitleCamera::TitleCamera(void)
 {
 	this->at.z = 0.0f;
-	this->near_z = 1.0f;
+	this->near_z = 5.0f;
 	this->far_z = 7000.0f;
 
-	AddComponent<EaseMove>()->SetInterval(1.3f);
+	AddComponent<EaseMove>()->SetInterval(1.0f);
 	AddComponent<CameraFov>();
 	AddComponent<CameraShake>();
 	AddComponent<CameraPlay>();
 
-	GetComponent<CameraFov>()->SetFov(Deg2Rad(1.0f));
+	auto fov = GetComponent<CameraFov>();
+	fov->SetFov(Deg2Rad(1.0f));
+	fov->speed = 10.0f;
 	setBackColor(210, 210, 210, 255);
 
 	Renderer::GetInstance()->setCamera(this);
@@ -60,4 +62,9 @@ void TitleCamera::SetState(State state)
 		}
 		break;
 	}
+}
+
+void TitleCamera::SetPlay(bool active)
+{
+	GetComponent<CameraPlay>()->SetActive(active);
 }

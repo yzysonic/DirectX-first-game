@@ -5,12 +5,15 @@
 class TitlePoly : public Object, public IParticleBehavior
 {
 	static constexpr float PolySize = 20.0f;
+	static constexpr float Speed1 = 1.0f;
+	static constexpr float Speed2 = 10.0f;
 public:
 	bool mix_mode;
 
-	TitlePoly(void);
+	TitlePoly(UINT max);
 	void SetMixMode(float target_mix_factor);
 	float GetMixFactor(void);
+	void SetBehavior2(void);
 
 private:
 	struct Data
@@ -26,6 +29,14 @@ private:
 		Color fix_color2;
 	};
 
+	class Behavior2 : public IParticleBehavior
+	{
+	public:
+		void Init(ParticleElement & element) override {};
+		void Update(ParticleElement & element) override;
+	};
+
+	Behavior2 behavior2;
 	std::vector<std::vector<Data>> data_map;
 	RandomTable random_table;
 	Camera* camera = nullptr;

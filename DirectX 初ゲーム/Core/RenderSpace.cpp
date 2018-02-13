@@ -3,6 +3,7 @@
 
 std::vector<smart_ptr<RenderSpace>> RenderSpace::render_space_list;
 std::unordered_map<std::string, int> RenderSpace::name_map;
+std::vector<int> RenderSpace::draw_order_map;
 
 
 RenderSpace * RenderSpace::Get(int index)
@@ -24,7 +25,7 @@ RenderSpace * RenderSpace::Get(std::string name)
 	{
 		return render_space_list[name_map.at(name)].get();
 	}
-	catch (std::out_of_range&)
+	catch (std::out_of_range)
 	{
 		return nullptr;
 	}
@@ -36,10 +37,21 @@ void RenderSpace::Add(std::string name)
 	{
 		name_map.at(name);
 	}
-	catch (std::out_of_range&)
+	catch (std::out_of_range)
 	{
 		name_map.insert({name, render_space_list.size()});
 		render_space_list.push_back(std::make_unique<RenderSpace>(name));
+		draw_order_map.emplace_back(name_map[name]);
+	}
+}
+
+void RenderSpace::Add(std::string name, int order)
+{
+	Add(name);
+	if (order < draw_order_map.size() - 1)
+	{
+		draw_order_map.insert(draw_order_map.begin() + order, draw_order_map.back());
+		draw_order_map.pop_back();
 	}
 }
 
@@ -47,9 +59,26 @@ void RenderSpace::Delete(int index)
 {
 	if(index < (int)render_space_list.size())
 	{
-		name_map.erase(render_space_list[index]->name);
-		render_space_list[index].reset();
-		render_space_list.erase(render_space_list.begin() + index);
+		render_space_list[index].swap(render_space_list.back());
+		name_map[render_space_list[index]->name] = index;
+		name_map.erase(render_space_list.back()->name);
+		render_space_list.pop_back();
+
+		for (auto it = draw_order_map.begin(); it != draw_order_map.end();)
+		{
+			if (*it == index)
+			{
+				draw_order_map.erase(it);
+				break;
+			}
+			else
+				it++;
+		}
+		for (auto& i : draw_order_map)
+		{
+			if (i > index)
+				i--;
+		}
 	}
 }
 
@@ -57,12 +86,9 @@ void RenderSpace::Delete(std::string name)
 {
 	try
 	{
-		render_space_list[name_map.at(name)].reset();
-		render_space_list.erase(render_space_list.begin() + name_map.at(name));
-		name_map.erase(name);
+		Delete(name_map.at(name));
 	}
 	catch (std::out_of_range){}
-
 }
 
 int RenderSpace::RenderSpaceCount(void)
@@ -80,8 +106,10 @@ void RenderSpace::Draw(void)
 	auto pDevice = Direct3D::GetDevice();
 
 	// •`‰æ‹óŠÔ‚²‚Æ‚É
-	for (auto &render_space:render_space_list)
+	for (auto &index:draw_order_map)
 	{
+		auto &render_space = render_space_list[index];
+
 		// ƒJƒƒ‰‚²‚Æ‚É
 		for (Camera* camera: render_space->camera_list)
 		{
@@ -104,7 +132,11 @@ void RenderSpace::Draw(void)
 				auto list = render_space->draw_list[i];
 
 				for (Drawable* drawable : list)
+				{
+					drawable->object->OnDraw();
 					drawable->Draw();
+					drawable->object->AfterDraw();
+				}
 			}
 
 		}

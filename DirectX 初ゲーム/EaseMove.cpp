@@ -9,9 +9,9 @@ void EaseMove::Update(void)
 {
 	float progress = min(timer.Progress(), 1.0f);
 
-	object->transform.position.x = Ease::CircInOut(last_pos.x, target_pos.x, progress);
-	object->transform.position.y = Ease::CircInOut(last_pos.y, target_pos.y, progress);
-	object->transform.position.z = Ease::CircInOut(last_pos.z, target_pos.z, progress);
+	object->transform.position.x = Ease::ExpoInOut(last_pos.x, target_pos.x, progress);
+	object->transform.position.y = Ease::ExpoInOut(last_pos.y, target_pos.y, progress);
+	object->transform.position.z = Ease::ExpoInOut(last_pos.z, target_pos.z, progress);
 
 	timer.Step();
 

@@ -47,6 +47,7 @@ public:
 	float radius;							// 頂点計算用半径
 	float baseAngle;						// 頂点計算用角度
 	
+	RectPolygon2D(Texture* texture, Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
 	RectPolygon2D(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
 	void Draw(void) override;
 	void SetColor(Color color);
@@ -60,16 +61,18 @@ protected:
 	Vector2 size;	// 表示するサイズ
 	int pattern;	// 表示するパターン
 
-private:
 	void transformVertex(void);
 };
 
-class RectPolygon : public Drawable
+class RectPolygon : public Drawable, public ILostAndReset
 {
 public:
 	Texture *pTexture;
 
 	RectPolygon(std::string texture_name = "none", Layer layer = Layer::DEFAULT, std::string render_space_name = "default");
+	~RectPolygon(void);
+	HRESULT OnLostDevice(void);
+	HRESULT OnResetDevice(void);
 	void Draw(void) override;
 	void SetColor(Color color);
 	Vector2 GetSize(void);
@@ -80,5 +83,7 @@ public:
 protected:
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	Vector2 size;
+
+	HRESULT InitBuffer(void);
 
 };

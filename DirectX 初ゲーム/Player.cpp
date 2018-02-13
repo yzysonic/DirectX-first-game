@@ -13,9 +13,10 @@ Player::Player()
 	this->hp = 3;
 	this->speed = 700.0f;
 	this->boost = 1.0f;
-	this->timer = 0;
+	this->timer.Reset(0.13f);
 	this->muteki = false;
 	this->autoAim = false;
+	this->state = State::Normal;
 }
 
 Player::~Player(void)
@@ -25,20 +26,37 @@ Player::~Player(void)
 
 void Player::Update()
 {
-	this->control = Vector3::zero;
+	switch (this->state)
+	{
+	case State::Normal:
 
-	// ˆÚ“®ˆ—
-	this->move();
+		this->control = Vector3::zero;
 
-	// ŽËŒ‚ˆ—
-	this->shoot();
+		// ˆÚ“®ˆ—
+		this->move();
 
-	// Œü‚«‚ÌÝ’è
-	if ((control.x != 0.0f) || control.y != 0.0f)
-		this->transform.setUp(control);
+		// ŽËŒ‚ˆ—
+		this->shoot();
 
-	// –³“Gó‘Ô‚ÌXV
-	this->update_muteki();
+		// Œü‚«‚ÌÝ’è
+		if ((control.x != 0.0f) || control.y != 0.0f)
+			this->transform.setUp(control);
+
+		// –³“Gó‘Ô‚ÌXV
+		this->update_muteki();
+
+		break;
+
+	case State::Death:
+
+		if (this->timer.TimeUp())
+			this->state = State::Vanish;
+
+		this->timer++;
+
+		break;
+	}
+	
 }
 
 void Player::OnCollision(Object * other)
@@ -52,6 +70,27 @@ void Player::OnCollision(Object * other)
 		this->timer_muteki = 0;
 		this->injury();
 	}
+}
+
+void Player::SetDeath(void)
+{
+	this->GetComponent<RectPolygon>()->SetActive(false);
+	this->GetComponent<SphereCollider>()->SetActive(false);
+
+	auto particle =
+	this->AddComponent<ParticleSystem>(3000);
+	particle->SetDuration(0.3f);
+	particle->emission_rate = 10000.0f;
+
+	auto behavior = particle->GetBehavior<ParticleDefaultBehavior>();
+	behavior->start_color = Color(255, 250, 250, 255);
+	behavior->start_size = 6.0f;
+	behavior->end_size = 1.0f;
+	behavior->start_speed = 10.0f;
+
+	this->timer.Reset(3.0f);
+
+	this->state = State::Death;
 }
 
 void Player::update_muteki()
@@ -144,13 +183,13 @@ void Player::shoot(void)
 	{
 		shoot_control = shoot_control.normalized();
 
-		if (this->timer >= 0.13f)
+		if (this->timer.TimeUp())
 		{
 			/*this->scene->AddObject*/(new Bullet(this, 1.7f * this->speed * shoot_control));
-			this->timer = 0;
+			this->timer.Reset(0.13f);
 		}
 		this->control = shoot_control;
-		this->timer += Time::DeltaTime();
+		this->timer ++;
 	}
 
 }

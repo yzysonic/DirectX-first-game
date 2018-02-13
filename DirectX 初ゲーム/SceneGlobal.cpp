@@ -9,10 +9,15 @@
 void SceneGlobal::Init(void)
 {
 	FadeScreen::Create();
-	/*AddObject*/(FadeScreen::GetInstance());
+	(FadeScreen::GetInstance());
 	FadeScreen::FadeOut(Color::black, 0.0f);
 	this->control_type = kKeyboard | kMouse;
 
+	// レンダースペースの初期化
+	RenderSpace::Add("mini_map", 0);
+	RenderSpace::Add("post");
+
+	// テクスチャの読み込み
 	Texture::LoadTexture("vignetting");
 	Texture::LoadTexture("title_logo");
 	Texture::LoadTexture("title_presskey", "title_presskey_v3.png");
@@ -33,11 +38,21 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("guide");
 	Texture::LoadTexture("player_mark");
 	Texture::LoadTexture("enemy_mark");
-	Texture::LoadTexture("pause", "pause.jpg");
+	Texture::LoadTexture("pause");
 	Texture::LoadTexture("title_mask");
+	Texture::LoadTexture("cursor");
+	Texture::LoadTexture("field_boundary");
 
-
+	// シェーダーの初期化
 	VertexShader::Load("InstancingVS.hlsl");
+	PixelShader::Load("GaussianBlurPS.hlsl");
+	PixelShader::Load("ChromaticAberrationPS.hlsl");
+	PixelShader::Load("MotionBlurPS.hlsl");
+
+	// ポストエフェクトの環境設定
+	this->post_effect = new PostEffect;
+	this->post_effect->SetActive(false);
+	GameManager::Var<PostEffect*>("post_effect") = this->post_effect;
 
 }
 
@@ -62,5 +77,5 @@ void SceneGlobal::Update(void)
 void SceneGlobal::Uninit(void)
 {
 	FadeScreen::Singleton<FadeScreen>::Destroy();
-
+	Shader::UnloadAll();
 }

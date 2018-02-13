@@ -1,6 +1,6 @@
 #include "TitlePoly.h"
 
-TitlePoly::TitlePoly(void)
+TitlePoly::TitlePoly(UINT max)
 {
 	D3DLOCKED_RECT rect;
 	D3DSURFACE_DESC desc;
@@ -51,9 +51,9 @@ TitlePoly::TitlePoly(void)
 	this->random_table.Init(p_list);
 
 	// パーティクル初期化
-	auto particle =	AddComponent<ParticleSystem>(10000, this);
+	auto particle =	AddComponent<ParticleSystem>(max, this);
 	particle->SetDuration(-1.0f);
-	particle->emission_rate = 43000.0f;
+	particle->emission_rate = (float)max;
 
 
 	auto mask = AddComponent<RectPolygon>("title_mask");
@@ -92,7 +92,6 @@ void TitlePoly::Init(ParticleElement & element)
 
 	e.transform.position.x = (pos.x -0.5f) * size.x;
 	e.transform.position.y = (0.5f -pos.y) * size.y;
-	//e.transform.position.z = Randomf(-200.0f, 200.0f);
 	e.transform.position.z = Randomf(-500.0f, -260.0f);
 	e.transform.position += transform.position;
 	e.fix_pos = e.transform.position;
@@ -112,6 +111,7 @@ void TitlePoly::Update(ParticleElement & element)
 	}
 
 	e.transform.position += e.dir*Time::DeltaTime();
+	//e.transform.position = Vector3::Lerp(e.transform.position, e.fix_pos, 0.001f);
 	e.timer.Step();
 
 	e.transform.scale = this->scale*Vector3::one;
@@ -124,7 +124,7 @@ void TitlePoly::Update(void)
 {
 	if (this->mix_mode)
 	{
-		this->mix_factor = (-this->camera->transform.position.z - 250.0f) / 6700.0f;
+		this->mix_factor = (-this->camera->transform.position.z - 250.0f) / 6450.0f;
 
 		this->scale = PolySize*Lerpf(1.0f, 3.0f, this->mix_factor);
 
@@ -138,6 +138,13 @@ void TitlePoly::Update(void)
 	}
 }
 
+void TitlePoly::SetBehavior2(void)
+{
+	auto particle = GetComponent<ParticleSystem>();
+	particle->SetBehavior(&behavior2);
+	particle->emission_rate = 0.0f;
+}
+
 void TitlePoly::SetMixMode(float target_mix_factor)
 {
 	this->target_mix_factor = target_mix_factor;
@@ -147,4 +154,14 @@ void TitlePoly::SetMixMode(float target_mix_factor)
 float TitlePoly::GetMixFactor(void)
 {
 	return this->mix_factor;
+}
+
+void TitlePoly::Behavior2::Update(ParticleElement & element)
+{
+	element.color.a = (UCHAR)Lerpf((float)element.color.a, 0.0f, 0.1f);
+	element.transform.position += element.dir * 200 * Time::DeltaTime();
+	element.transform.position.x += 400.0f*PerlinNoise(element.transform.position.y/800.0f, 1);
+	element.transform.position.y += 400.0f*PerlinNoise(element.transform.position.x/800.0f, 1);
+
+	element.timer++;
 }

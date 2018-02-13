@@ -19,7 +19,7 @@ public:
 
 	Collider(void);
 	~Collider(void);
-
+	bool SetActive(bool value) override;
 	ColliderType GetType(void);
 
 protected:

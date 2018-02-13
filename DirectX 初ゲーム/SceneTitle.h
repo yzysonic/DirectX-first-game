@@ -1,8 +1,10 @@
 #pragma once
 
-#include"Core/Scene.h"
+#include "Core/Scene.h"
 #include "Core/Core.h"
-#include "PolygonElement.h"
+#include "TitleCamera.h"
+#include "TitlePoly.h"
+#include "FieldPolygon.h"
 
 class SceneTitle : public Scene
 {
@@ -33,7 +35,7 @@ private:
 	};
 
 	// ƒJƒƒ‰
-	smart_ptr<Camera> camera;
+	TitleCamera *camera;
 
 	// ‰æ‘œ
 	Object *vignetting = nullptr;
@@ -45,8 +47,8 @@ private:
 	Object *exit = nullptr;
 
 	// ”wŒiƒ|ƒŠƒSƒ“
-	PolygonElement* polyList[TitlePolyMax];
-	int polyCount;
+	TitlePoly *title_poly = nullptr;
+	FieldPolygon *field_poly = nullptr;
 
 	// ŠÔŒv‘ª
 	float timer;
@@ -75,6 +77,7 @@ private:
 	void update_showMenu_A(void);
 	void update_showMenu_B(void);
 	void update_menu(void);
+	void update_zoomWait(void);
 
 	void update_anime_poly(void);
 	void update_anime_logo(void);

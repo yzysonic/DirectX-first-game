@@ -120,7 +120,8 @@ Camera * Renderer::getCamera(int render_space_no, int no)
 //=============================================================================
 void Renderer::setCamera(Camera * camera, std::string render_space)
 {
-	RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
+	if (RenderSpace::Get(render_space)->CameraCount() > 0)
+		RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
 
 	if (camera != nullptr)
 		RenderSpace::Get(render_space)->AddCamera(camera);
@@ -129,7 +130,8 @@ void Renderer::setCamera(Camera * camera, std::string render_space)
 }
 void Renderer::setCamera(Camera * camera, int render_space)
 {
-	RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
+	if(RenderSpace::Get(render_space)->CameraCount() > 0)
+		RenderSpace::Get(render_space)->RemoveCamera(RenderSpace::Get(render_space)->GetCamera(0));
 
 	if (camera != nullptr)
 		RenderSpace::Get(render_space)->AddCamera(camera);

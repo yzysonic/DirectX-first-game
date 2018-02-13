@@ -29,8 +29,8 @@ Bullet::Bullet(Object * owner, Vector3 velocity)
 		this->GetComponent<SphereCollider>()->radius = 15.0f;
 	}
 
-	this->timer = 0;
-
+	this->timer.Reset(3.0f);
+	this->state = 0;
 	this->index = Bullet::list.size();
 	Bullet::list.push_back(this);
 
@@ -46,10 +46,28 @@ Bullet::~Bullet(void)
 
 void Bullet::Update()
 {
-	this->timer += Time::DeltaTime();
 
-	if (this->timer > 3.0f)
+	if (this->timer.TimeUp())
 		this->Destroy();
+
+	this->timer++;
+}
+
+void Bullet::OnDraw(void)
+{
+	//auto pDevice = Direct3D::GetDevice();
+
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+}
+
+void Bullet::AfterDraw(void)
+{
+	//auto pDevice = Direct3D::GetDevice();
+
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	
 }
 
 void Bullet::OnCollision(Object * other)
@@ -57,11 +75,11 @@ void Bullet::OnCollision(Object * other)
 
 	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))
 	{
-		this->Destroy();
+		ToState1();
 	}
 	else if (this->type == ObjectType::Bullet_E && (other->type == ObjectType::Player /*|| other->type == ObjectType::Bullet*/))
 	{
-		this->Destroy();
+		ToState1();
 	}
 
 }
@@ -74,4 +92,28 @@ void Bullet::Clear()
 
 	//for (auto bullet : tList)
 	//	delete bullet;
+}
+
+void Bullet::ToState1(void)
+{
+	this->GetComponent<RectPolygon>()->SetActive(false);
+	this->GetComponent<Rigidbody>()->SetActive(false);
+	this->GetComponent<SphereCollider>()->SetActive(false);
+
+	auto particle =
+	this->AddComponent<ParticleSystem>(20);
+	particle->SetDuration(1.3f);
+	particle->emission_rate = 10000.0f;
+
+	auto behavior = particle->GetBehavior<ParticleDefaultBehavior>();
+	if(this->type == ObjectType::Bullet)
+		behavior->start_color = Color(255, 254, 191, 255);
+	else
+		behavior->start_color = Color(253, 226, 255, 255);
+	behavior->start_speed = 5.0f;
+	behavior->start_size = 5.0f;
+	behavior->end_size = 1.0f;
+
+	this->state = 1;
+	this->timer.Reset(1.0f);
 }

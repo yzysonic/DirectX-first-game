@@ -21,6 +21,7 @@ public:
 	HRESULT OnResetDevice(void) override;
 
 	RenderTarget(int width = SystemParameters::ResolutionX, int height = SystemParameters::ResolutionY, bool create = true);
+	RenderTarget(bool create);
 	~RenderTarget(void);
 
 private:

@@ -14,6 +14,7 @@
 #include "Object.h"
 #include "ObjectType.h"
 #include "Polygon.h"
+#include "Billboard.h"
 #include "Collider.h"
 #include "Rigidbody.h"
 #include "Camera.h"

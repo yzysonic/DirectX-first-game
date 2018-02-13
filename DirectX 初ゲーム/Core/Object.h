@@ -41,7 +41,9 @@ public:
 	virtual ~Object(void);
 
 	virtual void Update(void) {};
+	virtual void OnDraw(void) {};
 	virtual void OnCollision(Object* other) {};
+	virtual void AfterDraw(void) {};
 
 	template<class T, class... Args>
 	T* AddComponent(Args&&... args);

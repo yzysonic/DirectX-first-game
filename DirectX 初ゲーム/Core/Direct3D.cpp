@@ -60,7 +60,7 @@ HRESULT Direct3D::Init(HWND hWnd, bool bWindowMode)
 	d3dpp.EnableAutoDepthStencil = TRUE;				// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
 	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;			// デプスバッファとして16bitを使う
 	d3dpp.BackBufferFormat = d3ddm.Format;				// カラーモードの指定
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
 	// デバイスの生成
 	// ディスプレイアダプタを表すためのデバイスを作成
@@ -181,7 +181,7 @@ bool Direct3D::SetWindowMode(bool windowMode)
 	{
 		s_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;						// バックバッファ
 		s_d3dpp.FullScreen_RefreshRateInHz = 0;							// リフレッシュレート
-		s_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル
+		//s_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル
 	}
 	// フルスクリーンモード
 	else

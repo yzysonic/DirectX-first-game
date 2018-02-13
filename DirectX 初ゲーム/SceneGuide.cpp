@@ -9,7 +9,7 @@ void SceneGuide::Init(void)
 	this->state = 0;
 	this->timer = 0;
 	
-	FadeScreen::FadeIn(Color::white);
+	FadeScreen::FadeIn(Color::black);
 }
 
 void SceneGuide::Update(void)

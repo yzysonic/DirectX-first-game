@@ -12,6 +12,7 @@ public:
 private:
 	Camera* camera;
 	Transform last_transform;
+	Object* cursor;
 	float phi;				// ’‹“_‚Æ‚ÌƒÓ‰ñ“]ŠpiŒ»İj
 	float theta;			// ’‹“_‚Æ‚ÌƒÆ‰ñ“]ŠpiŒ»İj
 	float move_phi;			// ƒÓ‰ñ“]Šp‚ÌˆÚ“®—Ê

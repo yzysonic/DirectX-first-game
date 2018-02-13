@@ -1,17 +1,15 @@
 #include "ParticleSystem.h"
 
-ParticleDefaultBehavior ParticleSystem::default_behavior;
-
-
 ParticleSystem::ParticleSystem(UINT particle_max, IParticleBehavior* behavior) : Drawable(Layer::DEFAULT, "default")
 {
-	this->behavior = behavior;
+	this->default_behavior = nullptr;
 	this->duration = 5.0f;
 	this->emission_rate = 10.0f;
 	this->particle_max = particle_max;
 	this->particle_num = 0;
 	this->loop = false;
 
+	SetBehavior(behavior);
 	this->behavior->MakeElement(&this->elements, &this->pitch, particle_max);
 	InitDraw();
 }
@@ -19,6 +17,7 @@ ParticleSystem::ParticleSystem(UINT particle_max, IParticleBehavior* behavior) :
 ParticleSystem::~ParticleSystem(void)
 {
 	delete[] this->elements;
+	SafeDelete(this->default_behavior);
 	UninitDraw();
 }
 
@@ -65,7 +64,10 @@ void ParticleSystem::Update(void)
 		{
 			this->behavior->Update(*element);
 			if (element->active == false)
+			{
+				element->transform.scale = Vector3::zero;
 				this->particle_num--;
+			}
 		}
 	}
 
@@ -130,6 +132,7 @@ void ParticleSystem::Draw(void)
 	pDevice->SetStreamSourceFreq(0, 1);
 	pDevice->SetStreamSourceFreq(1, 1);
 	pDevice->SetVertexShader(NULL);
+
 }
 
 HRESULT ParticleSystem::OnLostDevice(void)
@@ -182,7 +185,7 @@ void ParticleSystem::InitDraw(void)
 		{ 1, 64, D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },
 		D3DDECL_END()
 	};
-	pDevice->CreateVertexDeclaration(decl_element, &decl);
+	pDevice->CreateVertexDeclaration(decl_element, &this->decl);
 
 	// インデックスバッファを作る
 	WORD index[6] = { 0, 1, 2, 2, 1, 3 };
@@ -229,6 +232,8 @@ void ParticleSystem::InitDraw(void)
 
 void ParticleSystem::UninitDraw(void)
 {
+	SafeRelease(this->decl);
+	SafeRelease(this->pIndexBuff);
 	SafeRelease(this->pGeometryBuff);
 	SafeRelease(this->pInstanceBuff);
 }
@@ -241,15 +246,28 @@ void ParticleSystem::SetMaxNum(UINT value)
 	OnResetDevice();
 }
 
+UINT ParticleSystem::GetMaxNum(void)
+{
+	return this->particle_max;
+}
+
 void ParticleSystem::SetBehavior(IParticleBehavior * behavior)
 {
-	this->behavior = behavior;
+	if (behavior == nullptr)
+	{
+		if (!this->default_behavior)
+			this->default_behavior = new ParticleDefaultBehavior;
+		this->behavior = this->default_behavior;
+	}
+	else
+		this->behavior = behavior;
 }
 
 void ParticleSystem::SetDuration(float value)
 {
 	this->duration = value;
 	this->timer_duration.Reset(value);
+	this->timer_emission.Reset(1.0f / this->emission_rate);
 }
 
 UINT ParticleSystem::GetParticleNum(void)
@@ -270,6 +288,10 @@ ParticleDefaultBehavior::ParticleDefaultBehavior(void)
 	this->end_size = 5.0f;
 	this->end_opacity = 0.0f;
 	this->end_color = Color(255, 255, 255, 255);
+
+	// 補間関数の初期化
+	this->timing_func["size"] = Lerpf;
+	this->timing_func["opacity"] = Lerpf;
 }
 
 void ParticleDefaultBehavior::Init(ParticleElement & element)
@@ -278,17 +300,14 @@ void ParticleDefaultBehavior::Init(ParticleElement & element)
 	element.color = this->start_color;
 	element.transform.scale = this->start_size*Vector3::one;
 
-	// 補間関数の初期化
-	this->timing_func["size"] = Lerpf;
-	this->timing_func["opacity"] = Lerpf;
-
-
 	// 球状からランダムに発射
 	float theta = Randomf(-2.0f*PI, 2.0f*PI);
 	float phi = Randomf(-2.0f*PI, 2.0f*PI);
 	element.dir.y = cosf(theta);
 	element.dir.x = sinf(theta) * cosf(phi);
 	element.dir.z = sinf(theta) * sinf(phi);
+
+	element.random_seed = Randomf(0.0f, 1000.0f);
 }
 
 void ParticleDefaultBehavior::Update(ParticleElement & element)
@@ -302,10 +321,16 @@ void ParticleDefaultBehavior::Update(ParticleElement & element)
 
 	float progress = element.timer.Progress();
 
-	element.transform.scale = this->timing_func["size"](this->start_size, this->end_size, progress) * Vector3::one;
+	//element.transform.scale = this->timing_func["size"](this->start_size, this->end_size, progress) * Vector3::one;
+	element.transform.scale = Lerpf(this->start_size, this->end_size, progress) * Vector3::one;
 	element.color = LerpC(this->start_color, this->end_color, progress);
-	element.color.a = (UCHAR)(255*this->timing_func["opacity"](this->start_opacity, this->end_opacity, progress));
+	//element.color.a = (UCHAR)(255*this->timing_func["opacity"](this->start_opacity, this->end_opacity, progress));
+	element.color.a = (UCHAR)(255 * Lerpf(this->start_opacity, this->end_opacity, progress));
 	element.transform.position += element.dir * this->start_speed /** powf(this->damping, element.timer.Elapsed())*/;
+
+	element.transform.position.x += 5.0f*PerlinNoise(element.transform.position.z*0.05f + element.random_seed, 2);
+	element.transform.position.y += 5.0f*PerlinNoise(element.transform.position.x*0.05f + element.random_seed, 2);
+	element.transform.position.z += 5.0f*PerlinNoise(element.transform.position.y*0.05f + element.random_seed, 2);
 
 	element.timer.Step();
 }

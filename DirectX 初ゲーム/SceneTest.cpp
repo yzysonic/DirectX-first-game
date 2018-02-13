@@ -47,30 +47,18 @@ void SceneTest::Init(void)
 
 
 
-	 //”wŒiƒ|ƒŠƒSƒ“¶¬
-	//this->polyCount = 0;
-	//this->polyList.resize(PolyMax);
-	//for (auto& poly : this->polyList)
-	//{
-	//	poly = new PolygonElement;
-	//	poly->transform.position.x = Randomf(-FieldRangeX, FieldRangeX);
-	//	poly->transform.position.y = Randomf(-FieldRangeY, FieldRangeY);
-	//	poly->targetOpacity = 0.7f;
-	//	poly->targetScale = Vector3(0.1f, 0.1f, 1.0f);
-	//	this->polyCount++;
-	//}
-	this->PolyMax = 2000;
-	this->test = /*AddObject*/(new Object);
-	//auto particle = 
-	//this->test->AddComponent<ParticleSystem>(PolyMax);
-	//particle->GetBehavior<ParticleDefaultBehavior>()->start_color = Color(0, 0, 255, 255);
-	//particle->SetDuration(0.5f);
-	//particle->emission_rate = 100.0f;
+	this->PolyMax = 12000;
+	this->test = (new Object);
+	auto particle = 
+	this->test->AddComponent<ParticleSystem>(1000);
+	particle->GetBehavior<ParticleDefaultBehavior>()->start_color = Color(0, 0, 255, 255);
+	particle->SetDuration(0.5f);
+	particle->emission_rate = 100.0f;
 
-	this->field_bk = new FieldPolygon(PolyMax);
+	this->field_bk = new FieldPolygon(PolyMax/6);
 	this->polyCount = PolyMax;
 
-	this->title_poly = new TitlePoly;
+	this->title_poly = new TitlePoly(PolyMax*5/6);
 	/*this->title_poly->SetActive(false);*/
 
 	this->logo = new Object;
@@ -98,9 +86,6 @@ void SceneTest::Update(void)
 		if (!GetKeyboardPress(DIK_LSHIFT))
 		{
 			project = !project;
-
-
-
 			if (project)
 				this->camera->SetState(TitleCamera::State::Normal);
 			else
@@ -129,7 +114,7 @@ void SceneTest::Update(void)
 
 	}
 
-	this->logo->GetComponent<RectPolygon>()->SetOpacity(1.0f - this->title_poly->GetMixFactor());
+	//this->logo->GetComponent<RectPolygon>()->SetOpacity(1.0f - this->title_poly->GetMixFactor());
 
 
 	if (GetKeyboardPress(DIK_NUMPAD4))
@@ -166,7 +151,10 @@ void SceneTest::Update(void)
 
 
 	if (GetKeyboardTrigger(DIK_RETURN))
-		this->test->GetComponent<ParticleSystem>()->SetDuration(0.5f);
+	{
+		this->test->GetComponent<ParticleSystem>()->SetDuration(0.3f);
+	}
+		/*this->title_poly->SetBehavior2();*/
 
 	int line = 0;
 	//sprintf(GetDebugText(line++), "PolyCount: %d", this->polyCount);

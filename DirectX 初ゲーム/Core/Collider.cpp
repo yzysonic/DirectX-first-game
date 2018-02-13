@@ -6,13 +6,25 @@ Collider::Collider(void)
 {
 	this->Component::type = ComponentType::Collider;
 	this->isTrigger = false;
-	Physics::GetInstance()->addCollider(this);
+	//Physics::GetInstance()->addCollider(this);
 }
 
 
 Collider::~Collider(void)
 {
-	Physics::GetInstance()->removeCollider(this);
+	if(this->active)
+		Physics::GetInstance()->removeCollider(this);
+}
+
+bool Collider::SetActive(bool value)
+{
+	if (!Component::SetActive(value))
+		return false;
+
+	if (value)
+		Physics::GetInstance()->addCollider(this);
+	else
+		Physics::GetInstance()->removeCollider(this);
 }
 
 ColliderType Collider::GetType(void)

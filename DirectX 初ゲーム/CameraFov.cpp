@@ -21,7 +21,7 @@ void CameraFov::Update(void)
 	SetFov(Lerpf(camera->fov, target_fov, timer.Elapsed()*speed));
 	if (fabsf(camera->fov - target_fov) <= 0.00001f)
 	{
-		camera->fov = target_fov;
+		SetFov(target_fov);
 		SetActive(false);
 	}
 	timer++;

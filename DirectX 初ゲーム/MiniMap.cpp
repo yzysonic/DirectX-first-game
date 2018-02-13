@@ -165,8 +165,7 @@ void MiniMap::SetElement(void)
 	for (int i = 0; i < element_count; i++)
 	{
 		Element *element = new Element;
-		element->AddComponent<RectPolygon2D>("none", Layer::UI_00)
-			->SetTexture(this->render_target);
+		element->AddComponent<RectPolygon2D>(this->render_target, Layer::UI_00);
 		element->GetComponent<RectPolygon2D>()->setPattern(i);
 		if (i % 2 == 0)
 			element->GetComponent<RectPolygon2D>()->SetColor(Color(250, 250, 250, 255));

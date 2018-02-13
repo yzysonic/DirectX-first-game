@@ -14,6 +14,7 @@ public:
 	static void Uninit(void);
 	static Texture* Get(std::string name);
 	static void LoadTexture(std::string name, std::string file_name = "", int divX = 1, int divY = 1);
+	static void MakeTexture(std::string name, int width, int height);
 
 	static Texture* const none;
 
@@ -24,6 +25,8 @@ public:
 	Vector2 size;				// テクスチャサイズ
 	int divideX;				// テクスチャ内X分割数
 	int divideY;				// テクスチャ内Y分割数
+
+	~Texture(void);
 
 private:
 	static std::unordered_map<std::string, std::unique_ptr<Texture>> texture_list;

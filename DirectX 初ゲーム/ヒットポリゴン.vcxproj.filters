@@ -37,6 +37,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{455a4483-fab4-48fe-a4c8-30e3bc201637}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Drawable">
+      <UniqueIdentifier>{d508e9c6-c63a-42c9-a56d-3dd5fa6d10ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneGame.cpp">
@@ -220,6 +223,22 @@
     <ClCompile Include="TitleCamera.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Billboard.cpp">
+      <Filter>Core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlur.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromaticAberration.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromaticAberrationScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldBoundary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -420,10 +439,37 @@
     <ClInclude Include="TitleCamera.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Billboard.h">
+      <Filter>Core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffect.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlur.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="ChromaticAberration.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="ChromaticAberrationScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldBoundary.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\InstancingVS.hlsl">
+    <FxCompile Include="Shader\GaussianBlurPS.hlsl">
       <Filter>Shader</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shader\InstancingVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\ChromaticAberrationPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\MotionBlurPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

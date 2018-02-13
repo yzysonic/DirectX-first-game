@@ -3,7 +3,8 @@
 void CameraSmooth::Init(void)
 {
 	camera = dynamic_cast<Camera*>(object);
-	distance = (object->transform.position - target->position).length();
+	distance = 250.0f;
+	//distance = (object->transform.position - target->position).length();
 }
 
 void CameraSmooth::Update(void)

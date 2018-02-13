@@ -5,10 +5,11 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
-#include "PolygonElement.h"
+#include "FieldPolygon.h"
 #include "MiniMap.h"
 #include "LiveUI.h"
 #include "ScoreUI.h"
+#include "FieldBoundary.h"
 
 #define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
 #define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
@@ -35,10 +36,11 @@ private:
 	ScoreUI* scoreUI = nullptr;
 	NumberUI* timeUI[2] = {};
 	Camera* camera;
-	PolygonElement *polyList[GAME_POLY_MAX] = {};
+	FieldPolygon* field_poly;
 	Player* player = nullptr;
 	Enemy* enemy[ENEMY_MAX] = {};
 	MiniMap* minimap = nullptr;
+	FieldBoundary* boundary = nullptr;
 
 	int score;
 	float timer;
@@ -47,5 +49,6 @@ private:
 	void(SceneGame::*pUpdate)(void);
 	void update_fadeWait(void);
 	void update_main(void);
+	void update_death(void);
 	void swapEnemy(void);
 };

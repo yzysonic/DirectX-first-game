@@ -21,12 +21,6 @@ void Texture::Uninit(void)
 {
 	texture_list["none"].reset(nullptr);
 	texture_list.erase("none");
-
-	for (auto &tex : texture_list)
-	{
-		tex.second->pDXTex->Release();
-		tex.second.reset(nullptr);
-	}
 	texture_list.clear();
 }
 
@@ -95,4 +89,41 @@ void Texture::LoadTexture(std::string name, std::string file_name, int divX, int
 
 	texture_list[name].reset(texture);
 
+}
+
+void Texture::MakeTexture(std::string name, int width, int height)
+{
+	if (texture_list[name])
+		return;
+
+	Texture *texture = new Texture;
+
+	// テクスチャの作成
+	if (FAILED(Direct3D::GetDevice()->CreateTexture(
+		width, height,
+		1, 0,
+		D3DFMT_A8R8G8B8,
+		D3DPOOL_MANAGED,
+		&texture->pDXTex,
+		NULL
+	)))
+	{
+		delete texture;
+		return;
+	}
+
+	texture->name = name;
+	texture->file_name = "none";
+	texture->size.x = (float)width;
+	texture->size.y = (float)height;
+	texture->divideX = 1.0f;
+	texture->divideY = 1.0f;
+
+	texture_list[name].reset(texture);
+
+}
+
+Texture::~Texture(void)
+{
+	SafeRelease(this->pDXTex);
 }

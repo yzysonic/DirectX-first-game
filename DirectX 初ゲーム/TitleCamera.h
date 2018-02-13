@@ -14,6 +14,7 @@ public:
 	TitleCamera(void);
 	~TitleCamera(void);
 	void SetState(State state);
+	void SetPlay(bool active);
 
 private:
 	State state;

@@ -14,6 +14,7 @@ public:
 	static RenderSpace* Get(int index);
 	static RenderSpace* Get(std::string name);
 	static void Add(std::string name);
+	static void Add(std::string name, int order);
 	static void Delete(int index);
 	static void Delete(std::string name);
 	static int RenderSpaceCount(void);
@@ -21,7 +22,7 @@ public:
 private:
 	static std::vector<smart_ptr<RenderSpace>> render_space_list;
 	static std::unordered_map<std::string, int> name_map;
-
+	static std::vector<int> draw_order_map;
 
 public:
 	RenderSpace(std::string name);

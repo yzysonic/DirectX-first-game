@@ -7,6 +7,7 @@ HINSTANCE Window::s_hInstance = NULL;
 HWND Window::s_hWnd = NULL;
 MSG  Window::s_Msg;
 bool Window::s_bWindowMode = true;
+bool Window::s_bBigMode = true;
 char* Window::s_ClassName = "MainWindow";
 
 //=============================================================================
@@ -15,8 +16,19 @@ char* Window::s_ClassName = "MainWindow";
 HRESULT Window::Init()
 {
 	s_hInstance = GetModuleHandle(NULL);
-	int width = SystemParameters::ResolutionX;
-	int height = SystemParameters::ResolutionY;
+	int width;
+	int height;
+
+	if (s_bWindowMode)
+	{
+		width = 1600;
+		height = 900;
+	}
+	else
+	{
+		width = SystemParameters::ResolutionX;
+		height = SystemParameters::ResolutionY;
+	}
 
 	// ウィンドウクラスを登録する
 	WNDCLASSEX	wcex = {};
@@ -99,6 +111,15 @@ LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		case VK_F9:			// [F9]キーが押された
 			SetWindowMode(!s_bWindowMode);
 			break;
+		case VK_F8:			// [F9]キーが押された
+			if (s_bWindowMode)
+				SetWindowSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
+			else
+				SetWindowSize(1600, 900);
+
+			s_bWindowMode = !s_bWindowMode;
+			break;
+
 		}
 
 	default:
@@ -152,11 +173,7 @@ void Window::SetWindowMode(bool windowMode)
 	if (windowMode)
 	{
 		//SetWindowLong(s_hWnd, GWL_STYLE, WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU);
-		SetWindowPos(s_hWnd, NULL,
-			(GetSystemMetrics(SM_CXSCREEN) - SystemParameters::ResolutionX) / 2,
-			(GetSystemMetrics(SM_CYSCREEN) - SystemParameters::ResolutionY) / 2,
-			0, 0,
-			SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+		SetWindowSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
 	}
 	//else
 	//{
@@ -167,4 +184,14 @@ void Window::SetWindowMode(bool windowMode)
 	//ShowWindow(s_hWnd, SW_SHOW);
 
 	s_bWindowMode = windowMode;
+}
+
+void Window::SetWindowSize(int x, int y)
+{
+	SetWindowPos(s_hWnd, NULL,
+		(GetSystemMetrics(SM_CXSCREEN) - x) / 2,
+		(GetSystemMetrics(SM_CYSCREEN) - y) / 2,
+		x + GetSystemMetrics(SM_CXDLGFRAME) * 2,
+		y + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
+		SWP_NOZORDER | SWP_SHOWWINDOW);
 }

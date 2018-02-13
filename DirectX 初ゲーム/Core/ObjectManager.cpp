@@ -26,27 +26,7 @@ void ObjectManager::Destroy(void)
 
 void ObjectManager::Update(void)
 {
-
-	//for (UINT i = 0; i < m_pInstance->objectList.size(); i++)
-	//{
-	//	auto &object = m_pInstance->objectList[i];
-	//	if (object->isActive)
-	//	{
-	//		// オブジェクトの更新処理
-	//		object->Update();
-
-	//		// オブジェクト所属のスクリプトの更新処理
-	//		for (UINT j = 0; j < object->scripts.size(); j++)
-	//		{
-	//			auto &script = object->scripts[j];
-	//			if (script->GetActive())
-	//				script->Update();
-	//		}
-	//	}
-	//}
-
 	KillObject();
-
 }
 
 void ObjectManager::KillObject(void)

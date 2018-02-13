@@ -25,12 +25,17 @@ RenderTarget::RenderTarget(int width, int height, bool create)
 
 }
 
+RenderTarget::RenderTarget(bool create) : RenderTarget(SystemParameters::ResolutionX, SystemParameters::ResolutionY, create)
+{
+}
+
 RenderTarget::~RenderTarget(void)
 {
 	if (this->index >= 0)
 	{
-		render_target_list.erase(render_target_list.begin() + this->index);
-		render_target_list.shrink_to_fit();
+		render_target_list[this->index] = render_target_list.back();
+		render_target_list[this->index]->index = this->index;
+		render_target_list.pop_back();
 	}
 	SafeRelease(pDXTex);
 	SafeRelease(pSurface);

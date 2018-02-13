@@ -3,7 +3,9 @@
 #include "Lerp.h"
 
 
-RectPolygon2D::RectPolygon2D(std::string texture_name, Layer layer, std::string render_space_name) : Drawable(layer, render_space_name)
+RectPolygon2D::RectPolygon2D(std::string texture_name, Layer layer, std::string render_space_name) : RectPolygon2D(Texture::Get(texture_name), layer, render_space_name){}
+
+RectPolygon2D::RectPolygon2D(Texture * texture, Layer layer, std::string render_space_name) : Drawable(layer, render_space_name)
 {
 	this->Component::type = ComponentType::RectPolygon2D;
 	this->rendType = RendererType::UI;
@@ -15,7 +17,7 @@ RectPolygon2D::RectPolygon2D(std::string texture_name, Layer layer, std::string 
 	this->vertex[2].rhw =
 	this->vertex[3].rhw = 1.0f;
 
-	SetTexture(texture_name);
+	SetTexture(texture);
 }
 
 void RectPolygon2D::Draw(void)
@@ -51,9 +53,9 @@ void RectPolygon2D::setSize(float x, float y)
 
 void RectPolygon2D::SetColor(Color color)
 {
-	this->vertex[0].diffuse =
-	this->vertex[1].diffuse =
-	this->vertex[2].diffuse =
+	this->vertex[0].diffuse = color;
+	this->vertex[1].diffuse = color;
+	this->vertex[2].diffuse = color;
 	this->vertex[3].diffuse = color;
 	this->color = color;
 }
@@ -79,6 +81,9 @@ void RectPolygon2D::SetTexture(std::string texture_name)
 
 void RectPolygon2D::SetTexture(Texture * texture)
 {
+	if (texture == nullptr)
+		return;
+
 	this->pTexture = texture;
 	this->size = this->pTexture->size;
 
@@ -129,28 +134,32 @@ void RectPolygon2D::transformVertex(void)
 	{
 
 		// カメラ変換
-		this->vertex[0].pos -= camera->transform.position;
-		this->vertex[1].pos -= camera->transform.position;
-		this->vertex[2].pos -= camera->transform.position;
-		this->vertex[3].pos -= camera->transform.position;
+		this->vertex[0].pos.x -= camera->transform.position.x;
+		this->vertex[0].pos.y -= camera->transform.position.y;
+		this->vertex[1].pos.x -= camera->transform.position.x;
+		this->vertex[1].pos.y -= camera->transform.position.y;
+		this->vertex[2].pos.x -= camera->transform.position.x;
+		this->vertex[2].pos.y -= camera->transform.position.y;
+		this->vertex[3].pos.x -= camera->transform.position.x;
+		this->vertex[3].pos.y -= camera->transform.position.y;
 
 		// 投影変換
-		float fov = Lerpf(this->vertex[0].pos.z, 1.0f, camera->fov);
-		this->vertex[0].pos.x /= this->vertex[0].pos.z / fov;
-		this->vertex[0].pos.y /= this->vertex[0].pos.z / fov;
-		this->vertex[0].pos.z = (this->vertex[0].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
+		//float fov = Lerpf(this->vertex[0].pos.z, 1.0f, camera->fov);
+		//this->vertex[0].pos.x /= this->vertex[0].pos.z / fov;
+		//this->vertex[0].pos.y /= this->vertex[0].pos.z / fov;
+		//this->vertex[0].pos.z = (this->vertex[0].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
 
-		this->vertex[1].pos.x /= this->vertex[1].pos.z / fov;
-		this->vertex[1].pos.y /= this->vertex[1].pos.z / fov;
-		this->vertex[1].pos.z = (this->vertex[1].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
+		//this->vertex[1].pos.x /= this->vertex[1].pos.z / fov;
+		//this->vertex[1].pos.y /= this->vertex[1].pos.z / fov;
+		//this->vertex[1].pos.z = (this->vertex[1].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
 
-		this->vertex[2].pos.x /= this->vertex[2].pos.z / fov;
-		this->vertex[2].pos.y /= this->vertex[2].pos.z / fov;
-		this->vertex[2].pos.z = (this->vertex[2].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
+		//this->vertex[2].pos.x /= this->vertex[2].pos.z / fov;
+		//this->vertex[2].pos.y /= this->vertex[2].pos.z / fov;
+		//this->vertex[2].pos.z = (this->vertex[2].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
 
-		this->vertex[3].pos.x /= this->vertex[3].pos.z / fov;
-		this->vertex[3].pos.y /= this->vertex[3].pos.z / fov;
-		this->vertex[3].pos.z = (this->vertex[3].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
+		//this->vertex[3].pos.x /= this->vertex[3].pos.z / fov;
+		//this->vertex[3].pos.y /= this->vertex[3].pos.z / fov;
+		//this->vertex[3].pos.z = (this->vertex[3].pos.z - camera->near_z) / (camera->far_z - camera->near_z);
 
 	}
 
@@ -174,52 +183,32 @@ RectPolygon::RectPolygon(std::string texture_name, Layer layer, std::string rend
 	this->layer = layer;
 	this->rendType = RendererType::Default;
 
-	// オブジェクトの頂点バッファを生成
-	Direct3D::GetDevice()->CreateVertexBuffer(sizeof(Vertex3D) * RECT_NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
-		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
-		FVF_VERTEX_3D,				// 使用する頂点フォーマット
-		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
-		&this->pVtxBuff,			// 頂点バッファインターフェースへのポインタ
-		NULL);
-
-	Vertex3D *pVtx;
-
-	this->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	// 頂点座標の設定(ローカル座標)
-	pVtx[0].pos = Vector3(-0.5f*size.x, 0.5f*size.y, 0.0f);
-	pVtx[1].pos = Vector3(0.5f*size.x, 0.5f*size.y, 0.0f);
-	pVtx[2].pos = Vector3(-0.5f*size.x, -0.5f*size.y, 0.0f);
-	pVtx[3].pos = Vector3(0.5f*size.x, -0.5f*size.y, 0.0f);
-
-	// 法線ベクトルの設定
-	pVtx[0].nor =
-	pVtx[1].nor =
-	pVtx[2].nor =
-	pVtx[3].nor = Vector3(0.0f, 0.0f, -1.0f);
-
-	// 反射光の設定
-	pVtx[0].diffuse = 
-	pVtx[1].diffuse = 
-	pVtx[2].diffuse = 
-	pVtx[3].diffuse = this->color;
-
-	// テクスチャ座標の設定
-	pVtx[0].uv = Vector2(0.0f, 0.0f);
-	pVtx[1].uv = Vector2(1.0f, 0.0f);
-	pVtx[2].uv = Vector2(0.0f, 1.0f);
-	pVtx[3].uv = Vector2(1.0f, 1.0f);
-
-	this->pVtxBuff->Unlock();
-
+	InitBuffer();
 	SetTexture(Texture::Get(texture_name));
 
+}
+
+RectPolygon::~RectPolygon(void)
+{
+	SafeRelease(this->pVtxBuff);
+}
+
+HRESULT RectPolygon::OnLostDevice(void)
+{
+	SafeRelease(this->pVtxBuff);
+	return S_OK;
+}
+
+HRESULT RectPolygon::OnResetDevice(void)
+{
+	return InitBuffer();
 }
 
 void RectPolygon::Draw(void)
 {
 	D3DXMATRIX mtxWorld, mtxScl, mtxRot, mtxTranslate, mtxView;
-	LPDIRECT3DDEVICE9 pDevice = Direct3D::GetDevice();
+	auto pDevice = Direct3D::GetDevice();
+	auto camera = Renderer::GetInstance()->getCamera();
 
 	// ワールドマトリクスの初期化
 	D3DXMatrixIdentity(&mtxWorld);
@@ -237,9 +226,9 @@ void RectPolygon::Draw(void)
 	// ワールドマトリクスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 	// ビューマトリクスの設定
-	pDevice->SetTransform(D3DTS_VIEW, &Renderer::GetInstance()->getCamera()->getViewMatrix(false));
+	pDevice->SetTransform(D3DTS_VIEW, &camera->getViewMatrix(false));
 	// プロジェクションマトリクスの設定
-	pDevice->SetTransform(D3DTS_PROJECTION, &Renderer::GetInstance()->getCamera()->getProjectionMatrix(false));
+	pDevice->SetTransform(D3DTS_PROJECTION, &camera->getProjectionMatrix(false));
 
 	// 頂点バッファをデバイスのデータストリームにバインド
 	pDevice->SetStreamSource(0, this->pVtxBuff, 0, sizeof(Vertex3D));
@@ -310,4 +299,55 @@ void RectPolygon::SetTexture(Texture * texture)
 	}
 
 	this->pTexture = texture;
+}
+
+HRESULT RectPolygon::InitBuffer(void)
+{
+	HRESULT hr;
+
+	// オブジェクトの頂点バッファを生成
+	hr = Direct3D::GetDevice()->CreateVertexBuffer(sizeof(Vertex3D) * RECT_NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		D3DUSAGE_DYNAMIC,			// 頂点バッファの使用法　
+		FVF_VERTEX_3D,				// 使用する頂点フォーマット
+		D3DPOOL_DEFAULT,			// リソースのバッファを保持するメモリクラスを指定
+		&this->pVtxBuff,			// 頂点バッファインターフェースへのポインタ
+		NULL);
+
+	if (FAILED(hr))
+		return hr;
+
+	Vertex3D *pVtx;
+
+	hr = this->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	if (FAILED(hr))
+		return hr;
+
+	// 頂点座標の設定(ローカル座標)
+	pVtx[0].pos = Vector3(-0.5f*size.x, 0.5f*size.y, 0.0f);
+	pVtx[1].pos = Vector3(0.5f*size.x, 0.5f*size.y, 0.0f);
+	pVtx[2].pos = Vector3(-0.5f*size.x, -0.5f*size.y, 0.0f);
+	pVtx[3].pos = Vector3(0.5f*size.x, -0.5f*size.y, 0.0f);
+
+	// 法線ベクトルの設定
+	pVtx[0].nor =
+		pVtx[1].nor =
+		pVtx[2].nor =
+		pVtx[3].nor = Vector3(0.0f, 0.0f, -1.0f);
+
+	// 反射光の設定
+	pVtx[0].diffuse =
+		pVtx[1].diffuse =
+		pVtx[2].diffuse =
+		pVtx[3].diffuse = this->color;
+
+	// テクスチャ座標の設定
+	pVtx[0].uv = Vector2(0.0f, 0.0f);
+	pVtx[1].uv = Vector2(1.0f, 0.0f);
+	pVtx[2].uv = Vector2(0.0f, 1.0f);
+	pVtx[3].uv = Vector2(1.0f, 1.0f);
+
+	this->pVtxBuff->Unlock();
+
+	return hr;
 }

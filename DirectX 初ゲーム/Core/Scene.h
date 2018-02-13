@@ -26,11 +26,13 @@ public:
 	template<class T>
 	T* AddObject(T* object);
 	void RemoveObject(Object* object);
-
 	void UpdateObjects(void);
+	void PauseObjects(void);
+	void ResumeObjects(void);
 
 private:
 	std::vector<Object*> obj_list;
+	std::vector<bool> active_shot;
 };
 
 template<class T>

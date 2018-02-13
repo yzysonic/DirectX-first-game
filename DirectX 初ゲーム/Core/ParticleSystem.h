@@ -21,6 +21,7 @@ struct ParticleElement
 	Color color;
 	FrameTimer timer;
 	Vector3 dir;
+	float random_seed;
 	bool active = false;
 };
 
@@ -58,7 +59,7 @@ private:
 class ParticleSystem : public Drawable, public ILostAndReset
 {
 public:
-	ParticleSystem(UINT particle_max = 100, IParticleBehavior* behavior = &default_behavior);
+	ParticleSystem(UINT particle_max = 100, IParticleBehavior* behavior = nullptr);
 	~ParticleSystem(void);
 
 	void Draw(void) override;
@@ -66,7 +67,8 @@ public:
 	HRESULT OnResetDevice(void) override;
 
 	void SetMaxNum(UINT value);
-	void SetBehavior(IParticleBehavior* behavior);
+	UINT GetMaxNum(void);
+	void SetBehavior(IParticleBehavior* behavior = nullptr);
 	void SetDuration(float value);
 	UINT GetParticleNum(void);
 	template<class T>
@@ -76,9 +78,6 @@ public:
 	bool loop;
 
 private:
-	static ParticleDefaultBehavior default_behavior;
-
-private:
 	IDirect3DVertexDeclaration9 *decl;
 	LPDIRECT3DINDEXBUFFER9 pIndexBuff;
 	LPDIRECT3DVERTEXBUFFER9 pGeometryBuff;
@@ -86,6 +85,7 @@ private:
 
 	ParticleElement* elements;
 	IParticleBehavior* behavior;
+	ParticleDefaultBehavior* default_behavior;
 	FrameTimer timer_duration;
 	FrameTimer timer_emission;
 	UINT particle_max;

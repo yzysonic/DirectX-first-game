@@ -39,7 +39,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		return 1;
 
 	// マウスを隠す
-	//ShowCursor(false);
+	ShowCursor(false);
 
 #ifndef _DEBUG
 	Window::SetWindowMode(false);
@@ -51,7 +51,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifndef _DEBUG
 	GameManager::GetInstance()->SetScene(new SceneTitle);
 #else
-	GameManager::GetInstance()->SetScene(new SceneTest);
+	GameManager::GetInstance()->SetScene(new SceneTitle);
 #endif
 
 	// ゲームループ

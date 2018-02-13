@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "ObjectManager.h"
 
 Scene::~Scene(void)
 {
@@ -10,8 +9,6 @@ Scene::~Scene(void)
 	}
 
 	this->obj_list.clear();
-
-	ObjectManager::KillObject();
 }
 
 void Scene::RemoveObject(Object * object)
@@ -42,4 +39,31 @@ void Scene::UpdateObjects(void)
 		}
 	}
 
+}
+
+void Scene::PauseObjects(void)
+{
+	if (this->active_shot.size() > 0)
+		return;
+
+	for (auto &obj : this->obj_list)
+	{
+		this->active_shot.emplace_back(obj->GetActive());
+		obj->SetActive(false);
+	}
+}
+
+void Scene::ResumeObjects(void)
+{
+	if (this->active_shot.size() == 0)
+		return;
+
+	int i = 0;
+	for (auto &obj : this->obj_list)
+	{
+		this->active_shot.emplace_back(obj->GetActive());
+		obj->SetActive(this->active_shot[i++]);
+	}
+
+	this->active_shot.clear();
 }

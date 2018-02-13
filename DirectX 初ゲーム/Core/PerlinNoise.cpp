@@ -7,12 +7,12 @@ float Noise(int x);
 float SmoothedNoise(int x);
 float InterpolatedNoise(float x);
 
-float PerlinNoise(float x)
+float PerlinNoise(float x, int octavers_num)
 {
 
 	float total = 0.0f;
 
-	for (int i = 0; i < kOctaversNum; i++)
+	for (int i = 0; i < octavers_num; i++)
 	{
 		float frequency = powf(2.0f,(float)i);
 		float amplitude = powf(kPersistence,(float)i);

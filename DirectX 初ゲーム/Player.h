@@ -7,18 +7,27 @@
 class Player : public Object
 {
 public:
+	enum State
+	{
+		Normal,
+		Death,
+		Vanish
+	};
+
 	int hp;
+	State state;
 	Event injury;
 	Player(void);
 	~Player(void);
 	void Update(void) override;
 	void OnCollision(Object* other) override;
+	void SetDeath(void);
 
 private:
 	Vector3 control;
 	float speed;
 	float boost;
-	float timer;
+	FrameTimer timer;
 	float timer_flash;
 	float timer_muteki;
 

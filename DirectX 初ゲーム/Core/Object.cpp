@@ -37,11 +37,11 @@ Object::~Object()
 {
 
 	//this->SetActive(false);
-	//if (this->components.size() > 0)
-	//{
-	//	for (auto &component : this->components)
-	//		component.second.reset();
-	//}
+	if (this->components.size() > 0)
+	{
+		for (auto &component : this->components)
+			component.second.reset();
+	}
 
 	if (this->scene)
 		this->scene->RemoveObject(this);
@@ -60,10 +60,11 @@ void Object::SetActive(bool value)
 		int i = 0;
 		for (auto &component : this->components)
 			component.second->SetActive(this->component_actives[i++]);
-		this->component_actives.clear();
 	}
 	else
 	{
+		this->component_actives.clear();
+
 		for (auto &component : this->components)
 		{
 			this->component_actives.push_back(component.second->active);
