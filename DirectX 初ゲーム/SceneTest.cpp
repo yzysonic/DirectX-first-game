@@ -16,7 +16,6 @@ void SceneTest::Init(void)
 {
 
 	this->player = new Player;
-	this->player->GetComponent<RectPolygon>()->SetOpacity(0.0f);
 	//this->player->SetActive(false);
 	//this->enemy = new Enemy;
 	//enemy->target = &this->player->transform;
@@ -155,6 +154,9 @@ void SceneTest::Update(void)
 		this->test->GetComponent<ParticleSystem>()->SetDuration(0.3f);
 	}
 		/*this->title_poly->SetBehavior2();*/
+
+	if (GetKeyboardTrigger(DIK_SPACE))
+		this->player->SetDeath();
 
 	int line = 0;
 	//sprintf(GetDebugText(line++), "PolyCount: %d", this->polyCount);

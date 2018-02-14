@@ -17,28 +17,40 @@ void ChromaticAberrationScript::Init(void)
 	}
 
 	this->ca->strength = 0.0f;
-	this->timer.Reset(this->interval);
+	this->state = 0;
+	this->timer.Reset(this->interval*0.3f);
 }
 
 void ChromaticAberrationScript::Update(void)
 {
-
-	if (this->timer.TimeUp())
+	switch (this->state)
 	{
-		this->ca->strength = 0.0f;
-		SetActive(false);
-		return;
+	case 0:
+		if (this->timer.TimeUp())
+		{
+			this->timer.Reset(this->interval*0.7f);
+			this->state = 1;
+		}
+		else
+			this->ca->strength = Lerpf(this->ca->strength, 1.0f, 0.1f);
+		break;
+		
+	case 1:
+		if (this->timer.TimeUp())
+		{
+			this->ca->strength = 0.0f;
+			SetActive(false);
+		}
+		else
+			this->ca->strength = Lerpf(1.0f, 0.0f, this->timer.Progress());
+		break;
 	}
 
-	if (this->timer.Progress() < 0.8f)
-		this->ca->strength = Lerpf(this->ca->strength, 1.0f, 0.1f);
-	else
-		this->ca->strength = Lerpf(this->ca->strength, 0.0f, 0.2f);
-
-	this->ca->time = this->timer.Elapsed();
-
-	if(!this->pause)
+	if (!this->pause)
+	{
+		this->ca->time += Time::DeltaTime();
 		this->timer++;
+	}
 }
 
 void ChromaticAberrationScript::Uninit(void)

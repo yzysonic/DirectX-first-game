@@ -328,11 +328,11 @@ void ParticleDefaultBehavior::Update(ParticleElement & element)
 	element.color.a = (UCHAR)(255 * Lerpf(this->start_opacity, this->end_opacity, progress));
 	element.transform.position += element.dir * this->start_speed /** powf(this->damping, element.timer.Elapsed())*/;
 
-	element.transform.position.x += 5.0f*PerlinNoise(element.transform.position.z*0.05f + element.random_seed, 2);
-	element.transform.position.y += 5.0f*PerlinNoise(element.transform.position.x*0.05f + element.random_seed, 2);
-	element.transform.position.z += 5.0f*PerlinNoise(element.transform.position.y*0.05f + element.random_seed, 2);
+	element.transform.position.x += 5.0f*PerlinNoise(element.transform.position.z*0.05f + element.random_seed, 1);
+	element.transform.position.y += 5.0f*PerlinNoise(element.transform.position.x*0.05f + element.random_seed, 1);
+	element.transform.position.z += 5.0f*PerlinNoise(element.transform.position.y*0.05f + element.random_seed, 1);
 
-	element.timer.Step();
+	element.timer++;
 }
 
 void ParticleDefaultBehavior::SetTimingFunc(std::string attr, std::function<float(float, float, float)> func)

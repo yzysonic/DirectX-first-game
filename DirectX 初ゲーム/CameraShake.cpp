@@ -45,3 +45,9 @@ void CameraShake::Update(void)
 	}
 
 }
+
+void CameraShake::Shake(float strength)
+{
+	this->strength = strength;
+	SetActive(true);
+}

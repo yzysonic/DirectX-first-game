@@ -13,6 +13,7 @@ public:
 	CameraShake(void);
 	void Init(void) override;
 	void Update(void) override;
+	void Shake(float strength = 20.0f);
 
 private:
 	Camera* camera;

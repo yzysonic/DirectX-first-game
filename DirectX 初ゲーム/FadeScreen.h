@@ -32,7 +32,6 @@ private:
 
 	enum AnimeState
 	{
-		Set,
 		Run,
 		Stop,
 	};

@@ -80,13 +80,15 @@ void Player::SetDeath(void)
 	auto particle =
 	this->AddComponent<ParticleSystem>(3000);
 	particle->SetDuration(0.3f);
-	particle->emission_rate = 10000.0f;
+	particle->emission_rate = 30000.0f;
 
 	auto behavior = particle->GetBehavior<ParticleDefaultBehavior>();
-	behavior->start_color = Color(255, 250, 250, 255);
-	behavior->start_size = 6.0f;
-	behavior->end_size = 1.0f;
+	behavior->start_color = Color(207, 240, 243, 255);
+	behavior->start_size = 5.0f;
 	behavior->start_speed = 10.0f;
+	behavior->end_size = 0.0f;
+	//behavior->end_color = Color(255, 255, 255, 255);
+	behavior->end_opacity = 0.5f;
 
 	this->timer.Reset(3.0f);
 

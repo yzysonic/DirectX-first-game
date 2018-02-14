@@ -64,7 +64,7 @@ void SceneGame::Init(void)
 	this->player->injury += [&]
 	{
 		// 揺れエフェクト
-		this->camera->GetComponent<CameraShake>()->SetActive(true);
+		this->camera->GetComponent<CameraShake>()->Shake();
 		this->minimap->Shake();
 
 		// 残機表示の更新
@@ -76,9 +76,8 @@ void SceneGame::Init(void)
 			this->liveUI->SetLowLive(true);
 			PlayBGM(SE_LOW_HP);
 			SetVolume(SE_LOW_HP, -1800);
-			GameManager::Var<PostEffect*>("post_effect")->SetCA(-1.0f);
-		} else if(this->player->hp != 0)
-			GameManager::Var<PostEffect*>("post_effect")->SetCA(1.5f);
+			GameManager::Var<PostEffect*>("post_effect")->SetCA(5.0f);
+		}
 	};
 
 	// ゲームで使う変数
@@ -258,6 +257,8 @@ void SceneGame::update_main(void)
 	if (this->player->hp == 0)
 	{
 		this->player->SetDeath();
+		this->liveUI->SetActive(false);
+		this->camera->GetComponent<CameraShake>()->Shake(100);
 		GameManager::Var<PostEffect*>("post_effect")->SetCA(0.0f);
 		SceneGame::pUpdate = &SceneGame::update_death;
 		return;

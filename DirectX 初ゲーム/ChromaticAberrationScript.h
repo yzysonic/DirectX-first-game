@@ -16,4 +16,5 @@ public:
 private:
 	FrameTimer timer;
 	ChromaticAberration* ca;
+	int state;
 };

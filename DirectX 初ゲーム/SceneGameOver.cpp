@@ -4,9 +4,11 @@
 
 void SceneGameOver::Init(void)
 {
-	this->bk = new Object;
-	this->bk->AddComponent<RectPolygon2D>("game_over", Layer::BG_00);
+	this->text = new Object;
+	this->text->AddComponent<RectPolygon2D>("game_over");
 	this->timer = 0;
+
+	Renderer::GetInstance()->getCamera("default")->setBackColor(0, 0, 0, 255);
 
 	// BGM‚ðÄ¶
 	SetVolume(BGM_GAMEOVER, -1800);
@@ -27,7 +29,7 @@ void SceneGameOver::Update(void)
 void SceneGameOver::Uninit(void)
 {
 	StopSound(BGM_GAMEOVER);
-	delete this->bk;
+	delete this->text;
 }
 
 void SceneGameOver::update_fadeWait(void)

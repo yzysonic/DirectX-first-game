@@ -17,10 +17,6 @@ void FadeScreen::Update()
 
 	switch (state)
 	{
-	case Set:
-		this->GetComponent<RectPolygon2D>()->SetOpacity(targetOpacity);
-		state = Stop;
-		break;
 	case Run:
 		if (timer < fadeTime + 0.1f)
 		{
@@ -67,13 +63,18 @@ void FadeScreen::Fade(FadeType type, Color color, float interval)
 	m_pInstance->fadeTime = interval;
 
 	if (m_pInstance->fadeTime > 0)
+	{
+		m_pInstance->timer = 0;
+		m_pInstance->oldOpacity = m_pInstance->GetComponent<RectPolygon2D>()->GetOpacity();
+		m_pInstance->SetActive(true);
 		m_pInstance->state = Run;
+	}
 	else
-		m_pInstance->state = Set;
-
-	m_pInstance->timer = 0;
-	m_pInstance->oldOpacity = m_pInstance->GetComponent<RectPolygon2D>()->GetOpacity();
-	m_pInstance->SetActive(true);
+	{
+		m_pInstance->GetComponent<RectPolygon2D>()->SetOpacity(m_pInstance->targetOpacity);
+		m_pInstance->state = Stop;
+	}
+		
 }
 
 void FadeScreen::FadeIn(Color color, float interval)
