@@ -74,6 +74,7 @@ BOOL IsMouseRightPressed(void);     // 右クリックした状態
 BOOL IsMouseRightTriggered(void);   // 右クリックした瞬間
 BOOL IsMouseCenterPressed(void);    // 中クリックした状態
 BOOL IsMouseCenterTriggered(void);  // 中クリックした瞬間
+BOOL IsMouseMoved(void);
 long GetMouseMoveX(void);           // マウスがX方向に動いた相対値
 long GetMouseMoveY(void);           // マウスがY方向に動いた相対値
 long GetMouseMoveZ(void);           // マウスホイールが動いた相対値

@@ -140,7 +140,7 @@ void Player::move(void)
 		control = control.normalized();
 
 	// ƒpƒbƒh“ü—Í
-	control = Vector3(GetPadLX(), -GetPadLY(), 0);
+	control += Vector3(GetPadLX(), -GetPadLY(), 0);
 
 	// ˆÚ“®ˆ—
 	if(control.sqrLength() > 0.0f)

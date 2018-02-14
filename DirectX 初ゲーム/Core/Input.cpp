@@ -395,6 +395,13 @@ BOOL IsMouseCenterTriggered(void)
 {
 	return (BOOL)(mouseTrigger.rgbButtons[2] & 0x80);
 }
+BOOL IsMouseMoved(void)
+{
+	if (mouseState.lX >= 0.01f || mouseState.lY >= 0.01f)
+		return true;
+	else
+		return false;
+}
 //------------------
 long GetMouseMoveX(void)
 {

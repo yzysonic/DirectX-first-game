@@ -4,10 +4,6 @@
 CameraPlay::CameraPlay(void)
 {
 	active_on_load = false;
-	cursor = new Object;
-	cursor->transform.scale *= 0.15f;
-	cursor->AddComponent<RectPolygon2D>("cursor", Layer::UI_02);
-	cursor->SetActive(false);
 }
 
 void CameraPlay::Init(void)
@@ -21,7 +17,6 @@ void CameraPlay::Init(void)
 	dis = camera->transform.position.length();
 	target_dis = dis;
 	last_transform = camera->transform;
-	cursor->SetActive(true);
 }
 
 void CameraPlay::Update(void)
@@ -34,18 +29,10 @@ void CameraPlay::Update(void)
 	camera->transform.position.z = dis * sinf(theta) * sinf(phi);
 	camera->transform.position += camera->at;
 
-	// カーソルの更新処理
-	if (IsMouseCenterPressed() || IsMouseLeftPressed())
-		cursor->transform.scale = Vector3::one*0.3f;
-	else
-		cursor->transform.scale = Vector3::one*0.15f;
-	cursor->transform.position = GetMousePos();
-
 }
 
 void CameraPlay::Uninit(void)
 {
-	cursor->SetActive(false);
 	camera->transform = last_transform;
 }
 

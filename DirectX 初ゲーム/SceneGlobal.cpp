@@ -57,6 +57,9 @@ void SceneGlobal::Init(void)
 	this->post_effect->SetActive(false);
 	GameManager::Var<PostEffect*>("post_effect") = this->post_effect;
 
+	// ƒJ[ƒ\ƒ‹‰Šú‰»
+	this->cursor = new MouseCursor;
+
 }
 
 void SceneGlobal::Update(void)

@@ -200,6 +200,7 @@
     <ClCompile Include="LiveUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="NumberUI.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PolygonElement.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="LiveUI.h" />
     <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="MouseCursor.h" />
     <ClInclude Include="NumberUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />

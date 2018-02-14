@@ -2,6 +2,7 @@
 #include "Core/Scene.h"
 #include "Core\Core.h"
 #include "PostEffect.h"
+#include "MouseCursor.h"
 
 class SceneGlobal : public Scene
 {
@@ -19,4 +20,5 @@ private:
 	//RenderTarget* render_target;
 
 	PostEffect* post_effect;
+	MouseCursor* cursor;
 };

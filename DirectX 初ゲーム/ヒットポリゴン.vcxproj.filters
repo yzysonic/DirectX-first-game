@@ -239,6 +239,9 @@
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="FieldBoundary.cpp" />
+    <ClCompile Include="MouseCursor.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGame.h">
@@ -455,6 +458,9 @@
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="FieldBoundary.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCursor.h">
       <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
