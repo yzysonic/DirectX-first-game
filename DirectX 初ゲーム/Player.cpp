@@ -136,17 +136,15 @@ void Player::move(void)
 	if (GetKeyboardPress(DIK_D))
 		control += Vector3(1.0f, 0.0f, 0.0f);
 
+	if (GetKeyboardPress(DIK_W) || GetKeyboardPress(DIK_A) || GetKeyboardPress(DIK_S) || GetKeyboardPress(DIK_D))
+		control = control.normalized();
+
 	// ƒpƒbƒh“ü—Í
-	control += Vector3(GetPadLX(), -GetPadLY(), 0);
-
-
-	// ‰Á‘¬“ü—Í
-	//if (GetKeyboardPress(DIK_LSHIFT))
-	//	boost = 2.0f;
+	control = Vector3(GetPadLX(), -GetPadLY(), 0);
 
 	// ˆÚ“®ˆ—
 	if(control.sqrLength() > 0.0f)
-		this->transform.position += control.normalized() * this->speed * this->boost * Time::DeltaTime();
+		this->transform.position += control * this->speed * this->boost * Time::DeltaTime();
 
 }
 

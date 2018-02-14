@@ -38,11 +38,13 @@ void SceneGlobal::Init(void)
 	Texture::LoadTexture("guide");
 	Texture::LoadTexture("player_mark");
 	Texture::LoadTexture("enemy_mark");
-	Texture::LoadTexture("pause");
 	Texture::LoadTexture("title_mask");
 	Texture::LoadTexture("cursor");
 	Texture::LoadTexture("field_boundary");
 	Texture::LoadTexture("timesup");
+	Texture::LoadTexture("pause_title");
+	Texture::LoadTexture("pause_item0");
+	Texture::LoadTexture("pause_item1");
 
 	// シェーダーの初期化
 	VertexShader::Load("InstancingVS.hlsl");

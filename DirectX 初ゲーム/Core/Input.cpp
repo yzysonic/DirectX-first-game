@@ -593,6 +593,11 @@ BOOL IsButtonTriggered(int padNo,DWORD button)
 	return (button & padTrigger[padNo]);
 }
 
+BOOL IsAnyButtonTriggered(int padNo)
+{
+	return padState[padNo];
+}
+
 float GetPadLX(void)
 {
 	return (float)padLX / RANGE_MAX;

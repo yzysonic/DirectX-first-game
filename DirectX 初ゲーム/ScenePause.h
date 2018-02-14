@@ -3,14 +3,24 @@
 
 class PauseMenu : public Object
 {
+private:
+	static constexpr float ItemOffset = 10.0f;
+	static constexpr float ItemMargin = 85.0f;
+
 public:
-	void OnDraw(void) override;
-	void AfterDraw(void) override;
+	Object* title;
+	Object* cursor;
+	Object* item0;
+	Object* item1;
 
 	PauseMenu(void);
+	void Update(void) override;
+	int GetCursor(void);
 
 private:
-	PixelShader* shader;
+	int cursor_index;
+
+	void SetCursor(int index);
 };
 
 class ScenePause : public Scene

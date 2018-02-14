@@ -82,6 +82,7 @@ Vector3 GetMousePos(void);          // マウスの座標
 //---------------------------- game pad
 BOOL IsButtonPressed(int padNo, DWORD button);
 BOOL IsButtonTriggered(int padNo, DWORD button);
+BOOL IsAnyButtonTriggered(int padNo);
 float GetPadLX(void);
 float GetPadLY(void);
 float GetPadRX(void);

@@ -73,7 +73,6 @@ void CameraPlay::MoveCamera(void)
 
 	// ズーム
 	target_dis += -GetMouseMoveZ() / 12.0f;
-	dis = dis + (target_dis - dis)*0.15f;
 
 
 	// キーボード操作
@@ -92,16 +91,29 @@ void CameraPlay::MoveCamera(void)
 	// 回転
 	else
 	{
-		if (GetKeyboardPress(DIK_LEFT))
-			move_phi = 0.02f;
-		if (GetKeyboardPress(DIK_RIGHT))
-			move_phi = -0.02f;
-		if (GetKeyboardPress(DIK_UP))
+		if (GetKeyboardPress(DIK_LEFT) || IsButtonPressed(0, BUTTON_LEFT))
+			move_phi = 0.005f;
+		if (GetKeyboardPress(DIK_RIGHT) || IsButtonPressed(0, BUTTON_RIGHT))
+			move_phi = -0.005f;
+		if (GetKeyboardPress(DIK_UP) || IsButtonPressed(0, BUTTON_UP))
 			move_theta = 0.005f;
-		if (GetKeyboardPress(DIK_DOWN))
+		if (GetKeyboardPress(DIK_DOWN) || IsButtonPressed(0, BUTTON_DOWN))
 			move_theta = -0.005f;
 	}
 
+	// ゲームパッド操作
+	// 回転
+	Vector2 pad_input_r(GetPadRX(), GetPadRY());
+	if (pad_input_r.sqrLength() >= 0.05f && !IsButtonPressed(0, BUTTON_L1))
+	{
+		move_phi = -pad_input_r.x*0.02f;
+		move_theta = -pad_input_r.y*0.02f;
+	}
+
+	// ズーム
+	if(IsButtonPressed(0, BUTTON_L1))
+		target_dis += GetPadRY()*10.0f;
+	dis = dis + (target_dis - dis)*0.15f;
 
 	if (move_phi != 0.0f)
 	{

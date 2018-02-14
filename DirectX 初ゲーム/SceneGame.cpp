@@ -264,7 +264,7 @@ void SceneGame::update_main(void)
 		return;
 	}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonPressed(0, BUTTON_OPTIONS) || IsButtonPressed(0, BUTTON_PAD))
 	{
 		GameManager::PushScene(new ScenePause);
 	}

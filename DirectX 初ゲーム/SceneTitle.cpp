@@ -50,7 +50,7 @@ void SceneTitle::Init(void)
 	this->exit = (new Object);
 	this->exit->AddComponent<RectPolygon>("title_exit", Layer::UI_00);
 	this->exit->GetComponent<RectPolygon>()->SetOpacity(0);
-	this->exit->transform.position = Vector3(40, SystemParameters::ResolutionY / 2.f - 500, 0);
+	this->exit->transform.position = Vector3(40 + 0.5f*(this->exit->GetComponent<RectPolygon>()->GetSize().x - this->start->GetComponent<RectPolygon>()->GetSize().x), SystemParameters::ResolutionY / 2.f - 500, 0);
 	this->exit->SetActive(false);
 
 	// アニメーション状態初期化
@@ -161,7 +161,7 @@ void SceneTitle::update_fadeWait(void)
 void SceneTitle::update_createPoly(void)
 {
 	// アニメーションスキップ
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(0, BUTTON_CI))
 		this->field_poly->GetComponent<ParticleSystem>()->emission_rate = TitlePolyMax*100.0f;
 
 	// 処理完了
@@ -217,7 +217,7 @@ void SceneTitle::update_pressWait(void)
 	syncAnimation();
 
 	// メニュー表示
-	if (GetKeyboardTrigger(DIK_RETURN) || IsButtonTriggered(0, BUTTON_CI))
+	if (GetKeyboardAnyKeyTrigger() || IsAnyButtonTriggered(0))
 	{
 		this->timer = 0;
 		this->camera->SetState(TitleCamera::State::Normal);
