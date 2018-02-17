@@ -7,7 +7,7 @@ HINSTANCE Window::s_hInstance = NULL;
 HWND Window::s_hWnd = NULL;
 MSG  Window::s_Msg;
 bool Window::s_bWindowMode = true;
-bool Window::s_bBigMode = true;
+bool Window::s_bBigMode = false;
 char* Window::s_ClassName = "MainWindow";
 
 //=============================================================================
@@ -19,7 +19,7 @@ HRESULT Window::Init()
 	int width;
 	int height;
 
-	if (s_bWindowMode)
+	if (s_bBigMode)
 	{
 		width = 1600;
 		height = 900;
@@ -112,12 +112,12 @@ LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 			SetWindowMode(!s_bWindowMode);
 			break;
 		case VK_F8:			// [F9]ÉLÅ[Ç™âüÇ≥ÇÍÇΩ
-			if (s_bWindowMode)
+			if (s_bBigMode)
 				SetWindowSize(SystemParameters::ResolutionX, SystemParameters::ResolutionY);
 			else
 				SetWindowSize(1600, 900);
 
-			s_bWindowMode = !s_bWindowMode;
+			s_bBigMode = !s_bBigMode;
 			break;
 
 		}
@@ -189,8 +189,8 @@ void Window::SetWindowMode(bool windowMode)
 void Window::SetWindowSize(int x, int y)
 {
 	SetWindowPos(s_hWnd, NULL,
-		(GetSystemMetrics(SM_CXSCREEN) - x) / 2,
-		(GetSystemMetrics(SM_CYSCREEN) - y) / 2,
+		/*(GetSystemMetrics(SM_CXSCREEN) - x) / 2*/0,
+		/*(GetSystemMetrics(SM_CYSCREEN) - y) / 2*/0,
 		x + GetSystemMetrics(SM_CXDLGFRAME) * 2,
 		y + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
 		SWP_NOZORDER | SWP_SHOWWINDOW);
