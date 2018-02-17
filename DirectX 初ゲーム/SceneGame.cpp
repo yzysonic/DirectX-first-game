@@ -61,7 +61,8 @@ void SceneGame::Init(void)
 	this->minimap->zoom = 0.3f;
 
 	// イベントバインド
-	this->player->injury += [&]
+	//ダメージイベント
+	this->player->event_injury += [&]
 	{
 		// 揺れエフェクト
 		this->camera->GetComponent<CameraShake>()->Shake();
@@ -78,6 +79,11 @@ void SceneGame::Init(void)
 			SetVolume(SE_LOW_HP, -1800);
 			GameManager::Var<PostEffect*>("post_effect")->SetCA(5.0f);
 		}
+	};
+	// ムーブイベント
+	this->player->event_move += [&]
+	{
+		player_limit();
 	};
 
 	// ゲームで使う変数
@@ -204,29 +210,7 @@ void SceneGame::update_main(void)
 		}
 	}
 
-	// プレイヤーの移動制限
-	Vector3 &playerPos = this->player->transform.position;
-	if (playerPos.x < -FIELD_RANG_X)
-	{
-		playerPos.x = -FIELD_RANG_X;
-		this->boundary->Touch();
-	}
-	if (playerPos.x > FIELD_RANG_X)
-	{
-		playerPos.x = FIELD_RANG_X;
-		this->boundary->Touch();
-	}
-	if (playerPos.y < -FIELD_RANG_Y)
-	{
-		playerPos.y = -FIELD_RANG_Y;
-		this->boundary->Touch();
-	}
-	if (playerPos.y > FIELD_RANG_Y)
-	{
-		playerPos.y = FIELD_RANG_Y;
-		this->boundary->Touch();
-	}
-
+	player_limit();
 
 	// カウントダウン更新
 	this->timer = fmaxf(this->timer-Time::DeltaTime(), 0.0f);
@@ -312,4 +296,31 @@ void SceneGame::swapEnemy(void)
 			break;
 		}
 	}
+}
+
+void SceneGame::player_limit(void)
+{
+	// プレイヤーの移動制限
+	Vector3 &playerPos = this->player->transform.position;
+	if (playerPos.x < -FIELD_RANG_X)
+	{
+		playerPos.x = Lerpf(playerPos.x, -FIELD_RANG_X, 0.3f);
+		this->boundary->Touch();
+	}
+	if (playerPos.x > FIELD_RANG_X)
+	{
+		playerPos.x = Lerpf(playerPos.x, FIELD_RANG_X, 0.3f);
+		this->boundary->Touch();
+	}
+	if (playerPos.y < -FIELD_RANG_Y)
+	{
+		playerPos.y = Lerpf(playerPos.y, -FIELD_RANG_Y, 0.3f);
+		this->boundary->Touch();
+	}
+	if (playerPos.y > FIELD_RANG_Y)
+	{
+		playerPos.y = Lerpf(playerPos.y, FIELD_RANG_Y, 0.3f);
+		this->boundary->Touch();
+	}
+
 }

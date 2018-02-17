@@ -16,7 +16,8 @@ public:
 
 	int hp;
 	State state;
-	Event injury;
+	Event event_injury;
+	Event event_move;
 	Player(void);
 	~Player(void);
 	void Update(void) override;

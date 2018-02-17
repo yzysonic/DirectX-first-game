@@ -68,7 +68,7 @@ void Player::OnCollision(Object * other)
 		this->muteki = true;
 		this->timer_flash =
 		this->timer_muteki = 0;
-		this->injury();
+		this->event_injury();
 	}
 }
 
@@ -143,8 +143,12 @@ void Player::move(void)
 	control += Vector3(GetPadLX(), -GetPadLY(), 0);
 
 	// ˆÚ“®ˆ—
-	if(control.sqrLength() > 0.0f)
+	if (control.sqrLength() > 0.0f)
+	{
 		this->transform.position += control * this->speed * this->boost * Time::DeltaTime();
+		this->event_move();
+	}
+
 
 }
 

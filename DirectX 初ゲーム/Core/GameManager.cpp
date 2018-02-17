@@ -11,14 +11,14 @@ void GameManager::Update(void)
 {
 	if (m_pInstance->scene[0] != nullptr)
 	{
-		m_pInstance->scene[0]->Update();
 		m_pInstance->scene[0]->UpdateObjects();
+		m_pInstance->scene[0]->Update();
 	}
 
 	if (m_pInstance->scene[m_pInstance->scene_stack_num + 1] != nullptr)
 	{
-		m_pInstance->scene[m_pInstance->scene_stack_num + 1]->Update();
 		m_pInstance->scene[m_pInstance->scene_stack_num + 1]->UpdateObjects();
+		m_pInstance->scene[m_pInstance->scene_stack_num + 1]->Update();
 	}
 }
 

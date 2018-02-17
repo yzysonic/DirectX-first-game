@@ -29,6 +29,7 @@ public:
 	void OnResume(void) override;
 	int getGameScore(void);
 	void addGameScore(int score);
+	void player_limit(void);
 
 private:
 	enum NextState 
