@@ -31,7 +31,9 @@ void SceneGame::Init(void)
 	this->timeUI[0]->setOffset(180, 0);
 
 	// ã´äE
-	this->boundary = new FieldBoundary(2 * FIELD_RANG_X + 150, 2 * FIELD_RANG_Y + 150);
+	this->boundary = new FieldBoundary(2 * FieldRangX + 150, 2 * FieldRangY + 150);
+	this->boundary_margin.x = 0.5f*SystemParameters::ResolutionX - ShowBoundaryMargin;
+	this->boundary_margin.y = 0.5f*SystemParameters::ResolutionY - ShowBoundaryMargin;
 
 	// écã@UI 
 	this->liveUI = (new LiveUI);
@@ -92,7 +94,7 @@ void SceneGame::Init(void)
 	this->enemy_timer.Reset(3.0f);
 	this->polyCount = 0;
 
-	for (int i = 0; i < ENEMY_MAX; i++)
+	for (int i = 0; i < EnemyMax; i++)
 		this->enemy[i] = NULL;
 
 	// îwåiÉ|ÉäÉSÉìèâä˙âª
@@ -124,7 +126,6 @@ void SceneGame::Uninit(void)
 	StopSound(BGM_GAME);
 
 	Renderer::GetInstance()->setCamera(nullptr);
-	Bullet::Clear();
 
 	GameManager::Var<PostEffect*>("post_effect")->SetActive(false);
 }
@@ -289,7 +290,7 @@ void SceneGame::swapEnemy(void)
 
 			enemy->target = &this->player->transform;
 			do {
-				enemy->transform.position = Vector3(Randomf(-FIELD_RANG_X, FIELD_RANG_X), Randomf(-FIELD_RANG_Y, FIELD_RANG_Y), 0.0f);
+				enemy->transform.position = Vector3(Randomf(-FieldRangX, FieldRangX), Randomf(-FieldRangY, FieldRangY), 0.0f);
 			} while ((enemy->transform.position - this->player->transform.position).length() < 200.0f);
 			this->minimap->SetEnemy(enemy);
 
@@ -302,25 +303,22 @@ void SceneGame::player_limit(void)
 {
 	// ÉvÉåÉCÉÑÅ[ÇÃà⁄ìÆêßå¿
 	Vector3 &playerPos = this->player->transform.position;
-	if (playerPos.x < -FIELD_RANG_X)
-	{
-		playerPos.x = Lerpf(playerPos.x, -FIELD_RANG_X, 0.3f);
-		this->boundary->Touch();
-	}
-	if (playerPos.x > FIELD_RANG_X)
-	{
-		playerPos.x = Lerpf(playerPos.x, FIELD_RANG_X, 0.3f);
-		this->boundary->Touch();
-	}
-	if (playerPos.y < -FIELD_RANG_Y)
-	{
-		playerPos.y = Lerpf(playerPos.y, -FIELD_RANG_Y, 0.3f);
-		this->boundary->Touch();
-	}
-	if (playerPos.y > FIELD_RANG_Y)
-	{
-		playerPos.y = Lerpf(playerPos.y, FIELD_RANG_Y, 0.3f);
-		this->boundary->Touch();
-	}
+	if (playerPos.x < -FieldRangX)
+		playerPos.x = Lerpf(playerPos.x, -FieldRangX, 0.2f);
+	if (playerPos.x > FieldRangX)
+		playerPos.x = Lerpf(playerPos.x, FieldRangX, 0.2f);	
+	if (playerPos.y < -FieldRangY)
+		playerPos.y = Lerpf(playerPos.y, -FieldRangY, 0.2f);
+	if (playerPos.y > FieldRangY)
+		playerPos.y = Lerpf(playerPos.y, FieldRangY, 0.2f);
 
+	// ã´äEê¸ÇÃï\é¶
+	if (playerPos.x < -(FieldRangX - boundary_margin.x))
+		this->boundary->Touch();
+	if (playerPos.x > (FieldRangX - boundary_margin.x))
+		this->boundary->Touch();
+	if (playerPos.y < -(FieldRangY - boundary_margin.y))
+		this->boundary->Touch();
+	if (playerPos.y > (FieldRangY - boundary_margin.y))
+		this->boundary->Touch();
 }

@@ -11,15 +11,14 @@
 #include "ScoreUI.h"
 #include "FieldBoundary.h"
 
-#define FIELD_RANG_X (float)(SystemParameters::ResolutionX/2+500)
-#define FIELD_RANG_Y (float)(SystemParameters::ResolutionY/2+500)
-#define ENEMY_MAX (5)
-#define GAME_POLY_MAX (1000)
-
 class SceneGame : public Scene
 {
 public:
+	static constexpr float FieldRangX = 1280 / 2 + 500;
+	static constexpr float FieldRangY = 720 / 2 + 500;
 	static constexpr float GameTime = 60.0f;
+	static constexpr float ShowBoundaryMargin = 150.0f;
+	static constexpr int EnemyMax = 5;
 
 public:
 	void Init(void) override;
@@ -45,7 +44,7 @@ private:
 	Camera* camera;
 	FieldPolygon* field_poly;
 	Player* player = nullptr;
-	Enemy* enemy[ENEMY_MAX] = {};
+	Enemy* enemy[EnemyMax] = {};
 	MiniMap* minimap = nullptr;
 	FieldBoundary* boundary = nullptr;
 	Object* timesup = nullptr;
@@ -54,6 +53,7 @@ private:
 	float timer;
 	FrameTimer enemy_timer;
 	int polyCount;
+	Vector2 boundary_margin;
 
 	void(SceneGame::*pUpdate)(void);
 	void update_fadeWait(void);

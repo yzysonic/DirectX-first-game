@@ -1,17 +1,17 @@
 #include "Bullet.h"
 
-
-std::list<Bullet*> Bullet::list;
-
 Bullet::Bullet(Object * owner, Vector3 velocity)
 {
+	// 座標、回転初期化
 	this->transform.position = owner->transform.position;
 	this->transform.setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
 
+	// 描画コンポネント初期化
 	this->AddComponent<Rigidbody>();
 	this->GetComponent<Rigidbody>()->useGravity = false;
 	this->GetComponent<Rigidbody>()->velocity = velocity;
 
+	// 発射元で処理を分ける
 	if (owner->type == ObjectType::Player)
 	{
 		this->type = ObjectType::Bullet;
@@ -29,26 +29,39 @@ Bullet::Bullet(Object * owner, Vector3 velocity)
 		this->GetComponent<SphereCollider>()->radius = 15.0f;
 	}
 
-	this->timer.Reset(3.0f);
-	this->state = 0;
-	this->index = Bullet::list.size();
-	Bullet::list.push_back(this);
 
-}
+	this->timer.Reset(LifeTime-WeakTime);
+	this->state = Normal;
 
-Bullet::~Bullet(void)
-{
-	Bullet::list.back()->index = this->index;
-	*std::next(Bullet::list.begin(), this->index) = Bullet::list.back();
-	Bullet::list.pop_back();
 }
 
 
 void Bullet::Update()
 {
+	switch (this->state)
+	{
+	case Normal:
+		if (this->timer.TimeUp())
+		{
+			this->timer.Reset(WeakTime);
+			this->state = Weak;
+		}
+		break;
 
-	if (this->timer.TimeUp())
-		this->Destroy();
+	case Collision:
+		if (this->timer.TimeUp())
+			this->Destroy();
+		break;
+
+	case Weak:
+		GetComponent<RectPolygon>()->SetOpacity(Lerpf(1.0f, 0.0f, this->timer.Progress()));
+		if (this->timer.Progress() >= 0.5f)
+			this->GetComponent<SphereCollider>()->SetActive(false);
+		if (this->timer.TimeUp())
+			this->Destroy();
+		break;
+	}
+	
 
 	this->timer++;
 }
@@ -75,26 +88,16 @@ void Bullet::OnCollision(Object * other)
 
 	if (this->type == ObjectType::Bullet && (other->type == ObjectType::Enemy /*|| other->type == ObjectType::Bullet_E*/))
 	{
-		ToState1();
+		SetStateToCollision();
 	}
 	else if (this->type == ObjectType::Bullet_E && (other->type == ObjectType::Player /*|| other->type == ObjectType::Bullet*/))
 	{
-		ToState1();
+		SetStateToCollision();
 	}
 
 }
 
-void Bullet::Clear()
-{
-	//std::list<Bullet*> tList;
-	//for (auto bullet : Bullet::list)
-	//	tList.push_back(bullet);
-
-	//for (auto bullet : tList)
-	//	delete bullet;
-}
-
-void Bullet::ToState1(void)
+void Bullet::SetStateToCollision(void)
 {
 	this->GetComponent<RectPolygon>()->SetActive(false);
 	this->GetComponent<Rigidbody>()->SetActive(false);
@@ -114,6 +117,6 @@ void Bullet::ToState1(void)
 	behavior->start_size = 5.0f;
 	behavior->end_size = 1.0f;
 
-	this->state = 1;
+	this->state = Collision;
 	this->timer.Reset(1.0f);
 }

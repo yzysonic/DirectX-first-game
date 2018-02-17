@@ -5,19 +5,25 @@
 
 class Bullet : public Object
 {
+private:
+	static constexpr float LifeTime = 3.0f;
+	static constexpr float WeakTime = 0.5f;
+
 public:
 	Bullet(Object* owner, Vector3 velocity);
-	~Bullet(void);
 	void Update(void) override;
 	void OnDraw(void) override;
 	void AfterDraw(void) override;
 	void OnCollision(Object* other) override;
-	static void Clear();
-private:
-	static std::list<Bullet*> list;
-	FrameTimer timer;
-	int index;
-	int state;
 
-	void ToState1(void);
+private:
+	enum State
+	{
+		Normal,
+		Collision,
+		Weak
+	}state;
+	FrameTimer timer;
+
+	void SetStateToCollision(void);
 };

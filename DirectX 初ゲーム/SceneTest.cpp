@@ -182,8 +182,6 @@ void SceneTest::Update(void)
 void SceneTest::Uninit(void)
 {
 
-	Bullet::Clear();
-
 	for (int i = 0; i < 40; i++)
 		strcpy(GetDebugText(i), "");
 
