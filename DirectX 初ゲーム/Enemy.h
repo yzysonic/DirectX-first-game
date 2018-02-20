@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Core.h"
 
+#define EnemyInitColor Color(245, 0, 0, 255)
+
 class Enemy : public Object
 {
 private:

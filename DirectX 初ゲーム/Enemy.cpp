@@ -1,11 +1,11 @@
 #include "Enemy.h"
-#include "SceneGame.h"
+#include "Bullet.h"
 
 
 Enemy::Enemy()
 {
 	// ポリゴンの初期化
-	AddComponent<RectPolygon>("enemy", Layer::DEFAULT);
+	AddComponent<RectPolygon>("enemy", Layer::DEFAULT)->SetColor(EnemyInitColor);
 
 	// コライダーの初期化
 	AddComponent<SphereCollider>();
@@ -115,9 +115,9 @@ void Enemy::update_main(void)
 		}
 	}
 
-	if (this->effect_timer <= EffectTime+0.3f)
+	if (this->effect_timer <= EffectTime+0.1f)
 	{
-		float p = (1.0f* (float)(this->hp) / MaxHP - 0.3f*sinf(this->effect_timer / EffectTime*PI));
+		float p = ((float)(this->hp) / MaxHP - 0.3f*sinf(this->effect_timer / EffectTime*PI));
 		
 		if (this->effect_timer < EffectTime)
 		{
@@ -125,7 +125,7 @@ void Enemy::update_main(void)
 		}
 		else
 		{
-			float x = 1.0f*((float)(hp) / MaxHP);
+			float x = 1.0f - ((float)(hp-1) / MaxHP);
 			GetComponent<RectPolygon>()->SetColor(Color(255, (UCHAR)(255 * x), (UCHAR)(255 * x), 255));
 		}
 		this->effect_timer += Time::DeltaTime();

@@ -6,7 +6,7 @@ Bullet::Bullet(Object * owner, Vector3 velocity)
 	this->transform.position = owner->transform.position;
 	this->transform.setRotation(0.0f, 0.0f, atan2f(velocity.y, velocity.x)-0.5f*PI);
 
-	// 描画コンポネント初期化
+	// 剛体コンポネント初期化
 	this->AddComponent<Rigidbody>();
 	this->GetComponent<Rigidbody>()->useGravity = false;
 	this->GetComponent<Rigidbody>()->velocity = velocity;
@@ -27,6 +27,8 @@ Bullet::Bullet(Object * owner, Vector3 velocity)
 		this->AddComponent<RectPolygon>("bullet_e", Layer::BULLET);
 		this->AddComponent<SphereCollider>();
 		this->GetComponent<SphereCollider>()->radius = 15.0f;
+		this->transform.scale = 0.7f*Vector3::one;
+
 	}
 
 
@@ -112,7 +114,7 @@ void Bullet::SetStateToCollision(void)
 	if(this->type == ObjectType::Bullet)
 		behavior->start_color = Color(255, 254, 191, 255);
 	else
-		behavior->start_color = Color(253, 226, 255, 255);
+		behavior->start_color = Color(255, 0, 186, 255);
 	behavior->start_speed = 5.0f;
 	behavior->start_size = 5.0f;
 	behavior->end_size = 1.0f;

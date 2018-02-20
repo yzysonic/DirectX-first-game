@@ -3,9 +3,13 @@
 #include "Core/Core.h"
 #include "Bullet.h"
 
+#define PlayerInitColor Color(180, 227, 255, 255)
 
 class Player : public Object
 {
+private:
+	static constexpr int MaxHP = 3;
+
 public:
 	enum State
 	{

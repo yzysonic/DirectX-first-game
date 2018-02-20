@@ -14,7 +14,7 @@ void SceneClear::Init(void)
 	this->score->setOffset(130, 0);
 	this->score->setNumber(GameManager::Var<int>("score"));
 
-	Renderer::GetInstance()->getCamera("default")->setBackColor(230, 230, 230, 255);
+	Renderer::GetInstance()->getCamera("default")->setBackColor(180, 180, 180, 255);
 
 	this->timer = 0;
 

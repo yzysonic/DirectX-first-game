@@ -3,14 +3,14 @@
 
 Player::Player()
 {
-	AddComponent<RectPolygon>("player", Layer::PLAYER);
+	AddComponent<RectPolygon>("player", Layer::PLAYER)->SetColor(PlayerInitColor);
 	AddComponent<SphereCollider>()
 		->radius = 25.0f;
 
 	this->type = ObjectType::Player;
 	this->transform.position = Vector3(0.0f, 0.0f, 0.0f);
 	this->transform.scale = Vector3(0.5f, 0.5f, 0.0f);
-	this->hp = 3;
+	this->hp = MaxHP;
 	this->speed = 700.0f;
 	this->boost = 1.0f;
 	this->timer.Reset(0.13f);
@@ -101,6 +101,15 @@ void Player::update_muteki()
 
 	if (!this->muteki)
 		return;
+
+	float x = (Lerpf((float)hp, (float)hp-1, this->timer_muteki/ 0.3f*1.5f) / MaxHP);
+	UCHAR r, g, b;
+
+	r = (UCHAR)(PlayerInitColor.r * x + 255 * (1.0f - x));
+	g = (UCHAR)(PlayerInitColor.g * x + 255 * (1.0f - x));
+	b = (UCHAR)(PlayerInitColor.b * x + 255 * (1.0f - x));
+
+	GetComponent<RectPolygon>()->SetColor(Color(r, g, b, 255));
 
 	if (this->timer_flash > (0.07f - 0.04f*(this->timer_muteki/1.5f)) )
 	{

@@ -1,11 +1,9 @@
 #pragma once
 #include "Core/Core.h"
 
-#define BULLET_MAX (100)
-
 class Bullet : public Object
 {
-private:
+protected:
 	static constexpr float LifeTime = 3.0f;
 	static constexpr float WeakTime = 0.5f;
 
@@ -16,7 +14,7 @@ public:
 	void AfterDraw(void) override;
 	void OnCollision(Object* other) override;
 
-private:
+protected:
 	enum State
 	{
 		Normal,
