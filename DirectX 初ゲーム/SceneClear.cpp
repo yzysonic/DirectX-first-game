@@ -19,7 +19,6 @@ void SceneClear::Init(void)
 	this->timer = 0;
 
 	// BGMを再生
-	SetVolume(BGM_CLEAR, -1800);
 	PlayBGM(BGM_CLEAR);
 
 	// フェイトイン効果

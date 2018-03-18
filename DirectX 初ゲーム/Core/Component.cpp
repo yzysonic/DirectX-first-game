@@ -1,6 +1,6 @@
 #include "Component.h"
 
-Component::Component(void) : object(nullptr), active(false), active_on_load(true) {}
+Component::Component(void) : object(nullptr), active(false), active_on_load(true), type(ComponentType::Unknow) {}
 
 void Component::BindObject(Object * object)
 {

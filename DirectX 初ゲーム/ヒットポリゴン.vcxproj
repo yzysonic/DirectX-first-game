@@ -76,12 +76,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Users\yang.tzui\Source\Repos\DirectX-first-game\DirectX 初ゲーム;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)</OutDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -280,6 +283,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolygonElement.h" />
     <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneClear.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="SceneGameOver.h" />
@@ -293,16 +297,6 @@
     <ClInclude Include="TitlePoly.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\MotionBlurPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MotionBlurPS</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">3.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MotionBlurPS</EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">3.0</ShaderModel>
-    </FxCompile>
     <FxCompile Include="Shader\ChromaticAberrationPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -336,6 +330,12 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GaussianBlurPS</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">3.0</ShaderModel>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ヒットポリゴン.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="main.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

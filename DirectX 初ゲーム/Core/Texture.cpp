@@ -116,8 +116,8 @@ void Texture::MakeTexture(std::string name, int width, int height)
 	texture->file_name = "none";
 	texture->size.x = (float)width;
 	texture->size.y = (float)height;
-	texture->divideX = 1.0f;
-	texture->divideY = 1.0f;
+	texture->divideX = 1;
+	texture->divideY = 1;
 
 	texture_list[name].reset(texture);
 

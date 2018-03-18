@@ -50,7 +50,6 @@ void SceneGlobal::Init(void)
 	VertexShader::Load("InstancingVS.hlsl");
 	PixelShader::Load("GaussianBlurPS.hlsl");
 	PixelShader::Load("ChromaticAberrationPS.hlsl");
-	PixelShader::Load("MotionBlurPS.hlsl");
 
 	// ポストエフェクトの環境設定
 	this->post_effect = new PostEffect;

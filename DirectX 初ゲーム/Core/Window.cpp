@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Direct3D.h"
 #include "Game.h"
+#include "../resource.h"
 
 HINSTANCE Window::s_hInstance = NULL;
 HWND Window::s_hWnd = NULL;
@@ -40,6 +41,7 @@ HRESULT Window::Init()
 	wcex.lpszClassName = s_ClassName;
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);
+	wcex.hIcon = LoadIcon(s_hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 	RegisterClassEx(&wcex);
 

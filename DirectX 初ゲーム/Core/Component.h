@@ -7,6 +7,7 @@ class Object;
 
 enum class ComponentType
 {
+	Unknow,
 	RectPolygon,
 	RectPolygon2D,
 	Rigidbody,

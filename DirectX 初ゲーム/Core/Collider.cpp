@@ -25,6 +25,8 @@ bool Collider::SetActive(bool value)
 		Physics::GetInstance()->addCollider(this);
 	else
 		Physics::GetInstance()->removeCollider(this);
+
+	return true;
 }
 
 ColliderType Collider::GetType(void)

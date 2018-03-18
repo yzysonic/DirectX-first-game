@@ -40,6 +40,9 @@
     <Filter Include="Drawable">
       <UniqueIdentifier>{d508e9c6-c63a-42c9-a56d-3dd5fa6d10ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{59e45465-2b6d-4d45-92d3-9146b2db1a05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneGame.cpp">
@@ -238,8 +241,10 @@
     <ClCompile Include="ChromaticAberrationScript.cpp">
       <Filter>Script</Filter>
     </ClCompile>
-    <ClCompile Include="FieldBoundary.cpp" />
     <ClCompile Include="MouseCursor.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldBoundary.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -463,6 +468,9 @@
     <ClInclude Include="MouseCursor.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GaussianBlurPS.hlsl">
@@ -474,8 +482,15 @@
     <FxCompile Include="Shader\ChromaticAberrationPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\MotionBlurPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="main.ico">
+      <Filter>Resource</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ヒットポリゴン.rc">
+      <Filter>Resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -42,7 +42,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ShowCursor(false);
 
 #ifndef _DEBUG
-	Window::SetWindowMode(false);
+	//Window::SetWindowMode(false);
 #endif
 
 	// ƒQ[ƒ€‰Šú‰»

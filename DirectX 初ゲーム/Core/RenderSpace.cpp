@@ -48,7 +48,7 @@ void RenderSpace::Add(std::string name)
 void RenderSpace::Add(std::string name, int order)
 {
 	Add(name);
-	if (order < draw_order_map.size() - 1)
+	if (order < (int)draw_order_map.size() - 1)
 	{
 		draw_order_map.insert(draw_order_map.begin() + order, draw_order_map.back());
 		draw_order_map.pop_back();

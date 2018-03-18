@@ -1,3 +1,4 @@
+// éQçlÅFhttps://wgld.org/d/webgl/w057.html
 
 static const float2 Resolution = float2(1280.0, 720.0);
 
@@ -60,7 +61,5 @@ void GaussianBlurPS(in float2 pos : VPOS, out float4 color : COLOR0)
     }
 
     color = float4(destColor, 1.0);
-
-    //color = tex2D(sampler0, pos / float2(1280, 720));
 
 }
